@@ -1,0 +1,48 @@
+baseURL = "https://pradeep2Tech.github.io/"
+languageCode = "en-us"
+title = "Pradeep2Tech Blog"
+theme = "PaperMod"
+enableRobotsTXT = true
+pagination.pagerSize = 10
+
+[sitemap]
+  changefreq = "weekly"
+  priority = 0.5
+  filename = "sitemap.xml"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[params]
+  env = "production"
+  title = "Pradeep2Tech Blog"
+  description = "Technical blogs and engineering notes."
+  keywords = ["blog", "tech", "hugo", "papermod", "programming"]
+  author = "pradeep2Tech"
+  defaultTheme = "auto"
+  ShowShareButtons = true
+  ShowReadingTime = true
+  ShowCodeCopyButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowToc = true
+  TocOpen = false
+
+[params.assets]
+  disableHLJS = true
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    lineNos = true
+    codeFences = true
+    guessSyntax = true
+    style = "github"
+
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[minify]
+  disableXML = false
+  minifyOutput = true
