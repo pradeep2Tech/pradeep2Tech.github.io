@@ -1,9 +1,12 @@
 baseURL = "https://pradeep2Tech.github.io/"
 languageCode = "en-us"
-title = "PradeepCS Blog"
+title = "Pradeep CS – Engineering Notes"
 theme = "PaperMod"
 enableRobotsTXT = true
-pagination.pagerSize = 10
+canonifyURLs = true
+
+[pagination]
+  pagerSize = 10
 
 [sitemap]
   changefreq = "weekly"
@@ -15,11 +18,12 @@ pagination.pagerSize = 10
 
 [params]
   env = "production"
-  title = "Pradeep2Tech Blog"
-  description = "Technical blogs and engineering notes."
-  keywords = ["blog", "tech", "hugo", "papermod", "programming"]
-  author = "pradeep cs"
+  title = "Pradeep CS – Engineering Notes"
+  description = "Deep dives into PostgreSQL internals, distributed systems, caching strategies, and performance debugging."
+  keywords = ["PostgreSQL internals", "Distributed systems", "Caching strategies", "System design", "Performance tuning"]
+  author = "Pradeep Chakravarthi"
   defaultTheme = "auto"
+
   ShowShareButtons = true
   ShowReadingTime = true
   ShowCodeCopyButtons = true
@@ -27,6 +31,10 @@ pagination.pagerSize = 10
   ShowBreadCrumbs = true
   ShowToc = true
   TocOpen = false
+
+[params.homeInfoParams]
+  Title = "Engineering Deep Dives"
+  Content = "Practical system design, database internals, and real-world performance debugging."
 
 [params.assets]
   disableHLJS = true
@@ -36,7 +44,6 @@ pagination.pagerSize = 10
     noClasses = false
     lineNos = true
     codeFences = true
-    guessSyntax = true
     style = "github"
 
   [markup.goldmark]
