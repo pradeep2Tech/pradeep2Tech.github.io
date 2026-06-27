@@ -1,0 +1,12 @@
+# Security Architecture index order.
+# Edit this list to reorder the Table of Contents; chapter numbers follow this sequence.
+topics:
+  - phantom-token-pattern
+  - scim-enterprise-provisioning
+  - edge-downstream-auth
+  - csrf-double-submit-cookie
+  - http-secure-headers-blueprint
+  - defensive-input-pipelines
+  - distributed-rate-limiting-l7-ddos
+  - cloud-secrets-envelope-encryption
+  - zero-trust-mtls

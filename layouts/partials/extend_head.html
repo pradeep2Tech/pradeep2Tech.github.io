@@ -1,6 +1,6 @@
 {{- partial "diagram-lightbox-head.html" . -}}
 {{- partial "section-collapsible-head.html" . -}}
-{{- if or (eq .Section "system-design") (and .IsSection (eq .Section "system-design")) -}}
+{{- if or (eq .Section "system-design") (eq .Section "security-architecture") (and .IsSection (or (eq .Section "system-design") (eq .Section "security-architecture"))) -}}
 <style>
   .sd-section-nav {
     font-size: 0.9rem;
