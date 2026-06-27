@@ -1,3 +1,19 @@
+<div id="diagram-modal" class="diagram-modal" role="dialog" aria-modal="true" aria-label="Diagram viewer" hidden>
+  <div class="diagram-modal-backdrop" data-diagram-close></div>
+  <div class="diagram-modal-toolbar">
+    <span class="diagram-modal-title" id="diagram-modal-title">Architecture diagram</span>
+    <button type="button" class="diagram-modal-btn" data-diagram-action="zoom-out" title="Zoom out (−)" aria-label="Zoom out">−</button>
+    <button type="button" class="diagram-modal-btn" data-diagram-action="zoom-in" title="Zoom in (+)" aria-label="Zoom in">+</button>
+    <button type="button" class="diagram-modal-btn" data-diagram-action="reset" title="Reset zoom" aria-label="Reset zoom">⟲</button>
+    <button type="button" class="diagram-modal-btn" data-diagram-action="fit" title="Fit to screen" aria-label="Fit to screen">Fit</button>
+    <button type="button" class="diagram-modal-btn diagram-modal-btn--close" data-diagram-close title="Close (Esc)" aria-label="Close">✕</button>
+  </div>
+  <div class="diagram-modal-stage" id="diagram-modal-stage">
+    <div class="diagram-modal-content" id="diagram-modal-content"></div>
+  </div>
+  <div class="diagram-modal-help">Scroll to zoom · Drag to pan · Esc to close</div>
+</div>
+
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
@@ -7,27 +23,208 @@
     theme: "default"
   });
 
-  function renderMermaidBlocks() {
+  const EXPAND_ICON =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>';
+
+  function wrapMermaidBlocks() {
     const mermaidCodeBlocks = document.querySelectorAll("pre code.language-mermaid");
 
     mermaidCodeBlocks.forEach((codeBlock, index) => {
       const pre = codeBlock.closest("pre");
       if (!pre) return;
 
+      const frame = document.createElement("div");
+      frame.className = "diagram-frame";
+      frame.setAttribute("role", "button");
+      frame.setAttribute("tabindex", "0");
+      frame.setAttribute("aria-label", "Expand diagram");
+
+      const hint = document.createElement("span");
+      hint.className = "diagram-frame-hint";
+      hint.innerHTML = EXPAND_ICON + " Click to expand";
+
       const mermaidContainer = document.createElement("div");
       mermaidContainer.className = "mermaid";
       mermaidContainer.id = `mermaid-${index}`;
       mermaidContainer.textContent = codeBlock.textContent;
 
-      pre.parentNode.replaceChild(mermaidContainer, pre);
+      frame.appendChild(hint);
+      frame.appendChild(mermaidContainer);
+      pre.parentNode.replaceChild(frame, pre);
+    });
+  }
+
+  async function renderMermaidBlocks() {
+    wrapMermaidBlocks();
+    await mermaid.run({ querySelector: ".mermaid" });
+    initDiagramLightbox();
+  }
+
+  function initDiagramLightbox() {
+    const modal = document.getElementById("diagram-modal");
+    const stage = document.getElementById("diagram-modal-stage");
+    const content = document.getElementById("diagram-modal-content");
+    const titleEl = document.getElementById("diagram-modal-title");
+    if (!modal || !stage || !content) return;
+
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let panStartX = 0;
+    let panStartY = 0;
+    let activeFrame = null;
+
+    function applyTransform() {
+      content.style.transform = `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${scale})`;
+    }
+
+    function fitToStage() {
+      const svg = content.querySelector("svg");
+      if (!svg) return;
+
+      const stageRect = stage.getBoundingClientRect();
+      const padding = 48;
+      const availW = stageRect.width - padding;
+      const availH = stageRect.height - padding;
+
+      const svgW = svg.viewBox?.baseVal?.width || svg.getBoundingClientRect().width || 800;
+      const svgH = svg.viewBox?.baseVal?.height || svg.getBoundingClientRect().height || 600;
+
+      scale = Math.min(availW / svgW, availH / svgH, 1.5);
+      scale = Math.max(scale, 0.15);
+      panX = 0;
+      panY = 0;
+      applyTransform();
+    }
+
+    function openModal(frame) {
+      const svg = frame.querySelector(".mermaid svg");
+      if (!svg) return;
+
+      activeFrame = frame;
+      content.innerHTML = "";
+      content.appendChild(svg.cloneNode(true));
+
+      const heading = findDiagramHeading(frame);
+      titleEl.textContent = heading || "Architecture diagram";
+
+      modal.hidden = false;
+      modal.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+
+      requestAnimationFrame(fitToStage);
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.hidden = true;
+      document.body.style.overflow = "";
+      content.innerHTML = "";
+      activeFrame = null;
+      scale = 1;
+      panX = 0;
+      panY = 0;
+    }
+
+    function findDiagramHeading(frame) {
+      let el = frame.previousElementSibling;
+      while (el) {
+        if (/^H[2-4]$/.test(el.tagName)) return el.textContent.trim();
+        if (el.tagName === "HR") break;
+        el = el.previousElementSibling;
+      }
+      return null;
+    }
+
+    function zoom(factor) {
+      scale = Math.min(Math.max(scale * factor, 0.15), 6);
+      applyTransform();
+    }
+
+    document.querySelectorAll(".diagram-frame").forEach((frame) => {
+      frame.addEventListener("click", () => openModal(frame));
+      frame.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openModal(frame);
+        }
+      });
     });
 
-    mermaid.run({ querySelector: ".mermaid" });
+    modal.querySelectorAll("[data-diagram-close]").forEach((el) => {
+      el.addEventListener("click", closeModal);
+    });
+
+    modal.querySelectorAll("[data-diagram-action]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const action = btn.getAttribute("data-diagram-action");
+        if (action === "zoom-in") zoom(1.2);
+        if (action === "zoom-out") zoom(1 / 1.2);
+        if (action === "reset") {
+          scale = 1;
+          panX = 0;
+          panY = 0;
+          applyTransform();
+        }
+        if (action === "fit") fitToStage();
+      });
+    });
+
+    stage.addEventListener(
+      "wheel",
+      (e) => {
+        if (!modal.classList.contains("is-open")) return;
+        e.preventDefault();
+        zoom(e.deltaY > 0 ? 1 / 1.12 : 1.12);
+      },
+      { passive: false }
+    );
+
+    stage.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      isDragging = true;
+      stage.classList.add("is-dragging");
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      panStartX = panX;
+      panStartY = panY;
+      stage.setPointerCapture(e.pointerId);
+    });
+
+    stage.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      panX = panStartX + (e.clientX - dragStartX);
+      panY = panStartY + (e.clientY - dragStartY);
+      applyTransform();
+    });
+
+    stage.addEventListener("pointerup", () => {
+      isDragging = false;
+      stage.classList.remove("is-dragging");
+    });
+
+    stage.addEventListener("pointercancel", () => {
+      isDragging = false;
+      stage.classList.remove("is-dragging");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!modal.classList.contains("is-open")) return;
+      if (e.key === "Escape") closeModal();
+      if (e.key === "+" || e.key === "=") zoom(1.2);
+      if (e.key === "-") zoom(1 / 1.2);
+      if (e.key === "0") fitToStage();
+    });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", renderMermaidBlocks);
+    document.addEventListener("DOMContentLoaded", () => {
+      renderMermaidBlocks().catch(console.error);
+    });
   } else {
-    renderMermaidBlocks();
+    renderMermaidBlocks().catch(console.error);
   }
 </script>

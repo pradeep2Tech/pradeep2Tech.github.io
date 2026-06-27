@@ -1,0 +1,31 @@
+# System Design index order (simple → advanced).
+# Edit this list to reorder the Table of Contents; chapter numbers follow this sequence.
+topics:
+  - urlshortner
+  - distributed-rate-limiter
+  - leaderboard
+  - distributed-lru-cache
+  - distributed-kv-store
+  - notification-system
+  - chat-application
+  - social-feed
+  - email-delivery
+  - cloud-storage
+  - distributed-message-queue
+  - distributed-job-scheduler
+  - distributed-logging-system
+  - distributed-web-crawler
+  - proximity-search
+  - linkedin-job-search
+  - food-delivery
+  - ride-sharing
+  - ticket-booking
+  - hotel-booking
+  - ecommerce
+  - payment-gateway-orchestration
+  - stock-broker-trading
+  - sponsored-ads
+  - ott
+  - online-learning-platform
+  - fleet-vending-iot
+  - collaborative-text-editor

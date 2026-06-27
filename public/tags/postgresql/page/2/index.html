@@ -1,0 +1,244 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Postgresql | Pradeep CS – Engineering Notes</title><meta name=keywords content><meta name=description content="Deep dives into PostgreSQL internals, distributed systems, caching strategies, and performance debugging."><meta name=author content="Pradeep Chakravarthi"><link rel=canonical href=http://localhost:1313/tags/postgresql/><link crossorigin=anonymous href=http://localhost:1313/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as=style><link rel=icon href=http://localhost:1313/favicon.ico><link rel=icon type=image/png sizes=16x16 href=http://localhost:1313/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=http://localhost:1313/favicon-32x32.png><link rel=apple-touch-icon href=http://localhost:1313/apple-touch-icon.png><link rel=mask-icon href=http://localhost:1313/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=http://localhost:1313/tags/postgresql/index.xml title=rss><link rel=alternate hreflang=en href=http://localhost:1313/tags/postgresql/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><style>.diagram-frame{position:relative;margin:1.25rem 0;border:1px solid var(--border);border-radius:8px;background:var(--entry);overflow:hidden;cursor:zoom-in}.diagram-frame .mermaid{margin:0;padding:1rem;overflow:auto;max-width:100%}.diagram-frame .mermaid svg{display:block;margin:0 auto;max-width:100%;height:auto}.diagram-frame-hint{position:absolute;top:.5rem;right:.5rem;display:flex;align-items:center;gap:.35rem;padding:.25rem .55rem;font-size:.72rem;font-weight:600;letter-spacing:.02em;color:var(--secondary);background:var(--theme);border:1px solid var(--border);border-radius:999px;opacity:.85;pointer-events:none;transition:opacity .15s ease}.diagram-frame:hover .diagram-frame-hint{opacity:1}.diagram-frame-hint svg{width:.85rem;height:.85rem;flex-shrink:0}.diagram-modal{position:fixed;inset:0;z-index:9999;display:none;flex-direction:column}.diagram-modal.is-open{display:flex}.diagram-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(2px)}html[data-theme=light] .diagram-modal-backdrop{background:rgba(255,255,255,.82)}.diagram-modal-toolbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.65rem 1rem;background:var(--entry);border-bottom:1px solid var(--border);flex-shrink:0}.diagram-modal-title{flex:1;font-size:.875rem;font-weight:600;color:var(--primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-right:.5rem}.diagram-modal-btn{display:inline-flex;align-items:center;justify-content:center;min-width:2.25rem;height:2.25rem;padding:0 .5rem;font-size:.95rem;font-weight:600;line-height:1;color:var(--primary);background:var(--code-bg);border:1px solid var(--border);border-radius:6px;cursor:pointer;user-select:none}.diagram-modal-btn:hover{border-color:var(--secondary)}.diagram-modal-btn:focus-visible{outline:2px solid var(--secondary);outline-offset:2px}.diagram-modal-btn--close{margin-left:.25rem}.diagram-modal-stage{position:relative;z-index:1;flex:1;overflow:hidden;cursor:grab;touch-action:none}.diagram-modal-stage.is-dragging{cursor:grabbing}.diagram-modal-content{position:absolute;top:50%;left:50%;transform-origin:center center;will-change:transform}.diagram-modal-content svg{display:block;max-width:none;height:auto}.diagram-modal-help{position:relative;z-index:2;padding:.4rem 1rem;font-size:.75rem;text-align:center;color:var(--secondary);background:var(--entry);border-top:1px solid var(--border);flex-shrink:0}</style><meta property="og:url" content="http://localhost:1313/tags/postgresql/"><meta property="og:site_name" content="Pradeep CS – Engineering Notes"><meta property="og:title" content="Postgresql"><meta property="og:description" content="Deep dives into PostgreSQL internals, distributed systems, caching strategies, and performance debugging."><meta property="og:locale" content="en-us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Postgresql"><meta name=twitter:description content="Deep dives into PostgreSQL internals, distributed systems, caching strategies, and performance debugging."></head><body class=list id=top><header class=header><nav class=nav><div class=logo><a href=http://localhost:1313/ accesskey=h title="Pradeep CS – Engineering Notes (Alt + H)">Pradeep CS – Engineering Notes</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu></ul></nav></header><main class=main><header class=page-header><div class=breadcrumbs><a href=http://localhost:1313/>Home</a>&nbsp;»&nbsp;<a href=http://localhost:1313/tags/>Tags</a></div><h1>Postgresql</h1></header><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Social Graph & Feed Application at Scale</h2></header><div class=entry-content><p>A social graph and feed application connects hundreds of millions of daily active users through profile management, content publishing, follow relationships, engagement (likes and comments), and personalized chronological timelines. At scale it is read-heavy, fan-out-intensive, and latency-sensitive: feed reads dominate traffic at a 100:1 ratio over post writes, celebrity posts create thundering-herd bottlenecks, and the system must converge globally within seconds while keeping p99 feed loads under 200 ms.
+This post walks through the full design — requirements, capacity math, API contracts, data modeling, hybrid fan-out topology, technology trade-offs, caching, infrastructure sizing, security, observability, and failure modes. For 50 senior-level interview follow-ups, see Social Feed Interview Questions.
+...</p></div><footer class=entry-footer><span title='2026-06-27 10:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>14 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Social Graph & Feed Application at Scale" href=http://localhost:1313/system-design/social-feed/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Stock Broker Trading Platform at Scale</h2></header><div class=entry-content><p>A stock broker trading platform lets retail investors onboard, watch live market prices, place orders, and track portfolio P&amp;L — all while every rupee of margin and every fill must reconcile with the national exchange. At scale it is asymmetric and latency-critical: market data and portfolio reads dominate traffic, but order validation, ledger mutations, and exchange routing demand strict ACID serializability with sub-100 ms P99 on the execution path.
+This post walks through the full design — requirements, capacity math, API contracts, data modeling, microservice topology, order-validation algorithms, technology trade-offs, caching, infrastructure sizing, and failure modes. For 50 senior-level interview follow-ups, see Stock Broker Trading Interview Questions.
+...</p></div><footer class=entry-footer><span title='2026-06-27 10:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>13 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Stock Broker Trading Platform at Scale" href=http://localhost:1313/system-design/stock-broker-trading/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing an Online Learning Platform at Scale</h2></header><div class=entry-content><p>An online learning platform connects students, instructors, and enterprise tenants behind a course catalog, video playback layer, and financial settlement pipeline. At scale it is read-heavy on discovery and streaming, write-bursty on telemetry heartbeats, and consistency-split — catalog search and progress counters favor availability (AP), while payments, asset access control, and tenant isolation demand strong consistency (CP).
+This post walks through the full design: requirements, capacity math, API contracts, data modeling, multi-tenant architecture, telemetry ingestion, technology trade-offs, caching, infrastructure sizing, and failure playbooks.
+...</p></div><footer class=entry-footer><span title='2026-06-27 10:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing an Online Learning Platform at Scale" href=http://localhost:1313/system-design/online-learning-platform/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Distributed Job Scheduler at Scale</h2></header><div class=entry-content><p>A distributed job scheduler orchestrates fine-grained, repetitive workloads — immediate triggers, future timestamps, and Cron expressions — across thousands of stateless executors. At production scale it is a write-bursty, latency-sensitive control plane: job creation must survive massive spikes without dropping events, while execution pickup must stay within a 2-second budget and guarantee at-least-once delivery.
+This post captures the full design — from requirements and capacity math through API contracts, data modeling, the Watcher concurrency engine, caching, Kubernetes sizing, and failure runbooks.
+...</p></div><footer class=entry-footer><span title='2026-06-26 16:00:00 +0000 +0000'>June 26, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Distributed Job Scheduler at Scale" href=http://localhost:1313/system-design/distributed-job-scheduler/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Proximity Search Engine at Scale</h2></header><div class=entry-content><p>A proximity search engine answers one question at planetary scale: what is near me right now? Given a latitude, longitude, and radius, it returns paginated points of interest — restaurants, hotels, or live drivers — optionally filtered by name, category, or tags. At Uber, DoorDash, Yelp, or Google Maps scale the system is write-dominated on the telemetry path (1M location updates per second at peak) while read queries must still return in P99 &lt; 50 ms.
+...</p></div><footer class=entry-footer><span title='2026-06-26 16:00:00 +0000 +0000'>June 26, 2026</span>&nbsp;·&nbsp;<span>15 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Proximity Search Engine at Scale" href=http://localhost:1313/system-design/proximity-search/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Ride-Sharing Platform at Scale</h2></header><div class=entry-content><p>A ride-sharing platform connects riders and drivers in real time — estimate fares by vehicle tier, book a ride, match the nearest available driver, stream bi-directional map updates, settle payment, and exchange ratings. At Uber/Ola scale the system is path-asymmetric: browsing and estimation are AP-tolerant, while the dispatch pipeline is CP-critical — double-booking a driver or racing on allocation state is unacceptable.
+This post walks through the full design — requirements, capacity math, API contracts, data modeling, microservice topology, driver-matching concurrency controls, technology trade-offs, caching, infrastructure sizing, security, observability, and failure modes.
+...</p></div><footer class=entry-footer><span title='2026-06-26 16:00:00 +0000 +0000'>June 26, 2026</span>&nbsp;·&nbsp;<span>13 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Ride-Sharing Platform at Scale" href=http://localhost:1313/system-design/ride-sharing/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Scalable Chat Application at Scale</h2></header><div class=entry-content><p>A chat application connects billions of users through near real-time one-to-one and group messaging, delivery receipts, media attachments, and presence indicators. At scale it is write-heavy, latency-sensitive, and connection-dense: every active user holds a long-lived WebSocket, message ordering must be strict per conversation, and the system must guarantee zero message loss while targeting sub-300ms delivery for online recipients.
+This post walks through the full design — requirements, capacity math, API contracts, data modeling, WebSocket gateway topology, technology trade-offs, caching, infrastructure sizing, and failure modes. For 50 senior-level interview follow-ups, see Chat Application Interview Questions.
+...</p></div><footer class=entry-footer><span title='2026-06-26 16:00:00 +0000 +0000'>June 26, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Scalable Chat Application at Scale" href=http://localhost:1313/system-design/chat-application/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Distributed Hotel Booking & Proximity Engine at Scale</h2></header><div class=entry-content><p>A hotel booking platform lets travelers discover properties by proximity, browse room inventory, reserve rooms in real time, pay through an external gateway, and review past stays. At scale it is asymmetric by path: search and discovery favor availability over strict consistency (AP), while booking and inventory control demand strong consistency (CP) — a double-booked room is never acceptable.
+This post walks through the full design: requirements, capacity math, API contracts, data modeling, CQRS architecture, concurrency controls, technology trade-offs, caching, infrastructure sizing, and failure modes.
+...</p></div><footer class=entry-footer><span title='2026-06-26 14:00:00 +0000 +0000'>June 26, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Distributed Hotel Booking & Proximity Engine at Scale" href=http://localhost:1313/system-design/hotel-booking/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Food Delivery Platform at Scale</h2></header><div class=entry-content><p>A food delivery platform connects customers, restaurants, and delivery agents in real time — browse nearby venues, build a cart, pay, track preparation, and follow live driver location on a map. At scale it is asymmetric by path: discovery and telemetry are read-heavy and AP-tolerant, while checkout, payments, and driver allocation are CP-critical where double-booking or ledger errors are unacceptable.
+This post walks through the full design — requirements, capacity math, API contracts, data modeling, microservice topology, driver-matching algorithms, technology trade-offs, caching, infrastructure sizing, and failure modes. For 50 senior-level interview follow-ups, see Food Delivery Interview Questions.
+...</p></div><footer class=entry-footer><span title='2026-06-26 14:00:00 +0000 +0000'>June 26, 2026</span>&nbsp;·&nbsp;<span>14 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Food Delivery Platform at Scale" href=http://localhost:1313/system-design/food-delivery/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing an E-Commerce Platform at Scale</h2></header><div class=entry-content><p>An e-commerce platform lets users search products, manage a persistent cart, check out, pay, and track orders. At scale it is read-heavy and latency-sensitive on the browse path, but consistency-critical on checkout and inventory — search and catalog browsing favor availability (AP), while order placement and stock reservation demand atomic guarantees (CP).
+This post walks through the full design: requirements, capacity math, API contracts, data modeling, microservice architecture, concurrency controls, technology trade-offs, caching, and infrastructure sizing.
+...</p></div><footer class=entry-footer><span title='2026-06-26 12:00:00 +0000 +0000'>June 26, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing an E-Commerce Platform at Scale" href=http://localhost:1313/system-design/ecommerce/></a></article><footer class=page-footer><nav class=pagination><a class=prev href=http://localhost:1313/tags/postgresql/>«&nbsp;Prev&nbsp;
+</a><a class=next href=http://localhost:1313/tags/postgresql/page/3/>Next&nbsp;&nbsp;»</a></nav></footer></main><footer class=footer><span>&copy; 2026 <a href=http://localhost:1313/>Pradeep CS – Engineering Notes</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg></a><div id=diagram-modal class=diagram-modal role=dialog aria-modal=true aria-label="Diagram viewer" hidden><div class=diagram-modal-backdrop data-diagram-close></div><div class=diagram-modal-toolbar><span class=diagram-modal-title id=diagram-modal-title>Architecture diagram</span>
+<button type=button class=diagram-modal-btn data-diagram-action=zoom-out title="Zoom out (−)" aria-label="Zoom out">−</button>
+<button type=button class=diagram-modal-btn data-diagram-action=zoom-in title="Zoom in (+)" aria-label="Zoom in">+</button>
+<button type=button class=diagram-modal-btn data-diagram-action=reset title="Reset zoom" aria-label="Reset zoom">⟲</button>
+<button type=button class=diagram-modal-btn data-diagram-action=fit title="Fit to screen" aria-label="Fit to screen">Fit</button>
+<button type=button class="diagram-modal-btn diagram-modal-btn--close" data-diagram-close title="Close (Esc)" aria-label=Close>✕</button></div><div class=diagram-modal-stage id=diagram-modal-stage><div class=diagram-modal-content id=diagram-modal-content></div></div><div class=diagram-modal-help>Scroll to zoom · Drag to pan · Esc to close</div></div><script type=module>
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: "loose",
+    theme: "default"
+  });
+
+  const EXPAND_ICON =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>';
+
+  function wrapMermaidBlocks() {
+    const mermaidCodeBlocks = document.querySelectorAll("pre code.language-mermaid");
+
+    mermaidCodeBlocks.forEach((codeBlock, index) => {
+      const pre = codeBlock.closest("pre");
+      if (!pre) return;
+
+      const frame = document.createElement("div");
+      frame.className = "diagram-frame";
+      frame.setAttribute("role", "button");
+      frame.setAttribute("tabindex", "0");
+      frame.setAttribute("aria-label", "Expand diagram");
+
+      const hint = document.createElement("span");
+      hint.className = "diagram-frame-hint";
+      hint.innerHTML = EXPAND_ICON + " Click to expand";
+
+      const mermaidContainer = document.createElement("div");
+      mermaidContainer.className = "mermaid";
+      mermaidContainer.id = `mermaid-${index}`;
+      mermaidContainer.textContent = codeBlock.textContent;
+
+      frame.appendChild(hint);
+      frame.appendChild(mermaidContainer);
+      pre.parentNode.replaceChild(frame, pre);
+    });
+  }
+
+  async function renderMermaidBlocks() {
+    wrapMermaidBlocks();
+    await mermaid.run({ querySelector: ".mermaid" });
+    initDiagramLightbox();
+  }
+
+  function initDiagramLightbox() {
+    const modal = document.getElementById("diagram-modal");
+    const stage = document.getElementById("diagram-modal-stage");
+    const content = document.getElementById("diagram-modal-content");
+    const titleEl = document.getElementById("diagram-modal-title");
+    if (!modal || !stage || !content) return;
+
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let panStartX = 0;
+    let panStartY = 0;
+    let activeFrame = null;
+
+    function applyTransform() {
+      content.style.transform = `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${scale})`;
+    }
+
+    function fitToStage() {
+      const svg = content.querySelector("svg");
+      if (!svg) return;
+
+      const stageRect = stage.getBoundingClientRect();
+      const padding = 48;
+      const availW = stageRect.width - padding;
+      const availH = stageRect.height - padding;
+
+      const svgW = svg.viewBox?.baseVal?.width || svg.getBoundingClientRect().width || 800;
+      const svgH = svg.viewBox?.baseVal?.height || svg.getBoundingClientRect().height || 600;
+
+      scale = Math.min(availW / svgW, availH / svgH, 1.5);
+      scale = Math.max(scale, 0.15);
+      panX = 0;
+      panY = 0;
+      applyTransform();
+    }
+
+    function openModal(frame) {
+      const svg = frame.querySelector(".mermaid svg");
+      if (!svg) return;
+
+      activeFrame = frame;
+      content.innerHTML = "";
+      content.appendChild(svg.cloneNode(true));
+
+      const heading = findDiagramHeading(frame);
+      titleEl.textContent = heading || "Architecture diagram";
+
+      modal.hidden = false;
+      modal.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+
+      requestAnimationFrame(fitToStage);
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.hidden = true;
+      document.body.style.overflow = "";
+      content.innerHTML = "";
+      activeFrame = null;
+      scale = 1;
+      panX = 0;
+      panY = 0;
+    }
+
+    function findDiagramHeading(frame) {
+      let el = frame.previousElementSibling;
+      while (el) {
+        if (/^H[2-4]$/.test(el.tagName)) return el.textContent.trim();
+        if (el.tagName === "HR") break;
+        el = el.previousElementSibling;
+      }
+      return null;
+    }
+
+    function zoom(factor) {
+      scale = Math.min(Math.max(scale * factor, 0.15), 6);
+      applyTransform();
+    }
+
+    document.querySelectorAll(".diagram-frame").forEach((frame) => {
+      frame.addEventListener("click", () => openModal(frame));
+      frame.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openModal(frame);
+        }
+      });
+    });
+
+    modal.querySelectorAll("[data-diagram-close]").forEach((el) => {
+      el.addEventListener("click", closeModal);
+    });
+
+    modal.querySelectorAll("[data-diagram-action]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const action = btn.getAttribute("data-diagram-action");
+        if (action === "zoom-in") zoom(1.2);
+        if (action === "zoom-out") zoom(1 / 1.2);
+        if (action === "reset") {
+          scale = 1;
+          panX = 0;
+          panY = 0;
+          applyTransform();
+        }
+        if (action === "fit") fitToStage();
+      });
+    });
+
+    stage.addEventListener(
+      "wheel",
+      (e) => {
+        if (!modal.classList.contains("is-open")) return;
+        e.preventDefault();
+        zoom(e.deltaY > 0 ? 1 / 1.12 : 1.12);
+      },
+      { passive: false }
+    );
+
+    stage.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      isDragging = true;
+      stage.classList.add("is-dragging");
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      panStartX = panX;
+      panStartY = panY;
+      stage.setPointerCapture(e.pointerId);
+    });
+
+    stage.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      panX = panStartX + (e.clientX - dragStartX);
+      panY = panStartY + (e.clientY - dragStartY);
+      applyTransform();
+    });
+
+    stage.addEventListener("pointerup", () => {
+      isDragging = false;
+      stage.classList.remove("is-dragging");
+    });
+
+    stage.addEventListener("pointercancel", () => {
+      isDragging = false;
+      stage.classList.remove("is-dragging");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!modal.classList.contains("is-open")) return;
+      if (e.key === "Escape") closeModal();
+      if (e.key === "+" || e.key === "=") zoom(1.2);
+      if (e.key === "-") zoom(1 / 1.2);
+      if (e.key === "0") fitToStage();
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      renderMermaidBlocks().catch(console.error);
+    });
+  } else {
+    renderMermaidBlocks().catch(console.error);
+  }
+</script><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

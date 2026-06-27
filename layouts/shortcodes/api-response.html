@@ -1,0 +1,13 @@
+{{- $code := .Get "code" -}}
+{{- $label := .Get "label" -}}
+{{- $summary := printf "Response (%s" $code -}}
+{{- if $label -}}
+  {{- $summary = printf "%s %s" $summary $label -}}
+{{- end -}}
+{{- $summary = printf "%s)" $summary -}}
+<details class="api-panel api-panel-response">
+  <summary class="api-panel-summary">{{ $summary }}</summary>
+  <div class="api-panel-body">
+    {{ .Page.RenderString .Inner }}
+  </div>
+</details>

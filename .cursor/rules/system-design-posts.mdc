@@ -1,0 +1,144 @@
+---
+description: Template and conventions for system design blog posts (Hugo + Mermaid)
+globs: content/system-design/**/*.md
+alwaysApply: false
+---
+
+# System Design Blog Posts
+
+Reference implementation: `content/system-design/urlshortner.md`
+
+## Repo Layout
+
+| Path | Purpose |
+|------|---------|
+| `content/system-design/_index.md` | Section landing page |
+| `content/system-design/<topic>.md` | One post per design (e.g. `rate-limiter.md`, `news-feed.md`) |
+
+URL pattern: `/system-design/<filename>/`
+
+## Hugo Front Matter
+
+```yaml
+---
+title: "Designing a <System> at Scale"
+date: 2026-06-26T10:00:00+00:00
+draft: false
+description: "One-line summary for SEO and social previews."
+tags: ["system-design", "<topic>", "distributed-systems"]
+categories: ["System Design"]
+---
+```
+
+Set `draft: true` while writing; `draft: false` when ready to publish.
+
+## Required Sections (11)
+
+Use numbered `##` headings matching the URL shortener post:
+
+1. **Requirements and Goals** — MVP functional table, premium/optional features, NFRs (scale, availability, latency, read/write ratio)
+2. **Back-of-the-Envelope Calculations** — Daily traffic, avg/peak RPS, storage, bandwidth (show math in tables)
+3. **API Design** — Overview table (always visible) + collapsible endpoint blocks via shortcodes (see below)
+4. **Data Model** — Tables/entities + Mermaid `erDiagram`
+5. **High-Level Architecture** — Mermaid `flowchart LR` (entry → services → storage → async pipeline)
+6. **Core Algorithm / ID Generation** — Uniqueness, ordering, or partitioning strategy
+7. **Database & Scaling** — Tech comparison table, choice, scaling stages (`flowchart TD`)
+8. **Caching Strategy** — What to cache, strategy (cache-aside / write-through), sizing
+9. **Capacity Planning** — Component table (pods, memory, brokers, network)
+10. **Design Decisions + Failure Modes** — Summary table + what breaks and how to mitigate
+
+**Intro** (before section 1): 1–2 paragraphs — what the system does + dominant trait (read-heavy, write-heavy, real-time, etc.).
+
+Separate major sections with `---` horizontal rules.
+
+## API Design (Collapsible Endpoints)
+
+Keep §3 scannable: **overview table always visible**, request/response/errors collapsed per endpoint.
+
+Shortcodes live in `layouts/shortcodes/` (`api-endpoint`, `api-request`, `api-response`, `api-errors`, `api-notes`).
+
+Reference: `content/system-design/urlshortner.md` §3.
+
+### Structure
+
+1. **Overview table** (markdown, not collapsed) — all endpoints at a glance
+2. **`api-endpoint`** per route — method badge + path + one-line description always visible
+3. **`api-request`** — JSON body, headers, field table (omit if no body, e.g. simple GET)
+4. **`api-response`** — success payload; params: `code`, optional `label`
+5. **`api-errors`** — status code table
+6. **`api-notes`** — optional visible footnote (design rationale, not collapsed)
+
+### Template
+
+```markdown
+## 3. API Design
+
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/v1/resource` | Create resource |
+
+{{< api-endpoint method="POST" path="/v1/resource" desc="Create resource" open="true" >}}
+{{< api-request >}}
+```json
+{ "field": "value" }
+```
+| Field | Required | Notes |
+| `field` | Yes | Description |
+{{< /api-request >}}
+{{< api-response code="201" label="Created" >}}
+```json
+{ "id": "abc" }
+```
+{{< /api-response >}}
+{{< api-errors >}}
+| Code | Condition |
+| `400 Bad Request` | Invalid input |
+{{< /api-errors >}}
+{{< /api-endpoint >}}
+```
+
+- Set `open="true"` on the first endpoint only — expands its Request panel by default
+- Use representative JSON; truncate repetitive fields with `...`
+- Group related routes under `###` headings when a post has many endpoints
+
+## Architecture Diagrams (Zoom / Lightbox)
+
+Mermaid diagrams render inside a **click-to-expand** frame with a lightbox viewer:
+
+- **Click** any diagram (or press Enter when focused) to open fullscreen
+- **Scroll** to zoom, **drag** to pan, **Esc** to close
+- Toolbar: `+` / `−` / Reset / Fit
+- Title auto-picked from the nearest preceding `##` / `###` heading
+
+No author changes needed — all ` ```mermaid ` blocks get this automatically.
+
+## Mermaid Rules (v11)
+
+| Do | Avoid |
+|----|-------|
+| Quote edge labels: `\|"GET /v1/resource"\|` | `\n` in unquoted labels |
+| Curly braces in labels: `{code}` | Reserved/special chars in node IDs |
+| Use `<br/>` for line breaks in nodes | Ambiguous IDs like `Redis`, `Kafka` as node names |
+| camelCase subgraph IDs: `subgraph readPath["Read Path"]` | Unquoted multi-line labels |
+| Cylinder nodes: `[("PostgreSQL<br/>Primary")]` | Static images when Mermaid suffices |
+
+**Required diagram types per post:**
+- `erDiagram` — data model
+- `flowchart LR` — architecture
+- `flowchart TD` — scaling stages or request flow
+
+## Workflow
+
+1. Sketch in draw.io (requirements → API → schema → architecture → capacity)
+2. Create `content/system-design/<name>.md` using the 11-section template
+3. Convert diagrams to Mermaid (no static image unless Mermaid cannot express it)
+4. Preview: `hugo server -D` — verify Mermaid renders and TOC is correct (`buildFuture` is enabled in `hugo.toml` so same-day UTC-dated posts appear locally)
+5. Set `draft: false` when ready to publish
+
+## Writing Style
+
+- Use markdown tables for requirements, calculations, comparisons, and capacity
+- State concrete numbers (RPS, storage GB, pod counts) — never vague "lots of traffic"
+- Separate read and write paths when the system is asymmetric
+- Offload analytics/async work off the hot path (e.g. Kafka → analytics store)
+- Name services by responsibility (e.g. Write Service vs Read Service), not generic "API"

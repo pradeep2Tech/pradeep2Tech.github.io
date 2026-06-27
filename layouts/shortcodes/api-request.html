@@ -1,0 +1,10 @@
+{{- $open := eq (.Get "open") "true" -}}
+{{- if not $open -}}
+  {{- $open = eq (.Parent.Get "open") "true" -}}
+{{- end -}}
+<details class="api-panel api-panel-request"{{ if $open }} open{{ end }}>
+  <summary class="api-panel-summary">Request</summary>
+  <div class="api-panel-body">
+    {{ .Page.RenderString .Inner }}
+  </div>
+</details>

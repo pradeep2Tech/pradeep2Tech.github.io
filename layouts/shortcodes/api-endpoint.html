@@ -1,0 +1,18 @@
+{{- $method := upper (.Get "method") -}}
+{{- $path := .Get "path" -}}
+{{- $desc := .Get "desc" -}}
+{{- $methodClass := lower $method -}}
+<div class="api-endpoint">
+  <div class="api-endpoint-header">
+    <span class="api-method api-method-{{ $methodClass }}">{{ $method }}</span>
+    <code class="api-path">{{ $path }}</code>
+    {{- with $desc -}}
+    <span class="api-desc">{{ . }}</span>
+    {{- end -}}
+  </div>
+  {{- with .Inner -}}
+  <div class="api-endpoint-panels">
+    {{ $.Page.RenderString . }}
+  </div>
+  {{- end -}}
+</div>

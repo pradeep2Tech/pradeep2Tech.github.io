@@ -1,0 +1,246 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>System Design | Pradeep CS – Engineering Notes</title><meta name=keywords content><meta name=description content="Deep dives into PostgreSQL internals, distributed systems, caching strategies, and performance debugging."><meta name=author content="Pradeep Chakravarthi"><link rel=canonical href=http://localhost:1313/categories/system-design/><link crossorigin=anonymous href=http://localhost:1313/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as=style><link rel=icon href=http://localhost:1313/favicon.ico><link rel=icon type=image/png sizes=16x16 href=http://localhost:1313/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=http://localhost:1313/favicon-32x32.png><link rel=apple-touch-icon href=http://localhost:1313/apple-touch-icon.png><link rel=mask-icon href=http://localhost:1313/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=http://localhost:1313/categories/system-design/index.xml title=rss><link rel=alternate hreflang=en href=http://localhost:1313/categories/system-design/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><style>.diagram-frame{position:relative;margin:1.25rem 0;border:1px solid var(--border);border-radius:8px;background:var(--entry);overflow:hidden;cursor:zoom-in}.diagram-frame .mermaid{margin:0;padding:1rem;overflow:auto;max-width:100%}.diagram-frame .mermaid svg{display:block;margin:0 auto;max-width:100%;height:auto}.diagram-frame-hint{position:absolute;top:.5rem;right:.5rem;display:flex;align-items:center;gap:.35rem;padding:.25rem .55rem;font-size:.72rem;font-weight:600;letter-spacing:.02em;color:var(--secondary);background:var(--theme);border:1px solid var(--border);border-radius:999px;opacity:.85;pointer-events:none;transition:opacity .15s ease}.diagram-frame:hover .diagram-frame-hint{opacity:1}.diagram-frame-hint svg{width:.85rem;height:.85rem;flex-shrink:0}.diagram-modal{position:fixed;inset:0;z-index:9999;display:none;flex-direction:column}.diagram-modal.is-open{display:flex}.diagram-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(2px)}html[data-theme=light] .diagram-modal-backdrop{background:rgba(255,255,255,.82)}.diagram-modal-toolbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.65rem 1rem;background:var(--entry);border-bottom:1px solid var(--border);flex-shrink:0}.diagram-modal-title{flex:1;font-size:.875rem;font-weight:600;color:var(--primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-right:.5rem}.diagram-modal-btn{display:inline-flex;align-items:center;justify-content:center;min-width:2.25rem;height:2.25rem;padding:0 .5rem;font-size:.95rem;font-weight:600;line-height:1;color:var(--primary);background:var(--code-bg);border:1px solid var(--border);border-radius:6px;cursor:pointer;user-select:none}.diagram-modal-btn:hover{border-color:var(--secondary)}.diagram-modal-btn:focus-visible{outline:2px solid var(--secondary);outline-offset:2px}.diagram-modal-btn--close{margin-left:.25rem}.diagram-modal-stage{position:relative;z-index:1;flex:1;overflow:hidden;cursor:grab;touch-action:none}.diagram-modal-stage.is-dragging{cursor:grabbing}.diagram-modal-content{position:absolute;top:50%;left:50%;transform-origin:center center;will-change:transform}.diagram-modal-content svg{display:block;max-width:none;height:auto}.diagram-modal-help{position:relative;z-index:2;padding:.4rem 1rem;font-size:.75rem;text-align:center;color:var(--secondary);background:var(--entry);border-top:1px solid var(--border);flex-shrink:0}</style><meta property="og:url" content="http://localhost:1313/categories/system-design/"><meta property="og:site_name" content="Pradeep CS – Engineering Notes"><meta property="og:title" content="System Design"><meta property="og:description" content="Deep dives into PostgreSQL internals, distributed systems, caching strategies, and performance debugging."><meta property="og:locale" content="en-us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="System Design"><meta name=twitter:description content="Deep dives into PostgreSQL internals, distributed systems, caching strategies, and performance debugging."></head><body class=list id=top><header class=header><nav class=nav><div class=logo><a href=http://localhost:1313/ accesskey=h title="Pradeep CS – Engineering Notes (Alt + H)">Pradeep CS – Engineering Notes</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu></ul></nav></header><main class=main><header class=page-header><div class=breadcrumbs><a href=http://localhost:1313/>Home</a>&nbsp;»&nbsp;<a href=http://localhost:1313/categories/>Categories</a></div><h1>System Design</h1></header><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Distributed Email Delivery System at Scale (Gmail/Outlook)</h2></header><div class=entry-content><p>A global email platform must register unique addresses, compose and autosave drafts, deliver messages internally and to third-party domains, organize mailboxes, handle attachments, and support full-text search — all while sustaining 500M DAU and 5 billion sent emails per day. The system is write-accepting on ingress (never block composition) with eventually consistent delivery (a few seconds of inbox lag is acceptable), but zero data loss once a message leaves the outbox.
+...</p></div><footer class=entry-footer><span title='2026-06-27 12:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>13 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Distributed Email Delivery System at Scale (Gmail/Outlook)" href=http://localhost:1313/system-design/email-delivery/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Distributed Rate Limiter at Scale</h2></header><div class=entry-content><p>A distributed rate limiter protects downstream services by throttling traffic based on user identity, API keys, IP addresses, and endpoint patterns. At scale it is an extremely read-heavy, latency-critical inline interceptor — every API request must be evaluated in ≤ 5 ms while sustaining 1 million RPS steady state with burst tolerance and runtime rule updates.
+This post walks through the full design — requirements, capacity math, admin API contracts, PostgreSQL rule storage, Envoy gateway architecture, atomic Redis Lua token-bucket algorithms, technology trade-offs, caching and eviction, infrastructure sizing, and failure modes. For 50 senior-level interview follow-ups, see Distributed Rate Limiter Interview Questions.
+...</p></div><footer class=entry-footer><span title='2026-06-27 12:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Distributed Rate Limiter at Scale" href=http://localhost:1313/system-design/distributed-rate-limiter/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Google/Meta Sponsored Ads Platform at Scale</h2></header><div class=entry-content><p>A sponsored ads platform matches user search intent to retailer inventory, ranks candidates by click-feedback scores, and serves results in real time across millions of advertisers and billions of products. At scale it is read/write balanced on the user path (search reads and click writes at ~1:1) while internal telemetry aggregation is write-dominated. Search must return top ads in &lt; 200 ms P99; click scores must propagate to the serving cache within ≤ 3 minutes.
+...</p></div><footer class=entry-footer><span title='2026-06-27 12:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>14 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Google/Meta Sponsored Ads Platform at Scale" href=http://localhost:1313/system-design/sponsored-ads/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a LinkedIn Job Search & AI Recommendation Engine at Scale</h2></header><div class=entry-content><p>A professional job platform must serve two asymmetric workloads: employers performing infrequent CRUD on postings, and millions of seekers running filtered search and personalized recommendations every day. At LinkedIn scale this is read-dominated (~1000:1 seeker-to-employer ratio) with a strict ≤ 200 ms backend SLA and graceful degradation when the AI personalization tier fails.
+This post walks through the full design — requirements, capacity math, API contracts, DynamoDB/OpenSearch data modeling, Kafka-driven index synchronization, multi-tier ranking with circuit-breaker fallbacks, technology trade-offs, caching, infrastructure sizing, and failure modes. For 50 senior-level interview follow-ups, see LinkedIn Job Search Interview Questions.
+...</p></div><footer class=entry-footer><span title='2026-06-27 12:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>11 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a LinkedIn Job Search & AI Recommendation Engine at Scale" href=http://localhost:1313/system-design/linkedin-job-search/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing an IoT-Enabled Fleet Vending Ecosystem at Scale</h2></header><div class=entry-content><p>An enterprise fleet vending ecosystem spans 500,000 edge devices across continents, each running autonomously on constrained ARM hardware with intermittent cellular backhaul. The dominant trait is asymmetric scale: the edge is read-heavy (constant hardware polling) and must remain strictly consistent for local inventory, while the cloud control plane is write-heavy on telemetry ingestion (~50K peak RPS) with periodic operational reads.
+This post walks through the full design — requirements, capacity math, edge and cloud API contracts, dual-tier data modeling (SQLite + PostgreSQL/TimescaleDB), MQTT/Kafka ingestion architecture, state-machine concurrency on the edge, technology trade-offs, caching, infrastructure sizing, security, and failure modes. For senior-level interview follow-ups, see Fleet Vending IoT Interview Questions.
+...</p></div><footer class=entry-footer><span title='2026-06-27 12:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing an IoT-Enabled Fleet Vending Ecosystem at Scale" href=http://localhost:1313/system-design/fleet-vending-iot/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Distributed Key-Value Store (Memcached-Style) — Interview Questions</h2></header><div class=entry-content><p>Companion Q&amp;A for Designing a Distributed Key-Value Store (Memcached-Style) at Scale. These questions probe lock-striped LRU internals, consistent hashing trade-offs, async replication semantics, cache avalanche mitigation, and production failover — the topics interviewers dig into after the whiteboard diagram.
+Architecture & Trade-offs (1–10) 1. Why build a custom in-memory engine instead of deploying Redis or Memcached off the shelf?
+Redis bundles structured data types, Lua scripting, and optional disk persistence (RDB/AOF) that add memory and CPU overhead. Memcached is single-threaded per instance. A stripped-down, multithreaded engine optimized for opaque blob get/put/delete maximizes raw throughput and memory efficiency at 23M+ peak RPS.
+...</p></div><footer class=entry-footer><span title='2026-06-27 11:30:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Distributed Key-Value Store (Memcached-Style) — Interview Questions" href=http://localhost:1313/system-design/distributed-kv-store-interview-questions/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Distributed Message Queue System Design — Interview Questions</h2></header><div class=entry-content><p>Companion Q&amp;A for Designing a Distributed Message Queue at Scale. These questions probe append-only log internals, ISR replication, consumer group rebalancing, idempotent producers, page-cache behavior, and production failure recovery — the topics interviewers dig into after the whiteboard diagram.
+Storage & Log Internals (1–10) 1. Why use append-only logs instead of traditional B-Tree indexed structures?
+Append-only logs write sequentially to the end of the file, avoiding the random disk I/O operations and page splits common in B-Tree modifications. This design keeps insertion speeds at constant O(1) complexity, maximizing throughput for heavy streaming workloads.
+...</p></div><footer class=entry-footer><span title='2026-06-27 11:30:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Distributed Message Queue System Design — Interview Questions" href=http://localhost:1313/system-design/distributed-message-queue-interview-questions/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Distributed Web Crawler System Design — Interview Questions</h2></header><div class=entry-content><p>Companion Q&amp;A for Designing a Distributed Web Crawler at Scale. These questions probe Bloom-filter deduplication, politeness enforcement, frontier scheduling, SSRF prevention, and production failure recovery — the topics interviewers dig into after the whiteboard diagram.
+Architecture & Trade-offs (1–10) 1. Why separate the URL Frontier Service from Crawl Workers instead of a monolithic crawler?
+The frontier is CPU- and database-bound (scheduling, dedup, priority queues), while workers are network- and I/O-bound (HTTP fetch, parsing). Separating them allows independent horizontal scaling — add workers when Kafka lag grows without over-provisioning database connections on the scheduling tier.
+...</p></div><footer class=entry-footer><span title='2026-06-27 11:30:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>11 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Distributed Web Crawler System Design — Interview Questions" href=http://localhost:1313/system-design/distributed-web-crawler-interview-questions/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Distributed Key-Value Store (Memcached-Style) at Scale</h2></header><div class=entry-content><p>A distributed key-value cache sits between application services and persistent storage, absorbing read pressure with ultra-low-latency, in-memory lookups. This design targets a Memcached-style engine: opaque byte payloads, per-key TTL, LRU eviction under memory pressure, and no disk persistence — availability comes from clustering and replication, not cold storage.
+At scale the workload is read-intensive (10:1): 100M DAU generating ~1 trillion operations per day, with a peak of ~23M RPS and a p99 latency budget under 2 ms over the network. This post walks through requirements, capacity math, API contracts, in-memory data structures, consistent-hashing client routing, technology trade-offs, infrastructure sizing, security, observability, and failure recovery. For senior-level interview follow-ups, see Distributed KV Store Interview Questions.
+...</p></div><footer class=entry-footer><span title='2026-06-27 11:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>13 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Distributed Key-Value Store (Memcached-Style) at Scale" href=http://localhost:1313/system-design/distributed-kv-store/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Designing a Distributed Message Queue at Scale</h2></header><div class=entry-content><p>A distributed message queue decouples producers from consumers through durable, partitioned topics — enabling event-driven microservices, stream processing, and historical replay at scale. At production scale it is a write-heavy, partition-ordered system: ingestion must sustain burst traffic with configurable durability guarantees (ack=0/1/all), while consumers pull at their own pace without broker-side push overload.
+This post walks through the full design — requirements, capacity math, REST control plane and TCP data plane APIs, append-only log storage, leader-follower replication, MurmurHash3 partitioning, OS page-cache caching, infrastructure sizing, and failure runbooks. For 50 senior-level interview follow-ups, see Distributed Message Queue Interview Questions.
+...</p></div><footer class=entry-footer><span title='2026-06-27 11:00:00 +0000 +0000'>June 27, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>Pradeep Chakravarthi</span></footer><a class=entry-link aria-label="post link to Designing a Distributed Message Queue at Scale" href=http://localhost:1313/system-design/distributed-message-queue/></a></article><footer class=page-footer><nav class=pagination><a class=prev href=http://localhost:1313/categories/system-design/>«&nbsp;Prev&nbsp;
+</a><a class=next href=http://localhost:1313/categories/system-design/page/3/>Next&nbsp;&nbsp;»</a></nav></footer></main><footer class=footer><span>&copy; 2026 <a href=http://localhost:1313/>Pradeep CS – Engineering Notes</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg></a><div id=diagram-modal class=diagram-modal role=dialog aria-modal=true aria-label="Diagram viewer" hidden><div class=diagram-modal-backdrop data-diagram-close></div><div class=diagram-modal-toolbar><span class=diagram-modal-title id=diagram-modal-title>Architecture diagram</span>
+<button type=button class=diagram-modal-btn data-diagram-action=zoom-out title="Zoom out (−)" aria-label="Zoom out">−</button>
+<button type=button class=diagram-modal-btn data-diagram-action=zoom-in title="Zoom in (+)" aria-label="Zoom in">+</button>
+<button type=button class=diagram-modal-btn data-diagram-action=reset title="Reset zoom" aria-label="Reset zoom">⟲</button>
+<button type=button class=diagram-modal-btn data-diagram-action=fit title="Fit to screen" aria-label="Fit to screen">Fit</button>
+<button type=button class="diagram-modal-btn diagram-modal-btn--close" data-diagram-close title="Close (Esc)" aria-label=Close>✕</button></div><div class=diagram-modal-stage id=diagram-modal-stage><div class=diagram-modal-content id=diagram-modal-content></div></div><div class=diagram-modal-help>Scroll to zoom · Drag to pan · Esc to close</div></div><script type=module>
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: "loose",
+    theme: "default"
+  });
+
+  const EXPAND_ICON =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>';
+
+  function wrapMermaidBlocks() {
+    const mermaidCodeBlocks = document.querySelectorAll("pre code.language-mermaid");
+
+    mermaidCodeBlocks.forEach((codeBlock, index) => {
+      const pre = codeBlock.closest("pre");
+      if (!pre) return;
+
+      const frame = document.createElement("div");
+      frame.className = "diagram-frame";
+      frame.setAttribute("role", "button");
+      frame.setAttribute("tabindex", "0");
+      frame.setAttribute("aria-label", "Expand diagram");
+
+      const hint = document.createElement("span");
+      hint.className = "diagram-frame-hint";
+      hint.innerHTML = EXPAND_ICON + " Click to expand";
+
+      const mermaidContainer = document.createElement("div");
+      mermaidContainer.className = "mermaid";
+      mermaidContainer.id = `mermaid-${index}`;
+      mermaidContainer.textContent = codeBlock.textContent;
+
+      frame.appendChild(hint);
+      frame.appendChild(mermaidContainer);
+      pre.parentNode.replaceChild(frame, pre);
+    });
+  }
+
+  async function renderMermaidBlocks() {
+    wrapMermaidBlocks();
+    await mermaid.run({ querySelector: ".mermaid" });
+    initDiagramLightbox();
+  }
+
+  function initDiagramLightbox() {
+    const modal = document.getElementById("diagram-modal");
+    const stage = document.getElementById("diagram-modal-stage");
+    const content = document.getElementById("diagram-modal-content");
+    const titleEl = document.getElementById("diagram-modal-title");
+    if (!modal || !stage || !content) return;
+
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let panStartX = 0;
+    let panStartY = 0;
+    let activeFrame = null;
+
+    function applyTransform() {
+      content.style.transform = `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${scale})`;
+    }
+
+    function fitToStage() {
+      const svg = content.querySelector("svg");
+      if (!svg) return;
+
+      const stageRect = stage.getBoundingClientRect();
+      const padding = 48;
+      const availW = stageRect.width - padding;
+      const availH = stageRect.height - padding;
+
+      const svgW = svg.viewBox?.baseVal?.width || svg.getBoundingClientRect().width || 800;
+      const svgH = svg.viewBox?.baseVal?.height || svg.getBoundingClientRect().height || 600;
+
+      scale = Math.min(availW / svgW, availH / svgH, 1.5);
+      scale = Math.max(scale, 0.15);
+      panX = 0;
+      panY = 0;
+      applyTransform();
+    }
+
+    function openModal(frame) {
+      const svg = frame.querySelector(".mermaid svg");
+      if (!svg) return;
+
+      activeFrame = frame;
+      content.innerHTML = "";
+      content.appendChild(svg.cloneNode(true));
+
+      const heading = findDiagramHeading(frame);
+      titleEl.textContent = heading || "Architecture diagram";
+
+      modal.hidden = false;
+      modal.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+
+      requestAnimationFrame(fitToStage);
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.hidden = true;
+      document.body.style.overflow = "";
+      content.innerHTML = "";
+      activeFrame = null;
+      scale = 1;
+      panX = 0;
+      panY = 0;
+    }
+
+    function findDiagramHeading(frame) {
+      let el = frame.previousElementSibling;
+      while (el) {
+        if (/^H[2-4]$/.test(el.tagName)) return el.textContent.trim();
+        if (el.tagName === "HR") break;
+        el = el.previousElementSibling;
+      }
+      return null;
+    }
+
+    function zoom(factor) {
+      scale = Math.min(Math.max(scale * factor, 0.15), 6);
+      applyTransform();
+    }
+
+    document.querySelectorAll(".diagram-frame").forEach((frame) => {
+      frame.addEventListener("click", () => openModal(frame));
+      frame.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openModal(frame);
+        }
+      });
+    });
+
+    modal.querySelectorAll("[data-diagram-close]").forEach((el) => {
+      el.addEventListener("click", closeModal);
+    });
+
+    modal.querySelectorAll("[data-diagram-action]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const action = btn.getAttribute("data-diagram-action");
+        if (action === "zoom-in") zoom(1.2);
+        if (action === "zoom-out") zoom(1 / 1.2);
+        if (action === "reset") {
+          scale = 1;
+          panX = 0;
+          panY = 0;
+          applyTransform();
+        }
+        if (action === "fit") fitToStage();
+      });
+    });
+
+    stage.addEventListener(
+      "wheel",
+      (e) => {
+        if (!modal.classList.contains("is-open")) return;
+        e.preventDefault();
+        zoom(e.deltaY > 0 ? 1 / 1.12 : 1.12);
+      },
+      { passive: false }
+    );
+
+    stage.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      isDragging = true;
+      stage.classList.add("is-dragging");
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      panStartX = panX;
+      panStartY = panY;
+      stage.setPointerCapture(e.pointerId);
+    });
+
+    stage.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      panX = panStartX + (e.clientX - dragStartX);
+      panY = panStartY + (e.clientY - dragStartY);
+      applyTransform();
+    });
+
+    stage.addEventListener("pointerup", () => {
+      isDragging = false;
+      stage.classList.remove("is-dragging");
+    });
+
+    stage.addEventListener("pointercancel", () => {
+      isDragging = false;
+      stage.classList.remove("is-dragging");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!modal.classList.contains("is-open")) return;
+      if (e.key === "Escape") closeModal();
+      if (e.key === "+" || e.key === "=") zoom(1.2);
+      if (e.key === "-") zoom(1 / 1.2);
+      if (e.key === "0") fitToStage();
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      renderMermaidBlocks().catch(console.error);
+    });
+  } else {
+    renderMermaidBlocks().catch(console.error);
+  }
+</script><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

@@ -4,6 +4,7 @@ title = "Pradeep CS – Engineering Notes"
 theme = "PaperMod"
 enableRobotsTXT = true
 canonifyURLs = true
+buildFuture = true
 
 [pagination]
   pagerSize = 10
