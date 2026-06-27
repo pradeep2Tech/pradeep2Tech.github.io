@@ -1,0 +1,141 @@
+<script>
+  (function () {
+    const HLD_RE = /high[- ]level architecture/i;
+
+    function isHLDHeading(el) {
+      return el && /^H[23]$/.test(el.tagName) && HLD_RE.test(el.textContent);
+    }
+
+    function directChildren(parent, tagName) {
+      return Array.from(parent.children).filter((el) => el.tagName === tagName);
+    }
+
+    /** Hugo sometimes wraps block shortcodes in placeholder h2 — unwrap before section logic. */
+    function unwrapShortcodeHeadings(container) {
+      container.querySelectorAll('h2[id^="hahahugoshortcode"]').forEach((h2) => {
+        const parent = h2.parentElement;
+        if (!parent) return;
+        while (h2.firstChild) {
+          parent.insertBefore(h2.firstChild, h2);
+        }
+        h2.remove();
+      });
+    }
+
+    function moveSectionContent(body, startNode, root, endH2) {
+      let node = startNode;
+      while (node && node !== endH2) {
+        if (node.tagName === "H2" && node.parentElement === root) break;
+        const next = node.nextSibling;
+        body.appendChild(node);
+        node = next;
+      }
+    }
+
+    function wrapSubsections(body) {
+      while (true) {
+        const h3s = directChildren(body, "H3");
+        if (!h3s.length) break;
+
+        const h3 = h3s[0];
+        const nextH3 = h3s[1] || null;
+
+        const sub = document.createElement("details");
+        sub.className = "sd-subsection";
+
+        const summary = document.createElement("summary");
+        summary.className = "sd-subsection-summary";
+
+        const title = document.createElement("span");
+        title.className = "sd-subsection-title";
+
+        const hint = document.createElement("span");
+        hint.className = "sd-subsection-hint";
+        hint.textContent = "Expand";
+
+        const subBody = document.createElement("div");
+        subBody.className = "sd-subsection-body";
+
+        body.insertBefore(sub, h3);
+        title.appendChild(h3);
+        summary.appendChild(title);
+        summary.appendChild(hint);
+        sub.appendChild(summary);
+        sub.appendChild(subBody);
+
+        moveSectionContent(subBody, sub.nextSibling, body, nextH3);
+
+        sub.addEventListener("toggle", () => {
+          hint.textContent = sub.open ? "Collapse" : "Expand";
+        });
+      }
+    }
+
+    function wrapHLDSection(container, h2, nextH2) {
+      const block = document.createElement("div");
+      block.className = "sd-hld-block";
+      container.insertBefore(block, h2);
+      block.appendChild(h2);
+      moveSectionContent(block, block.nextSibling, container, nextH2);
+    }
+
+    function wrapOneSection(container, h2, nextH2) {
+      const section = document.createElement("details");
+      section.className = "sd-section";
+
+      const summary = document.createElement("summary");
+      summary.className = "sd-section-summary";
+
+      const title = document.createElement("span");
+      title.className = "sd-section-title";
+
+      const hint = document.createElement("span");
+      hint.className = "sd-section-hint";
+      hint.textContent = "Expand";
+
+      const body = document.createElement("div");
+      body.className = "sd-section-body";
+
+      container.insertBefore(section, h2);
+      title.appendChild(h2);
+      summary.appendChild(title);
+      summary.appendChild(hint);
+      section.appendChild(summary);
+      section.appendChild(body);
+
+      moveSectionContent(body, section.nextSibling, container, nextH2);
+      wrapSubsections(body);
+
+      section.addEventListener("toggle", () => {
+        hint.textContent = section.open ? "Collapse" : "Expand";
+      });
+    }
+
+    function wrapSections(container) {
+      unwrapShortcodeHeadings(container);
+
+      while (true) {
+        const h2s = directChildren(container, "H2");
+        if (!h2s.length) break;
+
+        const h2 = h2s[0];
+        const nextH2 = h2s[1] || null;
+
+        try {
+          if (isHLDHeading(h2)) {
+            wrapHLDSection(container, h2, nextH2);
+          } else {
+            wrapOneSection(container, h2, nextH2);
+          }
+        } catch (err) {
+          console.error("Section collapsible failed for:", h2.textContent?.trim(), err);
+          break;
+        }
+      }
+    }
+
+    window.initSectionCollapsibles = function () {
+      document.querySelectorAll(".sd-collapsible-content").forEach(wrapSections);
+    };
+  })();
+</script>

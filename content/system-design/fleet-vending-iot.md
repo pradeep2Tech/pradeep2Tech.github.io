@@ -99,22 +99,24 @@ This post walks through the full design — requirements, capacity math, edge an
 
 ## 3. API Design
 
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/local/selection` | Edge — Select Item |
+| 2 | POST | `/api/v1/local/payment/cash` | Edge — Process Cash Payment |
+| 3 | POST | `/api/v1/fleet/transactions` | Cloud — Transaction Reconciliation |
+
 Low-level communication between edge runtime components uses **asynchronous gRPC over Unix Domain Sockets**. External cloud APIs use REST over mTLS.
 
-### Edge — Select Item
-
-**`POST /api/v1/local/selection`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/local/selection" desc="Edge — Select Item" open="true" >}}
+{{< api-request >}}
 ```json
 {
   "coordinate": "A5"
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "status": "AVAILABLE",
@@ -127,24 +129,22 @@ Response (`200 OK`):
 | :--- | :--- |
 | `404 Not Found` | Invalid row/column coordinate |
 | `410 Gone` | Slot out of stock |
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Edge — Process Cash Payment
-
-**`POST /api/v1/local/payment/cash`**
-
+{{< api-endpoint method="POST" path="/api/v1/local/payment/cash" desc="Edge — Process Cash Payment" >}}
 Idempotency: client-generated `transaction_id` prevents duplicate coin-return runs on retry.
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "transaction_id": "tx-edge-109273-8821",
   "inserted_cents": 200
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "status": "PAID",
@@ -152,19 +152,17 @@ Response (`200 OK`):
   "idempotency_token": "idem-tok-88127391823"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### Cloud — Fleet Configuration Push (MQTT)
 
 Devices subscribe to `fleet/{machine_id}/config`. Configuration updates are pushed from the **Fleet Configuration Service** through the IoT hub when an administrator changes machine parameters.
 
-### Cloud — Transaction Reconciliation
-
-**`POST /api/v1/fleet/transactions`**
-
+{{< api-endpoint method="POST" path="/api/v1/fleet/transactions" desc="Cloud — Transaction Reconciliation" >}}
 Asynchronous ingestion — device fires the event and tracks status locally. Cloud confirms via MQTT ack topic `fleet/{machine_id}/txn/ack`.
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "transaction_id": "tx-edge-109273-8821",
@@ -175,16 +173,17 @@ Request:
   "timestamp": 1782403200
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "status": "queued",
   "snowflake_id": 8923749182736401
 }
 ```
-
+{{< /api-response >}}
+{{< /api-endpoint >}}
 ---
 
 ## 4. Data Model

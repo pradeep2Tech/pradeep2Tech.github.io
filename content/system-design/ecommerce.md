@@ -103,12 +103,17 @@ Starting from **10M MAU** and a **30% DAU** engagement factor:
 
 ## 3. API Design
 
-### Search Catalog
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | GET | `/api/v1/search?q={term}&category={cat}&page={n}&size={n}` | Search Catalog |
+| 2 | GET | `/api/v1/products/{productId}` | Get Product Metadata |
+| 3 | POST | `/api/v1/cart/items` | Add to Cart |
+| 4 | POST | `/api/v1/checkout` | Initialize Checkout |
+| 5 | POST | `/api/v1/payments/charge` | Process Payment |
+| 6 | GET | `/api/v1/orders/{orderId}/status` | Order Status |
 
-**`GET /api/v1/search?q={term}&category={cat}&page={n}&size={n}`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/search?q={term}&category={cat}&page={n}&size={n}" desc="Search Catalog" open="true" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "items": [
@@ -123,13 +128,11 @@ Response (`200 OK`):
   "pagination": { "currentPage": 1, "totalPages": 45, "totalItems": 450 }
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Get Product Metadata
-
-**`GET /api/v1/products/{productId}`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/products/{productId}" desc="Get Product Metadata" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "productId": "p_9901",
@@ -141,84 +144,79 @@ Response (`200 OK`):
   "currency": "USD"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Add to Cart
-
-**`POST /api/v1/cart/items`**
-
+{{< api-endpoint method="POST" path="/api/v1/cart/items" desc="Add to Cart" >}}
 Headers: `Authorization: Bearer <JWT>`
 
-Request:
-
+{{< api-request >}}
 ```json
 { "productId": "p_9901", "quantity": 1 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 { "cartId": "c_5502", "userId": "u_1102", "itemCount": 3 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Initialize Checkout
-
-**`POST /api/v1/checkout`**
-
+{{< api-endpoint method="POST" path="/api/v1/checkout" desc="Initialize Checkout" >}}
 Headers: `Authorization: Bearer <JWT>`, `X-Idempotency-Key: <UUID>`
 
-Request:
-
+{{< api-request >}}
 ```json
 { "cartId": "c_5502", "shippingAddressId": "addr_8801" }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 { "orderId": "ord_7701", "totalAmount": 999.00, "status": "PENDING_PAYMENT" }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Process Payment
-
-**`POST /api/v1/payments/charge`**
-
+{{< api-endpoint method="POST" path="/api/v1/payments/charge" desc="Process Payment" >}}
 Headers: `X-Idempotency-Key: <UUID>`
 
-Request:
-
+{{< api-request >}}
 ```json
 { "orderId": "ord_7701", "paymentMethodToken": "tok_9988", "amount": 999.00 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 { "transactionId": "tx_4402", "orderId": "ord_7701", "status": "SUCCESS" }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Order Status
-
-**`GET /api/v1/orders/{orderId}/status`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/orders/{orderId}/status" desc="Order Status" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 { "orderId": "ord_7701", "status": "CONFIRMED", "updatedAt": "2026-06-26T15:00:00Z" }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Error Codes
+### Idempotency
 
+For `/checkout` and `/payments/charge`, the API gateway stores `X-Idempotency-Key` in Redis via atomic `SETNX` with a 2-hour TTL. Duplicate requests return the cached response fingerprint instead of re-executing downstream transactions.
+
+**Common HTTP error codes**
+
+{{% api-errors %}}
 | Code | When |
 | :--- | :--- |
 | `400 Bad Request` | Validation failure on request body |
 | `409 Conflict` | Requested quantity exceeds available stock |
 | `422 Unprocessable Entity` | Invalid payment instrument state |
 | `429 Too Many Requests` | Rate limit exceeded at API gateway |
-
-### Idempotency
-
-For `/checkout` and `/payments/charge`, the API gateway stores `X-Idempotency-Key` in Redis via atomic `SETNX` with a 2-hour TTL. Duplicate requests return the cached response fingerprint instead of re-executing downstream transactions.
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

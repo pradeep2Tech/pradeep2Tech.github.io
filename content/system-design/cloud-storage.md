@@ -110,14 +110,16 @@ This post captures the full design — from requirements and capacity math throu
 
 ## 3. API Design
 
-### Initialize Upload Session
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/files/upload/init` | Initialize Upload Session |
+| 2 | POST | `/api/v1/files/upload/chunk-url` | Request Chunk Pre-signed URL |
+| 3 | POST | `/api/v1/files/upload/commit` | Commit Upload Session |
 
-**`POST /api/v1/files/upload/init`**
-
+{{< api-endpoint method="POST" path="/api/v1/files/upload/init" desc="Initialize Upload Session" open="true" >}}
 Idempotency: clients transmit an `X-Client-File-Signature` header (hash of the complete file layout) to detect matching ongoing sessions.
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "file_name": "quarterly_report.pdf",
@@ -126,9 +128,9 @@ Request:
   "total_chunks": 4
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "file_id": "b7c3-811a-4f2d",
@@ -138,13 +140,11 @@ Response (`201 Created`):
   "status": "INITIATED"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Request Chunk Pre-signed URL
-
-**`POST /api/v1/files/upload/chunk-url`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/files/upload/chunk-url" desc="Request Chunk Pre-signed URL" >}}
+{{< api-request >}}
 ```json
 {
   "upload_id": "upl-9012-acdf",
@@ -152,9 +152,9 @@ Request:
   "chunk_hash_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "upload_id": "upl-9012-acdf",
@@ -162,13 +162,11 @@ Response (`200 OK`):
   "pre_signed_url": "https://storage.provider.com/blocks/upl-9012?partNumber=2&sig=ab73c..."
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Commit Upload Session
-
-**`POST /api/v1/files/upload/commit`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/files/upload/commit" desc="Commit Upload Session" >}}
+{{< api-request >}}
 ```json
 {
   "upload_id": "upl-9012-acdf",
@@ -181,9 +179,9 @@ Request:
   ]
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "file_id": "b7c3-811a-4f2d",
@@ -191,6 +189,8 @@ Response (`202 Accepted`):
   "message": "Asynchronous validation and deduplication engine triggered."
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### HTTP Status Codes
 
@@ -200,7 +200,6 @@ Response (`202 Accepted`):
 | `401 Unauthorized` | Missing token, signature mismatch, or expired access context |
 | `403 Forbidden` | Quota exceeded or sharing restriction |
 | `409 Conflict` | Resource lock conflict or duplicate filename in target folder |
-
 ---
 
 ## 4. Data Model

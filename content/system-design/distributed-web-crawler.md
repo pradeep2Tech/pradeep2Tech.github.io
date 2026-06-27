@@ -85,14 +85,15 @@ Starting from **1 billion pages**, a **7-day re-crawl interval**, and **100 KB a
 
 ## 3. API Design
 
-### Ingest Seed URLs
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/v1/seeds` | Ingest Seed URLs |
+| 2 | GET | `/v1/politeness/rules?domain={domain_name}` | Fetch Domain Crawl Rules |
 
-**`POST /v1/seeds`**
-
+{{< api-endpoint method="POST" path="/v1/seeds" desc="Ingest Seed URLs" open="true" >}}
 Idempotency: `X-Idempotency-Key` header mapped in Redis to prevent duplicate batch ingestion on retries.
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "seeds": [
@@ -100,9 +101,9 @@ Request:
   ]
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "status": "QUEUED",
@@ -114,13 +115,11 @@ Response (`202 Accepted`):
 | :--- | :--- | :--- |
 | `url` | Yes | Must be a valid, normalized HTTP/HTTPS URL |
 | `priority` | No | 1 (lowest) – 5 (highest); defaults to 3 |
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Fetch Domain Crawl Rules
-
-**`GET /v1/politeness/rules?domain={domain_name}`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/v1/politeness/rules?domain={domain_name}" desc="Fetch Domain Crawl Rules" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "domain": "example.com",
@@ -128,14 +127,17 @@ Response (`200 OK`):
   "disallowed_paths": ["/admin", "/private"]
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Error Codes
+**Common HTTP error codes**
 
+{{% api-errors %}}
 | Code | Condition |
 | :--- | :--- |
 | `400 Bad Request` | Malformed or unparseable target URL string |
 | `429 Too Many Requests` | Internal throttling on ingestion or frontier overload |
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

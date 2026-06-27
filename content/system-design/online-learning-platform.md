@@ -115,12 +115,14 @@ Cache the top **10%** of highly requested course listings, indexes, and session 
 
 ## 3. API Design
 
-### Search Courses
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | GET | `/api/v1/courses/search` | Search Courses |
+| 2 | POST | `/api/v1/courses/enroll` | Enroll in Course |
+| 3 | POST | `/api/v1/telemetry/progress` | Progress Telemetry |
 
-**`GET /api/v1/courses/search`**
-
-Request:
-
+{{< api-endpoint method="GET" path="/api/v1/courses/search" desc="Search Courses" open="true" >}}
+{{< api-request >}}
 ```json
 {
   "query": "System Design",
@@ -132,9 +134,9 @@ Request:
   "pagination": { "page_size": 20, "cursor": "ZXF4OTM0" }
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "data": [
@@ -149,24 +151,22 @@ Response (`200 OK`):
   "next_cursor": "YXVwODgy"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Enroll in Course
-
-**`POST /api/v1/courses/enroll`**
-
+{{< api-endpoint method="POST" path="/api/v1/courses/enroll" desc="Enroll in Course" >}}
 Headers: `X-Idempotency-Key: idm_uuid_v4_val`
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "course_id": "crs_90234",
   "payment_method_token": "pm_tok_840239"
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "enrollment_id": "enr_389234",
@@ -176,13 +176,11 @@ Response (`202 Accepted`):
 ```
 
 `202 Accepted` signals async settlement — the client polls or receives a webhook when access is granted.
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Progress Telemetry
-
-**`POST /api/v1/telemetry/progress`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/telemetry/progress" desc="Progress Telemetry" >}}
+{{< api-request >}}
 ```json
 {
   "course_id": "crs_90234",
@@ -191,14 +189,16 @@ Request:
   "client_timestamp_utc": "2026-06-26T16:07:00Z"
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 { "status": "ACK" }
 ```
 
 Designed for fire-and-forget ingestion — the gateway ACKs after buffering to Kafka, not after a durable DB write.
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### Global Error Contract
 
@@ -209,7 +209,6 @@ Designed for fire-and-forget ingestion — the gateway ACKs after buffering to K
   "timestamp": "2026-06-26T16:07:02Z"
 }
 ```
-
 ---
 
 ## 4. Data Model

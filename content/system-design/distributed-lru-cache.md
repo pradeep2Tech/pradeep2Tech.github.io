@@ -77,22 +77,23 @@ This post walks through the full design — requirements, capacity math, REST AP
 
 ## 3. API Design
 
-### Retrieve Entry
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | GET | `/v1/cache/{key}` | Retrieve Entry |
+| 2 | PUT | `/v1/cache/{key}` | Upsert Entry |
 
-**`GET /v1/cache/{key}`**
-
+{{< api-endpoint method="GET" path="/v1/cache/{key}" desc="Retrieve Entry" open="true" >}}
 Idempotent — repeated calls produce identical side effects on downstream state.
 
-Request:
-
+{{< api-request >}}
 ```http
 GET /v1/cache/user_session_992183 HTTP/1.1
 Host: cache.internal.net
 X-Request-ID: c8d2fa8c-023a-446a-8be7-d35b91cf8df3
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "key": "user_session_992183",
@@ -100,15 +101,13 @@ Response (`200 OK`):
   "ttl_remaining_sec": 3600
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Upsert Entry
-
-**`PUT /v1/cache/{key}`**
-
+{{< api-endpoint method="PUT" path="/v1/cache/{key}" desc="Upsert Entry" >}}
 Idempotent — successive writes to the same key produce identical final state.
 
-Request:
-
+{{< api-request >}}
 ```http
 PUT /v1/cache/user_session_992183 HTTP/1.1
 Host: cache.internal.net
@@ -120,25 +119,27 @@ X-Request-ID: f47ac10b-58cc-4372-a567-0e02b2c3d4a1
   "ttl_seconds": 3600
 }
 ```
-
-Response (`200 OK` / `201 Created`):
-
+{{< /api-request >}}
+{{< api-response code="200" label="OK / Created" >}}
 ```json
 {
   "status": "SUCCESS",
   "key": "user_session_992183"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Error Codes
+**Common HTTP error codes**
 
+{{% api-errors %}}
 | Code | Error Code | Condition | Mitigation |
 | :--- | :--- | :--- | :--- |
 | `400 Bad Request` | `INVALID_KEY_FORMAT` | Key exceeds 250-byte bound | Client shortens key |
 | `404 Not Found` | `CACHE_MISS` | Entry absent or expired | Application fetches from DB |
 | `429 Too Many Requests` | `RATE_LIMIT_EXCEEDED` | Client exceeds RPS quota | Client backs off |
 | `503 Service Unavailable` | `SHARD_UNREACHABLE` | Quorum failure across storage nodes | Circuit breaker trips |
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

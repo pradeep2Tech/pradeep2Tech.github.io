@@ -77,10 +77,11 @@ The **3× peak multiplier** accounts for synchronized regional spikes (lunch bre
 
 ## 3. API Design
 
-### Seeker Job Search
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | GET | `/v1/jobs/search` | Seeker Job Search |
 
-**`GET /v1/jobs/search`**
-
+{{< api-endpoint method="GET" path="/v1/jobs/search" desc="Seeker Job Search" open="true" >}}
 Request headers:
 
 ```
@@ -100,8 +101,7 @@ Query parameters:
 }
 ```
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "results": [
@@ -117,9 +117,12 @@ Response (`200 OK`):
   "next_page_token": "eyJvZmZzZXQiOjQwLCJzZWVkIjo0Mn0="
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Error Codes
+**Common HTTP error codes**
 
+{{% api-errors %}}
 | Code | Condition |
 | :--- | :--- |
 | `400 Bad Request` | Invalid filter parameters or corrupted cursor token |
@@ -128,7 +131,7 @@ Response (`200 OK`):
 | `503 Service Unavailable` | Circuit breaker open on personalization pipeline — falls back to structural search ranking |
 
 Token-based pagination (`page_token`) avoids O(n) offset scans as result sets grow.
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

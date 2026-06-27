@@ -112,10 +112,13 @@ This post walks through the full design — requirements, capacity math, API con
 
 ## 3. API Design
 
-### Fare Estimation
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/estimates` | Fare Estimation |
+| 2 | POST | `/api/v1/rides/bookings` | Request Ride |
+| 3 | POST | `/api/v1/dispatch/decide` | Driver Dispatch Decision |
 
-**`POST /api/v1/estimates`**
-
+{{< api-endpoint method="POST" path="/api/v1/estimates" desc="Fare Estimation" open="true" >}}
 Non-idempotent — surge and supply/demand change dynamically.
 
 ```json
@@ -126,8 +129,7 @@ Non-idempotent — surge and supply/demand change dynamically.
 }
 ```
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "quotation_id": "qte_883a-11f2",
@@ -139,11 +141,10 @@ Response (`200 OK`):
   ]
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Request Ride
-
-**`POST /api/v1/rides/bookings`**
-
+{{< api-endpoint method="POST" path="/api/v1/rides/bookings" desc="Request Ride" >}}
 Header: `X-Idempotency-Key: <uuid>` (required — prevents duplicate bookings on timeout retries).
 
 ```json
@@ -155,8 +156,7 @@ Header: `X-Idempotency-Key: <uuid>` (required — prevents duplicate bookings on
 }
 ```
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "booking_id": "bk_771c-99a3",
@@ -164,11 +164,10 @@ Response (`202 Accepted`):
   "created_at": "2026-06-26T15:48:00Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Driver Dispatch Decision
-
-**`POST /api/v1/dispatch/decide`**
-
+{{< api-endpoint method="POST" path="/api/v1/dispatch/decide" desc="Driver Dispatch Decision" >}}
 Idempotency enforced via `booking_id` + `driver_id` compound uniqueness.
 
 ```json
@@ -179,8 +178,7 @@ Idempotency enforced via `booking_id` + `driver_id` compound uniqueness.
 }
 ```
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "booking_id": "bk_771c-99a3",
@@ -188,6 +186,8 @@ Response (`200 OK`):
   "passcode": "4491"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### Error Matrix
 
@@ -203,7 +203,6 @@ Response (`200 OK`):
 | :--- | :--- |
 | `POST /api/v1/rides/bookings` | **2 req/s** per rider ID |
 | `POST /api/v1/dispatch/decide` | **1 req/s** per driver ID |
-
 ---
 
 ## 4. Data Model

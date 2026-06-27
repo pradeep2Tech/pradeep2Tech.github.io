@@ -108,14 +108,17 @@ A single Redis shard holds the working set; we scale out for HA and throughput, 
 
 ## 3. API Design
 
-### Get Upload Token (Pre-signed URL)
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/advertiser/ads/preassigned-url` | Get Upload Token (Pre-signed URL) |
+| 2 | POST | `/api/v1/advertiser/ads` | Create Ad Metadata |
+| 3 | GET | `/api/v1/ads/search?query=gifts+for+10+year+old&device=mobile` | Search Ads |
+| 4 | POST | `/api/v1/clicks` | Track Click Telemetry |
 
-**`POST /api/v1/advertiser/ads/preassigned-url`**
-
+{{< api-endpoint method="POST" path="/api/v1/advertiser/ads/preassigned-url" desc="Get Upload Token (Pre-signed URL)" open="true" >}}
 Authentication: Mutual TLS or Bearer token.
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "advertiser_id": "adv_99218",
@@ -123,24 +126,22 @@ Request:
   "file_size_bytes": 102400
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "upload_url": "https://s3.us-east-1.amazonaws.com/google-ads-media/thumbs/xyz123?...",
   "asset_key": "thumbs/xyz123.jpg"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Create Ad Metadata
-
-**`POST /api/v1/advertiser/ads`**
-
+{{< api-endpoint method="POST" path="/api/v1/advertiser/ads" desc="Create Ad Metadata" >}}
 Headers: `X-Idempotency-Key: <UUIDv4>`
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "advertiser_id": "adv_99218",
@@ -151,9 +152,9 @@ Request:
   "image_asset_key": "thumbs/xyz123.jpg"
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "ad_id": "ad_88192031",
@@ -161,13 +162,11 @@ Response (`202 Accepted`):
   "created_at": "2026-06-27T07:46:00Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Search Ads
-
-**`GET /api/v1/ads/search?query=gifts+for+10+year+old&device=mobile`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/ads/search?query=gifts+for+10+year+old&device=mobile" desc="Search Ads" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "query": "gifts for 10 year old",
@@ -184,15 +183,13 @@ Response (`200 OK`):
   ]
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Track Click Telemetry
-
-**`POST /api/v1/clicks`**
-
+{{< api-endpoint method="POST" path="/api/v1/clicks" desc="Track Click Telemetry" >}}
 Headers: `X-Idempotency-Key: <UUIDv4>`
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "click_id": "clk_7721901a88b",
@@ -202,28 +199,31 @@ Request:
   "client_ip": "192.0.2.1"
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "status": "QUEUED"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Error Codes
+### Idempotency
 
+All write flows accept `X-Idempotency-Key`. The API gateway caches the mutation response in Redis with a **24-hour TTL**. Duplicate keys within the window return the cached response without reprocessing downstream side effects.
+
+**Common HTTP error codes**
+
+{{% api-errors %}}
 | Code | Error | Condition |
 | :--- | :--- | :--- |
 | `400` | `ERR_INVALID_CATEGORY` | Unsupported or banned category |
 | `401` | `ERR_AUTH_EXPIRED` | Credential signature window failed |
 | `429` | `ERR_RATE_LIMIT_EXCEEDED` | Token-bucket limit breached per IP or API key |
 | `503` | `ERR_BROKER_BACKPRESSURE` | Ingestion buffer saturated |
-
-### Idempotency
-
-All write flows accept `X-Idempotency-Key`. The API gateway caches the mutation response in Redis with a **24-hour TTL**. Duplicate keys within the window return the cached response without reprocessing downstream side effects.
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

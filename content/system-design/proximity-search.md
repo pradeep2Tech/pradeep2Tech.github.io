@@ -97,10 +97,12 @@ Starting from **100M DAU**, **2 reads/user/day**, and **1M active drivers** upda
 
 ## 3. API Design
 
-### Search Nearby Points of Interest
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | GET | `/v1/search/proximity` | Search Nearby Points of Interest |
+| 2 | POST | `/v1/telemetry/location` | Update Dynamic Location Telemetry |
 
-**`GET /v1/search/proximity`**
-
+{{< api-endpoint method="GET" path="/v1/search/proximity" desc="Search Nearby Points of Interest" open="true" >}}
 | Parameter | Type | Required | Notes |
 | :--- | :--- | :--- | :--- |
 | `latitude` | float64 | Yes | e.g. `12.9716` |
@@ -112,8 +114,7 @@ Starting from **100M DAU**, **2 reads/user/day**, and **1M active drivers** upda
 
 Header: `X-Request-ID: <uuid>` (required for tracing)
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "results": [
@@ -131,11 +132,11 @@ Response (`200 OK`):
   }
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Update Dynamic Location Telemetry
-
-**`POST /v1/telemetry/location`**
-
+{{< api-endpoint method="POST" path="/v1/telemetry/location" desc="Update Dynamic Location Telemetry" >}}
+{{< api-request >}}
 ```json
 {
   "entity_id": "d83b9101-3821-419a-9912-887766554433",
@@ -145,39 +146,43 @@ Response (`200 OK`):
   "timestamp": 1774843200
 }
 ```
-
-Response (`202 Accepted`):
-
+{{< /api-request >}}
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "status": "ACCEPTED",
   "tracking_id": "req-99887766-5544"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### POI Management (CRUD)
 
-**`POST /v1/poi`** — create static POI. Header: `X-Idempotency-Key: <uuid>` (120 s TTL in gateway Redis).
+| Method | Path | Purpose |
+| :--- | :--- | :--- |
+| POST | `/v1/poi` | Create static POI (`X-Idempotency-Key` header, 120 s TTL) |
+| PUT | `/v1/poi/{poi_id}` | Update metadata, hours, coordinates |
+| DELETE | `/v1/poi/{poi_id}` | Soft-delete with CDC propagation to ES |
 
-**`PUT /v1/poi/{poi_id}`** — update metadata, hours, coordinates.
+**Common HTTP error codes**
 
-**`DELETE /v1/poi/{poi_id}`** — soft-delete with CDC propagation to ES.
-
-### Error Matrix
-
+{{% api-errors %}}
 | HTTP | Condition |
 | :--- | :--- |
 | `400` | Invalid coordinates (lat ∉ [-90, 90], lng ∉ [-180, 180]) |
 | `429` | Rate limiter exhaustion per user / IP / token |
 | `503` | Downstream spatial index or cache cluster degradation |
+{{% /api-errors %}}
 
-### Idempotency Strategy
+{{< api-notes >}}
+**Idempotency strategy**
 
 | Operation | Strategy |
 | :--- | :--- |
 | POI create (`POST /v1/poi`) | `X-Idempotency-Key` stored in Redis (120 s TTL) — deduplicates network retries |
 | Telemetry (`POST /v1/telemetry/location`) | No idempotency key; **timestamp monotonicity** — older timestamps discarded at consumer |
-
+{{< /api-notes >}}
 ---
 
 ## 4. Data Model

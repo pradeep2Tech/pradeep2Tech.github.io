@@ -95,12 +95,14 @@ Cache active template metadata and **20%** of high-frequency end-user preference
 
 ## 3. API Design
 
-### Manage Template Definitions
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/v1/templates` | Manage Template Definitions |
+| 2 | POST | `/v1/notifications` | Disseminate Messages / Notify Users |
+| 3 | PUT | `/v1/preferences` | Mutate Profile Subscriptions |
 
-**`POST /v1/templates`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/v1/templates" desc="Manage Template Definitions" open="true" >}}
+{{< api-request >}}
 ```json
 {
   "client_id": "cli_amzn_9921",
@@ -111,9 +113,9 @@ Request:
   "version": "1.0.0"
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "template_id": "tpl_sms_88321",
@@ -121,15 +123,13 @@ Response (`201 Created`):
   "created_at": "2026-06-26T16:01:00Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Disseminate Messages / Notify Users
-
-**`POST /v1/notifications`**
-
+{{< api-endpoint method="POST" path="/v1/notifications" desc="Disseminate Messages / Notify Users" >}}
 Requires header: `Idempotency-Key: <UUIDv4>`
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "template_id": "tpl_sms_88321",
@@ -144,22 +144,20 @@ Request:
   "schedule_timestamp": null
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "notification_id": "ntf_b7a8-991a2",
   "status": "QUEUED"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Mutate Profile Subscriptions
-
-**`PUT /v1/preferences`**
-
-Request:
-
+{{< api-endpoint method="PUT" path="/v1/preferences" desc="Mutate Profile Subscriptions" >}}
+{{< api-request >}}
 ```json
 {
   "client_id": "cli_amzn_9921",
@@ -171,29 +169,32 @@ Request:
   }
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "status": "UPDATED",
   "updated_at": "2026-06-26T16:01:05Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Status and Error Schemas
+### Idempotency Execution
 
+Clients submit a unique `Idempotency-Key` header on write requests. The edge service applies a short-lived distributed lock (`SET NX EX 86400`) in Redis using compound key `idempotency:{client_id}:{key}`. If an entry exists, the system returns the cached initial response without scheduling redundant executions.
+
+**Common HTTP error codes**
+
+{{% api-errors %}}
 | Status | Condition |
 | :--- | :--- |
 | `400 Bad Request` | Validation failure on runtime parameters |
 | `401 Unauthorized` | API signature token corrupted or expired |
 | `429 Too Many Requests` | Client breached allocated tier rate limits |
 | `503 Service Unavailable` | Downstream buffer queue overflow |
-
-### Idempotency Execution
-
-Clients submit a unique `Idempotency-Key` header on write requests. The edge service applies a short-lived distributed lock (`SET NX EX 86400`) in Redis using compound key `idempotency:{client_id}:{key}`. If an entry exists, the system returns the cached initial response without scheduling redundant executions.
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

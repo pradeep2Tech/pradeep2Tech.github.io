@@ -98,38 +98,38 @@ This post walks through the full design — requirements, capacity math, REST an
 
 ## 3. API Design
 
-### Create Document
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/documents` | Create Document |
+| 2 | GET | `/api/v1/documents/{document_id}?version_id=41` | Get Document Snapshot |
+| 3 | GET | `/api/v1/documents/{document_id}/edit/ws` | Collaborative session (WebSocket) |
 
-**`POST /api/v1/documents`**
-
+{{< api-endpoint method="POST" path="/api/v1/documents" desc="Create Document" open="true" >}}
 Request headers: `X-Idempotency-Key: <UUIDv4>` (prevents duplicate creation on network retry).
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "title": "Q3 Architecture Design",
   "owner_id": "usr_99831"
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "document_id": "doc_7712a",
   "created_at": "2026-06-26T10:15:30Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Get Document Snapshot
-
-**`GET /api/v1/documents/{document_id}?version_id=41`**
-
+{{< api-endpoint method="GET" path="/api/v1/documents/{document_id}?version_id=41" desc="Get Document Snapshot" >}}
 Query parameter `version_id` is optional — omit to fetch the latest snapshot.
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "document_id": "doc_7712a",
@@ -138,11 +138,11 @@ Response (`200 OK`):
   "title": "Q3 Architecture Design"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Collaborative Session (WebSocket)
-
-**`GET /api/v1/documents/{document_id}/edit/ws`** — connection upgrade to WebSocket.
-
+{{< api-endpoint method="GET" path="/api/v1/documents/{document_id}/edit/ws" desc="Collaborative session (WebSocket upgrade)" >}}
+{{< api-request >}}
 **Inbound operation (client → server):**
 
 ```json
@@ -157,7 +157,8 @@ Response (`200 OK`):
   }
 }
 ```
-
+{{< /api-request >}}
+{{< api-response code="200" label="Broadcast" >}}
 **Outbound broadcast (server → connected clients):**
 
 ```json
@@ -172,12 +173,14 @@ Response (`200 OK`):
   }
 }
 ```
-
+{{< /api-response >}}
+{{< api-errors >}}
 | Status / Code | Condition |
 | :--- | :--- |
 | `409 Conflict` | Client version outside OT transformation sliding window — triggers client resynchronization |
 | `429 Too Many Requests` | Keystroke rate limit exceeded per WebSocket session |
-
+{{< /api-errors >}}
+{{< /api-endpoint >}}
 ---
 
 ## 4. Data Model

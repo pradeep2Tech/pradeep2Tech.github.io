@@ -95,14 +95,16 @@ Tracking cancellation states over a rolling 1-hour window:
 
 ## 3. API Design
 
-### Create or Schedule Job
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/jobs` | Create or Schedule Job |
+| 2 | GET | `/api/v1/jobs/{job_id}/status` | Job Status |
+| 3 | POST | `/api/v1/jobs/{job_id}/cancel` | Cancel Job |
 
-**`POST /api/v1/jobs`**
-
+{{< api-endpoint method="POST" path="/api/v1/jobs" desc="Create or Schedule Job" open="true" >}}
 Requires `X-Idempotency-Key` header (UUID). Enforced at the API gateway via atomic Redis `SETNX` with 15-minute TTL.
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "name": "data_warehouse_nightly_aggregation",
@@ -116,9 +118,9 @@ Request:
   }
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "job_id": "job_7f168012-bc78-4ea1-bd34-f390823da56b",
@@ -132,13 +134,11 @@ Response (`202 Accepted`):
 | `IMMEDIATE` | Enqueue for immediate execution |
 | `FUTURE` | Run at `schedule_time` |
 | `CRON` | Recurring via `cron_expression` |
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Job Status
-
-**`GET /api/v1/jobs/{job_id}/status`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/jobs/{job_id}/status" desc="Job Status" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "job_id": "job_7f168012-bc78-4ea1-bd34-f390823da56b",
@@ -163,28 +163,29 @@ Response (`200 OK`):
   ]
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Cancel Job
-
-**`POST /api/v1/jobs/{job_id}/cancel`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="POST" path="/api/v1/jobs/{job_id}/cancel" desc="Cancel Job" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "job_id": "job_7f168012-bc78-4ea1-bd34-f390823da56b",
   "status": "CANCELLATION_PENDING"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Error Codes
+**Common HTTP error codes**
 
+{{% api-errors %}}
 | Code | Condition |
 | :--- | :--- |
 | `400 Bad Request` | Invalid Cron expression or parsing errors |
 | `409 Conflict` | Duplicate idempotency key while first request is processing |
 | `429 Too Many Requests` | Per-token rate limit exceeded (100 req/sec) |
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

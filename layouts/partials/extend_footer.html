@@ -14,6 +14,8 @@
   <div class="diagram-modal-help">Scroll to zoom · Drag to pan · Esc to close</div>
 </div>
 
+{{- partial "section-collapsible.html" . -}}
+
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
@@ -27,9 +29,13 @@
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>';
 
   function wrapMermaidBlocks() {
-    const mermaidCodeBlocks = document.querySelectorAll("pre code.language-mermaid");
+    const mermaidCodeBlocks = document.querySelectorAll(
+      ".sd-collapsible-content pre > code.language-mermaid, .sd-collapsible-content pre > code[data-lang='mermaid']"
+    );
 
     mermaidCodeBlocks.forEach((codeBlock, index) => {
+      if (codeBlock.closest(".diagram-frame")) return;
+
       const pre = codeBlock.closest("pre");
       if (!pre) return;
 
@@ -54,10 +60,25 @@
     });
   }
 
+  async function renderMermaidInContainer(container) {
+    const nodes = container.querySelectorAll(".mermaid:not([data-processed])");
+    if (!nodes.length) return;
+    await mermaid.run({ nodes: Array.from(nodes) });
+    nodes.forEach((node) => node.setAttribute("data-processed", "true"));
+  }
+
   async function renderMermaidBlocks() {
     wrapMermaidBlocks();
     await mermaid.run({ querySelector: ".mermaid" });
+    document.querySelectorAll(".mermaid").forEach((node) => node.setAttribute("data-processed", "true"));
     initDiagramLightbox();
+
+    document.querySelectorAll(".sd-section, .sd-subsection").forEach((details) => {
+      details.addEventListener("toggle", () => {
+        if (!details.open) return;
+        renderMermaidInContainer(details).catch(console.error);
+      });
+    });
   }
 
   function initDiagramLightbox() {
@@ -77,6 +98,32 @@
     let panStartY = 0;
     let activeFrame = null;
 
+    function getSvgDimensions(svg) {
+      const vb = svg.viewBox?.baseVal;
+      if (vb && vb.width > 0 && vb.height > 0) {
+        return { width: vb.width, height: vb.height };
+      }
+      const attrW = parseFloat(svg.getAttribute("width"));
+      const attrH = parseFloat(svg.getAttribute("height"));
+      if (attrW > 0 && attrH > 0) {
+        return { width: attrW, height: attrH };
+      }
+      const rect = svg.getBoundingClientRect();
+      return { width: rect.width || 800, height: rect.height || 600 };
+    }
+
+    function prepareSvgClone(svg) {
+      const clone = svg.cloneNode(true);
+      clone.removeAttribute("width");
+      clone.removeAttribute("height");
+      clone.removeAttribute("style");
+
+      const { width, height } = getSvgDimensions(svg);
+      clone.setAttribute("width", String(width));
+      clone.setAttribute("height", String(height));
+      return clone;
+    }
+
     function applyTransform() {
       content.style.transform = `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${scale})`;
     }
@@ -86,15 +133,16 @@
       if (!svg) return;
 
       const stageRect = stage.getBoundingClientRect();
+      if (stageRect.width < 1 || stageRect.height < 1) return;
+
       const padding = 48;
       const availW = stageRect.width - padding;
       const availH = stageRect.height - padding;
 
-      const svgW = svg.viewBox?.baseVal?.width || svg.getBoundingClientRect().width || 800;
-      const svgH = svg.viewBox?.baseVal?.height || svg.getBoundingClientRect().height || 600;
+      const { width: svgW, height: svgH } = getSvgDimensions(svg);
 
-      scale = Math.min(availW / svgW, availH / svgH, 1.5);
-      scale = Math.max(scale, 0.15);
+      scale = Math.min(availW / svgW, availH / svgH);
+      scale = Math.max(scale, 0.05);
       panX = 0;
       panY = 0;
       applyTransform();
@@ -106,7 +154,7 @@
 
       activeFrame = frame;
       content.innerHTML = "";
-      content.appendChild(svg.cloneNode(true));
+      content.appendChild(prepareSvgClone(svg));
 
       const heading = findDiagramHeading(frame);
       titleEl.textContent = heading || "Architecture diagram";
@@ -115,7 +163,9 @@
       modal.classList.add("is-open");
       document.body.style.overflow = "hidden";
 
-      requestAnimationFrame(fitToStage);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(fitToStage);
+      });
     }
 
     function closeModal() {
@@ -163,12 +213,7 @@
         const action = btn.getAttribute("data-diagram-action");
         if (action === "zoom-in") zoom(1.2);
         if (action === "zoom-out") zoom(1 / 1.2);
-        if (action === "reset") {
-          scale = 1;
-          panX = 0;
-          panY = 0;
-          applyTransform();
-        }
+        if (action === "reset") fitToStage();
         if (action === "fit") fitToStage();
       });
     });
@@ -220,11 +265,26 @@
     });
   }
 
+  async function renderPageEnhancements() {
+    try {
+      if (typeof window.initSectionCollapsibles === "function") {
+        window.initSectionCollapsibles();
+      }
+    } catch (err) {
+      console.error("Section collapsibles failed:", err);
+    }
+    try {
+      await renderMermaidBlocks();
+    } catch (err) {
+      console.error("Mermaid rendering failed:", err);
+    }
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
-      renderMermaidBlocks().catch(console.error);
+      renderPageEnhancements().catch(console.error);
     });
   } else {
-    renderMermaidBlocks().catch(console.error);
+    renderPageEnhancements().catch(console.error);
   }
 </script>

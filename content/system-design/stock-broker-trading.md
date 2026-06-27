@@ -94,14 +94,17 @@ Peak bursts concentrate around market open (09:15), option expiry windows, and m
 
 ## 3. API Design
 
-### Submit New Order
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/orders` | Submit New Order |
+| 2 | PUT | `/api/v1/orders/{order_id}` | Modify Active Limit Order |
+| 3 | DELETE | `/api/v1/orders/{order_id}` | Cancel Active Order |
+| 4 | GET | `/api/v1/market/charts?asset_id=INE002A01018&resolution=5m&start_time=1782362400&end_time=1782384000` | Historical Chart Data |
 
-**`POST /api/v1/orders`**
-
+{{< api-endpoint method="POST" path="/api/v1/orders" desc="Submit New Order" open="true" >}}
 Requires `X-Idempotency-Key` header (UUIDv4).
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "asset_id": "INE002A01018",
@@ -112,9 +115,9 @@ Request:
   "validity_window": "DAY"
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "order_id": "ord_9f8d7e6c5b4a",
@@ -122,22 +125,20 @@ Response (`202 Accepted`):
   "received_timestamp": "2026-06-26T10:21:30.123Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Modify Active Limit Order
-
-**`PUT /api/v1/orders/{order_id}`**
-
-Request:
-
+{{< api-endpoint method="PUT" path="/api/v1/orders/{order_id}" desc="Modify Active Limit Order" >}}
+{{< api-request >}}
 ```json
 {
   "modified_quantity": 20,
   "modified_target_price": 2448.00
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "order_id": "ord_9f8d7e6c5b4a",
@@ -145,13 +146,11 @@ Response (`200 OK`):
   "last_updated_timestamp": "2026-06-26T10:22:05.456Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Cancel Active Order
-
-**`DELETE /api/v1/orders/{order_id}`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="DELETE" path="/api/v1/orders/{order_id}" desc="Cancel Active Order" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "order_id": "ord_9f8d7e6c5b4a",
@@ -159,13 +158,11 @@ Response (`200 OK`):
   "last_updated_timestamp": "2026-06-26T10:22:15.789Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Historical Chart Data
-
-**`GET /api/v1/market/charts?asset_id=INE002A01018&resolution=5m&start_time=1782362400&end_time=1782384000`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/market/charts?asset_id=INE002A01018&resolution=5m&start_time=1782362400&end_time=1782384000" desc="Historical Chart Data" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "asset_id": "INE002A01018",
@@ -182,6 +179,8 @@ Response (`200 OK`):
   ]
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### Error Matrix
 
@@ -191,7 +190,6 @@ Response (`200 OK`):
 | `422` | `INSUFFICIENT_MARGIN_BALANCE` | Ledger lacks free cash for worst-case settlement |
 | `422` | `EXCHANGE_GATEWAY_CLOSED` | Exchange outside active trading session |
 | `429` | `RATE_LIMIT_EXCEEDED` | Client burst exceeded API firewall limits |
-
 ---
 
 ## 4. Data Model

@@ -1,6 +1,6 @@
 ---
-description: Template and conventions for system design blog posts (Hugo + Mermaid)
-globs: content/system-design/**/*.md
+description: Template and conventions for system design blog posts (Hugo + Mermaid + collapsibles)
+globs: content/system-design/**/*.md, layouts/partials/section-collapsible.html, layouts/partials/extend_footer.html, layouts/partials/diagram-lightbox-head.html, layouts/shortcodes/api-*.html
 alwaysApply: false
 ---
 
@@ -65,8 +65,53 @@ Reference: `content/system-design/urlshortner.md` §3.
 2. **`api-endpoint`** per route — method badge + path + one-line description always visible
 3. **`api-request`** — JSON body, headers, field table (omit if no body, e.g. simple GET)
 4. **`api-response`** — success payload; params: `code`, optional `label`
-5. **`api-errors`** — status code table
+5. **`api-errors`** — status code table (see **Shortcode delimiters** below)
 6. **`api-notes`** — optional visible footnote (design rationale, not collapsed)
+
+### Shortcode delimiters (`<` vs `%`) — required
+
+Hugo wraps **standalone block shortcodes** (`{{< ... >}}`) in a bogus placeholder `<h2 id="hahahugoshortcode...">`, which breaks section collapsibles (fake § boundary between API and Data Model).
+
+| Location | Syntax | Example |
+|----------|--------|---------|
+| **Inside** `api-endpoint` | `{{< api-errors >}}` … `{{< /api-errors >}}` | Per-endpoint error table |
+| **Standalone** after all endpoints (shared error codes) | `{{% api-errors %}}` … `{{% /api-errors %}}` | Site-wide HTTP errors under `**Common HTTP error codes**` |
+
+**Correct — nested (urlshortner pattern):**
+
+```markdown
+{{< api-endpoint method="POST" path="/v1/links" desc="Create short URL" open="true" >}}
+...
+{{< api-errors >}}
+| Code | Condition |
+| `400 Bad Request` | Invalid `long_url` |
+{{< /api-errors >}}
+{{< /api-endpoint >}}
+```
+
+**Correct — standalone shared errors (after closing last `api-endpoint`):**
+
+```markdown
+**Common HTTP error codes**
+
+{{% api-errors %}}
+| Code | Condition |
+| `400 Bad Request` | Validation failure |
+| `429 Too Many Requests` | Rate limit exceeded |
+{{% /api-errors %}}
+```
+
+**Wrong — standalone with `<` delimiters:**
+
+```markdown
+**Common HTTP error codes**
+
+{{< api-errors >}}   <!-- DO NOT: Hugo injects bogus h2 -->
+...
+{{< /api-errors >}}
+```
+
+Never put a standalone `api-errors` block between `## 3. API Design` and `## 4. Data Model` using `{{< >}}` syntax.
 
 ### Template
 
@@ -107,10 +152,87 @@ Mermaid diagrams render inside a **click-to-expand** frame with a lightbox viewe
 
 - **Click** any diagram (or press Enter when focused) to open fullscreen
 - **Scroll** to zoom, **drag** to pan, **Esc** to close
-- Toolbar: `+` / `−` / Reset / Fit
+- Toolbar: `+` / `−` / Reset (re-fit) / Fit
 - Title auto-picked from the nearest preceding `##` / `###` heading
 
-No author changes needed — all ` ```mermaid ` blocks get this automatically.
+No author changes needed — all fenced ` ```mermaid ` blocks inside `.sd-collapsible-content` get this automatically.
+
+### Inline preview vs lightbox (layout behavior)
+
+Wide diagrams (§5 `flowchart LR`, §4 `erDiagram`) behave differently in the two views:
+
+| View | Behavior | CSS / JS |
+|------|----------|----------|
+| **Inline** (`.diagram-frame`) | Natural SVG width preserved; horizontal scroll if wider than content column | `diagram-lightbox-head.html`: `.diagram-frame .mermaid { overflow-x: auto }`, `svg { max-width: none }` |
+| **Lightbox** (modal) | Clone scaled to **fill the viewport** on open | `extend_footer.html`: `prepareSvgClone()` + `fitToStage()` |
+
+**Do not** re-add `max-width: 100%` on inline `.diagram-frame .mermaid svg` — it squashes wide HLD diagrams into unreadable thumbnails.
+
+### Lightbox SVG sizing — critical (do not regress)
+
+**Symptom if broken:** Clicking "Click to expand" shows a tiny diagram centered in a large modal (especially §5 HLD and §4 ERD).
+
+**Root cause:** Mermaid compresses the inline SVG (`width="600"` etc.) to fit the page column, but the SVG `viewBox` stays large (e.g. 5000×800). Naïve `cloneNode(true)` + `fitToStage()` using `viewBox` dimensions applies a small `scale()` to the compressed pixel width → diagram appears ~100px wide in the modal.
+
+**Required implementation in `extend_footer.html`:**
+
+1. **`prepareSvgClone(svg)`** — on modal open:
+   - `cloneNode(true)`
+   - Remove `width`, `height`, and `style` attributes from the clone
+   - Set `width` / `height` from `viewBox.baseVal` (via `getSvgDimensions()`)
+2. **`fitToStage()`** — compute `scale = min(availW / svgW, availH / svgH)` from viewBox dimensions
+   - No upper cap on scale (removed `1.5` limit) — diagrams must scale **up** to fill the modal
+   - Double `requestAnimationFrame` before fit so modal layout is measured
+3. **Reset button** — calls `fitToStage()`, not `scale = 1`
+
+**Author rules for diagrams:**
+- Use standard Hugo/Chroma fences: ` ```mermaid ` (not indented inside lists unless intentional)
+- Do not wrap Mermaid in HTML or shortcodes
+- Diagrams inside collapsed §4 / §6 sections still render (lazy init on section open)
+- Wide `flowchart LR` HLD diagrams are expected — lightbox handles readability; inline uses horizontal scroll
+
+## Section Collapsibles (Auto)
+
+On every system design post, `##` sections and `###` subsections are wrapped in expand/collapse panels (same chevron UX as API toggles):
+
+- **§1–§11** — collapsed by default; each header shows an **Expand** pill (HLD excluded)
+- **§5 High-Level Architecture** — **always fully visible** (no section toggle; diagram lightbox still works)
+- Intro paragraphs before §1 stay visible
+
+Implemented in `layouts/partials/section-collapsible.html` — no markdown edits required for toggles themselves.
+
+## Page Enhancements (Layout — do not break)
+
+Client-side features run in this order from `layouts/partials/extend_footer.html`:
+
+1. `initSectionCollapsibles()` — wrap `##` / `###` in `<details>`
+2. `renderMermaidBlocks()` — convert `pre > code.language-mermaid` → `.diagram-frame` + Mermaid SVG
+3. `initDiagramLightbox()` — click-to-zoom on `.diagram-frame`
+
+**Critical constraints when editing layout JS:**
+
+| Rule | Why |
+|------|-----|
+| **Mermaid must run even if collapsibles fail** | Separate `try/catch` per step in `renderPageEnhancements()` — never let one failure skip the other |
+| **DOM order: `insertBefore` before `appendChild` when moving headings** | In `section-collapsible.html`, anchor `<details>` with `insertBefore(section, h2)` *while h2 is still in the DOM*, then move h2/h3 into `<summary>`. Reversing this throws `NotFoundError` and breaks the entire page |
+| **Per-section try/catch in `wrapSections`** | One bad section must not abort wrapping for §2–§11 |
+| **Mermaid selector** | `.sd-collapsible-content pre > code.language-mermaid, ... code[data-lang="mermaid"]`; skip blocks already inside `.diagram-frame` |
+| **`unwrapShortcodeHeadings()`** | Strips leftover `h2[id^="hahahugoshortcode"]` — prefer fixing markdown (`{{% api-errors %}}`) at source |
+| **Lazy Mermaid on toggle** | `.sd-section` / `.sd-subsection` `toggle` listener re-runs `mermaid.run` for unprocessed nodes when opened |
+| **Lightbox: `prepareSvgClone()`** | Strip clone `width`/`height`/`style`; set dimensions from `viewBox` — never clone raw SVG into modal |
+| **Lightbox: `fitToStage()`** | Scale from viewBox vs stage rect; no max-scale cap; double rAF before measure |
+| **Inline diagram CSS** | `overflow-x: auto` + `svg { max-width: none }` in `diagram-lightbox-head.html` — do not squash wide HLD |
+
+**Layout file map:**
+
+| File | Role |
+|------|------|
+| `layouts/partials/section-collapsible.html` | Section/subsection `<details>` wrapping |
+| `layouts/partials/section-collapsible-head.html` | Collapsible CSS |
+| `layouts/partials/extend_footer.html` | Mermaid init, diagram lightbox, enhancement orchestration |
+| `layouts/partials/diagram-lightbox-head.html` | Lightbox CSS |
+| `layouts/system-design/single.html` | Wraps post body in `.sd-collapsible-content` |
+| `layouts/shortcodes/api-*.html` | Collapsible API panels |
 
 ## Mermaid Rules (v11)
 
@@ -132,8 +254,22 @@ No author changes needed — all ` ```mermaid ` blocks get this automatically.
 1. Sketch in draw.io (requirements → API → schema → architecture → capacity)
 2. Create `content/system-design/<name>.md` using the 11-section template
 3. Convert diagrams to Mermaid (no static image unless Mermaid cannot express it)
-4. Preview: `hugo server -D` — verify Mermaid renders and TOC is correct (`buildFuture` is enabled in `hugo.toml` so same-day UTC-dated posts appear locally)
+4. Preview: `hugo server -D` — hard refresh (`Ctrl+Shift+R`) and verify checklist below
 5. Set `draft: false` when ready to publish
+
+### Preview checklist (every post)
+
+| Check | Expected |
+|-------|----------|
+| §1–§11 headers | Bordered cards with **Expand** pill (§5 HLD always visible, no toggle) |
+| §4 Data Model | `erDiagram` renders as SVG inside `.diagram-frame`; **Click to expand** fills modal (not tiny centered thumbnail) |
+| §5 High-Level Architecture | `flowchart` renders as SVG; inline scrolls horizontally if wide; expand fills viewport |
+| API §3 | Overview table visible; endpoint panels collapse/expand |
+| Standalone error codes | No bogus `h2` between §3 and §4 — use `{{% api-errors %}}` |
+| Diagram lightbox | Reset/Fit re-centers diagram; scroll zooms; no console errors on expand |
+| Browser console | No `NotFoundError`, no uncaught DOM exceptions |
+
+Spot-check reference posts: `urlshortner.md`, `distributed-rate-limiter.md`.
 
 ## Writing Style
 

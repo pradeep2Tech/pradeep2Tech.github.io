@@ -92,12 +92,15 @@ Storing 100 TB of new data daily without bounds violates hardware budgets. Apply
 
 ## 3. API Design
 
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | PUT | `/api/v1/cache/{key}` | Save / Update Value |
+| 2 | GET | `/api/v1/cache/{key}` | Retrieve Value |
+| 3 | DELETE | `/api/v1/cache/{key}` | Delete Value |
+
 The system exposes **gRPC over HTTP/2** for internal microservices and a **text/binary TCP fallback** for legacy clients. REST endpoints below serve gateway and debugging use cases.
 
-### Save / Update Value
-
-**`PUT /api/v1/cache/{key}`**
-
+{{< api-endpoint method="PUT" path="/api/v1/cache/{key}" desc="Save / Update Value" open="true" >}}
 Headers:
 
 | Header | Required | Notes |
@@ -106,10 +109,10 @@ Headers:
 | `X-Cache-TTL` | Yes | TTL in seconds (e.g. `3600`) |
 | `X-CAS-Token` | No | Optimistic concurrency token from prior `get`/`put` |
 
+{{< api-request >}}
 Request body: raw binary payload (≤ 1 MB).
-
-Response (`200 OK` or `201 Created`):
-
+{{< /api-request >}}
+{{< api-response code="200" label="OK / Created" >}}
 ```json
 {
   "status": "SUCCESS",
@@ -117,32 +120,21 @@ Response (`200 OK` or `201 Created`):
   "cas_token": "48106"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Retrieve Value
-
-**`GET /api/v1/cache/{key}`**
-
+{{< api-endpoint method="GET" path="/api/v1/cache/{key}" desc="Retrieve Value" >}}
 | Condition | Response |
 | :--- | :--- |
 | Key exists and not expired | `200 OK`; body = raw bytes; header `X-CAS-Token: <token>` |
 | Key absent or expired | `404 Not Found` |
+{{< /api-endpoint >}}
 
-### Delete Value
-
-**`DELETE /api/v1/cache/{key}`**
-
+{{< api-endpoint method="DELETE" path="/api/v1/cache/{key}" desc="Delete Value" >}}
 | Condition | Response |
 | :--- | :--- |
 | Key removed (or already absent) | `204 No Content` |
-
-### HTTP Error Codes
-
-| Code | Condition |
-| :--- | :--- |
-| `400 Bad Request` | Payload > 1 MB or invalid key format |
-| `404 Not Found` | Key missing or expired |
-| `409 Conflict` | CAS token mismatch — another client updated the key |
-| `429 Too Many Requests` | Rate-limit threshold exceeded |
+{{< /api-endpoint >}}
 
 ### Idempotency
 
@@ -152,6 +144,16 @@ Response (`200 OK` or `201 Created`):
 | `PUT` without CAS | Idempotent — safe to retry after network timeout |
 | `PUT` with CAS | Not idempotent on conflict — client must re-read and retry |
 
+**Common HTTP error codes**
+
+{{% api-errors %}}
+| Code | Condition |
+| :--- | :--- |
+| `400 Bad Request` | Payload > 1 MB or invalid key format |
+| `404 Not Found` | Key missing or expired |
+| `409 Conflict` | CAS token mismatch — another client updated the key |
+| `429 Too Many Requests` | Rate-limit threshold exceeded |
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

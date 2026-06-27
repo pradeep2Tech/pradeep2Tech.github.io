@@ -1,0 +1,114 @@
+<style>
+  .sd-collapsible-content > .sd-section {
+    margin: 1.25rem 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--entry);
+    overflow: hidden;
+  }
+  .sd-section-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.85rem 1rem;
+    background: var(--code-bg);
+    border-bottom: 1px solid transparent;
+  }
+  .sd-section[open] > .sd-section-summary {
+    border-bottom-color: var(--border);
+  }
+  .sd-section-title {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .sd-section-title h2 {
+    display: inline;
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.3;
+    border: none;
+  }
+  .sd-section-hint,
+  .sd-subsection-hint {
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--theme);
+  }
+  .sd-section-summary::-webkit-details-marker,
+  .sd-subsection-summary::-webkit-details-marker {
+    display: none;
+  }
+  .sd-section-summary::before,
+  .sd-subsection-summary::before {
+    content: "▸";
+    flex-shrink: 0;
+    color: var(--secondary);
+    transition: transform 0.15s ease;
+    margin-right: 0.15rem;
+  }
+  .sd-section[open] > .sd-section-summary::before,
+  .sd-subsection[open] > .sd-subsection-summary::before {
+    transform: rotate(90deg);
+  }
+  .sd-subsection-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.95rem;
+    color: var(--primary);
+    background: var(--code-bg);
+    border-bottom: 1px solid transparent;
+  }
+  .sd-subsection[open] > .sd-subsection-summary {
+    border-bottom-color: var(--border);
+  }
+  .sd-subsection-title h3 {
+    display: inline;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.3;
+    border: none;
+  }
+  .sd-section-body {
+    padding: 0.85rem 1rem 1rem;
+  }
+  .sd-section-body > :first-child {
+    margin-top: 0;
+  }
+  .sd-subsection {
+    margin: 0.65rem 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--theme);
+    overflow: hidden;
+  }
+  .sd-subsection-body {
+    padding: 0.65rem 0.85rem 0.85rem;
+    font-size: 0.95rem;
+  }
+  .sd-subsection-body > :first-child {
+    margin-top: 0;
+  }
+  .sd-hld-block {
+    margin: 1.25rem 0;
+  }
+  .sd-hld-block > h2 {
+    margin-top: 0;
+  }
+</style>

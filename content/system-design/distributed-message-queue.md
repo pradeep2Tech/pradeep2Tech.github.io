@@ -89,16 +89,12 @@ Active consumers reading recent data are served from the Linux page cache withou
 
 ## 3. API Design
 
-### Control Plane (REST)
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/v1/topics` | Control Plane (REST) |
 
-Used for provisioning and configuration. High-throughput data plane uses raw TCP binary framing.
-
-#### Create Topic
-
-**`POST /v1/topics`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/v1/topics" desc="Control Plane (REST)" open="true" >}}
+{{< api-request >}}
 ```json
 {
   "topic_name": "orders.v1",
@@ -109,15 +105,17 @@ Request:
   }
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "topic_id": "tp-9831a-0a91",
   "status": "PROVISIONING"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### Data Plane (TCP Binary Frames)
 
@@ -136,8 +134,13 @@ Response (`201 Created`):
 [TopicName (vB)][Partition (4B)][FetchOffset (8B)][MaxBytes (4B)]
 ```
 
-### Error Codes
+### Idempotency
 
+Producers append a unique `ProducerId` and monotonically increasing `SequenceNumber` to every message batch. The broker tracks sequences per partition log to discard duplicate submissions caused by network retries.
+
+**Common HTTP error codes**
+
+{{% api-errors %}}
 | Code | Name | Client Action |
 | :--- | :--- | :--- |
 | `0x00` | NO_ERROR | Continue |
@@ -145,11 +148,7 @@ Response (`201 Created`):
 | `0x02` | UNKNOWN_TOPIC_OR_PARTITION | Refresh metadata |
 | `0x03` | NOT_LEADER_FOR_PARTITION | Refresh metadata; retry on new leader |
 | `0x04` | REQUEST_TIMED_OUT | Exponential backoff retry |
-
-### Idempotency
-
-Producers append a unique `ProducerId` and monotonically increasing `SequenceNumber` to every message batch. The broker tracks sequences per partition log to discard duplicate submissions caused by network retries.
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

@@ -87,10 +87,13 @@ This post captures the full design — from requirements and capacity math throu
 
 ## 3. API Design
 
-### Real-Time Log Ingestion
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/telemetry/ingest` | Real-Time Log Ingestion |
+| 2 | POST | `/api/v1/telemetry/batch-upload` | Offline Bulk Upload |
+| 3 | POST | `/api/v1/search/query` | Search Query |
 
-**`POST /api/v1/telemetry/ingest`**
-
+{{< api-endpoint method="POST" path="/api/v1/telemetry/ingest" desc="Real-Time Log Ingestion" open="true" >}}
 Headers:
 
 | Header | Required | Notes |
@@ -98,8 +101,7 @@ Headers:
 | `X-Tenant-ID` | Yes | e.g. `amzn-prod-9923` |
 | `Authorization` | Yes | `Bearer <token_hash>` |
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "timestamp": "2026-06-26T16:03:00.123Z",
@@ -113,9 +115,9 @@ Request:
   }
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "status": "ACCEPTED",
@@ -128,17 +130,15 @@ Response (`202 Accepted`):
 | `400 Bad Request` | Invalid payload syntax |
 | `401 Unauthorized` | Invalid or expired token |
 | `429 Too Many Requests` | Tenant exceeded provisioned rate limit |
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Offline Bulk Upload
-
-**`POST /api/v1/telemetry/batch-upload`**
-
+{{< api-endpoint method="POST" path="/api/v1/telemetry/batch-upload" desc="Offline Bulk Upload" >}}
 Headers: `X-Tenant-ID`, `Content-Type: multipart/form-data`, optional `X-Idempotency-Key: <uuid>`.
 
 Request: gzip-compressed, line-delimited JSON archive.
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "batch_id": "batch-88319-ff02",
@@ -148,13 +148,11 @@ Response (`202 Accepted`):
 ```
 
 **Idempotency:** Gateway tracks `X-Idempotency-Key` in Redis for 24 hours to prevent duplicate batch inflation.
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Search Query
-
-**`POST /api/v1/search/query`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/search/query" desc="Search Query" >}}
+{{< api-request >}}
 ```json
 {
   "query_string": "payload.level:ERROR AND payment",
@@ -164,9 +162,9 @@ Request:
   "offset": 0
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "total_found": 1,
@@ -183,7 +181,8 @@ Response (`200 OK`):
   ]
 }
 ```
-
+{{< /api-response >}}
+{{< /api-endpoint >}}
 ---
 
 ## 4. Data Model

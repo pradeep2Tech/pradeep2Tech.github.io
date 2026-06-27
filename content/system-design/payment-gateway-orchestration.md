@@ -101,10 +101,13 @@ With a **99% cache hit ratio** on merchant config and active sessions, Redis mus
 
 ## 3. API Design
 
-### Create Payment Intent
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/v1/payment_intents` | Create Payment Intent |
+| 2 | POST | `/v1/checkout/sessions` | Create Checkout Session |
+| 3 | POST | `/v1/charge` | Charge (internal PCI zone) |
 
-**`POST /v1/payment_intents`**
-
+{{< api-endpoint method="POST" path="/v1/payment_intents" desc="Create Payment Intent" open="true" >}}
 Headers:
 
 ```
@@ -113,8 +116,7 @@ Idempotency-Key: idem_key_uuid_v4_abc123
 Content-Type: application/json
 ```
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "amount": 15000,
@@ -123,9 +125,9 @@ Request:
   "customer_id": "cust_3321"
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "id": "pi_1102934",
@@ -136,13 +138,11 @@ Response (`201 Created`):
   "created_at": 1779945840
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Create Checkout Session
-
-**`POST /v1/checkout/sessions`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/v1/checkout/sessions" desc="Create Checkout Session" >}}
+{{< api-request >}}
 ```json
 {
   "payment_intent_id": "pi_1102934",
@@ -150,9 +150,9 @@ Request:
   "cancel_url": "https://merchant.com/cancel"
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "session_id": "cs_99881122",
@@ -160,13 +160,14 @@ Response (`200 OK`):
   "expires_at": 1779946440
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Charge (Internal PCI Zone Only)
-
-**`POST /v1/charge`** — callable only from the isolated ingestion layer, not merchant backends.
-
-Request:
-
+{{< api-endpoint method="POST" path="/v1/charge" desc="Charge (internal PCI zone only)" >}}
+{{< api-notes >}}
+Callable only from the isolated ingestion layer, not merchant backends.
+{{< /api-notes >}}
+{{< api-request >}}
 ```json
 {
   "session_id": "cs_99881122",
@@ -174,32 +175,36 @@ Request:
   "cvv_encrypted": "enc_cvv_332"
 }
 ```
-
-Response (`202 Accepted`):
-
+{{< /api-request >}}
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "transaction_id": "txn_554192",
   "status": "processing"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Error Matrix
+{{< api-notes >}}
+**Idempotency protocol**
 
+1. Client sends a unique `Idempotency-Key` on every mutating request.
+2. API gateway issues atomic `SETNX` to Redis: `KEY = "idem:{merchant_id}:{header_key}"`.
+3. If key exists → return cached HTTP response; halt downstream routing.
+4. If key absent → process request; persist final response to Redis with **24-hour TTL**.
+{{< /api-notes >}}
+
+**Common HTTP error codes**
+
+{{% api-errors %}}
 | Status | Condition |
 | :--- | :--- |
 | **400** | Validation failure (invalid currency, malformed payload) |
 | **401** | Bad API signature, expired key, credential leak |
 | **409** | Same `Idempotency-Key` with changed request body |
 | **429** | IP or merchant rate-limit breach |
-
-### Idempotency Protocol
-
-1. Client sends a unique `Idempotency-Key` on every mutating request.
-2. API gateway issues atomic `SETNX` to Redis: `KEY = "idem:{merchant_id}:{header_key}"`.
-3. If key exists → return cached HTTP response; halt downstream routing.
-4. If key absent → process request; persist final response to Redis with **24-hour TTL**.
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

@@ -101,14 +101,16 @@ Clients emit heartbeats every **5 seconds** during active playback:
 
 ## 3. API Design
 
-### Playback Session Initiation
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/playback/session` | Playback Session Initiation |
+| 2 | GET | `/api/v1/search?q={term}&genre={g}&page={n}&size={n}` | Search Catalog |
+| 3 | GET | `/api/v1/videos/{video_id}` | Get Video Metadata |
 
-**`POST /api/v1/playback/session`**
-
+{{< api-endpoint method="POST" path="/api/v1/playback/session" desc="Playback Session Initiation" open="true" >}}
 Headers: `Authorization: Bearer <JWT>`, `X-Idempotency-Key: <UUID>`
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "video_id": "vid_9948523a10ff",
@@ -117,9 +119,9 @@ Request:
   "supported_protocols": ["DASH", "HLS"]
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "playback_session_id": "pb_sess_77391aefb204",
@@ -131,13 +133,11 @@ Response (`201 Created`):
 ```
 
 The `X-Idempotency-Key` header prevents duplicate stream accounting, license locking, and redundant billing state on network retries.
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Search Catalog
-
-**`GET /api/v1/search?q={term}&genre={g}&page={n}&size={n}`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/search?q={term}&genre={g}&page={n}&size={n}" desc="Search Catalog" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "items": [
@@ -152,13 +152,11 @@ Response (`200 OK`):
   "pagination": { "current_page": 1, "total_pages": 12, "total_items": 120 }
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Get Video Metadata
-
-**`GET /api/v1/videos/{video_id}`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/videos/{video_id}" desc="Get Video Metadata" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "video_id": "vid_9948523a10ff",
@@ -170,15 +168,8 @@ Response (`200 OK`):
   "maturity_rating": "PG-13"
 }
 ```
-
-### Error Codes
-
-| Code | When |
-| :--- | :--- |
-| `401 Unauthorized` | Token missing or expired |
-| `403 Forbidden` | Subscription tier lacks privileges, or concurrent stream limit breached |
-| `409 Conflict` | Duplicate `X-Idempotency-Key` context already processed |
-| `429 Too Many Requests` | Rate limiter threshold crossed at API gateway |
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### Rate Limits
 
@@ -187,6 +178,16 @@ Response (`200 OK`):
 | Unauthenticated endpoints | 10 requests / minute / IP |
 | Authenticated endpoints | 500 requests / minute / token |
 
+**Common HTTP error codes**
+
+{{% api-errors %}}
+| Code | When |
+| :--- | :--- |
+| `401 Unauthorized` | Token missing or expired |
+| `403 Forbidden` | Subscription tier lacks privileges, or concurrent stream limit breached |
+| `409 Conflict` | Duplicate `X-Idempotency-Key` context already processed |
+| `429 Too Many Requests` | Rate limiter threshold crossed at API gateway |
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

@@ -92,12 +92,14 @@ This post walks through the full design — requirements, capacity math, API con
 
 ## 3. API Design
 
-### User Registration
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/auth/register` | User Registration |
+| 2 | POST | `/api/v1/groups` | Create Group |
+| 3 | GET | `/api/v1/chats/{chatId}/messages?cursor=msg-177291-a81d&limit=50` | Fetch Chat History (Cursor Pagination) |
 
-**`POST /api/v1/auth/register`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/auth/register" desc="User Registration" open="true" >}}
+{{< api-request >}}
 ```json
 {
   "phoneNumber": "+919876543210",
@@ -105,9 +107,9 @@ Request:
   "clientOS": "ANDROID"
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "userId": "usr-88392-f02a",
@@ -120,35 +122,31 @@ Response (`201 Created`):
 | :--- | :--- |
 | `400 Bad Request` | Invalid phone format |
 | `409 Conflict` | Number already registered |
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Create Group
-
-**`POST /api/v1/groups`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/groups" desc="Create Group" >}}
+{{< api-request >}}
 ```json
 {
   "groupName": "Architecture Core",
   "members": ["usr-88392-f02a", "usr-11029-b82d"]
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "groupId": "grp-9910-c01b",
   "createdAt": "2026-06-26T15:34:00Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Fetch Chat History (Cursor Pagination)
-
-**`GET /api/v1/chats/{chatId}/messages?cursor=msg-177291-a81d&limit=50`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/chats/{chatId}/messages?cursor=msg-177291-a81d&limit=50" desc="Fetch Chat History (Cursor Pagination)" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "messages": [
@@ -162,6 +160,8 @@ Response (`200 OK`):
   "nextCursor": "msg-177232-z99e"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### WebSocket — Full-Duplex Chat Channel
 
@@ -206,7 +206,6 @@ Receipt acknowledgment (bi-directional):
 ### Idempotency
 
 Clients attach a unique deterministic **`traceId`** to every message frame. The Chat Gateway deduplicates within a sliding window before hitting storage — preventing duplicate messages from network retries.
-
 ---
 
 ## 4. Data Model

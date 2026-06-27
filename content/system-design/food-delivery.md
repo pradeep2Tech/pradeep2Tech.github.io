@@ -103,10 +103,13 @@ Starting from **50M registered users**, **10% DAU**, and **0.4 orders/DAU**:
 
 ## 3. API Design
 
-### Discovery — Nearby Restaurants
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | GET | `/api/v1/discovery/restaurants` | Discovery — Nearby Restaurants |
+| 2 | POST | `/api/v1/carts` | Cart — Add / Mutate Item |
+| 3 | POST | `/api/v1/orders` | Order — Commit Transactional Placement |
 
-**`GET /api/v1/discovery/restaurants`**
-
+{{< api-endpoint method="GET" path="/api/v1/discovery/restaurants" desc="Discovery — Nearby Restaurants" open="true" >}}
 | Parameter | Type | Required | Notes |
 | :--- | :--- | :--- | :--- |
 | `latitude` | double | Yes | User location |
@@ -116,8 +119,7 @@ Starting from **50M registered users**, **10% DAU**, and **0.4 orders/DAU**:
 
 Header: `Authorization: Bearer <JWT>`
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "restaurants": [
@@ -134,11 +136,10 @@ Response (`200 OK`):
   "next_page_token": "eyJjdXJzb3IiOiIzIn0="
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Cart — Add / Mutate Item
-
-**`POST /api/v1/carts`**
-
+{{< api-endpoint method="POST" path="/api/v1/carts" desc="Cart — Add / Mutate Item" >}}
 ```json
 {
   "restaurant_id": "res_88301f2a",
@@ -147,8 +148,7 @@ Response (`200 OK`):
 }
 ```
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "cart_id": "cart_bc771a3",
@@ -159,11 +159,10 @@ Response (`200 OK`):
   "version": 1
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Order — Commit Transactional Placement
-
-**`POST /api/v1/orders`**
-
+{{< api-endpoint method="POST" path="/api/v1/orders" desc="Order — Commit Transactional Placement" >}}
 Header: `X-Idempotency-Key: <uuidv4>` (required)
 
 ```json
@@ -173,8 +172,7 @@ Header: `X-Idempotency-Key: <uuidv4>` (required)
 }
 ```
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "order_id": "ord_77102f",
@@ -182,6 +180,8 @@ Response (`201 Created`):
   "created_at": "2026-06-26T15:21:00Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### Error Matrix
 
@@ -194,7 +194,6 @@ Response (`201 Created`):
 ### Idempotency Strategy
 
 The API gateway acquires a distributed lock via Redis (`SET order_id_key value NX PX 5000`). If the key exists within the TTL window, the gateway returns the cached response or rejects concurrent duplicates. A **unique `idempotency_key` column** on `orders` provides a database-level safety net if Redis locks evict early.
-
 ---
 
 ## 4. Data Model

@@ -94,12 +94,15 @@ Starting from **500M DAU**, **10 sent + 40 received emails/user/day**, **100 KB*
 
 ## 3. API Design
 
-### Compose / Save Draft
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/drafts` | Compose / Save Draft |
+| 2 | POST | `/api/v1/emails/send` | Send Email |
+| 3 | GET | `/api/v1/emails/search?q=Design&limit=20&offset=0` | Full-Text Search |
+| 4 | POST | `/api/v1/attachments/upload-intent` | Attachment Upload Intent (Signed URL) |
 
-**`POST /api/v1/drafts`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/drafts" desc="Compose / Save Draft" open="true" >}}
+{{< api-request >}}
 ```json
 {
   "draft_id": "8f3b9c62-7e1a-4c8d-b903-ef123456789a",
@@ -112,9 +115,8 @@ Request:
   "attachment_ids": ["att-44129-99a3"]
 }
 ```
-
-Response (`200 OK` / `201 Created`):
-
+{{< /api-request >}}
+{{< api-response code="200" label="OK / Created" >}}
 ```json
 {
   "status": "SUCCESS",
@@ -122,24 +124,22 @@ Response (`200 OK` / `201 Created`):
   "updated_at": "2026-06-26T16:09:00Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Send Email
-
-**`POST /api/v1/emails/send`**
-
+{{< api-endpoint method="POST" path="/api/v1/emails/send" desc="Send Email" >}}
 Headers: `X-Idempotency-Key: idemp-token-99124-abc`
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "draft_id": "8f3b9c62-7e1a-4c8d-b903-ef123456789a",
   "client_timestamp": "2026-06-26T16:09:01Z"
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "message_id": "msg-77215-992a-bc99",
@@ -149,13 +149,11 @@ Response (`202 Accepted`):
 ```
 
 **Idempotency:** `X-Idempotency-Key` is tracked in Redis via atomic `SETNX` with a **24-hour TTL** to prevent duplicate sends on network retries.
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Full-Text Search
-
-**`GET /api/v1/emails/search?q=Design&limit=20&offset=0`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/emails/search?q=Design&limit=20&offset=0" desc="Full-Text Search" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "total_matches": 1,
@@ -170,13 +168,11 @@ Response (`200 OK`):
   ]
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Attachment Upload Intent (Signed URL)
-
-**`POST /api/v1/attachments/upload-intent`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/attachments/upload-intent" desc="Attachment Upload Intent (Signed URL)" >}}
+{{< api-request >}}
 ```json
 {
   "filename": "specs.pdf",
@@ -184,9 +180,9 @@ Request:
   "byte_size": 5242880
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "attachment_id": "att-44129-99a3",
@@ -194,16 +190,19 @@ Response (`200 OK`):
   "expires_at": "2026-06-26T16:24:00Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Error Codes
+**Common HTTP error codes**
 
+{{% api-errors %}}
 | Code | Condition |
 | :--- | :--- |
 | `400 Bad Request` | Malformed addresses; payload exceeds 25 MB |
 | `409 Conflict` | Duplicate client entity operation |
 | `422 Unprocessable Entity` | Virus scan failure or policy rule violation |
 | `429 Too Many Requests` | Rate limiter exhaustion |
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

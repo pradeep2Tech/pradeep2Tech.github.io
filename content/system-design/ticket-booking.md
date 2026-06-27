@@ -99,10 +99,14 @@ Starting from **100M DAU**, **5 searches/user**, **3 seat-layout views/user**, a
 
 ## 3. API Design
 
-### Unified Search & Discovery
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | GET | `/api/v1/catalog/search` | Unified Search & Discovery |
+| 2 | GET | `/api/v1/shows/{show_id}/seats` | Real-Time Seat Layout |
+| 3 | POST | `/api/v1/bookings/reserve` | Atomic Seat Reservation |
+| 4 | POST | `/api/v1/bookings/{booking_id}/confirm` | Booking Confirmation |
 
-**`GET /api/v1/catalog/search`**
-
+{{< api-endpoint method="GET" path="/api/v1/catalog/search" desc="Unified Search & Discovery" open="true" >}}
 | Parameter | Type | Required | Notes |
 | :--- | :--- | :--- | :--- |
 | `query` | string | No | Free-text keyword |
@@ -113,8 +117,7 @@ Starting from **100M DAU**, **5 searches/user**, **3 seat-layout views/user**, a
 | `page` | int | No | Default **1** |
 | `size` | int | No | Default **20**; max **50** |
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "data": {
@@ -145,13 +148,11 @@ Response (`200 OK`):
   }
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Real-Time Seat Layout
-
-**`GET /api/v1/shows/{show_id}/seats`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/shows/{show_id}/seats" desc="Real-Time Seat Layout" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "data": {
@@ -171,11 +172,10 @@ Response (`200 OK`):
   }
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Atomic Seat Reservation
-
-**`POST /api/v1/bookings/reserve`**
-
+{{< api-endpoint method="POST" path="/api/v1/bookings/reserve" desc="Atomic Seat Reservation" >}}
 Headers:
 
 | Header | Required | Notes |
@@ -183,17 +183,16 @@ Headers:
 | `X-Idempotency-Key` | Yes | Client-generated; retries with same key return original hold |
 | `Authorization` | Yes | Bearer JWT |
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "show_id": "shw_00112233",
   "seat_ids": ["st_A_01", "st_A_03"]
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "data": {
@@ -206,13 +205,11 @@ Response (`201 Created`):
   }
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Booking Confirmation
-
-**`POST /api/v1/bookings/{booking_id}/confirm`**
-
-Request:
-
+{{< api-endpoint method="POST" path="/api/v1/bookings/{booking_id}/confirm" desc="Booking Confirmation" >}}
+{{< api-request >}}
 ```json
 {
   "payment_reference_id": "tx_pay_99881122",
@@ -220,9 +217,9 @@ Request:
   "amount_paid": 25000.00
 }
 ```
+{{< /api-request >}}
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "data": {
@@ -232,6 +229,8 @@ Response (`200 OK`):
   }
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### Error Matrix
 
@@ -247,7 +246,6 @@ Response (`200 OK`):
 1. Gateway extracts `X-Idempotency-Key`.
 2. Lookup `idempotency:bkg:{key}` in Redis — if hit, return cached response verbatim.
 3. On miss, acquire short-lived lock; execute reservation once; cache result for **24 h**.
-
 ---
 
 ## 4. Data Model

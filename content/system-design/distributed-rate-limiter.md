@@ -78,14 +78,15 @@ Key format: `rl:{tenant_id}:{rule_id}` (~32 B). Value: tokens (8 B) + last_updat
 
 ## 3. API Design
 
-### Create Rate Limiting Rule
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/rules` | Create Rate Limiting Rule |
+| 2 | GET | `/api/v1/rules/{client_id}` | Retrieve Client Rules |
 
-**`POST /api/v1/rules`**
-
+{{< api-endpoint method="POST" path="/api/v1/rules" desc="Create Rate Limiting Rule" open="true" >}}
 Idempotency: `X-Idempotency-Key` header cached in admin Redis tier for 30 minutes.
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "subject_type": "USER_ID",
@@ -97,9 +98,9 @@ Request:
   "tier": "PREMIUM"
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "rule_id": "rule_ff8923a1",
@@ -107,13 +108,11 @@ Response (`201 Created`):
   "created_at": "2026-06-26T16:09:00Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Retrieve Client Rules
-
-**`GET /api/v1/rules/{client_id}`**
-
-Response (`200 OK`):
-
+{{< api-endpoint method="GET" path="/api/v1/rules/{client_id}" desc="Retrieve Client Rules" >}}
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "client_id": "user_vip_9918",
@@ -127,11 +126,15 @@ Response (`200 OK`):
   ]
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Client Rejection Response (429)
-
+{{< api-endpoint method="—" path="Rate limit exceeded" desc="Client Rejection Response (429)" >}}
+{{< api-notes >}}
 When a consumer exceeds quota, the gateway returns immediately without forwarding to downstream services:
+{{< /api-notes >}}
 
+{{< api-response code="429" label="Too Many Requests" >}}
 ```http
 HTTP/1.1 429 Too Many Requests
 Content-Type: application/json
@@ -148,15 +151,18 @@ Retry-After: 45
   "retry_after_seconds": 45
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Error Codes
+**Common HTTP error codes**
 
+{{% api-errors %}}
 | Code | Condition |
 | :--- | :--- |
 | `400 Bad Request` | Invalid payload (e.g. negative token bucket constants) |
 | `429 Too Many Requests` | Client-facing throttling marker |
 | `201 Created` | Rule successfully persisted and propagated |
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model

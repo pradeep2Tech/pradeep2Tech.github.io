@@ -89,10 +89,12 @@ Starting from **15M DAU** and a **30:1 search-to-book ratio**:
 
 ## 3. API Design
 
-### Proximity Search
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | GET | `/v1/hotels/search` | Proximity Search |
+| 2 | POST | `/v1/bookings/reserve` | Reserve Room (Two-Phase Booking) |
 
-**`GET /v1/hotels/search`**
-
+{{< api-endpoint method="GET" path="/v1/hotels/search" desc="Proximity Search" open="true" >}}
 | Parameter | Type | Required | Notes |
 | :--- | :--- | :--- | :--- |
 | `latitude` | double | Yes | Target coordinate |
@@ -102,8 +104,7 @@ Starting from **15M DAU** and a **30:1 search-to-book ratio**:
 | `check_out` | ISO 8601 date | Yes | Stay end |
 | `page_token` | string | No | Opaque cursor for stateless pagination |
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "data": [
@@ -121,11 +122,10 @@ Response (`200 OK`):
 ```
 
 Cursor pagination avoids `OFFSET` scans — lookups stay **O(log N)** via index seek instead of **O(N)** discard.
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Reserve Room (Two-Phase Booking)
-
-**`POST /v1/bookings/reserve`**
-
+{{< api-endpoint method="POST" path="/v1/bookings/reserve" desc="Reserve Room (Two-Phase Booking)" >}}
 Headers:
 
 | Header | Required | Notes |
@@ -133,8 +133,7 @@ Headers:
 | `Idempotency-Key` | Yes | UUIDv4 — prevents double charge on retries |
 | `Authorization` | Yes | Bearer JWT (RS256) |
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "hotel_id": "htl_99a8b7c6",
@@ -144,9 +143,9 @@ Request:
   "guest_count": 2
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "booking_id": "bkg_77e6f5a4",
@@ -154,6 +153,8 @@ Response (`202 Accepted`):
   "lease_expires_at": "2026-06-26T15:23:00Z"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
 ### Error Matrix
 
@@ -168,7 +169,6 @@ Response (`202 Accepted`):
 1. Gateway extracts `Idempotency-Key`.
 2. Lookup `idempotency:bkg:{key}` in Redis — if hit, return cached response verbatim.
 3. On miss, `SETNX` lock with **120 s** lease; process once; cache result.
-
 ---
 
 ## 4. Data Model

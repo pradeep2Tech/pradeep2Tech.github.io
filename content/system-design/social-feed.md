@@ -95,10 +95,12 @@ This post walks through the full design — requirements, capacity math, API con
 
 ## 3. API Design
 
-### Create Post
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/posts` | Create Post |
+| 2 | GET | `/api/v1/feeds?limit=20&cursor=<opaque_token>` | Get Feed Timeline |
 
-**`POST /api/v1/posts`**
-
+{{< api-endpoint method="POST" path="/api/v1/posts" desc="Create Post" open="true" >}}
 Creates a textual status update or registers media asset upload metadata pointers. Idempotency enforced via `X-Idempotency-Key` header (client-generated UUID, 120s TTL Redis lock).
 
 Request headers:
@@ -109,8 +111,7 @@ X-Idempotency-Key: c9d8e7b6-1234-4bc3-a212-e8f7a6b5c4d3
 Authorization: Bearer <JWT_TOKEN>
 ```
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "user_id": "usr_99f8d7c6-2341-4da2",
@@ -125,9 +126,9 @@ Request:
   ]
 }
 ```
+{{< /api-request >}}
 
-Response (`201 Created`):
-
+{{< api-response code="201" label="Created" >}}
 ```json
 {
   "post_id": "pst_1a2b3c4d-5e6f-7a8b",
@@ -142,18 +143,16 @@ Response (`201 Created`):
 | `401 Unauthorized` | Invalid or expired JWT |
 | `422 Unprocessable Entity` | Duplicate `X-Idempotency-Key` collision |
 | `429 Too Many Requests` | Rate limiter bucket exhausted |
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Get Feed Timeline
-
-**`GET /api/v1/feeds?limit=20&cursor=<opaque_token>`**
-
+{{< api-endpoint method="GET" path="/api/v1/feeds?limit=20&cursor=<opaque_token>" desc="Get Feed Timeline" >}}
 | Parameter | Default | Max | Notes |
 | :--- | :--- | :--- | :--- |
 | `limit` | 20 | 50 | Page size |
 | `cursor` | — | — | Opaque base64 token wrapping `created_at` + `post_id` bounds |
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "data": [
@@ -175,7 +174,8 @@ Response (`200 OK`):
   }
 }
 ```
-
+{{< /api-response >}}
+{{< /api-endpoint >}}
 ---
 
 ## 4. Data Model

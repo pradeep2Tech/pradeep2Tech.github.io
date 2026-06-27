@@ -93,14 +93,16 @@ The hot cache layer fits entirely in RAM with headroom for replication.
 
 ## 3. API Design
 
-### Ingest Score Event
+| # | Method | Path | Purpose |
+| :---: | :--- | :--- | :--- |
+| 1 | POST | `/api/v1/scores` | Ingest Score Event |
+| 2 | GET | `/api/v1/leaderboards/{context_id}` | Fetch Top-K Leaderboard |
+| 3 | GET | `/api/v1/leaderboards/{context_id}/users/{user_id}/surrounding` | Fetch Surrounding Ranks |
 
-**`POST /api/v1/scores`**
-
+{{< api-endpoint method="POST" path="/api/v1/scores" desc="Ingest Score Event" open="true" >}}
 Idempotency: include a `Client-Request-Id` UUID in HTTP headers to prevent duplicate increments on retry storms.
 
-Request:
-
+{{< api-request >}}
 ```json
 {
   "entity_id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
@@ -110,23 +112,21 @@ Request:
   "context_id": "game_season_12"
 }
 ```
+{{< /api-request >}}
 
-Response (`202 Accepted`):
-
+{{< api-response code="202" label="Accepted" >}}
 ```json
 {
   "status": "queued"
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Fetch Top-K Leaderboard
-
-**`GET /api/v1/leaderboards/{context_id}`**
-
+{{< api-endpoint method="GET" path="/api/v1/leaderboards/{context_id}" desc="Fetch Top-K Leaderboard" >}}
 Query parameters: `window=24h&region=IN&limit=50&offset=0`
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "context_id": "game_season_12",
@@ -145,15 +145,13 @@ Response (`200 OK`):
 | `limit` | 1 ≤ limit ≤ 1,000 per page |
 | `window` | `1h`, `24h`, `30d`, `all` |
 | `offset` | Required when K > 1,000 (pagination) |
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### Fetch Surrounding Ranks
-
-**`GET /api/v1/leaderboards/{context_id}/users/{user_id}/surrounding`**
-
+{{< api-endpoint method="GET" path="/api/v1/leaderboards/{context_id}/users/{user_id}/surrounding" desc="Fetch Surrounding Ranks" >}}
 Query parameters: `window=30d&region=US&surround_radius=2`
 
-Response (`200 OK`):
-
+{{< api-response code="200" label="OK" >}}
 ```json
 {
   "target_user_rank": 45,
@@ -166,14 +164,17 @@ Response (`200 OK`):
   ]
 }
 ```
+{{< /api-response >}}
+{{< /api-endpoint >}}
 
-### HTTP Error Codes
+**Common HTTP error codes**
 
+{{% api-errors %}}
 | Code | Condition |
 | :--- | :--- |
 | `400 Bad Request` | Invalid window string, out-of-bounds limit, or missing fields |
 | `429 Too Many Requests` | Rate-limit threshold breached on ingestion or read path |
-
+{{% /api-errors %}}
 ---
 
 ## 4. Data Model
