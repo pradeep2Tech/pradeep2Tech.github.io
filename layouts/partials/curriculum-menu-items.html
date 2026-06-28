@@ -1,0 +1,17 @@
+{{- $sections := site.Data.curriculum_sections.sections | default slice -}}
+{{- $currentPage := . -}}
+{{- range $sections -}}
+  {{- $slug := .slug -}}
+  {{- $label := .menuLabel -}}
+  {{- with site.GetPage $slug -}}
+  {{- $section_url := .Permalink | absURL -}}
+  {{- $page_url := $currentPage.Permalink | absURL -}}
+  <li>
+    <a href="{{ .RelPermalink }}" title="{{ $label | default .Title }}">
+      <span {{- if eq $section_url $page_url }} class="active" {{- end }}>
+        {{- $label | default .Title -}}
+      </span>
+    </a>
+  </li>
+  {{- end -}}
+{{- end -}}

@@ -1,0 +1,44 @@
+---
+description: Register new curriculum sections so home page and header nav stay in sync
+globs: content/**/_index.md, data/curriculum_sections.yaml, layouts/index.html, layouts/partials/home-curriculum.html, layouts/partials/curriculum-menu-items.html
+alwaysApply: false
+---
+
+# Curriculum Sections — Home & Nav Registry
+
+The home page and header navigation are driven by **`data/curriculum_sections.yaml`**, not a hardcoded list. When adding a new top-level module under `content/<section>/`, register it there or it will not appear on `/`.
+
+## Checklist for a New Section
+
+1. **`data/curriculum_sections.yaml`** — append an entry:
+   ```yaml
+   - slug: my-new-section
+     menuLabel: My New Section
+   ```
+   Order in this file controls home grid and nav order.
+
+2. **`content/<section>/_index.md`** — section landing page (`title`, `description`, `draft: false`).
+
+3. **Layouts** (match existing sections):
+   - `layouts/<section>/list.html` and `single.html`
+   - `layouts/partials/<section>-nav.html`
+   - Add section name to `layouts/partials/extend_head.html` style guard if it uses `sd-section-nav` / TOC styles.
+
+4. **Module data** (if module-grouped TOC): `data/<section>_modules.yaml` + `data/<section>_order.yaml`.
+
+5. **Verify**: `hugo server` → `/` shows the new card; header nav includes the new link.
+
+## What Updates Automatically
+
+| Component | Source |
+|-----------|--------|
+| Home section grid | `curriculum_sections.yaml` + section `_index.md` description |
+| Header nav links | `curriculum_sections.yaml` |
+| Topic count on card | `len` of section `RegularPages` |
+
+## Do Not
+
+- Rely on the old paginated post feed on home — `layouts/index.html` is a curriculum hub only.
+- Add curriculum sections only under `content/` without registering in `curriculum_sections.yaml`.
+
+Reference sections: `system-fundamentals`, `system-design`, `database-internals`, `security-architecture`.

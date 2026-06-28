@@ -1,0 +1,17 @@
+# Flat topic order — derived from database_internals_modules.yaml.
+# Prefer editing data/database_internals_modules.yaml for module/subsection structure.
+topics:
+  - b-plus-tree-storage-mechanics
+  - sqlite-architecture-teardown
+  - acid-two-phase-commit-journaling
+  - transactional-outbox-pattern
+  - transactional-inbox-pattern
+  - outbox-inbox-performance-tuning
+  - primary-key-selection-strategies
+  - advanced-schema-optimization
+  - zero-downtime-migration-frameworks
+  - cost-based-query-optimization
+  - local-concurrency-mvcc
+  - lock-graphs-deadlocks-latching
+  - distributed-consistency-primitives
+  - ai-vector-indexing-rag-scaling

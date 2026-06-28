@@ -1,0 +1,32 @@
+# Database Internals — module index (canonical structure).
+# Each module groups related topics; section numbers are Module.Topic (e.g. 1.1, 2.3).
+modules:
+  - id: 1
+    focus: "Local Storage Layer & Embedded Engines"
+    topics:
+      - b-plus-tree-storage-mechanics
+      - sqlite-architecture-teardown
+      - acid-two-phase-commit-journaling
+  - id: 2
+    focus: "Distributed State & Asynchronous Coordination Patterns"
+    topics:
+      - transactional-outbox-pattern
+      - transactional-inbox-pattern
+      - outbox-inbox-performance-tuning
+  - id: 3
+    focus: "Enterprise Relational Schema Architecture & Evolution"
+    topics:
+      - primary-key-selection-strategies
+      - advanced-schema-optimization
+      - zero-downtime-migration-frameworks
+  - id: 4
+    focus: "Query Optimization, Indexing Engines, & Concurrency Control"
+    topics:
+      - cost-based-query-optimization
+      - local-concurrency-mvcc
+      - lock-graphs-deadlocks-latching
+  - id: 5
+    focus: "Distributed Topology Architectures & AI Vector Systems"
+    topics:
+      - distributed-consistency-primitives
+      - ai-vector-indexing-rag-scaling

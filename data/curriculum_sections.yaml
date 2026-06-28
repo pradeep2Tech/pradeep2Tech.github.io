@@ -1,0 +1,11 @@
+# Canonical registry of top-level curriculum sections.
+# Home page grid and header nav read this list — register new sections here.
+sections:
+  - slug: system-fundamentals
+    menuLabel: System Fundamentals
+  - slug: system-design
+    menuLabel: System Design
+  - slug: database-internals
+    menuLabel: Database Internals
+  - slug: security-architecture
+    menuLabel: Security Architecture

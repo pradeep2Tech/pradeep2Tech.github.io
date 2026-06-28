@@ -1,0 +1,37 @@
+# System Fundamentals — module index (canonical structure).
+# Each module groups related topics; section numbers are Module.Topic (e.g. 1.1, 2.3).
+modules:
+  - id: 1
+    focus: "Boundary Ingress Routing & Proxy Mechanics"
+    topics:
+      - proxy-servers-forward-vs-reverse
+      - layer4-layer7-multi-tier-ingress-routing
+      - load-balancers-and-routing-algorithms
+      - hands-on-load-balancing-setup
+  - id: 2
+    focus: "Network Protocols & Layer 4/7 Transport Mechanics"
+    topics:
+      - application-layer-protocols-rest-grpc
+      - transport-layer-mechanics-tcp-vs-udp
+      - http3-quic-and-websocket-transports
+      - networking-essentials-ip-dns-firewalls
+  - id: 3
+    focus: "Distributed Hierarchical Caching Infrastructure"
+    topics:
+      - caching-and-cdns-hierarchical-arrays
+      - cache-eviction-and-mutation-policies
+      - cdc-based-cache-invalidation
+      - cache-stampede-and-penetration-mitigation
+  - id: 4
+    focus: "Stateful Storage Scaling & Data Partition Primitives"
+    topics:
+      - relational-database-fundamentals-and-b-trees
+      - database-transactions-and-acid-isolation
+      - replication-lag-read-replica-topology
+      - database-sharding-provisioning-and-chunk-routing
+  - id: 5
+    focus: "Redundancy Engineering & Global System Governance"
+    topics:
+      - single-point-of-failure-elimination-redundancy
+      - multi-region-topologies-and-availability-zones
+      - crdts-and-multi-master-conflict-resolution

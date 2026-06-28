@@ -1,6 +1,51 @@
 {{- partial "diagram-lightbox-head.html" . -}}
 {{- partial "section-collapsible-head.html" . -}}
-{{- if or (eq .Section "system-design") (eq .Section "security-architecture") (and .IsSection (or (eq .Section "system-design") (eq .Section "security-architecture"))) -}}
+{{- if .IsHome -}}
+<style>
+  .curriculum-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+  .curriculum-card {
+    display: block;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--entry);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .curriculum-card:hover {
+    border-color: var(--secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  .curriculum-card-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.35;
+  }
+  .curriculum-card-desc {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--secondary);
+  }
+  .curriculum-card-meta {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--secondary);
+  }
+</style>
+{{- end -}}
+{{- if or (eq .Section "system-design") (eq .Section "security-architecture") (eq .Section "database-internals") (eq .Section "system-fundamentals") (and .IsSection (or (eq .Section "system-design") (eq .Section "security-architecture") (eq .Section "database-internals") (eq .Section "system-fundamentals"))) -}}
 <style>
   .sd-section-nav {
     font-size: 0.9rem;
@@ -44,6 +89,46 @@
   .sd-toc-entry--sub {
     margin-left: 1.75rem;
     font-size: 0.95rem;
+  }
+  .sd-toc-entry--module {
+    margin: 1.25rem 0 0.35rem;
+    list-style: none;
+  }
+  .sd-toc-module-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--secondary);
+    letter-spacing: 0.01em;
+  }
+  .db-module-block {
+    margin: 2rem 0 1.5rem;
+  }
+  .db-module-heading {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    line-height: 1.4;
+    color: var(--primary);
+  }
+  .db-module-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+    background: var(--code-bg);
+    color: var(--secondary);
+    vertical-align: middle;
+  }
+  .sd-toc-list--module {
+    margin-left: 0.25rem;
+  }
+  .sd-toc-entry--nested {
+    margin-left: 2.5rem;
+    font-size: 0.9rem;
   }
   .sd-toc-num {
     flex-shrink: 0;

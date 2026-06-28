@@ -1,0 +1,9 @@
+{{- define "main" -}}
+
+{{- if site.Params.homeInfoParams -}}
+{{- partial "home_info.html" . -}}
+{{- end -}}
+
+{{- partial "home-curriculum.html" . -}}
+
+{{- end -}}
