@@ -1,0 +1,51 @@
+# Distributed Microservices — module index (canonical structure).
+# Each module groups related topics; section numbers are Module.Topic (e.g. 1.1, 2.3).
+modules:
+  - id: 1
+    focus: "Event-Driven Messaging & Async Coordination"
+    topics:
+      - event-driven-architecture-log-streaming
+      - point-to-point-message-queues
+      - saga-pattern-distributed-transactions
+      - cqrs-event-sourcing
+      - microservices-communication-topologies
+  - id: 2
+    focus: "API Boundaries, Discovery & Fault Tolerance"
+    topics:
+      - api-gateway-bff-pattern
+      - dynamic-service-discovery-registry
+      - circuit-breaker-pattern
+      - transient-fault-handling-timeouts-retries
+  - id: 3
+    focus: "Data Ownership & Persistence Scaling"
+    topics:
+      - database-per-microservice
+      - monolithic-database-decomposition
+      - database-replication-scaling
+      - database-sharding-horizontal-partitioning
+      - database-isolation-levels-concurrency-control
+  - id: 4
+    focus: "Runtime Infrastructure & Deployment Topologies"
+    topics:
+      - application-containerization-docker
+      - declarative-container-orchestration-kubernetes
+      - externalized-configuration-management
+      - zero-downtime-deployment-topologies
+      - strangler-fig-application-pattern
+  - id: 5
+    focus: "Observability, Mesh & Runtime Isolation"
+    topics:
+      - distributed-tracing-log-aggregation
+      - three-pillars-observability
+      - sidecar-integration-pattern
+      - service-mesh-architecture
+      - bulkhead-isolation-pattern
+      - distributed-rate-limiting-throttling
+  - id: 6
+    focus: "Distributed Theory, Caching & Quality Gates"
+    topics:
+      - distributed-caching-invalidation
+      - consistent-hashing-rings-virtual-nodes
+      - consumer-driven-contract-testing-cdct
+      - cap-theorem-pacelc-framework
+      - architectural-pragmatist-monolith-vs-microservices

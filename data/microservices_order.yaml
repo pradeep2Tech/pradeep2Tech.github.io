@@ -1,0 +1,33 @@
+# Flat topic order — derived from microservices_modules.yaml.
+# Prefer editing data/microservices_modules.yaml for module/subsection structure.
+topics:
+  - event-driven-architecture-log-streaming
+  - point-to-point-message-queues
+  - saga-pattern-distributed-transactions
+  - cqrs-event-sourcing
+  - microservices-communication-topologies
+  - api-gateway-bff-pattern
+  - dynamic-service-discovery-registry
+  - circuit-breaker-pattern
+  - transient-fault-handling-timeouts-retries
+  - database-per-microservice
+  - monolithic-database-decomposition
+  - database-replication-scaling
+  - database-sharding-horizontal-partitioning
+  - database-isolation-levels-concurrency-control
+  - application-containerization-docker
+  - declarative-container-orchestration-kubernetes
+  - externalized-configuration-management
+  - zero-downtime-deployment-topologies
+  - strangler-fig-application-pattern
+  - distributed-tracing-log-aggregation
+  - three-pillars-observability
+  - sidecar-integration-pattern
+  - service-mesh-architecture
+  - bulkhead-isolation-pattern
+  - distributed-rate-limiting-throttling
+  - distributed-caching-invalidation
+  - consistent-hashing-rings-virtual-nodes
+  - consumer-driven-contract-testing-cdct
+  - cap-theorem-pacelc-framework
+  - architectural-pragmatist-monolith-vs-microservices

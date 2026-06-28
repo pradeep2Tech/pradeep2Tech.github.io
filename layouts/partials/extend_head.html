@@ -45,7 +45,7 @@
   }
 </style>
 {{- end -}}
-{{- if or (eq .Section "system-design") (eq .Section "security-architecture") (eq .Section "database-internals") (eq .Section "system-fundamentals") (and .IsSection (or (eq .Section "system-design") (eq .Section "security-architecture") (eq .Section "database-internals") (eq .Section "system-fundamentals"))) -}}
+{{- if or (eq .Section "system-design") (eq .Section "security-architecture") (eq .Section "database-internals") (eq .Section "system-fundamentals") (eq .Section "microservices") (and .IsSection (or (eq .Section "system-design") (eq .Section "security-architecture") (eq .Section "database-internals") (eq .Section "system-fundamentals") (eq .Section "microservices"))) -}}
 <style>
   .sd-section-nav {
     font-size: 0.9rem;

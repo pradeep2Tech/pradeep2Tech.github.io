@@ -35,7 +35,7 @@ buildFuture = true
 
 [params.homeInfoParams]
   Title = "Engineering Deep Dives"
-  Content = "Structured masterclasses in system fundamentals, system design, database internals, and security architecture."
+  Content = "Structured masterclasses in system fundamentals, system design, database internals, security architecture, and distributed microservices."
 
 [params.assets]
   disableHLJS = true

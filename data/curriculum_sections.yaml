@@ -9,3 +9,5 @@ sections:
     menuLabel: Database Internals
   - slug: security-architecture
     menuLabel: Security Architecture
+  - slug: microservices
+    menuLabel: Distributed Microservices

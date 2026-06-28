@@ -1,6 +1,6 @@
 ---
 description: Register new curriculum sections so home page and header nav stay in sync
-globs: content/**/_index.md, data/curriculum_sections.yaml, layouts/index.html, layouts/partials/home-curriculum.html, layouts/partials/curriculum-menu-items.html
+globs: content/**/_index.md, data/curriculum_sections.yaml, data/*_modules.yaml, data/*_order.yaml, layouts/index.html, layouts/partials/home-curriculum.html, layouts/partials/curriculum-menu-items.html, layouts/partials/extend_head.html, layouts/**/list.html, layouts/**/single.html, layouts/partials/*-nav.html
 alwaysApply: false
 ---
 
@@ -12,8 +12,8 @@ The home page and header navigation are driven by **`data/curriculum_sections.ya
 
 1. **`data/curriculum_sections.yaml`** — append an entry:
    ```yaml
-   - slug: my-new-section
-     menuLabel: My New Section
+   - slug: microservices
+     menuLabel: Distributed Microservices
    ```
    Order in this file controls home grid and nav order.
 
@@ -26,7 +26,7 @@ The home page and header navigation are driven by **`data/curriculum_sections.ya
 
 4. **Module data** (if module-grouped TOC): `data/<section>_modules.yaml` + `data/<section>_order.yaml`.
 
-5. **Verify**: `hugo server` → `/` shows the new card; header nav includes the new link.
+5. **Verify**: restart `hugo server` (default `http://localhost:1313/`) → `/` shows the new card; header nav includes the new link.
 
 ## What Updates Automatically
 
@@ -40,5 +40,6 @@ The home page and header navigation are driven by **`data/curriculum_sections.ya
 
 - Rely on the old paginated post feed on home — `layouts/index.html` is a curriculum hub only.
 - Add curriculum sections only under `content/` without registering in `curriculum_sections.yaml`.
+- Expect a running `hugo server` to pick up new sections without restart — stop and restart after adding a section.
 
-Reference sections: `system-fundamentals`, `system-design`, `database-internals`, `security-architecture`.
+Reference sections: `system-fundamentals`, `system-design`, `database-internals`, `security-architecture`, `microservices`.

@@ -4,7 +4,8 @@
   {{- range $sections -}}
     {{- $slug := .slug -}}
     {{- $menuLabel := .menuLabel -}}
-    {{- with site.GetPage $slug -}}
+    {{- $page := or (site.GetPage (printf "/%s/" $slug)) (site.GetPage (printf "/%s" $slug)) (site.GetPage $slug) -}}
+    {{- with $page -}}
       {{- $topicCount := len .RegularPages -}}
       <a class="curriculum-card" href="{{ .RelPermalink }}">
         <h2 class="curriculum-card-title">{{ $menuLabel | default .Title }}</h2>

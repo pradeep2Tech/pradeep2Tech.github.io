@@ -3,7 +3,8 @@
 {{- range $sections -}}
   {{- $slug := .slug -}}
   {{- $label := .menuLabel -}}
-  {{- with site.GetPage $slug -}}
+  {{- $page := or (site.GetPage (printf "/%s/" $slug)) (site.GetPage (printf "/%s" $slug)) (site.GetPage $slug) -}}
+  {{- with $page -}}
   {{- $section_url := .Permalink | absURL -}}
   {{- $page_url := $currentPage.Permalink | absURL -}}
   <li>
