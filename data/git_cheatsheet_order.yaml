@@ -1,0 +1,20 @@
+# Flat topic order — derived from git_cheatsheet_modules.yaml.
+# Prefer editing data/git_cheatsheet_modules.yaml for module/subsection structure.
+topics:
+  - git-basics
+  - repository
+  - clone
+  - branch
+  - merge
+  - rebase
+  - cherry-pick
+  - interactive-rebase
+  - reset
+  - revert
+  - stash
+  - remote
+  - tag
+  - pull-request-workflow
+  - conflict-resolution
+  - git-internals
+  - git-hooks

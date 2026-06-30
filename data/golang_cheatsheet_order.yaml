@@ -1,0 +1,28 @@
+# Flat topic order — derived from golang_cheatsheet_modules.yaml.
+# Prefer editing data/golang_cheatsheet_modules.yaml for module structure.
+topics:
+  - language-basics
+  - functions
+  - structs
+  - interfaces
+  - pointers
+  - methods
+  - packages
+  - error-handling
+  - slices
+  - arrays
+  - maps
+  - goroutines
+  - channels
+  - select
+  - context
+  - mutex
+  - rwmutex
+  - sync-package
+  - testing
+  - reflection
+  - memory-model
+  - garbage-collection
+  - go-modules
+  - dependency-management
+  - interview-questions

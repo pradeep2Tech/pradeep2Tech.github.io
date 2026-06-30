@@ -1,0 +1,27 @@
+# Flat topic order — derived from redis_cheatsheet_modules.yaml.
+# Prefer editing data/redis_cheatsheet_modules.yaml for module structure.
+topics:
+  - architecture
+  - data-structures
+  - strings
+  - hashes
+  - lists
+  - sets
+  - sorted-sets
+  - bitmaps
+  - hyperloglog
+  - streams
+  - pub-sub
+  - transactions
+  - lua-scripts
+  - persistence
+  - replication
+  - sentinel
+  - cluster
+  - eviction-policies
+  - caching-patterns
+  - distributed-lock
+  - rate-limiter
+  - session-store
+  - common-redis-commands
+  - interview-questions

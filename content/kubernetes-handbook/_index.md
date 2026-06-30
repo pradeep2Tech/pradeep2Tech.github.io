@@ -7,4 +7,4 @@ tags: ["kubernetes-handbook", "kubernetes", "docker", "service-mesh", "observabi
 ShowPageNums: true
 ---
 
-Platform engineering reference for **containers, Kubernetes, ingress, gateways, service mesh, and observability**. For managed Kubernetes on AWS/Azure/GCP, see [Cloud Handbook](/cloud-handbook/).
+Quick-reference **cheat sheets** for containers, Kubernetes, ingress, service mesh, and observability — commands, YAML, and copy-paste snippets for engineers who already know the concepts. For architecture deep dives see [Microservices](/microservices/); for managed clusters see [Cloud Handbook](/cloud-handbook/).

@@ -1,0 +1,19 @@
+# Flat topic order — derived from mongodb_cheatsheet_modules.yaml.
+topics:
+  - architecture
+  - documents
+  - collections
+  - crud
+  - indexes
+  - aggregation-pipeline
+  - ttl-index
+  - text-search
+  - geospatial
+  - replication
+  - sharding
+  - transactions
+  - schema-design
+  - atlas-basics
+  - performance
+  - mongo-shell-commands
+  - interview-questions

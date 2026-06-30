@@ -1,0 +1,63 @@
+# Kubernetes Cheatsheet — production-ready reference for developers, DevOps, and architects.
+modules:
+  - id: 1
+    focus: "Architecture & Workloads"
+    topics:
+      - kubernetes-architecture
+      - pods
+      - replicasets
+      - deployments
+      - statefulsets
+      - daemonsets
+      - jobs
+      - cronjobs
+
+  - id: 2
+    focus: "Networking & Exposure"
+    topics:
+      - services
+      - ingress
+      - network-policies
+
+  - id: 3
+    focus: "Configuration & Storage"
+    topics:
+      - configmaps
+      - secrets
+      - persistent-volumes
+      - storage-classes
+      - namespaces
+
+  - id: 4
+    focus: "Scheduling & Scaling"
+    topics:
+      - labels-and-selectors
+      - affinity-and-anti-affinity
+      - taints-and-tolerations
+      - resource-limits
+      - hpa
+
+  - id: 5
+    focus: "Operations & Security"
+    topics:
+      - rolling-updates
+      - probes
+      - rbac
+      - helm-basics
+      - common-kubectl-commands
+      - troubleshooting
+      - production-best-practices
+
+  - id: 6
+    focus: "Docker"
+    topics:
+      - docker-architecture
+      - dockerfile
+      - image-layers
+      - docker-volumes
+      - docker-networks
+      - multi-stage-builds
+      - docker-compose
+      - docker-commands
+      - container-lifecycle
+      - docker-best-practices

@@ -1,106 +1,48 @@
 ---
-description: Java Engineering Handbook blog posts — cheat sheet format and Hugo layout
-globs: content/java-engineering/**/*.md, data/java_engineering_modules.yaml, data/java_cheatsheet_order.yaml, layouts/java-engineering/**, layouts/partials/java-cheatsheet*.html, layouts/shortcodes/java-*.html, scripts/generate_java_cheatsheet_stubs.py
+description: Java Engineering Handbook — architect cheat sheets (not tutorials)
+globs: content/java-engineering/**/*.md, data/java_engineering_modules.yaml, data/java_engineering_order.yaml, scripts/build_java_engineering_handbook.py
 alwaysApply: false
 ---
 
-# Java Engineering Cheat Sheet Posts
+# Java Engineering Handbook
 
-Reference implementation: `content/java-engineering/primitive-data-types.md`, `content/java-engineering/hashmap.md`
+Reference: `content/java-engineering/collections-decision-matrix.md`, `content/java-engineering/jvm-flags-and-tuning.md`
 
-## Repo Layout
+## Audience
+
+Senior engineers and **architects** — quick revision, production decisions, interview probes. **Not** a beginner tutorial.
+
+## Structure
 
 | Path | Purpose |
 |---|---|
-| `content/java-engineering/_index.md` | Section landing page |
-| `content/java-engineering/<topic>.md` | One page per topic |
-| `data/java_engineering_modules.yaml` | Module grouping and topic order |
-| `data/java_cheatsheet_order.yaml` | Flat topic order (prev/next nav) |
-| `layouts/shortcodes/java-note.html` | Note callout |
-| `layouts/shortcodes/java-tip.html` | Tip callout |
-| `layouts/shortcodes/java-warning.html` | Warning callout |
+| `data/java_engineering_modules.yaml` | 11 modules, **35 topics** (basics clubbed) |
+| `data/java_engineering_order.yaml` | Flat prev/next nav |
+| `scripts/build_java_engineering_handbook.py` | Regenerate all pages + prune orphans |
+| `content/java-engineering/<slug>.md` | One cheat sheet per topic |
 
-URL pattern: `/java-engineering/<filename>/`
+URL: `/java-engineering/<slug>/`
 
-## Scope
+## Page Format (`cheatSheet: true`)
 
-**In scope:** Core Java, OOP, collections, exceptions, generics, functional programming, streams, concurrency, memory, JVM, modern Java versions, IO, reflection, serialization, interview quick refs.
+1. **At a Glance** — 3–5 bullets
+2. **Reference Tables** — main content (decision matrices, Big-O, flags)
+3. **Snippets** — minimal Java only when it saves time
+4. **Internals & Gotchas**
+5. **Production Notes**
+6. **Interview Probes** — `{{< interview-answer >}}` (2–3 max)
+7. **See Also**
 
-**Out of scope (separate sections):** Spring Boot, Hibernate, JPA, Maven, Gradle, design patterns, DSA, system design.
+**Do not** split primitives, wrappers, operators into separate pages — keep in `core-java-quick-ref`.
 
-## Hugo Front Matter
+## Out of Scope
 
-```yaml
----
-title: "<Topic Title>"
-date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "One-line summary for SEO."
-tags: ["java", "java-cheatsheet", "<topic-tag>"]
-categories: ["Java Engineering Handbook"]
-shortTitle: "<Short Title>"
-module: 1
-moduleTitle: "Core Java Fundamentals"
-sectionRef: "1.1"
-ShowToc: true
-javaVersions: ["8", "11", "17", "21", "25"]
----
+Spring Boot, Hibernate, Maven, design patterns, DSA → other handbook sections.
+
+## Regenerate
+
+```bash
+python scripts/build_java_engineering_handbook.py
 ```
 
-Set `draft: false` when the page is ready to publish.
-
-## Required Sections (use `##` headings)
-
-Every topic page uses the same structure (collapsible via `sd-collapsible-content`):
-
-1. **Executive Summary** — simple English overview
-2. **Why It Exists** — problem/solution table
-3. **Key Concepts** — Mermaid diagram + tables
-4. **Syntax** — concise code + reference table
-5. **Example** — small runnable Java snippet
-6. **Internal Working** — JVM/runtime behavior; optional sequence diagram
-7. **Common Mistakes** — bullets + `java-warning` where needed
-8. **Best Practices** — production recommendations
-9. **Interview Questions** — `interview-answer` shortcode blocks
-10. **Related Topics** — internal links (prev/next + index)
-
-Separate major sections with `---` horizontal rules.
-
-## Callouts
-
-```markdown
-{{% note %}}
-Important context.
-{{% /note %}}
-
-{{% tip %}}
-Practical tip.
-{{% /tip %}}
-
-{{% warning %}}
-Pitfall or danger.
-{{% /warning %}}
-```
-
-## Module 15 — Interview Quick Reference
-
-One-page summaries only. No coding problems. Favor dense tables and diagrams over long prose.
-
-## Stub Generator
-
-`scripts/generate_java_cheatsheet_stubs.py` — regenerates draft stubs from `data/java_engineering_modules.yaml`.
-
-Skips reference pages: `primitive-data-types`, `hashmap`, `lambda`, `virtual-threads`, `collections-complexity`, `java-8-features`.
-
-## Workflow
-
-1. Add topic slug to `data/java_engineering_modules.yaml`
-2. Add metadata to `TITLES` in `scripts/generate_java_cheatsheet_stubs.py`
-3. Run `python scripts/generate_java_cheatsheet_stubs.py`
-4. Fill in content; set `draft: false`
-5. Preview: `hugo server -D` — restart server after new section registration
-
-## Cross-Links
-
-- Collections → [Design Patterns](/design-patterns/) only when discussing pattern-level design, not collection APIs
-- Concurrency → [Distributed Microservices](/microservices/) for distributed systems patterns
+Edits to page bodies live in `PAGE_BODIES` inside the build script unless you hand-edit markdown (hand edits overwritten on regen).

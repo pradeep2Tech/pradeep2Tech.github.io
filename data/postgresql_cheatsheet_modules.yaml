@@ -1,0 +1,57 @@
+# PostgreSQL Cheatsheet — module index.
+# Section numbers are Module.Topic (e.g. 1.1, 4.3).
+modules:
+  - id: 1
+    focus: "Getting Started"
+    topics:
+      - installation
+      - sql-basics
+      - most-common-sql-commands
+  - id: 2
+    focus: "DDL & DML"
+    topics:
+      - ddl
+      - dml
+      - joins
+  - id: 3
+    focus: "Query Performance"
+    topics:
+      - indexes
+      - explain
+      - performance-tuning
+  - id: 4
+    focus: "Transactions & Concurrency"
+    topics:
+      - transactions
+      - isolation-levels
+      - mvcc
+      - locks
+  - id: 5
+    focus: "Scaling & High Availability"
+    topics:
+      - partitioning
+      - sharding
+      - replication
+  - id: 6
+    focus: "Advanced SQL"
+    topics:
+      - views
+      - materialized-views
+      - ctes
+      - window-functions
+      - json
+  - id: 7
+    focus: "Server-Side Programming"
+    topics:
+      - functions
+      - triggers
+      - stored-procedures
+  - id: 8
+    focus: "Operations & Maintenance"
+    topics:
+      - vacuum
+      - backup-restore
+  - id: 9
+    focus: "Interview Prep"
+    topics:
+      - interview-questions

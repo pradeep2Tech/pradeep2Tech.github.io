@@ -1,100 +1,92 @@
 ---
 title: "GC Summary (Interview)"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "Collector selection and generational GC one-pager."
-tags: ["java", "java-cheatsheet", "handbook"]
+draft: false
+description: "Collector comparison, pause vs throughput, and tuning talking points."
+tags: ["java", "java-engineering", "handbook"]
 categories: ["Java Engineering Handbook"]
-shortTitle: "GC Summary"
-module: 15
-moduleTitle: "Interview Quick Reference"
-sectionRef: "15.4"
+shortTitle: "GC Interview"
+module: 11
+moduleTitle: "Interview Cheat Sheets"
+sectionRef: "11.4"
 ShowToc: true
-javaVersions: ["8", "11", "17", "21", "25"]
+cheatSheet: true
 ---
 
-## Executive Summary
+## At a Glance
 
-_One-page interview reference for **GC Summary (Interview)** — no coding problems._
+- Throughput vs latency collectors — no free lunch.
+- Generational hypothesis: most objects die young.
+- GC roots: stacks, statics, JNI, synchronized monitors.
+- Tune with data: logs, JFR, pause percentiles.
 
 ---
 
-## Why It Exists
+## Reference Tables
 
-| Need | How this page helps |
+| Collector | Goal |
 | :--- | :--- |
-| Last-minute revision | Scannable tables and diagrams |
-| Whiteboard interviews | Canonical facts without tutorial depth |
-| Senior probes | Trade-offs in one screen |
+| G1 | Balance, regional |
+| ZGC | Low pause, colored pointers |
+| Shenandoah | Concurrent compact |
+| Parallel | Max throughput batch |
 
----
-
-## Key Concepts
-
-```mermaid
-flowchart TD
-  topic["GC Summary (Interview)"]
-  topic --> fact1["Core fact 1"]
-  topic --> fact2["Core fact 2"]
-  topic --> fact3["Core fact 3"]
-```
-
-| Concept | Summary |
+| Term | Meaning |
 | :--- | :--- |
-| _TODO_ | _TODO_ |
+| Minor GC | Young collection |
+| Full GC | Often whole heap STW — investigate if frequent |
+| Promotion | Survivors → old |
+| Mixed GC (G1) | Partial old regions |
 
----
-
-## Syntax
-
-| Item | Reference |
+| Red flag | Action |
 | :--- | :--- |
-| _TODO_ | _TODO_ |
+| Frequent Full GC | Heap too small or leak |
+| Long pause spikes | Tune or switch collector |
+| High allocation rate | Object churn profiling |
 
 ---
 
-## Example
+## Snippets
 
-```java
-// TODO: minimal illustrative snippet
-public class Example {
-    public static void main(String[] args) {
-        System.out.println("TODO");
-    }
-}
+```bash
+-Xlog:gc*:file=gc.log:time,uptime,level,tags
 ```
 
 ---
 
-## Internal Working
+## Internals & Gotchas
 
-- _TODO: behind-the-scenes behavior in 3–5 bullets_
-
----
-
-## Common Mistakes
-
-- _TODO: typical interview wrong answers_
+- STW phases: snapshot roots at safepoint.
+- Concurrent collectors still brief pauses.
+- Metaspace GC distinct from heap GC.
 
 ---
 
-## Best Practices
+## Production Notes
 
-- _TODO: what seniors expect you to say_
+- Alert on pause P99 and GC time %.
+- Capacity plan includes GC overhead CPU.
 
 ---
 
-## Interview Questions
+## Interview Probes
+
 
 {< interview-answer >}
-**Q:** _TODO interview question_
+**Q:** Generational hypothesis?
 
-**A:** _TODO concise answer_
+**A:** Most objects short-lived — collecting young gen frequently is cheap; few promote to old.
+{< /interview-answer >}
+
+{< interview-answer >}
+**Q:** ZGC vs G1 trade-off?
+
+**A:** ZGC targets low pauses on large heaps with more CPU/barrier cost — validate on workload.
 {< /interview-answer >}
 
 ---
 
-## Related Topics
+## See Also
 
 - [Previous: Concurrent Collections](/java-engineering/concurrent-collections-interview/)
 - [Next: Version Features](/java-engineering/java-version-features-interview/)

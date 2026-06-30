@@ -1,0 +1,51 @@
+# Redis Cheatsheet — module index.
+# Each module groups related topics; section numbers are Module.Topic (e.g. 1.1, 4.3).
+modules:
+  - id: 1
+    focus: "Architecture & Model"
+    topics:
+      - architecture
+      - data-structures
+  - id: 2
+    focus: "Core Data Types"
+    topics:
+      - strings
+      - hashes
+      - lists
+      - sets
+      - sorted-sets
+  - id: 3
+    focus: "Specialized Structures"
+    topics:
+      - bitmaps
+      - hyperloglog
+      - streams
+  - id: 4
+    focus: "Messaging & Atomicity"
+    topics:
+      - pub-sub
+      - transactions
+      - lua-scripts
+  - id: 5
+    focus: "Durability & High Availability"
+    topics:
+      - persistence
+      - replication
+      - sentinel
+      - cluster
+  - id: 6
+    focus: "Memory Management"
+    topics:
+      - eviction-policies
+  - id: 7
+    focus: "Application Patterns"
+    topics:
+      - caching-patterns
+      - distributed-lock
+      - rate-limiter
+      - session-store
+  - id: 8
+    focus: "Reference"
+    topics:
+      - common-redis-commands
+      - interview-questions

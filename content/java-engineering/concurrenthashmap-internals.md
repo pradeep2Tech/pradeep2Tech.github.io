@@ -1,130 +1,101 @@
 ---
 title: "ConcurrentHashMap Internals"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "Segments, bins, CAS, and sizeCtl in modern JDK implementations."
-tags: ["java", "java-cheatsheet", "handbook"]
+draft: false
+description: "Bins, CAS, sizeCtl, compute methods, and iteration semantics under contention."
+tags: ["java", "java-engineering", "handbook"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "CHM Internals"
 module: 3
-moduleTitle: "Collections Framework"
-sectionRef: "3.20"
+moduleTitle: "Collections"
+sectionRef: "3.6"
 ShowToc: true
-javaVersions: ["8", "11", "17", "21", "25"]
+cheatSheet: true
 ---
 
-## Executive Summary
+## At a Glance
 
-_TODO: Explain **ConcurrentHashMap Internals** in simple English — one short paragraph._
+- No global lock — per-bin synchronization / CAS on Java 8+.
+- `sizeCtl` coordinates initialization and resize.
+- `compute*` methods atomic at key level — prefer over get+put.
+- Weakly consistent iterators — reflect some concurrent updates.
 
 ---
 
-## Why It Exists
+## Reference Tables
 
-| Problem | How ConcurrentHashMap Internals helps |
+| Era | Mechanism |
 | :--- | :--- |
-| _TODO_ | _TODO_ |
+| Java 7 | Segment locks (16 default) |
+| Java 8+ | Node array like HashMap + synchronized bin head / CAS + tree bins |
+| Resize | Multi-thread assisted transfer |
 
----
-
-## Key Concepts
-
-```mermaid
-flowchart LR
-  A["Concept A"] --> B["Concept B"]
-  B --> C["Concept C"]
-```
-
-| Concept | Description |
+| Method | Atomicity |
 | :--- | :--- |
-| _TODO_ | _TODO_ |
+| `putIfAbsent` | Key-level |
+| `compute` | Read-modify-write atomic |
+| `merge` | Atomic combine |
+| `replace(K,V,V)` | Compare-and-swap value |
 
-{% note %}
-_TODO: important note for readers._
-{% /note %}
+| vs `Hashtable` | CHM |
+| :--- | :--- |
+| Lock scope | Whole table | Bin-level |
+| Null | Allowed | Forbidden |
+| Iterators | Enumerator fail-fast | Weakly consistent |
 
 ---
 
-## Syntax
+## Snippets
 
 ```java
-// TODO: canonical syntax pattern
-```
+chm.compute(key, (k, v) -> v == null ? 1 : v + 1);
+chm.merge(key, 1, Integer::sum);
 
-| Element | Meaning |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
-
----
-
-## Example
-
-```java
-public class Example {
-    public static void main(String[] args) {
-        // TODO: small runnable example
-        System.out.println("TODO");
-    }
-}
-```
-
-{% tip %}
-_TODO: practical tip._
-{% /tip %}
-
----
-
-## Internal Working
-
-- _TODO: JVM / compiler / runtime behavior_
-- _TODO: performance characteristic_
-
-```mermaid
-sequenceDiagram
-    participant App
-    participant JVM
-    App->>JVM: operation
-    JVM-->>App: result
+// Avoid
+Integer v = chm.get(k);
+chm.put(k, v + 1); // race
 ```
 
 ---
 
-## Common Mistakes
+## Internals & Gotchas
 
-{% warning %}
-_TODO: pitfall that causes bugs in production._
-{% /warning %}
-
-- _TODO: mistake 1_
-- _TODO: mistake 2_
+- `CounterCell` striping for `size()` approximation under contention.
+- Forwarding nodes during resize — `helpTransfer` lets other threads assist.
+- `ConcurrentHashMap.keySet()` view operations may be weaker than `ConcurrentSkipListSet` for ordered needs.
 
 ---
 
-## Best Practices
+## Production Notes
 
-- _TODO: production-ready recommendation_
-- _TODO: readability or performance guidance_
+- Use `compute`/`merge` for counters — not `get`+`put`.
+- Bulk `forEach` parallel threshold — rarely needed; measure first.
+- No null keys/values — use sentinel `Optional`-like marker objects if needed.
 
 ---
 
-## Interview Questions
+## Interview Probes
+
 
 {< interview-answer >}
-**Q:** _TODO frequently asked question_
+**Q:** CHM size() accuracy?
 
-**A:** _TODO answer in 2–4 sentences_
+**A:** May be approximate under heavy concurrent updates — documented behavior; don't use as strict invariant check without external sync.
 {< /interview-answer >}
 
 {< interview-answer >}
-**Q:** _TODO follow-up probe_
+**Q:** Why forbid null in CHM?
 
-**A:** _TODO answer_
+**A:** Ambiguity: `get` returns null for missing vs null value — Doug Lea design avoids double-meaning in concurrent context.
 {< /interview-answer >}
 
 ---
 
-## Related Topics
+## See Also
 
 - [Previous: HashMap Internals](/java-engineering/hashmap-internals/)
-- [Next: Checked Exception](/java-engineering/checked-exception/)
+- [Next: Exceptions](/java-engineering/exceptions-quick-ref/)
+- [HashMap Internals](/java-engineering/hashmap-internals/)
+- [Locks & Atomics](/java-engineering/locks-and-atomics/)
+- [Concurrent Collections](/java-engineering/concurrent-collections-interview/)
 - [Java Engineering Handbook Index](/java-engineering/)

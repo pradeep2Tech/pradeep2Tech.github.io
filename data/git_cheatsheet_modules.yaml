@@ -1,0 +1,35 @@
+# Git Cheatsheet — module index (canonical structure).
+# Each module groups related topics; section numbers are Module.Topic (e.g. 1.1, 2.3).
+modules:
+  - id: 1
+    focus: "Getting Started"
+    topics:
+      - git-basics
+      - repository
+      - clone
+  - id: 2
+    focus: "Branching & Integration"
+    topics:
+      - branch
+      - merge
+      - rebase
+      - cherry-pick
+      - interactive-rebase
+  - id: 3
+    focus: "History & Workspace"
+    topics:
+      - reset
+      - revert
+      - stash
+  - id: 4
+    focus: "Collaboration"
+    topics:
+      - remote
+      - tag
+      - pull-request-workflow
+      - conflict-resolution
+  - id: 5
+    focus: "Internals & Automation"
+    topics:
+      - git-internals
+      - git-hooks

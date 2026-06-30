@@ -1,0 +1,50 @@
+---
+description: Spring Boot Cheat Sheet — quick-reference format and regeneration
+globs:
+  - content/spring-boot/**
+  - data/spring_boot_*.yaml
+  - scripts/build_spring_boot_handbook.py
+---
+
+# Spring Boot Cheat Sheet
+
+Quick recap at `/spring-boot/` — **not** a tutorial handbook. See `cheatsheet-template.mdc` for canonical format.
+
+Reference: `content/spring-boot/spring-boot-quick-ref.md`, `content/spring-boot/annotations-stereotypes.md`
+
+## Audience
+
+Senior engineers brushing up — annotations, config keys, snippets. Assumes you know Spring.
+
+**Versions:** Boot 2.x / 3.x — note `javax` → `jakarta` and `SecurityFilterChain` on Boot 3.
+
+## Structure
+
+| Path | Purpose |
+|---|---|
+| `data/spring_boot_modules.yaml` | 9 modules, **21 topics** |
+| `data/spring_boot_order.yaml` | Flat prev/next (auto-generated) |
+| `scripts/build_spring_boot_handbook.py` | Regenerate pages |
+| `content/spring-boot/<slug>.md` | One cheat sheet per topic |
+
+## Page Format (`cheatSheet: true`)
+
+1. **At a Glance**
+2. **Reference Tables**
+3. **Snippets**
+4. **Internals & Gotchas**
+5. **Production Notes**
+6. **Interview Probes** (0–2 max)
+7. **See Also**
+
+**Do not** add per-annotation pages, "creating project" tutorials, or playbook-style Request Flow sections.
+
+## Out of Scope
+
+Core Java, microservices architecture deep dives, Kafka broker internals → other sections.
+
+## Regenerate
+
+```bash
+python scripts/build_spring_boot_handbook.py
+```

@@ -1,0 +1,32 @@
+# MongoDB Cheatsheet — module index.
+# Section numbers are Module.Topic (e.g. 1.1, 2.3).
+modules:
+  - id: 1
+    focus: "Core & Data Model"
+    topics:
+      - architecture
+      - documents
+      - collections
+      - crud
+  - id: 2
+    focus: "Queries & Indexes"
+    topics:
+      - indexes
+      - aggregation-pipeline
+      - ttl-index
+      - text-search
+      - geospatial
+  - id: 3
+    focus: "Scale & Reliability"
+    topics:
+      - replication
+      - sharding
+      - transactions
+  - id: 4
+    focus: "Design, Ops & Reference"
+    topics:
+      - schema-design
+      - atlas-basics
+      - performance
+      - mongo-shell-commands
+      - interview-questions

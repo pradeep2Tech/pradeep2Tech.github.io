@@ -1,101 +1,88 @@
 ---
 title: "Java Version Features (Interview)"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "LTS timeline and headline features per release."
-tags: ["java", "java-cheatsheet", "handbook"]
+draft: false
+description: "What shipped in each LTS and recent releases — whiteboard facts."
+tags: ["java", "java-engineering", "handbook"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "Version Features"
-module: 15
-moduleTitle: "Interview Quick Reference"
-sectionRef: "15.5"
+module: 11
+moduleTitle: "Interview Cheat Sheets"
+sectionRef: "11.5"
 ShowToc: true
-javaVersions: ["8", "11", "17", "21", "25"]
+cheatSheet: true
 ---
 
-## Executive Summary
+## At a Glance
 
-_One-page interview reference for **Java Version Features (Interview)** — no coding problems._
+- Whiteboard LTS deltas — 8→11→17→21.
+- Records/sealed/patterns = 16–21 story.
+- Modules strong encapsulation = 9/17 enforcement.
+- Virtual threads = 21 headline.
 
 ---
 
-## Why It Exists
+## Reference Tables
 
-| Need | How this page helps |
+| Release | Headline features |
+| :---: | :--- |
+| 8 | Lambdas, streams, `Optional`, `java.time` |
+| 11 | HTTP client, `var` in lambda, removed JavaEE modules |
+| 17 | Records, sealed, pattern `instanceof` |
+| 21 | Virtual threads, sequenced collections, pattern switch |
+| 25 | LTS rollup — check release notes for GA |
+
+| Question angle | Answer shape |
 | :--- | :--- |
-| Last-minute revision | Scannable tables and diagrams |
-| Whiteboard interviews | Canonical facts without tutorial depth |
-| Senior probes | Trade-offs in one screen |
+| Why upgrade? | Security, support, performance, language productivity |
+| Risk | Removed APIs, reflection, dependencies |
+| Preview features | Not in prod without flag plan |
 
 ---
 
-## Key Concepts
-
-```mermaid
-flowchart TD
-  topic["Java Version Features (Interview)"]
-  topic --> fact1["Core fact 1"]
-  topic --> fact2["Core fact 2"]
-  topic --> fact3["Core fact 3"]
-```
-
-| Concept | Summary |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
-
----
-
-## Syntax
-
-| Item | Reference |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
-
----
-
-## Example
+## Snippets
 
 ```java
-// TODO: minimal illustrative snippet
-public class Example {
-    public static void main(String[] args) {
-        System.out.println("TODO");
-    }
-}
+// 17+ style
+public sealed interface Result permits Ok, Err {}
+public record Ok<T>(T value) implements Result {}
 ```
 
 ---
 
-## Internal Working
+## Internals & Gotchas
 
-- _TODO: behind-the-scenes behavior in 3–5 bullets_
-
----
-
-## Common Mistakes
-
-- _TODO: typical interview wrong answers_
+- `-release` flag ties bytecode to API.
+- LTS support timelines vendor-specific.
 
 ---
 
-## Best Practices
+## Production Notes
 
-- _TODO: what seniors expect you to say_
+- Automate dependency compatibility scans on JDK bump.
+- Run canary with new JDK before fleet.
 
 ---
 
-## Interview Questions
+## Interview Probes
+
 
 {< interview-answer >}
-**Q:** _TODO interview question_
+**Q:** Top 3 Java 17 features for teams?
 
-**A:** _TODO concise answer_
+**A:** Records (DTOs), sealed (domain), pattern matching (cleaner code paths) — plus strong encapsulation forcing dependency updates.
+{< /interview-answer >}
+
+{< interview-answer >}
+**Q:** 8 to 21 biggest infra change?
+
+**A:** Module encapsulation + remove illegal reflective access; thread model option with virtual threads.
 {< /interview-answer >}
 
 ---
 
-## Related Topics
+## See Also
 
-- [Previous: GC Summary](/java-engineering/gc-summary-interview/)
+- [Previous: GC Interview](/java-engineering/gc-summary-interview/)
 - [Next: Memory Diagram](/java-engineering/memory-diagram-interview/)
 - [Java Engineering Handbook Index](/java-engineering/)

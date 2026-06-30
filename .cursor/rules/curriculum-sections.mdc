@@ -19,7 +19,7 @@ The home page (grouped **Enterprise Knowledge Hub**) and header navigation are d
 
 **Design:** `system-design`, `microservices`, `technology-playbook`
 
-**Handbooks:** `java-engineering`, `spring-boot`, `kafka-handbook`, `kubernetes-handbook`, `database-handbook`, `cloud-handbook`
+**Handbooks:** `java-engineering`, `spring-boot`, `python-cheatsheet`, `golang-cheatsheet`, `kafka-handbook`, `kubernetes-handbook`, `database-handbook`, `postgresql-cheatsheet`, `cloud-handbook` — use **cheat sheet** format (see `cheatsheet-template.mdc`; Java: `java-cheatsheet-posts.mdc`; Spring: `spring-boot-handbook-posts.mdc`).
 
 **Practice:** `design-patterns`, `dsa-coding`
 

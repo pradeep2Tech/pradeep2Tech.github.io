@@ -2,119 +2,267 @@
 title: "Kubernetes"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "Container orchestration — scheduling, service discovery, and declarative ops."
-tags: ["technology-playbook", "cloud-native", "kubernetes"]
-categories: ["Technology Playbook"]
+description: "Kubernetes cheat sheet — core objects, kubectl commands, and everyday YAML patterns."
+tags: ["kubernetes-handbook", "kubernetes", "cheatsheet", "handbook"]
+categories: ["Kubernetes Handbook"]
 shortTitle: "Kubernetes"
-module: 6
-moduleTitle: "Cloud Native Ecosystem"
-sectionRef: "6.3"
-weight: 602
+module: 1
+moduleTitle: "Containers & Orchestration"
+sectionRef: "1.3"
 ShowToc: true
 ---
-## 1. Executive Summary
 
-**Kubernetes** — Container orchestration — scheduling, service discovery, and declarative ops.
+## Executive Summary
 
----
-
-## 2. What Problem It Solves
-
-| Need | How messaging helps |
-| :--- | :--- |
-| Decouple producers and consumers | Scale and deploy independently |
-| Buffer traffic spikes | Queue absorbs burst without dropping users |
-| Event notification | Many subscribers react to one business fact |
-| Integration across legacy and cloud | Stable wire protocol between eras |
+**Kubernetes** schedules container **Pods** on nodes, keeps desired state via controllers, and exposes workloads through **Services** and **Ingress**. This page is a kubectl and YAML quick reference — for orchestration architecture and deployment topologies, see [Declarative Container Orchestration (Kubernetes)](/microservices/declarative-container-orchestration-kubernetes/).
 
 ---
 
-## 3. Where It Fits in Architecture
+## Core Concepts
 
 ```mermaid
-flowchart LR
-  producer[Order Service] --> broker[(Kubernetes)]
-  broker --> consumerA[Inventory Worker]
-  broker --> consumerB[Analytics Pipeline]
-  broker --> consumerC[Notification Service]
+flowchart TB
+  subgraph control ["Control plane"]
+    api["API Server"]
+    sched["Scheduler"]
+    cm["Controller Manager"]
+    etcd[("etcd")]
+  end
+  subgraph node ["Worker node"]
+    kubelet["kubelet"]
+    pod["Pod(s)"]
+  end
+  api --> sched
+  api --> cm
+  api --> etcd
+  kubelet --> api
+  kubelet --> pod
+```
+
+| Object | Recap |
+| :--- | :--- |
+| **Pod** | Smallest deploy unit — one or more containers sharing network/volumes |
+| **Deployment** | Declarative ReplicaSet — rolling updates, rollbacks |
+| **Service** | Stable ClusterIP / NodePort / LoadBalancer endpoint for Pods |
+| **Ingress** | HTTP routing to Services (needs ingress controller) |
+| **ConfigMap / Secret** | Non-sensitive / sensitive config injected as env or files |
+| **Namespace** | Logical isolation — `default`, `kube-system`, app namespaces |
+| **HPA** | Horizontal Pod Autoscaler on CPU/memory/custom metrics |
+
+---
+
+## Quick Reference — kubectl
+
+### Context & namespaces
+
+```bash
+kubectl config get-contexts
+kubectl config use-context prod-cluster
+kubectl get ns
+kubectl -n myapp get all
+```
+
+### Deploy & inspect
+
+```bash
+kubectl apply -f deployment.yaml
+kubectl get pods -n myapp -o wide
+kubectl describe pod myapp-7f8b9c-xyz -n myapp
+kubectl logs -f deploy/myapp -n myapp --tail=100
+kubectl logs myapp-7f8b9c-xyz -c sidecar -n myapp    # multi-container pod
+```
+
+### Exec, port-forward, copy
+
+```bash
+kubectl exec -it myapp-7f8b9c-xyz -n myapp -- sh
+kubectl port-forward svc/myapp 8080:80 -n myapp
+kubectl cp myapp-7f8b9c-xyz:/var/log/app.log ./app.log -n myapp
+```
+
+### Rollout & scale
+
+```bash
+kubectl rollout status deploy/myapp -n myapp
+kubectl rollout history deploy/myapp -n myapp
+kubectl rollout undo deploy/myapp -n myapp
+kubectl scale deploy/myapp --replicas=5 -n myapp
+```
+
+### Debug & events
+
+```bash
+kubectl get events -n myapp --sort-by='.lastTimestamp'
+kubectl top pods -n myapp                          # metrics-server required
+kubectl run curl --rm -it --image=curlimages/curl -- sh
+```
+
+### Imperative shortcuts (dev only)
+
+```bash
+kubectl create deployment myapp --image=myapp:1.0.0 -n myapp
+kubectl expose deployment myapp --port=80 --target-port=8080 -n myapp
 ```
 
 ---
 
-## 4. When to Choose
+## Snippets
 
-- You need **async** processing with clear back-pressure semantics
-- Multiple consumers must react to the same event stream
-- Peak traffic exceeds synchronous processing capacity
-- Cloud-managed ops preferred (SQS, Pub/Sub, Service Bus) vs self-hosted (Kafka, RabbitMQ)
+### Deployment + Service
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: myapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: api
+          image: registry.example.com/myapp:1.0.0
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: myapp-config
+            - secretRef:
+                name: myapp-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+  namespace: myapp
+spec:
+  selector:
+    app: myapp
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP
+```
+
+### ConfigMap & Secret
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp-config
+  namespace: myapp
+data:
+  SPRING_PROFILES_ACTIVE: "prod"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myapp-secrets
+  namespace: myapp
+type: Opaque
+stringData:
+  SPRING_DATASOURCE_PASSWORD: "change-me"
+```
+
+### Ingress (nginx)
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp
+  namespace: myapp
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: myapp
+                port:
+                  number: 80
+```
+
+### HPA
+
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: myapp
+  namespace: myapp
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: myapp
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+```
 
 ---
 
-## 5. When Not to Choose
+## Common Gotchas
 
-- Simple request/response suffices and latency budget is tight
-- Strong synchronous consistency required across services without saga/compensation
-- Team cannot operate broker HA, patching, and partition rebalancing
-- Message ordering requirements exceed what the broker guarantees for your config
-
----
-
-## 6. Popular Tools / Products
-
-| Style | Examples |
+| Pitfall | Fix |
 | :--- | :--- |
-| **Log / stream** | Kafka, Pulsar, Redpanda, Kinesis |
-| **Queue / AMQP** | RabbitMQ, ActiveMQ, SQS, Service Bus |
-| **Cloud pub/sub** | SNS, Google Pub/Sub, Event Grid |
+| Pod `CrashLoopBackOff` | `kubectl logs` + `describe` — check command, probes, OOM |
+| Probe kills healthy pod | Readiness ≠ liveness; tune `initialDelaySeconds` |
+| `ImagePullBackOff` | Check tag, registry auth (`imagePullSecrets`) |
+| Config not updated | ConfigMap mounted as volume may need pod restart |
+| Wrong Service selector | Labels on Pod template must match Service `selector` |
+| Resource limits too tight | JVM needs headroom above heap — set requests/limits explicitly |
+
+{{% warning %}}
+Never commit real Secrets to git. Use sealed-secrets, external-secrets, or cloud secret managers in production.
+{{% /warning %}}
 
 ---
 
-## 7. Trade-offs
+## Related Topics
 
-{{< comparison-table >}}
-| Dimension | Upside | Downside |
-| :--- | :--- | :--- |
-| **Delivery** | At-least-once with retries | Idempotent consumers required |
-| **Ordering** | Partition keys enable order | Global order is expensive |
-| **Ops** | Managed services reduce toil | Self-hosted offers control at cost |
-| **Debugging** | Temporal decoupling | Harder than tracing sync calls |
-{{< /comparison-table >}}
-
----
-
-## 8. Real-World Example
-
-**Order placed event** → inventory reservation, payment capture, email receipt, and fraud scoring run in parallel. **Payment reconciliation batch** reads from the same topic with a consumer group isolated from real-time paths.
-
----
-
-## 9. Failure Scenarios
-
-- **Poison messages** clog queues — use DLQ and alerting
-- **Consumer lag** during campaigns — auto-scale consumers, partition count planning
-- **Schema drift** breaks deserializers — schema registry or contract tests
-
----
-
-## 10. Best Practices
-
-1. Design **idempotent** consumers with business keys.
-2. Use **dead-letter queues** and replay tooling from day one.
-3. Propagate **trace context** in message headers.
-4. Size **partitions/queues** for peak, not average traffic.
-
----
-
-## 11. Interview Answer
-
-{{< interview-answer >}}
-"I'd pick **Kubernetes** when the domain needs container orchestration. I clarify delivery guarantees, ordering needs, and ops model — managed cloud queue vs self-hosted Kafka. I always mention idempotent consumers and dead-letter handling."
-{{< /interview-answer >}}
-
----
-
-## 12. Related Topics
-
-- [How to Choose a Message Broker](/technology-playbook/how-to-choose-message-broker/)
-- [Kafka vs RabbitMQ](/interview-prep/kafka-vs-rabbitmq/)
-- [Event-Driven Architecture](/technology-playbook/event-driven-architecture/)
+- [Docker](/kubernetes-handbook/docker/) — image build cheat sheet
+- [Kubernetes CronJobs](/kubernetes-handbook/kubernetes-cronjobs/) — scheduled workloads
+- [Nginx Ingress](/kubernetes-handbook/nginx-ingress/) — ingress controller
+- [Declarative Container Orchestration (Kubernetes)](/microservices/declarative-container-orchestration-kubernetes/) — architecture deep dive
+- [Kubernetes Handbook Index](/kubernetes-handbook/)

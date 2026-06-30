@@ -1,232 +1,80 @@
-# Java Engineering Cheat Sheet — module index (canonical structure).
-# Each module groups related topics; section numbers are Module.Topic (e.g. 1.1, 4.3).
+# Java Engineering Handbook — architect quick-reference structure.
+# Basics are clubbed; depth is in collections internals, concurrency, JVM, and LTS matrix.
 modules:
   - id: 1
-    focus: "Core Java Fundamentals"
+    focus: "Language Essentials"
     topics:
-      - primitive-data-types
-      - wrapper-classes
-      - variables
-      - operators
-      - control-statements
-      - methods
-      - arrays
-      - strings
-      - stringbuilder
-      - stringbuffer
-      - enums
+      - core-java-quick-ref
+      - strings-and-enums-ref
 
   - id: 2
-    focus: "Object-Oriented Programming"
+    focus: "OOP"
     topics:
-      - class
-      - object
-      - constructor
-      - inheritance
-      - polymorphism
-      - abstraction
-      - encapsulation
-      - interface
-      - abstract-class
-      - object-class
-      - equals-method
-      - hashcode-method
-      - tostring-method
+      - oop-quick-ref
+      - interfaces-and-object-contract
 
   - id: 3
-    focus: "Collections Framework"
+    focus: "Collections"
     groups:
-      - name: "Overview"
+      - name: "Choose & Compare"
         topics:
-          - collections-framework-overview
-      - name: "List"
+          - collections-decision-matrix
+          - list-set-queue-comparison
+          - map-implementations-ref
+          - collections-utils-and-ordering
+      - name: "Internals"
         topics:
-          - arraylist
-          - linkedlist
-          - vector
-      - name: "Set"
-        topics:
-          - hashset
-          - linkedhashset
-          - treeset
-      - name: "Map"
-        topics:
-          - hashmap
-          - linkedhashmap
-          - treemap
-          - concurrenthashmap
-          - weakhashmap
-          - identityhashmap
-      - name: "Queue"
-        topics:
-          - priorityqueue
-          - arraydeque
-      - name: "Utilities"
-        topics:
-          - collections-util
-          - arrays-util
-      - name: "Comparison & Internals"
-        topics:
-          - comparable-vs-comparator
           - hashmap-internals
           - concurrenthashmap-internals
 
   - id: 4
-    focus: "Exception Handling"
+    focus: "Exceptions & Generics"
     topics:
-      - checked-exception
-      - unchecked-exception
-      - error
-      - try-catch
-      - finally
-      - try-with-resources
-      - custom-exceptions
-      - exception-handling-best-practices
+      - exceptions-quick-ref
+      - generics-quick-ref
 
   - id: 5
-    focus: "Generics"
+    focus: "Functional & Streams"
     topics:
-      - generic-classes
-      - generic-methods
-      - wildcards
-      - bounded-types
-      - type-erasure
+      - functional-java-ref
+      - streams-quick-ref
 
   - id: 6
-    focus: "Functional Programming"
-    topics:
-      - functional-interface
-      - lambda
-      - method-reference
-      - optional
-      - supplier
-      - consumer
-      - predicate
-      - function
-      - bifunction
-      - unaryoperator
-      - binaryoperator
-
-  - id: 7
-    focus: "Streams API"
-    topics:
-      - creating-streams
-      - intermediate-operations
-      - terminal-operations
-      - collectors
-      - grouping
-      - partitioning
-      - parallel-streams
-      - streams-best-practices
-
-  - id: 8
     focus: "Concurrency"
     topics:
-      - thread
-      - runnable
-      - callable
-      - executorservice
-      - forkjoinpool
-      - future
-      - completablefuture
-      - synchronization
-      - volatile
-      - atomic-classes
-      - locks
-      - readwritelock
-      - semaphore
-      - countdownlatch
-      - cyclicbarrier
-      - phaser
-      - threadlocal
-      - virtual-threads
-      - structured-concurrency
+      - threads-and-executors
+      - async-completablefuture
+      - locks-and-atomics
+      - concurrent-coordination
+      - virtual-threads-structured-concurrency
+
+  - id: 7
+    focus: "Memory & GC"
+    topics:
+      - jvm-memory-and-gc
+      - memory-leaks-and-oom
+
+  - id: 8
+    focus: "JVM"
+    topics:
+      - jvm-internals-quick-ref
+      - jvm-flags-and-tuning
 
   - id: 9
-    focus: "Memory Management"
+    focus: "Modern Java"
     topics:
-      - stack-vs-heap
-      - jvm-memory-layout
-      - object-creation
-      - garbage-collection
-      - gc-algorithms
-      - young-generation
-      - old-generation
-      - metaspace
-      - reference-types
-      - strong-reference
-      - weak-reference
-      - soft-reference
-      - phantom-reference
-      - memory-leak
-      - outofmemoryerror
-      - escape-analysis
+      - java-lts-release-matrix
+      - java-recent-features
 
   - id: 10
-    focus: "JVM Internals"
+    focus: "Platform APIs"
     topics:
-      - jvm-architecture
-      - class-loader
-      - class-loading-process
-      - bytecode
-      - jit-compiler
-      - interpreter
-      - garbage-collector-jvm
-      - jvm-startup
-      - jvm-parameters
-      - performance-tuning-basics
+      - java-io-nio-ref
+      - reflection-annotations-ref
+      - serialization-quick-ref
 
   - id: 11
-    focus: "Modern Java Features"
-    topics:
-      - java-8-features
-      - java-9-features
-      - java-10-var
-      - java-11-features
-      - java-12-13-switch-improvements
-      - java-14-switch-expressions
-      - java-15-text-blocks
-      - java-16-records
-      - java-17-sealed-classes
-      - java-18-20-incubator-features
-      - java-21-features
-      - java-22-features
-      - java-23-features
-      - java-24-features
-      - java-25-features
-
-  - id: 12
-    focus: "Java IO"
-    topics:
-      - file
-      - path
-      - files
-      - inputstream
-      - outputstream
-      - reader
-      - writer
-      - buffered-streams
-      - serialization-basics-io
-      - nio
-
-  - id: 13
-    focus: "Reflection & Annotations"
-    topics:
-      - reflection-api
-      - custom-annotation
-      - built-in-annotations
-      - annotation-processing
-
-  - id: 14
-    focus: "Serialization"
-    topics:
-      - serializable
-      - externalizable
-      - serialversionuid
-      - serialization-best-practices
-
-  - id: 15
-    focus: "Interview Quick Reference"
+    focus: "Interview Cheat Sheets"
     topics:
       - collections-complexity
       - stream-operations-interview

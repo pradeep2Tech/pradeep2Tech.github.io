@@ -1,130 +1,109 @@
 ---
 title: "HashMap Internals"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "Buckets, hash spread, resize, treeify threshold, and load factor."
-tags: ["java", "java-cheatsheet", "handbook"]
+draft: false
+description: "Buckets, spread, resize, treeify, load factor, and JDK implementation shifts."
+tags: ["java", "java-engineering", "handbook"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "HashMap Internals"
 module: 3
-moduleTitle: "Collections Framework"
-sectionRef: "3.19"
+moduleTitle: "Collections"
+sectionRef: "3.5"
 ShowToc: true
-javaVersions: ["8", "11", "17", "21", "25"]
+cheatSheet: true
 ---
 
-## Executive Summary
+## At a Glance
 
-_TODO: Explain **HashMap Internals** in simple English — one short paragraph._
-
----
-
-## Why It Exists
-
-| Problem | How HashMap Internals helps |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
+- Array of bins; index = `(n-1) & hash` after spread (`hash ^ hash>>>16`).
+- Load factor 0.75 — resize 2× when `size > threshold`.
+- Bin length ≥8 and treeify threshold → red-black tree per bin (Java 8+).
+- JDK 8+ linked list bins; treeify on collision depth.
 
 ---
 
-## Key Concepts
+## Reference Tables
+
+| Constant | Typical value | Meaning |
+| :--- | :---: | :--- |
+| Default capacity | 16 | Power of 2 |
+| Load factor | 0.75 | Space/time trade-off |
+| Treeify threshold | 8 | List → tree in bin |
+| Untreeify threshold | 6 | Tree → list when shrink |
+
+| Operation | Average | Worst (attacks/poor hash) |
+| :--- | :---: | :---: |
+| `get` | O(1) | O(log n) treeified / O(n) list |
+| `put` | O(1) | Same |
+| `resize` | O(n) | Rehash all entries |
 
 ```mermaid
 flowchart LR
-  A["Concept A"] --> B["Concept B"]
-  B --> C["Concept C"]
+  key[Key] --> hc[hashCode spread]
+  hc --> idx[bin index]
+  idx --> bin{bin type}
+  bin --> list[Linked list]
+  bin --> tree[RB tree if deep]
 ```
-
-| Concept | Description |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
-
-{% note %}
-_TODO: important note for readers._
-{% /note %}
 
 ---
 
-## Syntax
+## Snippets
 
 ```java
-// TODO: canonical syntax pattern
-```
-
-| Element | Meaning |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
-
----
-
-## Example
-
-```java
-public class Example {
-    public static void main(String[] args) {
-        // TODO: small runnable example
-        System.out.println("TODO");
-    }
+// Bad: mutable key field used in hashCode
+class BadKey {
+    String id;
+    public int hashCode() { return id.hashCode(); } // id mutated after insert breaks map
 }
-```
 
-{% tip %}
-_TODO: practical tip._
-{% /tip %}
-
----
-
-## Internal Working
-
-- _TODO: JVM / compiler / runtime behavior_
-- _TODO: performance characteristic_
-
-```mermaid
-sequenceDiagram
-    participant App
-    participant JVM
-    App->>JVM: operation
-    JVM-->>App: result
+// Good: immutable key fields
+record UserKey(String tenant, long id) {}
 ```
 
 ---
 
-## Common Mistakes
+## Internals & Gotchas
 
-{% warning %}
-_TODO: pitfall that causes bugs in production._
-{% /warning %}
-
-- _TODO: mistake 1_
-- _TODO: mistake 2_
+- Resize creates new table — reinsert all entries — STW for caller thread only on that map instance.
+- `HashMap` iterator is fail-fast on concurrent structural mod.
+- `LinkedHashMap` hooks `afterInsertion`/`afterAccess` for LRU.
+- JDK 17+: minor optimizations; algorithm unchanged conceptually.
 
 ---
 
-## Best Practices
+## Production Notes
 
-- _TODO: production-ready recommendation_
-- _TODO: readability or performance guidance_
+{{% warning %}}
+Do not use user-controlled keys with weak `hashCode` — collision DoS risk; consider limiting map size or using `LinkedHashMap` + eviction.
+{{% /warning %}}
+- Pre-size expected entries.
+- Never mutate keys while in map.
 
 ---
 
-## Interview Questions
+## Interview Probes
+
 
 {< interview-answer >}
-**Q:** _TODO frequently asked question_
+**Q:** Why power-of-two capacity?
 
-**A:** _TODO answer in 2–4 sentences_
+**A:** Bit mask `(n-1) & hash` is fast modulo; requires good spread function to avoid index clustering.
 {< /interview-answer >}
 
 {< interview-answer >}
-**Q:** _TODO follow-up probe_
+**Q:** When treeify?
 
-**A:** _TODO answer_
+**A:** When single bin chain length exceeds threshold — degrades to tree to bound worst case O(log n) per bin.
 {< /interview-answer >}
 
 ---
 
-## Related Topics
+## See Also
 
-- [Previous: Comparable vs Comparator](/java-engineering/comparable-vs-comparator/)
+- [Previous: Utils & Ordering](/java-engineering/collections-utils-and-ordering/)
 - [Next: CHM Internals](/java-engineering/concurrenthashmap-internals/)
+- [Collection Choice](/java-engineering/collections-decision-matrix/)
+- [Maps](/java-engineering/map-implementations-ref/)
+- [CHM Internals](/java-engineering/concurrenthashmap-internals/)
 - [Java Engineering Handbook Index](/java-engineering/)

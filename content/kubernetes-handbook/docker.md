@@ -2,119 +2,181 @@
 title: "Docker"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "Container packaging standard — images, registries, and local dev parity."
-tags: ["technology-playbook", "cloud-native", "docker"]
-categories: ["Technology Playbook"]
+description: "Docker cheat sheet — images, containers, Dockerfile patterns, and everyday CLI commands."
+tags: ["kubernetes-handbook", "docker", "cheatsheet", "handbook"]
+categories: ["Kubernetes Handbook"]
 shortTitle: "Docker"
-module: 6
-moduleTitle: "Cloud Native Ecosystem"
-sectionRef: "6.1"
-weight: 600
+module: 1
+moduleTitle: "Containers & Orchestration"
+sectionRef: "1.1"
 ShowToc: true
 ---
-## 1. Executive Summary
 
-**Docker** — Container packaging standard — images, registries, and local dev parity.
+## Executive Summary
 
----
-
-## 2. What Problem It Solves
-
-| Need | How messaging helps |
-| :--- | :--- |
-| Decouple producers and consumers | Scale and deploy independently |
-| Buffer traffic spikes | Queue absorbs burst without dropping users |
-| Event notification | Many subscribers react to one business fact |
-| Integration across legacy and cloud | Stable wire protocol between eras |
+**Docker** packages an app and its dependencies into an **immutable image**, then runs it as an isolated **container** on a shared host kernel. This page is a quick CLI and Dockerfile recap — for isolation mechanics and production hardening, see [Application Containerization (Docker)](/microservices/application-containerization-docker/).
 
 ---
 
-## 3. Where It Fits in Architecture
+## Core Concepts
 
 ```mermaid
 flowchart LR
-  producer[Order Service] --> broker[(Docker)]
-  broker --> consumerA[Inventory Worker]
-  broker --> consumerB[Analytics Pipeline]
-  broker --> consumerC[Notification Service]
+  dockerfile["Dockerfile"] --> build["docker build"]
+  build --> image["Image layers"]
+  image --> registry["Registry"]
+  registry --> run["docker run"]
+  run --> container["Container"]
+```
+
+| Term | Recap |
+| :--- | :--- |
+| **Image** | Read-only layered filesystem + metadata (tag = `repo:tag`) |
+| **Container** | Running instance of an image — writable top layer |
+| **Dockerfile** | Build recipe — `FROM`, `COPY`, `RUN`, `CMD`/`ENTRYPOINT` |
+| **Volume** | Persistent storage outside container lifecycle |
+| **Network** | Bridge (default), host, or custom overlay |
+| **Registry** | Docker Hub, ECR, ACR, GCR, Harbor |
+
+---
+
+## Quick Reference — CLI
+
+### Images
+
+```bash
+docker pull nginx:1.27-alpine
+docker images
+docker rmi nginx:1.27-alpine
+docker tag myapp:local registry.example.com/myapp:1.0.0
+docker push registry.example.com/myapp:1.0.0
+```
+
+### Build & run
+
+```bash
+docker build -t myapp:dev .
+docker build -f Dockerfile.prod -t myapp:prod --target runtime .
+
+docker run -d --name api -p 8080:8080 myapp:dev
+docker run --rm -it --entrypoint sh myapp:dev          # shell into image
+docker exec -it api sh                                 # shell into running container
+```
+
+### Lifecycle & logs
+
+```bash
+docker ps                    # running
+docker ps -a                 # all
+docker stop api && docker rm api
+docker logs -f --tail 100 api
+docker inspect api --format '{{.State.Status}}'
+```
+
+### Cleanup
+
+```bash
+docker system df
+docker container prune -f
+docker image prune -a -f
+docker volume prune -f
+```
+
+### Compose (v2)
+
+```bash
+docker compose up -d
+docker compose ps
+docker compose logs -f api
+docker compose down -v
 ```
 
 ---
 
-## 4. When to Choose
+## Snippets
 
-- You need **async** processing with clear back-pressure semantics
-- Multiple consumers must react to the same event stream
-- Peak traffic exceeds synchronous processing capacity
-- Cloud-managed ops preferred (SQS, Pub/Sub, Service Bus) vs self-hosted (Kafka, RabbitMQ)
+### Multi-stage Dockerfile (JVM service)
+
+```dockerfile
+FROM eclipse-temurin:21-jdk-alpine AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN ./mvnw -q -DskipTests package
+
+FROM eclipse-temurin:21-jre-alpine AS runtime
+RUN addgroup -S app && adduser -S app -G app
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+USER app
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+### `.dockerignore`
+
+```
+target/
+.git/
+*.md
+.env
+```
+
+### Run with env, volume, resource limits
+
+```bash
+docker run -d \
+  --name api \
+  -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=prod \
+  -v api-data:/data \
+  --memory=512m --cpus=1 \
+  myapp:prod
+```
+
+### Compose skeleton
+
+```yaml
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/app
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:16-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app"]
+      interval: 5s
+      retries: 5
+```
 
 ---
 
-## 5. When Not to Choose
+## Common Gotchas
 
-- Simple request/response suffices and latency budget is tight
-- Strong synchronous consistency required across services without saga/compensation
-- Team cannot operate broker HA, patching, and partition rebalancing
-- Message ordering requirements exceed what the broker guarantees for your config
-
----
-
-## 6. Popular Tools / Products
-
-| Style | Examples |
+| Pitfall | Fix |
 | :--- | :--- |
-| **Log / stream** | Kafka, Pulsar, Redpanda, Kinesis |
-| **Queue / AMQP** | RabbitMQ, ActiveMQ, SQS, Service Bus |
-| **Cloud pub/sub** | SNS, Google Pub/Sub, Event Grid |
+| PID 1 zombie processes | Use `ENTRYPOINT ["dumb-init", "--"]` or `tini` |
+| Writing logs/state to container FS | Mount volumes or stdout-only logging |
+| `latest` tag in prod | Pin digest or semver tag |
+| Root in container | `USER nonroot` + read-only root FS where possible |
+| Huge build context | `.dockerignore`; multi-stage to drop build tools |
+| Wrong platform on Apple Silicon | `docker build --platform linux/amd64` for cloud deploy |
+
+{{% note %}}
+`docker run -p 8080:8080` maps **host:container**. Inside the container the app still listens on its own port (often 8080).
+{{% /note %}}
 
 ---
 
-## 7. Trade-offs
+## Related Topics
 
-{{< comparison-table >}}
-| Dimension | Upside | Downside |
-| :--- | :--- | :--- |
-| **Delivery** | At-least-once with retries | Idempotent consumers required |
-| **Ordering** | Partition keys enable order | Global order is expensive |
-| **Ops** | Managed services reduce toil | Self-hosted offers control at cost |
-| **Debugging** | Temporal decoupling | Harder than tracing sync calls |
-{{< /comparison-table >}}
-
----
-
-## 8. Real-World Example
-
-**Order placed event** → inventory reservation, payment capture, email receipt, and fraud scoring run in parallel. **Payment reconciliation batch** reads from the same topic with a consumer group isolated from real-time paths.
-
----
-
-## 9. Failure Scenarios
-
-- **Poison messages** clog queues — use DLQ and alerting
-- **Consumer lag** during campaigns — auto-scale consumers, partition count planning
-- **Schema drift** breaks deserializers — schema registry or contract tests
-
----
-
-## 10. Best Practices
-
-1. Design **idempotent** consumers with business keys.
-2. Use **dead-letter queues** and replay tooling from day one.
-3. Propagate **trace context** in message headers.
-4. Size **partitions/queues** for peak, not average traffic.
-
----
-
-## 11. Interview Answer
-
-{{< interview-answer >}}
-"I'd pick **Docker** when the domain needs container packaging standard. I clarify delivery guarantees, ordering needs, and ops model — managed cloud queue vs self-hosted Kafka. I always mention idempotent consumers and dead-letter handling."
-{{< /interview-answer >}}
-
----
-
-## 12. Related Topics
-
-- [How to Choose a Message Broker](/technology-playbook/how-to-choose-message-broker/)
-- [Kafka vs RabbitMQ](/interview-prep/kafka-vs-rabbitmq/)
-- [Event-Driven Architecture](/technology-playbook/event-driven-architecture/)
+- [Kubernetes](/kubernetes-handbook/kubernetes/) — orchestration cheat sheet
+- [Podman](/kubernetes-handbook/podman/) — daemonless alternative
+- [Application Containerization (Docker)](/microservices/application-containerization-docker/) — architecture deep dive
+- [Kubernetes Handbook Index](/kubernetes-handbook/)

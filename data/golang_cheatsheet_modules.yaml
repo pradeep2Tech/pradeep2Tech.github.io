@@ -1,0 +1,66 @@
+# Go Cheat Sheet — language quick-reference structure.
+modules:
+  - id: 1
+    focus: "Language Basics"
+    topics:
+      - language-basics
+      - functions
+
+  - id: 2
+    focus: "Types & Structs"
+    topics:
+      - structs
+      - interfaces
+      - pointers
+      - methods
+
+  - id: 3
+    focus: "Packages & Errors"
+    topics:
+      - packages
+      - error-handling
+
+  - id: 4
+    focus: "Collections"
+    topics:
+      - slices
+      - arrays
+      - maps
+
+  - id: 5
+    focus: "Concurrency"
+    topics:
+      - goroutines
+      - channels
+      - select
+      - context
+
+  - id: 6
+    focus: "Synchronization"
+    topics:
+      - mutex
+      - rwmutex
+      - sync-package
+
+  - id: 7
+    focus: "Testing & Reflection"
+    topics:
+      - testing
+      - reflection
+
+  - id: 8
+    focus: "Runtime"
+    topics:
+      - memory-model
+      - garbage-collection
+
+  - id: 9
+    focus: "Modules & Tooling"
+    topics:
+      - go-modules
+      - dependency-management
+
+  - id: 10
+    focus: "Interview"
+    topics:
+      - interview-questions

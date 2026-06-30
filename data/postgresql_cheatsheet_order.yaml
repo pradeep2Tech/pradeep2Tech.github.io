@@ -1,0 +1,29 @@
+# Flat topic order — derived from postgresql_cheatsheet_modules.yaml.
+topics:
+  - installation
+  - sql-basics
+  - most-common-sql-commands
+  - ddl
+  - dml
+  - joins
+  - indexes
+  - explain
+  - performance-tuning
+  - transactions
+  - isolation-levels
+  - mvcc
+  - locks
+  - partitioning
+  - sharding
+  - replication
+  - views
+  - materialized-views
+  - ctes
+  - window-functions
+  - json
+  - functions
+  - triggers
+  - stored-procedures
+  - vacuum
+  - backup-restore
+  - interview-questions

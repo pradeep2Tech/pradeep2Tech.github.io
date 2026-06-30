@@ -1,0 +1,55 @@
+# Python Cheatsheet — quick-reference structure for senior engineers.
+modules:
+  - id: 1
+    focus: "Language Basics"
+    topics:
+      - language-basics
+      - functions
+
+  - id: 2
+    focus: "Collections & Comprehensions"
+    topics:
+      - collections
+      - comprehensions
+
+  - id: 3
+    focus: "OOP"
+    topics:
+      - classes
+      - oop
+
+  - id: 4
+    focus: "Modules & Packages"
+    topics:
+      - modules
+
+  - id: 5
+    focus: "Advanced Language Features"
+    topics:
+      - exceptions
+      - decorators
+      - generators
+      - iterators
+      - context-managers
+      - typing
+      - dataclasses
+
+  - id: 6
+    focus: "Concurrency"
+    topics:
+      - concurrency
+      - asyncio
+      - multithreading
+      - multiprocessing
+
+  - id: 7
+    focus: "Runtime & Tooling"
+    topics:
+      - memory-management
+      - packaging
+      - virtual-environments
+
+  - id: 8
+    focus: "Interview Cheat Sheets"
+    topics:
+      - interview-questions

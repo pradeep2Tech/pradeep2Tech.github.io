@@ -1,100 +1,99 @@
 ---
 title: "Thread Lifecycle (Interview)"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "NEW → RUNNABLE → TERMINATED state diagram."
-tags: ["java", "java-cheatsheet", "handbook"]
+draft: false
+description: "Platform vs virtual thread states, blocking, and executor mapping."
+tags: ["java", "java-engineering", "handbook"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "Thread Lifecycle"
-module: 15
-moduleTitle: "Interview Quick Reference"
-sectionRef: "15.7"
+module: 11
+moduleTitle: "Interview Cheat Sheets"
+sectionRef: "11.7"
 ShowToc: true
-javaVersions: ["8", "11", "17", "21", "25"]
+cheatSheet: true
 ---
 
-## Executive Summary
+## At a Glance
 
-_One-page interview reference for **Thread Lifecycle (Interview)** — no coding problems._
-
----
-
-## Why It Exists
-
-| Need | How this page helps |
-| :--- | :--- |
-| Last-minute revision | Scannable tables and diagrams |
-| Whiteboard interviews | Canonical facts without tutorial depth |
-| Senior probes | Trade-offs in one screen |
+- Platform thread states map to `Thread.State` enum.
+- BLOCKED = monitor entry; WAITING/TIMED_WAITING = `wait`, `park`, `join`.
+- Virtual threads: mount/unmount — not a 1:1 OS thread.
+- Executors decouple task submission from thread lifecycle.
 
 ---
 
-## Key Concepts
+## Reference Tables
 
 ```mermaid
-flowchart TD
-  topic["Thread Lifecycle (Interview)"]
-  topic --> fact1["Core fact 1"]
-  topic --> fact2["Core fact 2"]
-  topic --> fact3["Core fact 3"]
+stateDiagram-v2
+  [*] --> NEW
+  NEW --> RUNNABLE: start
+  RUNNABLE --> BLOCKED: monitor lock
+  RUNNABLE --> WAITING: wait/join/park
+  RUNNABLE --> TIMED_WAITING: sleep/timeout
+  BLOCKED --> RUNNABLE: lock acquired
+  WAITING --> RUNNABLE: notify/unpark
+  TIMED_WAITING --> RUNNABLE: timeout/notify
+  RUNNABLE --> TERMINATED: run ends
 ```
 
-| Concept | Summary |
+| State | Cause |
 | :--- | :--- |
-| _TODO_ | _TODO_ |
+| RUNNABLE | Eligible — may be running or waiting for CPU |
+| BLOCKED | Waiting for monitor |
+| WAITING | `Object.wait`, `join`, `LockSupport.park` |
+| TIMED_WAITING | `sleep`, timed `wait`, `join` with timeout |
+
+| Platform vs virtual | |
+| :--- | :--- |
+| OS thread cost | ~MB stack vs cheap VT |
+| Blocking IO | Blocks carrier if pinned |
+| `Thread.State` | Still reported — interpret carefully |
 
 ---
 
-## Syntax
-
-| Item | Reference |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
-
----
-
-## Example
+## Snippets
 
 ```java
-// TODO: minimal illustrative snippet
-public class Example {
-    public static void main(String[] args) {
-        System.out.println("TODO");
-    }
-}
+Thread t = Thread.startVirtualThread(() -> fetch(url));
+t.join();
 ```
 
 ---
 
-## Internal Working
+## Internals & Gotchas
 
-- _TODO: behind-the-scenes behavior in 3–5 bullets_
-
----
-
-## Common Mistakes
-
-- _TODO: typical interview wrong answers_
+- `RUNNABLE` includes running on CPU or ready on run queue.
+- Interrupt sets flag — cooperative handling required.
+- Virtual thread park releases carrier.
 
 ---
 
-## Best Practices
+## Production Notes
 
-- _TODO: what seniors expect you to say_
+- Thread dumps: distinguish deadlock vs pool exhaustion.
+- Don't rely on thread count for VT workloads — use request metrics.
 
 ---
 
-## Interview Questions
+## Interview Probes
+
 
 {< interview-answer >}
-**Q:** _TODO interview question_
+**Q:** BLOCKED vs WAITING?
 
-**A:** _TODO concise answer_
+**A:** BLOCKED waiting for synchronized monitor entry. WAITING voluntary no timeout — `wait`, `park`, `join` without timeout.
+{< /interview-answer >}
+
+{< interview-answer >}
+**Q:** How virtual threads affect thread dumps?
+
+**A:** Many virtual threads listed — look for carrier pool and pinned threads; interpret blocking on IO vs pinning.
 {< /interview-answer >}
 
 ---
 
-## Related Topics
+## See Also
 
 - [Previous: Memory Diagram](/java-engineering/memory-diagram-interview/)
 - [Java Engineering Handbook Index](/java-engineering/)

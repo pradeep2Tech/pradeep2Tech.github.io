@@ -1,0 +1,25 @@
+# Flat topic order — derived from python_cheatsheet_modules.yaml.
+# Prefer editing data/python_cheatsheet_modules.yaml for module structure.
+topics:
+  - language-basics
+  - functions
+  - collections
+  - comprehensions
+  - classes
+  - oop
+  - modules
+  - exceptions
+  - decorators
+  - generators
+  - iterators
+  - context-managers
+  - typing
+  - dataclasses
+  - concurrency
+  - asyncio
+  - multithreading
+  - multiprocessing
+  - memory-management
+  - packaging
+  - virtual-environments
+  - interview-questions

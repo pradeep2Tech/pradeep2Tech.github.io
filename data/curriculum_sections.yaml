@@ -31,11 +31,17 @@ sections:
   - slug: technology-playbook
     menuLabel: Technology Decisions
     group: design
+  - slug: python-cheatsheet
+    menuLabel: Python Cheatsheet
+    group: handbooks
+  - slug: golang-cheatsheet
+    menuLabel: Go Cheat Sheet
+    group: handbooks
   - slug: java-engineering
     menuLabel: Java Engineering
     group: handbooks
   - slug: spring-boot
-    menuLabel: Spring Boot
+    menuLabel: Spring Boot Cheat Sheet
     group: handbooks
   - slug: kafka-handbook
     menuLabel: Kafka Handbook
@@ -43,8 +49,17 @@ sections:
   - slug: kubernetes-handbook
     menuLabel: Kubernetes Handbook
     group: handbooks
+  - slug: kubernetes-cheatsheet
+    menuLabel: Kubernetes Cheatsheet
+    group: handbooks
   - slug: database-handbook
     menuLabel: Database Handbook
+    group: handbooks
+  - slug: postgresql-cheatsheet
+    menuLabel: PostgreSQL Cheatsheet
+    group: handbooks
+  - slug: mongodb-cheatsheet
+    menuLabel: MongoDB Cheatsheet
     group: handbooks
   - slug: cloud-handbook
     menuLabel: Cloud Handbook

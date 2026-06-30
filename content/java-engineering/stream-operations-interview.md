@@ -1,101 +1,98 @@
 ---
 title: "Stream Operations (Interview)"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "Lazy vs eager, common ops, and parallel caveats."
-tags: ["java", "java-cheatsheet", "handbook"]
+draft: false
+description: "Intermediate vs terminal ops, collectors, and parallel stream traps."
+tags: ["java", "java-engineering", "handbook"]
 categories: ["Java Engineering Handbook"]
-shortTitle: "Stream Ops"
-module: 15
-moduleTitle: "Interview Quick Reference"
-sectionRef: "15.2"
+shortTitle: "Streams Interview"
+module: 11
+moduleTitle: "Interview Cheat Sheets"
+sectionRef: "11.2"
 ShowToc: true
-javaVersions: ["8", "11", "17", "21", "25"]
+cheatSheet: true
 ---
 
-## Executive Summary
+## At a Glance
 
-_One-page interview reference for **Stream Operations (Interview)** — no coding problems._
+- Intermediate = lazy; terminal = eager trigger.
+- Short-circuit: `findFirst`, `anyMatch`, `limit`.
+- `reduce` vs `collect` — monoid vs mutable container.
+- Parallel: split characteristics matter.
 
 ---
 
-## Why It Exists
+## Reference Tables
 
-| Need | How this page helps |
+| Intermediate | Effect |
 | :--- | :--- |
-| Last-minute revision | Scannable tables and diagrams |
-| Whiteboard interviews | Canonical facts without tutorial depth |
-| Senior probes | Trade-offs in one screen |
+| `filter` | Predicate |
+| `map` | 1:1 transform |
+| `flatMap` | 1:many flatten |
+| `distinct` | HashSet-backed |
+| `sorted` | Materializes |
+| `peek` | Debug side-effect |
 
----
-
-## Key Concepts
-
-```mermaid
-flowchart TD
-  topic["Stream Operations (Interview)"]
-  topic --> fact1["Core fact 1"]
-  topic --> fact2["Core fact 2"]
-  topic --> fact3["Core fact 3"]
-```
-
-| Concept | Summary |
+| Terminal | Result |
 | :--- | :--- |
-| _TODO_ | _TODO_ |
+| `collect` | Mutable reduction |
+| `reduce` | Immutable combine |
+| `count` | long |
+| `min`/`max` | Optional |
 
----
-
-## Syntax
-
-| Item | Reference |
+| Parallel requirement | |
 | :--- | :--- |
-| _TODO_ | _TODO_ |
+| Associative combiner | Required |
+| No shared mutation | Required |
+| `ORDERED` + parallel | May buffer |
 
 ---
 
-## Example
+## Snippets
 
 ```java
-// TODO: minimal illustrative snippet
-public class Example {
-    public static void main(String[] args) {
-        System.out.println("TODO");
-    }
-}
+boolean anyExpensive = orders.stream()
+    .filter(o -> o.amount() > 10_000)
+    .findAny()
+    .isPresent();
 ```
 
 ---
 
-## Internal Working
+## Internals & Gotchas
 
-- _TODO: behind-the-scenes behavior in 3–5 bullets_
-
----
-
-## Common Mistakes
-
-- _TODO: typical interview wrong answers_
+- `Spliterator.ORDERED` preserved unless `unordered()`.
+- `Collectors.toMap` needs merge function on duplicate keys.
+- Primitive streams avoid `Integer` boxing.
 
 ---
 
-## Best Practices
+## Production Notes
 
-- _TODO: what seniors expect you to say_
+- Don't parallelize by default.
+- Close resource-backed streams.
 
 ---
 
-## Interview Questions
+## Interview Probes
+
 
 {< interview-answer >}
-**Q:** _TODO interview question_
+**Q:** Why is sorted() expensive?
 
-**A:** _TODO concise answer_
+**A:** Requires full input materialization to sort — not streaming sort for arbitrary pipelines.
+{< /interview-answer >}
+
+{< interview-answer >}
+**Q:** peek misuse?
+
+**A:** Debugging only — not for business logic; may not run if stream optimized away in theory — don't rely on side effects.
 {< /interview-answer >}
 
 ---
 
-## Related Topics
+## See Also
 
-- [Previous: Collections Complexity](/java-engineering/collections-complexity/)
+- [Previous: Collections Big-O](/java-engineering/collections-complexity/)
 - [Next: Concurrent Collections](/java-engineering/concurrent-collections-interview/)
 - [Java Engineering Handbook Index](/java-engineering/)

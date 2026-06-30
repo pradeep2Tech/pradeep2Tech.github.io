@@ -1,101 +1,90 @@
 ---
 title: "Concurrent Collections (Interview)"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "CHM, CopyOnWriteArrayList, BlockingQueue summary."
-tags: ["java", "java-cheatsheet", "handbook"]
+draft: false
+description: "CHM vs synchronized wrappers, CopyOnWrite, BlockingQueue family."
+tags: ["java", "java-engineering", "handbook"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "Concurrent Collections"
-module: 15
-moduleTitle: "Interview Quick Reference"
-sectionRef: "15.3"
+module: 11
+moduleTitle: "Interview Cheat Sheets"
+sectionRef: "11.3"
 ShowToc: true
-javaVersions: ["8", "11", "17", "21", "25"]
+cheatSheet: true
 ---
 
-## Executive Summary
+## At a Glance
 
-_One-page interview reference for **Concurrent Collections (Interview)** — no coding problems._
+- CHM default concurrent map — not `Hashtable`.
+- `CopyOnWriteArrayList` — read-heavy, rare writes.
+- BlockingQueue family for producer-consumer.
+- `Collections.synchronized*` — whole-structure lock.
 
 ---
 
-## Why It Exists
+## Reference Tables
 
-| Need | How this page helps |
+| Type | Implementation | Notes |
+| :--- | :--- | :--- |
+| Concurrent map | `ConcurrentHashMap` | No nulls |
+| Concurrent set | `ConcurrentHashMap.newKeySet()` | Backed by CHM |
+| Sorted concurrent | `ConcurrentSkipListMap` | O(log n) |
+| Copy-on-write list | `CopyOnWriteArrayList` | Snapshot iterators |
+| Bounded buffer | `ArrayBlockingQueue` | Fixed capacity |
+| Unbounded linked | `LinkedBlockingQueue` | Watch memory |
+
+| Choose | When |
 | :--- | :--- |
-| Last-minute revision | Scannable tables and diagrams |
-| Whiteboard interviews | Canonical facts without tutorial depth |
-| Senior probes | Trade-offs in one screen |
+| CHM | Shared mutable map |
+| COW list | Event listeners, config snapshots |
+| `BlockingQueue` | Thread pool work queues |
+| `LinkedBlockingQueue` + capacity | Backpressure |
 
 ---
 
-## Key Concepts
-
-```mermaid
-flowchart TD
-  topic["Concurrent Collections (Interview)"]
-  topic --> fact1["Core fact 1"]
-  topic --> fact2["Core fact 2"]
-  topic --> fact3["Core fact 3"]
-```
-
-| Concept | Summary |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
-
----
-
-## Syntax
-
-| Item | Reference |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
-
----
-
-## Example
+## Snippets
 
 ```java
-// TODO: minimal illustrative snippet
-public class Example {
-    public static void main(String[] args) {
-        System.out.println("TODO");
-    }
-}
+BlockingQueue<Task> queue = new ArrayBlockingQueue<>(1000);
+queue.put(task); // blocks if full — backpressure
 ```
 
 ---
 
-## Internal Working
+## Internals & Gotchas
 
-- _TODO: behind-the-scenes behavior in 3–5 bullets_
-
----
-
-## Common Mistakes
-
-- _TODO: typical interview wrong answers_
+- COW: write copies entire array — O(n) write.
+- CHM weakly consistent iterators.
+- `DelayQueue` for scheduled tasks.
 
 ---
 
-## Best Practices
+## Production Notes
 
-- _TODO: what seniors expect you to say_
+- Size blocking queues from SLA and memory.
+- Don't use COW for write-heavy metrics buffers.
 
 ---
 
-## Interview Questions
+## Interview Probes
+
 
 {< interview-answer >}
-**Q:** _TODO interview question_
+**Q:** CopyOnWrite when?
 
-**A:** _TODO concise answer_
+**A:** Read-mostly, iterator must not throw CME, writes rare — listener lists.
+{< /interview-answer >}
+
+{< interview-answer >}
+**Q:** CHM vs synchronized HashMap?
+
+**A:** CHM finer locking/CAS — synchronizedMap serializes all ops.
 {< /interview-answer >}
 
 ---
 
-## Related Topics
+## See Also
 
-- [Previous: Stream Ops](/java-engineering/stream-operations-interview/)
-- [Next: GC Summary](/java-engineering/gc-summary-interview/)
+- [Previous: Streams Interview](/java-engineering/stream-operations-interview/)
+- [Next: GC Interview](/java-engineering/gc-summary-interview/)
 - [Java Engineering Handbook Index](/java-engineering/)

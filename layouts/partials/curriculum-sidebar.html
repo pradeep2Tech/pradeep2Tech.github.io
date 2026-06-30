@@ -41,7 +41,13 @@
       {{- range $modules -}}
         {{- $modId := .id -}}
         {{- $modOpen := false -}}
-        {{- range .topics -}}
+        {{- $modSlugs := .topics | default slice -}}
+        {{- range .groups -}}
+          {{- range .topics -}}
+            {{- $modSlugs = $modSlugs | append . -}}
+          {{- end -}}
+        {{- end -}}
+        {{- range $modSlugs -}}
           {{- with site.GetPage (printf "%s/%s" $section .) -}}
             {{- if eq $currentURL .RelPermalink -}}{{- $modOpen = true -}}{{- end -}}
           {{- end -}}
@@ -54,6 +60,55 @@
           <span class="ekh-sidebar-module-badge">{{ $modId }}</span>
           {{ .focus }}
         </summary>
+        {{- if .groups -}}
+        <div class="ekh-sidebar-module-body">
+          {{- $topicCounter := 0 -}}
+          {{- range .groups -}}
+            {{- $grpOpen := false -}}
+            {{- range .topics -}}
+              {{- with site.GetPage (printf "%s/%s" $section .) -}}
+                {{- if eq $currentURL .RelPermalink -}}{{- $grpOpen = true -}}{{- end -}}
+              {{- end -}}
+            {{- end -}}
+          <details class="ekh-sidebar-submodule" {{ if $grpOpen }}open{{ end }}>
+            <summary class="ekh-sidebar-submodule-title">{{ .name }}</summary>
+            <ul class="ekh-sidebar-topics">
+              {{- range .topics -}}
+                {{- with site.GetPage (printf "%s/%s" $section .) -}}
+                  {{- $topicCounter = add $topicCounter 1 -}}
+                  {{- $sectionNum := printf "%d.%d" $modId $topicCounter -}}
+                  {{- $shortTitle := .Params.shortTitle | default .Title -}}
+                  {{- $base := .File.BaseFileName -}}
+              <li>
+                <a class="ekh-sidebar-link{{ if eq $currentURL .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">
+                  <span class="ekh-sidebar-link-num">{{ $sectionNum }}</span>
+                  <span class="ekh-sidebar-link-text">{{ $shortTitle }}</span>
+                </a>
+                  {{- $subPages := slice -}}
+                  {{- range $subSuffixes -}}
+                    {{- with site.GetPage (printf "%s/%s%s" $section $base .) -}}
+                      {{- $subPages = $subPages | append . -}}
+                    {{- end -}}
+                  {{- end -}}
+                  {{- if gt (len $subPages) 0 -}}
+                <ul class="ekh-sidebar-subtopics">
+                    {{- range $subPages -}}
+                  <li>
+                    <a class="ekh-sidebar-link ekh-sidebar-link--sub{{ if eq $currentURL .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">
+                      <span class="ekh-sidebar-link-text">{{ .Params.shortTitle | default "Interview Questions" }}</span>
+                    </a>
+                  </li>
+                    {{- end -}}
+                </ul>
+                  {{- end -}}
+              </li>
+                {{- end -}}
+              {{- end -}}
+            </ul>
+          </details>
+          {{- end -}}
+        </div>
+        {{- else -}}
         <ul class="ekh-sidebar-topics">
           {{- range $topicIdx, $slug := .topics -}}
             {{- with site.GetPage (printf "%s/%s" $section $slug) -}}
@@ -86,18 +141,26 @@
             {{- end -}}
           {{- end -}}
         </ul>
+        {{- end -}}
       </details>
       {{- end -}}
 
     {{- else if $sidebarCfg.flatGroups -}}
       {{- $orderTopics := index site.Data $sidebarCfg.order "topics" | default slice -}}
+      {{- $splitAt := $sidebarCfg.splitAfter | default 0 -}}
+      {{- if eq $splitAt 0 -}}
+        {{- range $sidebarCfg.flatGroups -}}
+          {{- if .splitAfter -}}
+            {{- $splitAt = .splitAfter -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
       {{- range $sidebarCfg.flatGroups -}}
-        {{- $splitAfter := .splitAfter | default 0 -}}
         {{- $groupTopics := slice -}}
         {{- if eq .id 1 -}}
-          {{- $groupTopics = first $splitAfter $orderTopics -}}
+          {{- $groupTopics = first $splitAt $orderTopics -}}
         {{- else -}}
-          {{- $groupTopics = after $splitAfter $orderTopics -}}
+          {{- $groupTopics = after $splitAt $orderTopics -}}
         {{- end -}}
         {{- $groupOpen := false -}}
         {{- range $groupTopics -}}

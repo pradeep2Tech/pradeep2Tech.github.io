@@ -1,0 +1,63 @@
+# Engineering Handbook — Quick Reference Cheat Sheets
+
+Applies to: `kubernetes-handbook`, `postgresql-cheatsheet`, and similar **cheat-sheet** Engineering Handbooks (not Java — see `java-cheatsheet-posts.mdc`; not Spring Boot — see `spring-boot-handbook-posts.mdc`).
+
+## Audience & Tone
+
+Readers **already know the concepts**. Pages are **quick recap + copy-paste snippets** — not tutorials, not architecture deep dives, not "when to choose" decision guides.
+
+| Section | Purpose |
+|---|---|
+| **Engineering Handbooks** | Cheat sheet — commands, YAML, config, API snippets |
+| **Microservices** | Architecture patterns — why/how in distributed systems |
+| **Technology Playbook** | Decision guides — when to pick tool A vs B |
+
+## Hugo Front Matter
+
+```yaml
+---
+title: "<Topic>"
+date: 2026-06-30T10:00:00+00:00
+draft: false
+description: "One-line recap for SEO."
+tags: ["<section-tag>", "cheatsheet", "handbook"]
+categories: ["<Section Title>"]
+shortTitle: "<Short>"
+module: 1
+moduleTitle: "<Module Name>"
+sectionRef: "1.1"
+ShowToc: true
+---
+```
+
+Use `categories: ["Kubernetes Handbook"]` or `["Spring Boot Handbook"]` — never `Technology Playbook`.
+
+## Required Sections (use `##` headings)
+
+Keep pages scannable. Prefer **tables and code blocks** over prose.
+
+1. **Executive Summary** — one short paragraph
+2. **Core Concepts** — Mermaid diagram (optional) + reference table
+3. **Quick Reference** — grouped CLI commands, API calls, or config keys
+4. **Snippets** — Dockerfile, kubectl YAML, `application.yml`, Java config — whatever fits the topic
+5. **Common Gotchas** — bullets; use `note` / `warning` callouts sparingly
+6. **Related Topics** — internal links (prev/next + section index + Microservices deep-dive if exists)
+
+Separate major sections with `---`.
+
+## Omit (belongs elsewhere)
+
+- "When to Choose" / "When Not to Choose" decision matrices → **Technology Playbook**
+- Namespace/cgroup architecture teardown → **Microservices**
+- Long interview-answer blocks → **Interview Prep**
+- Messaging-broker or unrelated stub templates
+
+## Callouts
+
+Reuse site shortcodes: `note`, `tip`, `warning` (same syntax as Java posts).
+
+## Reference Pages
+
+- Docker: `content/kubernetes-handbook/docker.md`
+- Kubernetes: `content/kubernetes-handbook/kubernetes.md`
+- Java style (denser): `content/java-engineering/primitive-data-types.md`

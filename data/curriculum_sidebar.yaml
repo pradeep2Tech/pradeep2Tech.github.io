@@ -5,10 +5,10 @@
 sections:
   system-design:
     order: system_design_order
+    splitAfter: 19
     flatGroups:
       - id: 1
         label: "System Fundamentals"
-        splitAfter: 19
       - id: 2
         label: "Case Studies"
   microservices:
@@ -17,6 +17,12 @@ sections:
   technology-playbook:
     modules: technology_playbook_modules
     order: technology_playbook_order
+  python-cheatsheet:
+    modules: python_cheatsheet_modules
+    order: python_cheatsheet_order
+  golang-cheatsheet:
+    modules: golang_cheatsheet_modules
+    order: golang_cheatsheet_order
   java-engineering:
     modules: java_engineering_modules
     order: java_engineering_order
@@ -29,12 +35,21 @@ sections:
   kubernetes-handbook:
     modules: kubernetes_handbook_modules
     order: kubernetes_handbook_order
+  kubernetes-cheatsheet:
+    modules: kubernetes_cheatsheet_modules
+    order: kubernetes_cheatsheet_order
   database-handbook:
     modules: database_handbook_modules
     order: database_handbook_order
+  mongodb-cheatsheet:
+    modules: mongodb_cheatsheet_modules
+    order: mongodb_cheatsheet_order
   cloud-handbook:
     modules: cloud_handbook_modules
     order: cloud_handbook_order
+  redis-cheatsheet:
+    modules: redis_cheatsheet_modules
+    order: redis_cheatsheet_order
   design-patterns:
     modules: design_patterns_modules
     order: design_patterns_order

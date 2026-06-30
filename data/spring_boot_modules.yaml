@@ -1,5 +1,59 @@
+# Spring Boot Cheat Sheet — dense quick-reference (not a tutorial handbook).
 modules:
   - id: 1
-    focus: "Spring Boot & Batch"
+    focus: "Bootstrap & Core"
     topics:
-      - spring-batch
+      - spring-boot-quick-ref
+      - annotations-stereotypes
+      - dependency-injection-ref
+
+  - id: 2
+    focus: "Configuration"
+    topics:
+      - configuration-ref
+
+  - id: 3
+    focus: "REST & Validation"
+    topics:
+      - rest-api-ref
+      - validation-ref
+      - exception-handling-ref
+
+  - id: 4
+    focus: "Data & Transactions"
+    topics:
+      - jpa-quick-ref
+      - jpa-queries-ref
+      - transactions-ref
+
+  - id: 5
+    focus: "Security"
+    topics:
+      - security-quick-ref
+      - jwt-oauth-ref
+
+  - id: 6
+    focus: "Cross-Cutting"
+    topics:
+      - caching-ref
+      - scheduling-async-ref
+      - events-ref
+
+  - id: 7
+    focus: "Production"
+    topics:
+      - actuator-ref
+      - observability-ref
+      - testing-ref
+      - production-deployment-ref
+
+  - id: 8
+    focus: "Distributed"
+    topics:
+      - spring-cloud-ref
+      - messaging-ref
+
+  - id: 9
+    focus: "Interview"
+    topics:
+      - spring-boot-interview-ref

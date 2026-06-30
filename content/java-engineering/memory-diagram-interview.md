@@ -1,100 +1,102 @@
 ---
 title: "Memory Diagram (Interview)"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "Stack, heap, metaspace — interview whiteboard layout."
-tags: ["java", "java-cheatsheet", "handbook"]
+draft: false
+description: "Stack, heap, metaspace, TLAB, and object layout talking points."
+tags: ["java", "java-engineering", "handbook"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "Memory Diagram"
-module: 15
-moduleTitle: "Interview Quick Reference"
-sectionRef: "15.6"
+module: 11
+moduleTitle: "Interview Cheat Sheets"
+sectionRef: "11.6"
 ShowToc: true
-javaVersions: ["8", "11", "17", "21", "25"]
+cheatSheet: true
 ---
 
-## Executive Summary
+## At a Glance
 
-_One-page interview reference for **Memory Diagram (Interview)** — no coding problems._
-
----
-
-## Why It Exists
-
-| Need | How this page helps |
-| :--- | :--- |
-| Last-minute revision | Scannable tables and diagrams |
-| Whiteboard interviews | Canonical facts without tutorial depth |
-| Senior probes | Trade-offs in one screen |
+- Stack: frames, locals, operand stack per thread.
+- Heap: objects, arrays — shared across threads.
+- Metaspace: class metadata (post-8).
+- Off-heap: direct buffers, mapped files.
 
 ---
 
-## Key Concepts
+## Reference Tables
 
 ```mermaid
-flowchart TD
-  topic["Memory Diagram (Interview)"]
-  topic --> fact1["Core fact 1"]
-  topic --> fact2["Core fact 2"]
-  topic --> fact3["Core fact 3"]
+flowchart TB
+  subgraph perThread [Per thread]
+    stack[Stack - frames]
+    pc[Program Counter]
+  end
+  subgraph shared [Shared]
+    heap[Heap - objects]
+    meta[Metaspace - classes]
+    code[Code Cache]
+  end
+  stack --> heap
 ```
 
-| Concept | Summary |
+| Region | Stores | GC |
+| :--- | :--- | :--- |
+| Stack | Primitives, refs | Auto on pop |
+| Heap Young | New objects | Minor GC |
+| Heap Old | Tenured | Major/mixed |
+| Metaspace | Class metadata | Class unloading |
+| Direct | NIO buffers | Cleaner / explicit |
+
+| Object layout (64b, compressed oops) | |
 | :--- | :--- |
-| _TODO_ | _TODO_ |
+| Mark word | Hash, locks, GC age |
+| Klass pointer | Class metadata |
+| Fields | + padding |
 
 ---
 
-## Syntax
-
-| Item | Reference |
-| :--- | :--- |
-| _TODO_ | _TODO_ |
-
----
-
-## Example
+## Snippets
 
 ```java
-// TODO: minimal illustrative snippet
-public class Example {
-    public static void main(String[] args) {
-        System.out.println("TODO");
-    }
-}
+// stack: primitives and references
+// heap: new Object()
+Object o = new Object();
 ```
 
 ---
 
-## Internal Working
+## Internals & Gotchas
 
-- _TODO: behind-the-scenes behavior in 3–5 bullets_
-
----
-
-## Common Mistakes
-
-- _TODO: typical interview wrong answers_
+- TLAB allocation in Eden reduces contention.
+- Escape analysis may scalar-replace — not guaranteed observable.
+- `-XX:+UseCompressedOops` default on 64-bit heaps <32GB.
 
 ---
 
-## Best Practices
+## Production Notes
 
-- _TODO: what seniors expect you to say_
+- Thread stack size `-Xss` matters at thousands of platform threads — not virtual threads.
+- Monitor Metaspace in dynamic class loaders (Groovy, JSR223).
 
 ---
 
-## Interview Questions
+## Interview Probes
+
 
 {< interview-answer >}
-**Q:** _TODO interview question_
+**Q:** Stack vs heap?
 
-**A:** _TODO concise answer_
+**A:** Stack: thread-local frames, automatic lifetime. Heap: shared objects, GC-managed — references on stack point to heap objects.
+{< /interview-answer >}
+
+{< interview-answer >}
+**Q:** Where do static fields live?
+
+**A:** Field data in heap inside class mirror; metadata in Metaspace — static references are heap objects.
 {< /interview-answer >}
 
 ---
 
-## Related Topics
+## See Also
 
 - [Previous: Version Features](/java-engineering/java-version-features-interview/)
 - [Next: Thread Lifecycle](/java-engineering/thread-lifecycle-interview/)
