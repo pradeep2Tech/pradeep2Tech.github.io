@@ -1,7 +1,7 @@
 ---
 title: "Dependency Injection & Inversion of Control"
 date: 2026-06-30T10:00:00+00:00
-draft: true
+draft: false
 description: "Spring-style composition root — wiring dependencies via container, not `new`."
 tags: ["lld", "architecture", "java", "golang"]
 categories: ["Design Patterns"]
@@ -14,7 +14,7 @@ languages: ["java", "golang"]
 
 ### Problem & Intent
 
-_TODO: Describe what Dependency Injection & Inversion of Control solves and the dominant design force it addresses._
+**Inversion of Control (IoC)** flips ownership: a framework or composition root decides object lifetimes and wiring instead of each class calling `new` on its collaborators. **Dependency Injection (DI)** is the mechanism — dependencies are supplied through constructors, setters, or factory parameters. The goal is testable, loosely coupled modules where high-level policy does not hard-code low-level implementations.
 
 ---
 
@@ -22,8 +22,12 @@ _TODO: Describe what Dependency Injection & Inversion of Control solves and the 
 
 | Situation | Use? | Why |
 | :--- | :---: | :--- |
-| _TODO: positive scenario_ | Yes | _reason_ |
-| _TODO: negative scenario_ | No | _prefer simpler approach_ |
+| Services depend on interfaces with multiple runtime implementations | Yes | Container swaps real vs mock vs feature-flagged beans |
+| Constructor has more than two collaborators or deep object graphs | Yes | Composition root assembles the graph once |
+| Unit tests must replace DB, HTTP, or clock dependencies | Yes | Inject fakes without subclassing production code |
+| 10-line CLI or single-file script | No | Manual `main` wiring is clearer than a container |
+| Every dependency is a concrete stdlib type with no test double need | No | DI adds indirection without benefit |
+| Team lacks discipline on container lifecycle (singleton vs request scope) | No | Fix scope rules first; DI misuse causes subtle bugs |
 
 ---
 
@@ -31,9 +35,28 @@ _TODO: Describe what Dependency Injection & Inversion of Control solves and the 
 
 ```mermaid
 classDiagram
-    class Context
-    class Abstraction
-    Context --> Abstraction : uses
+    class CompositionRoot {
+        +bootstrap()
+    }
+    class PaymentService {
+        -PaymentGateway gateway
+        -PaymentRepository repository
+    }
+    class PaymentGateway {
+        <<interface>>
+        +charge(amount)
+    }
+    class StripeGateway {
+        +charge(amount)
+    }
+    class InMemoryGateway {
+        +charge(amount)
+    }
+    CompositionRoot --> PaymentService : creates
+    CompositionRoot --> StripeGateway : wires
+    PaymentService --> PaymentGateway
+    PaymentGateway <|.. StripeGateway
+    PaymentGateway <|.. InMemoryGateway
 ```
 
 ---
@@ -42,39 +65,131 @@ classDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
-    participant Context
-    participant Implementation
-    Client->>Context: invoke()
-    Context->>Implementation: delegate()
-    Implementation-->>Context: result
-    Context-->>Client: result
+    participant Main as CompositionRoot
+    participant Container
+    participant PaymentService
+    participant Gateway as PaymentGateway
+    Main->>Container: register(StripeGateway)
+    Main->>Container: register(PaymentService)
+    Main->>Container: resolve(PaymentService)
+    Container->>PaymentService: new(gateway, repo)
+    Container-->>Main: PaymentService
+    Main->>PaymentService: processPayment(request)
+    PaymentService->>Gateway: charge(amount)
+    Gateway-->>PaymentService: receipt
 ```
 
 ---
-
 
 ### Implementation
 
 {{< impl-tabs default="java" java="Java" golang="Go" >}}
 {{< impl-tab lang="java" >}}
 
+**Violation — class constructs its own dependencies:**
+
 ```java
-// TODO: minimal Java reference implementation
-public interface Example {
-    void execute();
+public class PaymentService {
+    private final StripeClient stripe = new StripeClient(System.getenv("STRIPE_KEY"));
+    private final JdbcPaymentRepository repository = new JdbcPaymentRepository();
+
+    public Receipt process(PaymentRequest request) {
+        stripe.charge(request.getAmount());
+        repository.save(request);
+        return new Receipt(request.getId());
+    }
 }
 ```
+
+**Constructor injection — IoC-friendly:**
+
+```java
+public interface PaymentGateway {
+    void charge(Money amount);
+}
+
+public final class PaymentService {
+    private final PaymentGateway gateway;
+    private final PaymentRepository repository;
+
+    public PaymentService(PaymentGateway gateway, PaymentRepository repository) {
+        this.gateway = gateway;
+        this.repository = repository;
+    }
+
+    public Receipt process(PaymentRequest request) {
+        gateway.charge(request.getAmount());
+        repository.save(Payment.from(request));
+        return new Receipt(request.getId());
+    }
+}
+
+// Spring composition root
+@Configuration
+public class PaymentConfig {
+    @Bean PaymentGateway paymentGateway() { return new StripeGateway(); }
+    @Bean PaymentService paymentService(PaymentGateway g, PaymentRepository r) {
+        return new PaymentService(g, r);
+    }
+}
+```
+
+Prefer **constructor injection** — dependencies are required, immutable, and visible in tests.
 
 {{< /impl-tab >}}
 {{< impl-tab lang="golang" >}}
 
+**Violation:**
+
 ```go
-// TODO: idiomatic Go equivalent
-type Example interface {
-    Execute()
+type PaymentService struct{}
+
+func (s *PaymentService) Process(req PaymentRequest) (Receipt, error) {
+    stripe := NewStripeClient(os.Getenv("STRIPE_KEY"))
+    repo := NewPostgresPaymentRepo(defaultDBURL())
+    if err := stripe.Charge(req.Amount); err != nil {
+        return Receipt{}, err
+    }
+    return Receipt{ID: req.ID}, repo.Save(req)
 }
 ```
+
+**Constructor injection via explicit wiring:**
+
+```go
+type PaymentGateway interface {
+    Charge(ctx context.Context, amount Money) error
+}
+
+type PaymentService struct {
+    gateway PaymentGateway
+    repo    PaymentRepository
+}
+
+func NewPaymentService(gateway PaymentGateway, repo PaymentRepository) *PaymentService {
+    return &PaymentService{gateway: gateway, repo: repo}
+}
+
+func (s *PaymentService) Process(ctx context.Context, req PaymentRequest) (Receipt, error) {
+    if err := s.gateway.Charge(ctx, req.Amount); err != nil {
+        return Receipt{}, err
+    }
+    if err := s.repo.Save(ctx, PaymentFrom(req)); err != nil {
+        return Receipt{}, err
+    }
+    return Receipt{ID: req.ID}, nil
+}
+
+// cmd/api/main.go — composition root
+func main() {
+    gateway := stripe.NewGateway(os.Getenv("STRIPE_KEY"))
+    repo := postgres.NewPaymentRepo(db)
+    svc := payments.NewPaymentService(gateway, repo)
+    http.Handle("/pay", newHandler(svc))
+}
+```
+
+Go has no Spring — **`main` is the composition root**; use `wire`, `fx`, or manual constructor calls.
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}
@@ -85,37 +200,45 @@ type Example interface {
 
 | Concern | Impact |
 | :--- | :--- |
-| **Testability** | _TODO_ |
-| **Complexity** | _TODO_ |
-| **Framework fit** | _TODO_ |
+| **Testability** | Tests pass `InMemoryGateway` and stub repos without bytecode magic |
+| **Complexity** | Container config, bean scopes, and circular dependency resolution add learning curve |
+| **Framework fit** | Spring autowires by type; Go relies on explicit `main` or codegen (`wire`) |
+| **Runtime failures** | Missing bean or ambiguous `@Qualifier` surfaces at startup — fail-fast is good, but cryptic errors hurt |
 
 ---
 
 ### Junior Mistakes
 
-- _TODO: common misapplication_
-- _TODO: pattern for pattern's sake_
+- Field injection (`@Autowired` on private fields) — hard to test and hides required deps
+- Service locator anti-pattern: `context.getBean(PaymentGateway.class)` inside business logic
+- Registering concrete classes everywhere instead of interfaces — blocks swapping implementations
+- `@Component` on every class including DTOs and entities — pollutes the container
 
 ---
 
 ### Senior Questions
 
-1. _TODO: extension without modification probe_
-2. _TODO: comparison with adjacent pattern_
-3. _TODO: testing strategy_
-4. _TODO: production trade-off_
+1. Constructor vs setter vs method injection — when is setter injection justified?
+2. How do you break a circular dependency between `OrderService` and `InventoryService`?
+3. Request-scoped bean inside singleton — what breaks and how does Spring solve it?
+4. How does DI relate to DIP — same concept or different layer?
+5. When would you choose manual wiring in Go over `uber/fx` or `google/wire`?
 
 ---
 
 ### Revision Cheat Sheet
 
-- **One line:** _TODO_
-- **Trigger smell:** _TODO_
-- **Pairs with:** _TODO_
-- **Avoid when:** _TODO_
+- **One line:** Don't call `new` on collaborators — receive them from a composition root.
+- **Trigger smell:** `new StripeClient()` inside a `@Service` method.
+- **Pairs with:** [DIP](/design-patterns/dependency-inversion-principle/), [Repository & UoW](/design-patterns/repository-and-unit-of-work/), [Strategy Pattern](/design-patterns/strategy-pattern/)
+- **Avoid when:** No alternate implementations and no testing need for doubles.
+- **Interview tip:** Name the composition root (`@Configuration`, `main`, test fixture).
 
 ---
 
 ### See Also
 
-- _TODO: link related LLD topics_
+- [Dependency Inversion Principle](/design-patterns/dependency-inversion-principle/)
+- [Open-Closed Principle](/design-patterns/open-closed-principle/)
+- [Repository & Unit of Work](/design-patterns/repository-and-unit-of-work/)
+- [Layered vs Hexagonal Architecture](/design-patterns/layered-vs-hexagonal-architecture/)

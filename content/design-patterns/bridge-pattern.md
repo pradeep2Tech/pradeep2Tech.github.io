@@ -1,9 +1,9 @@
 ---
 title: "Bridge Pattern"
 date: 2026-06-30T10:00:00+00:00
-draft: true
+draft: false
 description: "Decouple abstraction from implementation so both can vary independently."
-tags: ["lld", "structural", "java", "golang"]
+tags: ["lld", "structural", "bridge", "design-patterns", "java", "golang"]
 categories: ["Design Patterns"]
 shortTitle: "Bridge"
 module: 3
@@ -14,7 +14,7 @@ languages: ["java", "golang"]
 
 ### Problem & Intent
 
-_TODO: Describe what Bridge Pattern solves and the dominant design force it addresses._
+The Bridge Pattern **decouples an abstraction from its implementation** so the two can vary independently. Instead of `BasicRemote` × `SonyTV` / `SamsungTV` subclass grid, you hold a `Remote` abstraction that delegates to a `Device` implementation interface. The dominant force is **Cartesian product explosion** — two or more dimensions of variation that would otherwise multiply subclasses.
 
 ---
 
@@ -22,8 +22,12 @@ _TODO: Describe what Bridge Pattern solves and the dominant design force it addr
 
 | Situation | Use? | Why |
 | :--- | :---: | :--- |
-| _TODO: positive scenario_ | Yes | _reason_ |
-| _TODO: negative scenario_ | No | _prefer simpler approach_ |
+| Abstraction and implementation both have multiple variants | Yes | Compose at runtime; avoid N×M subclasses |
+| Implementation may change at runtime (driver, renderer, transport) | Yes | Inject a new implementor without new abstraction class |
+| Single stable implementation, one abstraction | No | Direct dependency is simpler |
+| Stack optional behaviors on one object | No | Prefer [Decorator](/design-patterns/decorator-pattern/) |
+| Hide a complex subsystem behind one method | No | Prefer [Facade](/design-patterns/facade-pattern/) |
+| Translate foreign API to yours | No | Prefer [Adapter](/design-patterns/adapter-pattern/) |
 
 ---
 
@@ -31,9 +35,40 @@ _TODO: Describe what Bridge Pattern solves and the dominant design force it addr
 
 ```mermaid
 classDiagram
-    class Context
-    class Abstraction
-    Context --> Abstraction : uses
+    class RemoteControl {
+        <<abstract>>
+        #Device device
+        +togglePower()
+        +volumeUp()
+    }
+    class BasicRemote {
+        +togglePower()
+    }
+    class AdvancedRemote {
+        +togglePower()
+        +mute()
+    }
+    class Device {
+        <<interface>>
+        +on()
+        +off()
+        +setVolume(level)
+    }
+    class TvDevice {
+        +on()
+        +off()
+        +setVolume(level)
+    }
+    class RadioDevice {
+        +on()
+        +off()
+        +setVolume(level)
+    }
+    RemoteControl --> Device
+    RemoteControl <|-- BasicRemote
+    RemoteControl <|-- AdvancedRemote
+    Device <|.. TvDevice
+    Device <|.. RadioDevice
 ```
 
 ---
@@ -43,38 +78,121 @@ classDiagram
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Context
-    participant Implementation
-    Client->>Context: invoke()
-    Context->>Implementation: delegate()
-    Implementation-->>Context: result
-    Context-->>Client: result
+    participant Remote as AdvancedRemote
+    participant Device as TvDevice
+    Client->>Remote: volumeUp()
+    Remote->>Device: setVolume(current + 1)
+    Device-->>Remote: ok
+    Remote-->>Client: done
 ```
 
 ---
-
 
 ### Implementation
 
 {{< impl-tabs default="java" java="Java" golang="Go" >}}
 {{< impl-tab lang="java" >}}
 
+**Subclass explosion:**
+
 ```java
-// TODO: minimal Java reference implementation
-public interface Example {
-    void execute();
+public class AdvancedSonyTvRemote extends SonyTvRemote { /* ... */ }
+public class AdvancedSamsungTvRemote extends SamsungTvRemote { /* ... */ }
+public class BasicRadioRemote extends RadioRemote { /* ... */ }
+// N remotes × M devices
+```
+
+**Bridge approach:**
+
+```java
+public interface Device {
+    void on();
+    void off();
+    void setVolume(int level);
+}
+
+public final class TvDevice implements Device {
+    private boolean powered;
+    private int volume;
+    @Override public void on() { powered = true; }
+    @Override public void off() { powered = false; }
+    @Override public void setVolume(int level) { volume = level; }
+}
+
+public abstract class RemoteControl {
+    protected final Device device;
+    protected RemoteControl(Device device) { this.device = device; }
+    public abstract void togglePower();
+}
+
+public final class BasicRemote extends RemoteControl {
+    public BasicRemote(Device device) { super(device); }
+    @Override
+    public void togglePower() {
+        // simplified: track state in device in real code
+        device.on();
+    }
+}
+
+public final class AdvancedRemote extends RemoteControl {
+    public AdvancedRemote(Device device) { super(device); }
+    @Override
+    public void togglePower() { device.on(); }
+    public void volumeUp() { device.setVolume(1); } // read-modify-write in production
 }
 ```
+
+Wire `new AdvancedRemote(new TvDevice())` at composition root — swap device without new remote class.
 
 {{< /impl-tab >}}
 {{< impl-tab lang="golang" >}}
 
+**Subclass explosion smell:**
+
 ```go
-// TODO: idiomatic Go equivalent
-type Example interface {
-    Execute()
-}
+type AdvancedSonyRemote struct { SonyRemote }
 ```
+
+**Bridge approach:**
+
+```go
+type Device interface {
+    On()
+    Off()
+    SetVolume(level int)
+}
+
+type TVDevice struct {
+    powered bool
+    volume  int
+}
+
+func (d *TVDevice) On()                { d.powered = true }
+func (d *TVDevice) Off()               { d.powered = false }
+func (d *TVDevice) SetVolume(l int)   { d.volume = l }
+
+type RemoteControl interface {
+    TogglePower()
+}
+
+type BasicRemote struct {
+    Device Device
+}
+
+func (r BasicRemote) TogglePower() { r.Device.On() }
+
+type AdvancedRemote struct {
+    Device Device
+}
+
+func (r AdvancedRemote) TogglePower() { r.Device.On() }
+func (r AdvancedRemote) VolumeUp(current int) { r.Device.SetVolume(current + 1) }
+
+// Composition:
+// remote := AdvancedRemote{Device: &TVDevice{}}
+```
+
+Go favors **struct embedding of the Device interface field** and small abstraction interfaces per remote capability.
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}
@@ -85,37 +203,46 @@ type Example interface {
 
 | Concern | Impact |
 | :--- | :--- |
-| **Testability** | _TODO_ |
-| **Complexity** | _TODO_ |
-| **Framework fit** | _TODO_ |
+| **Testability** | Mock `Device` when testing remotes; mock nothing when testing device drivers |
+| **Complexity** | Two hierarchies to navigate — pays off when both axes genuinely vary |
+| **Framework fit** | JDBC drivers, logging appenders, rendering backends, message transports |
+| **Discovery** | Junior devs may not see the pattern — name types clearly (`Device`, `Renderer`) |
+| **Runtime swap** | Bridge enables changing implementor; ensure abstraction holds interface, not concrete type |
 
 ---
 
 ### Junior Mistakes
 
-- _TODO: common misapplication_
-- _TODO: pattern for pattern's sake_
+- Confusing Bridge with Adapter — Bridge **designs** two dimensions upfront; Adapter **fixes** existing mismatch
+- Confusing Bridge with Decorator — Bridge has **one** implementor chosen at construction; decorator stacks many wrappers
+- Putting business logic in the implementor that belongs in the abstraction (or vice versa)
+- Using Bridge when only one dimension varies (YAGNI)
 
 ---
 
 ### Senior Questions
 
-1. _TODO: extension without modification probe_
-2. _TODO: comparison with adjacent pattern_
-3. _TODO: testing strategy_
-4. _TODO: production trade-off_
+1. How do you add a `StreamingDevice` without creating new remote subclasses?
+2. Bridge vs Strategy — is `Device` a strategy? What differs in intent?
+3. Draw the class count: 4 remotes × 3 devices with inheritance vs Bridge.
+4. Where does JDBC `Connection` / `Driver` fit the Bridge pattern?
+5. How does [Decorator vs Proxy vs Bridge](/design-patterns/decorator-vs-proxy-vs-bridge/) disambiguate structurally similar wrappers?
 
 ---
 
 ### Revision Cheat Sheet
 
-- **One line:** _TODO_
-- **Trigger smell:** _TODO_
-- **Pairs with:** _TODO_
-- **Avoid when:** _TODO_
+- **One line:** Split abstraction and implementation into two composable hierarchies.
+- **Trigger smell:** Class names like `AdvancedSonyTvRemote` multiplying with every new device.
+- **Pairs with:** [Open-Closed](/design-patterns/open-closed-principle/), [Strategy](/design-patterns/strategy-pattern/), [Decorator vs Proxy vs Bridge](/design-patterns/decorator-vs-proxy-vs-bridge/)
+- **Avoid when:** One dimension is fixed forever or product is N×M with no shared interface.
+- **Interview tip:** Bridge = **two axes of variation**; Adapter = **one-off translation**.
 
 ---
 
 ### See Also
 
-- _TODO: link related LLD topics_
+- [Decorator vs Proxy vs Bridge](/design-patterns/decorator-vs-proxy-vs-bridge/)
+- [Strategy Pattern](/design-patterns/strategy-pattern/)
+- [Adapter Pattern](/design-patterns/adapter-pattern/)
+- [Open-Closed Principle](/design-patterns/open-closed-principle/)

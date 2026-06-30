@@ -224,4 +224,4 @@ Go favors **small interfaces** and **functions as strategies** (`type PricingFun
 - [Open-Closed Principle](/design-patterns/open-closed-principle/)
 - [State Pattern](/design-patterns/state-pattern/)
 - [Strategy vs State vs Template Method](/design-patterns/strategy-vs-state-vs-template-method/)
-- [Parking Lot System LLD](/design-patterns/parking-lot-system-design-patterns/) — pricing strategies in practice
+- [Parking Lot System LLD](/design-patterns/parking-lot-system-lld/) — pricing strategies in practice

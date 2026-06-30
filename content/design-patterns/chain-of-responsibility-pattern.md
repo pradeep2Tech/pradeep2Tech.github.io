@@ -1,9 +1,9 @@
 ---
 title: "Chain of Responsibility Pattern"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "Pass a request along a handler chain until one processes it."
-tags: ["lld", "behavioral", "java", "golang"]
+draft: false
+description: "Pass a request along a handler chain until one processes it — HTTP middleware and validation pipeline with Java and Go."
+tags: ["lld", "behavioral", "chain-of-responsibility", "design-patterns", "java", "golang"]
 categories: ["Design Patterns"]
 shortTitle: "Chain of Responsibility"
 module: 4
@@ -14,7 +14,7 @@ languages: ["java", "golang"]
 
 ### Problem & Intent
 
-_TODO: Describe what Chain of Responsibility Pattern solves and the dominant design force it addresses._
+The Chain of Responsibility Pattern **passes a request along a chain of handlers** until one handles it — or every handler gets a chance to process it (pipeline style). Each handler knows only its successor, decoupling senders from receivers. It models servlet filters, Spring `HandlerInterceptor`s, auth middleware, rate limiting, and validation pipelines where **order and composition matter**.
 
 ---
 
@@ -22,8 +22,13 @@ _TODO: Describe what Chain of Responsibility Pattern solves and the dominant des
 
 | Situation | Use? | Why |
 | :--- | :---: | :--- |
-| _TODO: positive scenario_ | Yes | _reason_ |
-| _TODO: negative scenario_ | No | _prefer simpler approach_ |
+| Multiple handlers may process a request; exact handler unknown upfront | Yes | Chain discovers the right handler at runtime |
+| Handlers should be added/reordered without changing client code | Yes | Link chain in config or DI |
+| Cross-cutting pipeline (auth → validate → execute) | Yes | Each link has single responsibility |
+| Exactly one handler always processes the request | No | Direct dispatch or strategy is simpler |
+| Chain depth is unbounded or handlers call back up the chain | No | Risk of infinite loops and opaque failures |
+| All handlers must run (not first-match) | No | Use explicit pipeline list, not early-exit chain |
+| Business rules are data-driven with no ordering semantics | No | Rule engine or [Specification](/design-patterns/specification-pattern/) |
 
 ---
 
@@ -31,9 +36,29 @@ _TODO: Describe what Chain of Responsibility Pattern solves and the dominant des
 
 ```mermaid
 classDiagram
-    class Context
-    class Abstraction
-    Context --> Abstraction : uses
+    class Handler {
+        <<interface>>
+        -Handler next
+        +setNext(handler)
+        +handle(request) boolean
+    }
+    class AuthHandler {
+        +handle(request)
+    }
+    class RateLimitHandler {
+        +handle(request)
+    }
+    class ValidationHandler {
+        +handle(request)
+    }
+    class BusinessHandler {
+        +handle(request)
+    }
+    Handler <|.. AuthHandler
+    Handler <|.. RateLimitHandler
+    Handler <|.. ValidationHandler
+    Handler <|.. BusinessHandler
+    AuthHandler --> Handler : next
 ```
 
 ---
@@ -43,38 +68,126 @@ classDiagram
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Context
-    participant Implementation
-    Client->>Context: invoke()
-    Context->>Implementation: delegate()
-    Implementation-->>Context: result
-    Context-->>Client: result
+    participant Auth as AuthHandler
+    participant Rate as RateLimitHandler
+    participant Biz as BusinessHandler
+    Client->>Auth: handle(request)
+    Auth->>Auth: check token
+    Auth->>Rate: handle(request)
+    Rate->>Rate: check quota
+    Rate->>Biz: handle(request)
+    Biz->>Biz: process
+    Biz-->>Client: response
 ```
 
 ---
-
 
 ### Implementation
 
 {{< impl-tabs default="java" java="Java" golang="Go" >}}
 {{< impl-tab lang="java" >}}
 
+**Junior approach — monolithic filter method:**
+
 ```java
-// TODO: minimal Java reference implementation
-public interface Example {
-    void execute();
+public void handleRequest(HttpRequest req) {
+    if (!authService.isValid(req.getToken())) throw new UnauthorizedException();
+    if (!rateLimiter.allow(req.getClientId())) throw new TooManyRequestsException();
+    if (!validator.isValid(req.getBody())) throw new BadRequestException();
+    businessService.process(req);
 }
 ```
+
+**Chain approach:**
+
+```java
+public abstract class Handler {
+    private Handler next;
+
+    public Handler setNext(Handler next) {
+        this.next = next;
+        return next; // fluent wiring
+    }
+
+    public final void handle(Request request) {
+        if (!doHandle(request) && next != null) {
+            next.handle(request);
+        }
+    }
+
+    protected abstract boolean doHandle(Request request);
+}
+
+public final class AuthHandler extends Handler {
+    @Override
+    protected boolean doHandle(Request request) {
+        if (!isValidToken(request.getToken())) {
+            throw new UnauthorizedException();
+        }
+        return false; // continue chain
+    }
+}
+
+public final class BusinessHandler extends Handler {
+    @Override
+    protected boolean doHandle(Request request) {
+        process(request);
+        return true; // handled — stop chain
+    }
+}
+
+// Wiring: auth.setNext(rateLimit).setNext(validation).setNext(business);
+```
+
+**Spring:** `FilterChain`, `HandlerInterceptor`, and WebFlux `WebFilter` are production chain implementations.
 
 {{< /impl-tab >}}
 {{< impl-tab lang="golang" >}}
 
 ```go
-// TODO: idiomatic Go equivalent
-type Example interface {
-    Execute()
+type Request struct {
+    Token    string
+    ClientID string
+    Body     []byte
+}
+
+type Handler interface {
+    Handle(req Request) error
+}
+
+type HandlerFunc func(Request) error
+
+func (f HandlerFunc) Handle(req Request) error { return f(req) }
+
+type Chain struct {
+    handlers []Handler
+}
+
+func (c *Chain) Add(h Handler) *Chain {
+    c.handlers = append(c.handlers, h)
+    return c
+}
+
+func (c *Chain) Run(req Request) error {
+    for _, h := range c.handlers {
+        if err := h.Handle(req); err != nil {
+            return err
+        }
+    }
+    return nil
+}
+
+func AuthHandler(next Handler) Handler {
+    return HandlerFunc(func(req Request) error {
+        if req.Token == "" {
+            return errors.New("unauthorized")
+        }
+        return next.Handle(req)
+    })
 }
 ```
+
+Go middleware uses **higher-order functions** wrapping `http.Handler` — idiomatic chain without abstract base classes.
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}
@@ -85,37 +198,46 @@ type Example interface {
 
 | Concern | Impact |
 | :--- | :--- |
-| **Testability** | _TODO_ |
-| **Complexity** | _TODO_ |
-| **Framework fit** | _TODO_ |
+| **Testability** | Each handler tested alone; integration test wires full chain |
+| **Complexity** | Debugging "which link failed" needs correlation IDs and logging per handler |
+| **Framework fit** | Spring Security filter chain; Go `net/http` middleware stacks |
+| **Performance** | Deep chains add latency — measure per-link cost |
 
 ---
 
 ### Junior Mistakes
 
-- _TODO: common misapplication_
-- _TODO: pattern for pattern's sake_
+- Forgetting to call `next` — silently drops requests
+- Mixing "first handler wins" with "all handlers must run" semantics in one chain
+- Handlers that know concrete successor types instead of the interface
+- No short-circuit on fatal errors — propagates through entire chain unnecessarily
+- Building chain in random order because wiring is scattered across `@Bean` methods
 
 ---
 
 ### Senior Questions
 
-1. _TODO: extension without modification probe_
-2. _TODO: comparison with adjacent pattern_
-3. _TODO: testing strategy_
-4. _TODO: production trade-off_
+1. Pipeline (all run) vs chain (first match) — which does your design need?
+2. How do you add a handler in production without redeploying every link?
+3. Chain of Responsibility vs [Decorator](/design-patterns/decorator-pattern/) — both wrap; what's the difference?
+4. How would you implement async handlers (reactive chain)?
+5. Where does [In-Memory Rate Limiter LLD](/design-patterns/in-memory-rate-limiter-lld/) sit in the chain?
 
 ---
 
 ### Revision Cheat Sheet
 
-- **One line:** _TODO_
-- **Trigger smell:** _TODO_
-- **Pairs with:** _TODO_
-- **Avoid when:** _TODO_
+- **One line:** Pass request through linked handlers until one handles or all process.
+- **Trigger smell:** Growing sequential `if` checks at every API entry point.
+- **Pairs with:** [Decorator Pattern](/design-patterns/decorator-pattern/), [Proxy Pattern](/design-patterns/proxy-pattern/), [In-Memory Rate Limiter LLD](/design-patterns/in-memory-rate-limiter-lld/)
+- **Avoid when:** Single handler, unordered rules, or all handlers must always execute.
+- **Go tip:** `func Middleware(next http.Handler) http.Handler` is the standard chain idiom.
 
 ---
 
 ### See Also
 
-- _TODO: link related LLD topics_
+- [Decorator Pattern](/design-patterns/decorator-pattern/)
+- [Proxy Pattern](/design-patterns/proxy-pattern/)
+- [In-Memory Rate Limiter LLD](/design-patterns/in-memory-rate-limiter-lld/)
+- [Single Responsibility Principle](/design-patterns/single-responsibility-principle/)

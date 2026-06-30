@@ -1,9 +1,9 @@
 ---
 title: "State Pattern"
 date: 2026-06-30T10:00:00+00:00
-draft: true
-description: "Delegate behavior to state objects as internal state transitions."
-tags: ["lld", "behavioral", "java", "golang"]
+draft: false
+description: "Delegate behavior to state objects as internal transitions occur — order lifecycle example with Java and Go, plus State vs Strategy."
+tags: ["lld", "behavioral", "state", "design-patterns", "java", "golang"]
 categories: ["Design Patterns"]
 shortTitle: "State"
 module: 4
@@ -14,7 +14,7 @@ languages: ["java", "golang"]
 
 ### Problem & Intent
 
-_TODO: Describe what State Pattern solves and the dominant design force it addresses._
+The State Pattern lets an object **alter its behavior when its internal state changes**, appearing to change class. Instead of sprawling `switch (status)` blocks, the context delegates to a state object; transitions replace the current state reference. It models lifecycles — orders, tickets, connections, workflows — where **allowed actions depend on current state**.
 
 ---
 
@@ -22,8 +22,13 @@ _TODO: Describe what State Pattern solves and the dominant design force it addre
 
 | Situation | Use? | Why |
 | :--- | :---: | :--- |
-| _TODO: positive scenario_ | Yes | _reason_ |
-| _TODO: negative scenario_ | No | _prefer simpler approach_ |
+| Object behavior changes significantly across lifecycle phases | Yes | Each state class owns valid transitions and actions |
+| `switch` on status enum grows with every new state | Yes | Open for new states without editing every branch |
+| States have different allowed operations (pay only when pending) | Yes | Illegal operations fail inside state, not scattered checks |
+| Algorithm chosen externally at runtime | No | Prefer [Strategy Pattern](/design-patterns/strategy-pattern/) |
+| Two or three simple states with identical behavior | No | Enum + guard methods is enough |
+| States are data-driven rules from config | No | Rule engine or specification pattern may fit better |
+| Algorithm skeleton fixed, only steps vary | No | Prefer [Template Method](/design-patterns/template-method-pattern/) |
 
 ---
 
@@ -31,9 +36,38 @@ _TODO: Describe what State Pattern solves and the dominant design force it addre
 
 ```mermaid
 classDiagram
-    class Context
-    class Abstraction
-    Context --> Abstraction : uses
+    class OrderContext {
+        -OrderState state
+        +pay()
+        +ship()
+        +cancel()
+        +setState(state)
+    }
+    class OrderState {
+        <<interface>>
+        +pay(ctx)
+        +ship(ctx)
+        +cancel(ctx)
+    }
+    class PendingState {
+        +pay(ctx)
+        +ship(ctx)
+        +cancel(ctx)
+    }
+    class PaidState {
+        +pay(ctx)
+        +ship(ctx)
+        +cancel(ctx)
+    }
+    class ShippedState {
+        +pay(ctx)
+        +ship(ctx)
+        +cancel(ctx)
+    }
+    OrderContext --> OrderState
+    OrderState <|.. PendingState
+    OrderState <|.. PaidState
+    OrderState <|.. ShippedState
 ```
 
 ---
@@ -43,38 +77,111 @@ classDiagram
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Context
-    participant Implementation
-    Client->>Context: invoke()
-    Context->>Implementation: delegate()
-    Implementation-->>Context: result
-    Context-->>Client: result
+    participant Ctx as OrderContext
+    participant State as PendingState
+    Client->>Ctx: pay()
+    Ctx->>State: pay(ctx)
+    State->>Ctx: setState(PaidState)
+    State-->>Ctx: done
+    Ctx-->>Client: ok
+    Client->>Ctx: ship()
+    Ctx->>Ctx: state.ship(ctx)
+    Note over Ctx: delegates to PaidState
 ```
 
 ---
-
 
 ### Implementation
 
 {{< impl-tabs default="java" java="Java" golang="Go" >}}
 {{< impl-tab lang="java" >}}
 
+**Junior approach — switch explosion:**
+
 ```java
-// TODO: minimal Java reference implementation
-public interface Example {
-    void execute();
+public void ship(Order order) {
+    return switch (order.getStatus()) {
+        case PENDING -> throw new IllegalStateException("not paid");
+        case PAID -> { order.setStatus(SHIPPED); yield; }
+        case SHIPPED -> throw new IllegalStateException("already shipped");
+        case CANCELLED -> throw new IllegalStateException("cancelled");
+    };
 }
 ```
+
+**State approach:**
+
+```java
+public interface OrderState {
+    void pay(OrderContext ctx);
+    void ship(OrderContext ctx);
+    void cancel(OrderContext ctx);
+}
+
+public final class PendingState implements OrderState {
+    @Override
+    public void pay(OrderContext ctx) {
+        ctx.setState(new PaidState());
+    }
+
+    @Override
+    public void ship(OrderContext ctx) {
+        throw new IllegalStateException("pay first");
+    }
+
+    @Override
+    public void cancel(OrderContext ctx) {
+        ctx.setState(new CancelledState());
+    }
+}
+
+public final class OrderContext {
+    private OrderState state = new PendingState();
+
+    public void setState(OrderState state) {
+        this.state = state;
+    }
+
+    public void pay()  { state.pay(this); }
+    public void ship() { state.ship(this); }
+}
+```
+
+**Spring State Machine** (`spring-statemachine`) fits complex workflows; simple lifecycles often need only hand-rolled state classes.
 
 {{< /impl-tab >}}
 {{< impl-tab lang="golang" >}}
 
 ```go
-// TODO: idiomatic Go equivalent
-type Example interface {
-    Execute()
+type OrderContext struct {
+    state OrderState
 }
+
+type OrderState interface {
+    Pay(ctx *OrderContext)
+    Ship(ctx *OrderContext)
+    Cancel(ctx *OrderContext)
+}
+
+type PendingState struct{}
+
+func (PendingState) Pay(ctx *OrderContext)  { ctx.state = PaidState{} }
+func (PendingState) Ship(ctx *OrderContext) {
+    panic("pay first")
+}
+func (PendingState) Cancel(ctx *OrderContext) { ctx.state = CancelledState{} }
+
+type PaidState struct{}
+
+func (PaidState) Pay(ctx *OrderContext)  { panic("already paid") }
+func (PaidState) Ship(ctx *OrderContext) { ctx.state = ShippedState{} }
+func (PaidState) Cancel(ctx *OrderContext) { ctx.state = CancelledState{} }
+
+func (c *OrderContext) Pay()  { c.state.Pay(c) }
+func (c *OrderContext) Ship() { c.state.Ship(c) }
 ```
+
+Go uses **empty struct state types** and interface delegation — no inheritance. State singletons (`var pending = PendingState{}`) avoid allocations on hot paths.
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}
@@ -85,37 +192,46 @@ type Example interface {
 
 | Concern | Impact |
 | :--- | :--- |
-| **Testability** | _TODO_ |
-| **Complexity** | _TODO_ |
-| **Framework fit** | _TODO_ |
+| **Testability** | Each state tested for allowed/denied transitions in isolation |
+| **Complexity** | Many small classes; transition tables help when states exceed ~6 |
+| **Framework fit** | Spring State Machine for BPM-like flows; JPA `@Enumerated` still stores status column |
+| **Persistence** | Serialize state as enum/string; rehydrate to correct state object on load |
 
 ---
 
 ### Junior Mistakes
 
-- _TODO: common misapplication_
-- _TODO: pattern for pattern's sake_
+- Storing state enum **and** state object — duplicate sources of truth
+- Context methods that bypass state and mutate status directly
+- Confusing State with Strategy — states **transition internally**; strategies are **swapped externally**
+- God context that still contains `switch` while claiming to use State
+- Not handling unknown/restored states after schema migration
 
 ---
 
 ### Senior Questions
 
-1. _TODO: extension without modification probe_
-2. _TODO: comparison with adjacent pattern_
-3. _TODO: testing strategy_
-4. _TODO: production trade-off_
+1. State vs Strategy — who owns the transition: context or state object?
+2. How do you persist and restore state machines across service restarts?
+3. Hierarchical states (sub-states of PAID) — nested classes or flat enum?
+4. How does State interact with [Observer](/design-patterns/observer-pattern/) on transition events?
+5. When does a state machine belong in the DB (workflow engine) vs in code?
 
 ---
 
 ### Revision Cheat Sheet
 
-- **One line:** _TODO_
-- **Trigger smell:** _TODO_
-- **Pairs with:** _TODO_
-- **Avoid when:** _TODO_
+- **One line:** Context delegates to state objects; transitions swap the delegate.
+- **Trigger smell:** `switch(status)` duplicated across multiple methods.
+- **Pairs with:** [Strategy Pattern](/design-patterns/strategy-pattern/), [Strategy vs State vs Template Method](/design-patterns/strategy-vs-state-vs-template-method/)
+- **Avoid when:** Few states, external algorithm selection, or rules are purely data-driven.
+- **Interview tip:** State = behavior changes with **internal** lifecycle; Strategy = **external** algorithm pick.
 
 ---
 
 ### See Also
 
-- _TODO: link related LLD topics_
+- [Strategy Pattern](/design-patterns/strategy-pattern/)
+- [Strategy vs State vs Template Method](/design-patterns/strategy-vs-state-vs-template-method/)
+- [Elevator Control System LLD](/design-patterns/elevator-control-system-lld/)
+- [Open-Closed Principle](/design-patterns/open-closed-principle/)
