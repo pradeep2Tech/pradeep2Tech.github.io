@@ -1,4 +1,4 @@
-"""Build Kubernetes Cheatsheet pages from data/kubernetes_cheatsheet_modules.yaml."""
+"""Build Kubernetes Handbook workload/Docker pages from data/kubernetes_handbook_modules.yaml."""
 from __future__ import annotations
 
 import textwrap
@@ -8,10 +8,10 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
-CONTENT = ROOT / "content" / "kubernetes-cheatsheet"
+CONTENT = ROOT / "content" / "kubernetes-handbook"
 DATE = "2026-06-30T10:00:00+00:00"
-SECTION = "kubernetes-cheatsheet"
-CATEGORY = "Kubernetes Cheatsheet"
+SECTION = "kubernetes-handbook"
+CATEGORY = "Kubernetes Handbook"
 
 
 def cmd(
@@ -215,10 +215,10 @@ flowchart TB
 
 ## Related Topics
 
-- [Pods](/kubernetes-cheatsheet/pods/) — smallest deployable unit
-- [Namespaces](/kubernetes-cheatsheet/namespaces/) — logical isolation
-- [RBAC](/kubernetes-cheatsheet/rbac/) — API access control
-- [Kubernetes Cheatsheet Index](/kubernetes-cheatsheet/)"""
+- [Pods](/kubernetes-handbook/pods/) — smallest deployable unit
+- [Namespaces](/kubernetes-handbook/namespaces/) — logical isolation
+- [RBAC](/kubernetes-handbook/rbac/) — API access control
+- [Kubernetes Cheatsheet Index](/kubernetes-handbook/)"""
 
 
 def _body_pods() -> str:
@@ -248,7 +248,7 @@ A **Pod** wraps one or more containers sharing network namespace, IPC, and volum
 
 ## Related Topics
 
-- [Deployments](/kubernetes-cheatsheet/deployments/) · [Probes](/kubernetes-cheatsheet/probes/) · [Resource Limits](/kubernetes-cheatsheet/resource-limits/)"""
+- [Deployments](/kubernetes-handbook/deployments/) · [Probes](/kubernetes-handbook/probes/) · [Resource Limits](/kubernetes-handbook/resource-limits/)"""
 
 
 def _body_replicasets() -> str:
@@ -270,7 +270,7 @@ def _body_replicasets() -> str:
 
 ## Related Topics
 
-- [Deployments](/kubernetes-cheatsheet/deployments/) · [Labels & Selectors](/kubernetes-cheatsheet/labels-and-selectors/)"""
+- [Deployments](/kubernetes-handbook/deployments/) · [Labels & Selectors](/kubernetes-handbook/labels-and-selectors/)"""
 
 
 def _body_deployments() -> str:
@@ -296,7 +296,7 @@ def _body_deployments() -> str:
 
 ## Related Topics
 
-- [Rolling Updates](/kubernetes-cheatsheet/rolling-updates/) · [HPA](/kubernetes-cheatsheet/hpa/) · [Probes](/kubernetes-cheatsheet/probes/)"""
+- [Rolling Updates](/kubernetes-handbook/rolling-updates/) · [HPA](/kubernetes-handbook/hpa/) · [Probes](/kubernetes-handbook/probes/)"""
 
 
 def _body_statefulsets() -> str:
@@ -318,7 +318,7 @@ def _body_statefulsets() -> str:
 
 ## Related Topics
 
-- [Persistent Volumes](/kubernetes-cheatsheet/persistent-volumes/) · [Services](/kubernetes-cheatsheet/services/) (headless)"""
+- [Persistent Volumes](/kubernetes-handbook/persistent-volumes/) · [Services](/kubernetes-handbook/services/) (headless)"""
 
 
 def _body_daemonsets() -> str:
@@ -338,7 +338,7 @@ def _body_daemonsets() -> str:
 
 ## Related Topics
 
-- [Taints & Tolerations](/kubernetes-cheatsheet/taints-and-tolerations/) · [Node affinity](/kubernetes-cheatsheet/affinity-and-anti-affinity/)"""
+- [Taints & Tolerations](/kubernetes-handbook/taints-and-tolerations/) · [Node affinity](/kubernetes-handbook/affinity-and-anti-affinity/)"""
 
 
 def _body_jobs() -> str:
@@ -360,7 +360,7 @@ def _body_jobs() -> str:
 
 ## Related Topics
 
-- [CronJobs](/kubernetes-cheatsheet/cronjobs/) · [Pods](/kubernetes-cheatsheet/pods/)"""
+- [CronJobs](/kubernetes-handbook/cronjobs/) · [Pods](/kubernetes-handbook/pods/)"""
 
 
 def _body_cronjobs() -> str:
@@ -382,7 +382,7 @@ def _body_cronjobs() -> str:
 
 ## Related Topics
 
-- [Jobs](/kubernetes-cheatsheet/jobs/) · [Production Best Practices](/kubernetes-cheatsheet/production-best-practices/)"""
+- [Jobs](/kubernetes-handbook/jobs/) · [Production Best Practices](/kubernetes-handbook/production-best-practices/)"""
 
 
 def _body_services() -> str:
@@ -406,7 +406,7 @@ def _body_services() -> str:
 
 ## Related Topics
 
-- [Ingress](/kubernetes-cheatsheet/ingress/) · [Network Policies](/kubernetes-cheatsheet/network-policies/) · [Labels & Selectors](/kubernetes-cheatsheet/labels-and-selectors/)"""
+- [Ingress](/kubernetes-handbook/ingress/) · [Network Policies](/kubernetes-handbook/network-policies/) · [Labels & Selectors](/kubernetes-handbook/labels-and-selectors/)"""
 
 
 def _body_ingress() -> str:
@@ -428,7 +428,7 @@ def _body_ingress() -> str:
 
 ## Related Topics
 
-- [Services](/kubernetes-cheatsheet/services/) · [TLS Secrets](/kubernetes-cheatsheet/secrets/) · [Kubernetes Handbook — NGINX Ingress](/kubernetes-handbook/nginx-ingress/)"""
+- [Services](/kubernetes-handbook/services/) · [TLS Secrets](/kubernetes-handbook/secrets/) · [Kubernetes Handbook — NGINX Ingress](/kubernetes-handbook/nginx-ingress/)"""
 
 
 def _body_network_policies() -> str:
@@ -450,7 +450,7 @@ def _body_network_policies() -> str:
 
 ## Related Topics
 
-- [Services](/kubernetes-cheatsheet/services/) · [Namespaces](/kubernetes-cheatsheet/namespaces/)"""
+- [Services](/kubernetes-handbook/services/) · [Namespaces](/kubernetes-handbook/namespaces/)"""
 
 
 def _body_configmaps() -> str:
@@ -472,7 +472,7 @@ def _body_configmaps() -> str:
 
 ## Related Topics
 
-- [Secrets](/kubernetes-cheatsheet/secrets/) · [Deployments](/kubernetes-cheatsheet/deployments/)"""
+- [Secrets](/kubernetes-handbook/secrets/) · [Deployments](/kubernetes-handbook/deployments/)"""
 
 
 def _body_secrets() -> str:
@@ -494,7 +494,7 @@ def _body_secrets() -> str:
 
 ## Related Topics
 
-- [ConfigMaps](/kubernetes-cheatsheet/configmaps/) · [RBAC](/kubernetes-cheatsheet/rbac/) · [Production Best Practices](/kubernetes-cheatsheet/production-best-practices/)"""
+- [ConfigMaps](/kubernetes-handbook/configmaps/) · [RBAC](/kubernetes-handbook/rbac/) · [Production Best Practices](/kubernetes-handbook/production-best-practices/)"""
 
 
 def _body_persistent_volumes() -> str:
@@ -516,7 +516,7 @@ def _body_persistent_volumes() -> str:
 
 ## Related Topics
 
-- [Storage Classes](/kubernetes-cheatsheet/storage-classes/) · [StatefulSets](/kubernetes-cheatsheet/statefulsets/)"""
+- [Storage Classes](/kubernetes-handbook/storage-classes/) · [StatefulSets](/kubernetes-handbook/statefulsets/)"""
 
 
 def _body_storage_classes() -> str:
@@ -536,7 +536,7 @@ def _body_storage_classes() -> str:
 
 ## Related Topics
 
-- [Persistent Volumes](/kubernetes-cheatsheet/persistent-volumes/) · [Affinity](/kubernetes-cheatsheet/affinity-and-anti-affinity/) (zones)"""
+- [Persistent Volumes](/kubernetes-handbook/persistent-volumes/) · [Affinity](/kubernetes-handbook/affinity-and-anti-affinity/) (zones)"""
 
 
 def _body_namespaces() -> str:
@@ -560,7 +560,7 @@ def _body_namespaces() -> str:
 
 ## Related Topics
 
-- [RBAC](/kubernetes-cheatsheet/rbac/) · [Resource Limits](/kubernetes-cheatsheet/resource-limits/)"""
+- [RBAC](/kubernetes-handbook/rbac/) · [Resource Limits](/kubernetes-handbook/resource-limits/)"""
 
 
 def _body_labels_and_selectors() -> str:
@@ -582,7 +582,7 @@ def _body_labels_and_selectors() -> str:
 
 ## Related Topics
 
-- [Services](/kubernetes-cheatsheet/services/) · [Deployments](/kubernetes-cheatsheet/deployments/)"""
+- [Services](/kubernetes-handbook/services/) · [Deployments](/kubernetes-handbook/deployments/)"""
 
 
 def _body_affinity() -> str:
@@ -608,7 +608,7 @@ def _body_affinity() -> str:
 
 ## Related Topics
 
-- [Taints & Tolerations](/kubernetes-cheatsheet/taints-and-tolerations/) · [DaemonSets](/kubernetes-cheatsheet/daemonsets/)"""
+- [Taints & Tolerations](/kubernetes-handbook/taints-and-tolerations/) · [DaemonSets](/kubernetes-handbook/daemonsets/)"""
 
 
 def _body_taints() -> str:
@@ -630,7 +630,7 @@ def _body_taints() -> str:
 
 ## Related Topics
 
-- [Affinity](/kubernetes-cheatsheet/affinity-and-anti-affinity/) · [Production Best Practices](/kubernetes-cheatsheet/production-best-practices/)"""
+- [Affinity](/kubernetes-handbook/affinity-and-anti-affinity/) · [Production Best Practices](/kubernetes-handbook/production-best-practices/)"""
 
 
 def _body_resource_limits() -> str:
@@ -652,7 +652,7 @@ def _body_resource_limits() -> str:
 
 ## Related Topics
 
-- [HPA](/kubernetes-cheatsheet/hpa/) · [Production Best Practices](/kubernetes-cheatsheet/production-best-practices/)"""
+- [HPA](/kubernetes-handbook/hpa/) · [Production Best Practices](/kubernetes-handbook/production-best-practices/)"""
 
 
 def _body_hpa() -> str:
@@ -674,7 +674,7 @@ def _body_hpa() -> str:
 
 ## Related Topics
 
-- [Resource Limits](/kubernetes-cheatsheet/resource-limits/) · [Deployments](/kubernetes-cheatsheet/deployments/)"""
+- [Resource Limits](/kubernetes-handbook/resource-limits/) · [Deployments](/kubernetes-handbook/deployments/)"""
 
 
 def _body_rolling_updates() -> str:
@@ -696,7 +696,7 @@ Deployment **strategy** controls rollout: `RollingUpdate` with `maxSurge` and `m
 
 ## Related Topics
 
-- [Deployments](/kubernetes-cheatsheet/deployments/) · [Probes](/kubernetes-cheatsheet/probes/)"""
+- [Deployments](/kubernetes-handbook/deployments/) · [Probes](/kubernetes-handbook/probes/)"""
 
 
 def _body_probes() -> str:
@@ -722,7 +722,7 @@ def _body_probes() -> str:
 
 ## Related Topics
 
-- [Deployments](/kubernetes-cheatsheet/deployments/) · [Troubleshooting](/kubernetes-cheatsheet/troubleshooting/)"""
+- [Deployments](/kubernetes-handbook/deployments/) · [Troubleshooting](/kubernetes-handbook/troubleshooting/)"""
 
 
 def _body_rbac() -> str:
@@ -744,7 +744,7 @@ def _body_rbac() -> str:
 
 ## Related Topics
 
-- [Namespaces](/kubernetes-cheatsheet/namespaces/) · [Production Best Practices](/kubernetes-cheatsheet/production-best-practices/)"""
+- [Namespaces](/kubernetes-handbook/namespaces/) · [Production Best Practices](/kubernetes-handbook/production-best-practices/)"""
 
 
 def _body_helm() -> str:
@@ -768,7 +768,7 @@ def _body_helm() -> str:
 
 ## Related Topics
 
-- [Deployments](/kubernetes-cheatsheet/deployments/) · [Production Best Practices](/kubernetes-cheatsheet/production-best-practices/)"""
+- [Deployments](/kubernetes-handbook/deployments/) · [Production Best Practices](/kubernetes-handbook/production-best-practices/)"""
 
 
 def _body_common_kubectl() -> str:
@@ -794,7 +794,7 @@ Day-to-day **kubectl** for apply, diff, watch, contexts, and output formatting. 
 
 ## Related Topics
 
-- [Troubleshooting](/kubernetes-cheatsheet/troubleshooting/) · [Kubernetes Architecture](/kubernetes-cheatsheet/kubernetes-architecture/)"""
+- [Troubleshooting](/kubernetes-handbook/troubleshooting/) · [Kubernetes Architecture](/kubernetes-handbook/kubernetes-architecture/)"""
 
 
 def _body_troubleshooting() -> str:
@@ -818,7 +818,7 @@ Systematic debug flow: **events → describe → logs → exec → endpoints →
 
 ## Related Topics
 
-- [Probes](/kubernetes-cheatsheet/probes/) · [Resource Limits](/kubernetes-cheatsheet/resource-limits/) · [Events & kubectl](/kubernetes-cheatsheet/common-kubectl-commands/)"""
+- [Probes](/kubernetes-handbook/probes/) · [Resource Limits](/kubernetes-handbook/resource-limits/) · [Events & kubectl](/kubernetes-handbook/common-kubectl-commands/)"""
 
 
 def _body_production() -> str:
@@ -840,7 +840,7 @@ Production checklist: **RBAC least privilege**, **resource requests/limits**, **
 
 ## Related Topics
 
-- [RBAC](/kubernetes-cheatsheet/rbac/) · [Network Policies](/kubernetes-cheatsheet/network-policies/) · [HPA](/kubernetes-cheatsheet/hpa/) · [Microservices — Zero-Downtime Deployment](/microservices/zero-downtime-deployment-topologies/)"""
+- [RBAC](/kubernetes-handbook/rbac/) · [Network Policies](/kubernetes-handbook/network-policies/) · [HPA](/kubernetes-handbook/hpa/) · [Microservices — Zero-Downtime Deployment](/microservices/zero-downtime-deployment-topologies/)"""
 
 
 def _body_docker_architecture() -> str:
@@ -875,7 +875,7 @@ flowchart LR
 
 ## Related Topics
 
-- [Docker Commands](/kubernetes-cheatsheet/docker-commands/) · [Container Lifecycle](/kubernetes-cheatsheet/container-lifecycle/) · [Kubernetes Handbook — Docker](/kubernetes-handbook/docker/)"""
+- [Docker Commands](/kubernetes-handbook/docker-commands/) · [Container Lifecycle](/kubernetes-handbook/container-lifecycle/) · [Kubernetes Handbook — Docker](/kubernetes-handbook/docker/)"""
 
 
 def _body_dockerfile() -> str:
@@ -911,7 +911,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ## Related Topics
 
-- [Multi-stage Builds](/kubernetes-cheatsheet/multi-stage-builds/) · [Image Layers](/kubernetes-cheatsheet/image-layers/) · [Docker Best Practices](/kubernetes-cheatsheet/docker-best-practices/)"""
+- [Multi-stage Builds](/kubernetes-handbook/multi-stage-builds/) · [Image Layers](/kubernetes-handbook/image-layers/) · [Docker Best Practices](/kubernetes-handbook/docker-best-practices/)"""
 
 
 def _body_image_layers() -> str:
@@ -933,7 +933,7 @@ Images are **read-only layers** stacked with copy-on-write. Reuse layers across 
 
 ## Related Topics
 
-- [Dockerfile](/kubernetes-cheatsheet/dockerfile/) · [Docker Best Practices](/kubernetes-cheatsheet/docker-best-practices/)"""
+- [Dockerfile](/kubernetes-handbook/dockerfile/) · [Docker Best Practices](/kubernetes-handbook/docker-best-practices/)"""
 
 
 def _body_docker_volumes() -> str:
@@ -955,7 +955,7 @@ def _body_docker_volumes() -> str:
 
 ## Related Topics
 
-- [Docker Compose](/kubernetes-cheatsheet/docker-compose/) · [Container Lifecycle](/kubernetes-cheatsheet/container-lifecycle/)"""
+- [Docker Compose](/kubernetes-handbook/docker-compose/) · [Container Lifecycle](/kubernetes-handbook/container-lifecycle/)"""
 
 
 def _body_docker_networks() -> str:
@@ -977,7 +977,7 @@ Default **bridge** network isolates containers on host. **user-defined bridge** 
 
 ## Related Topics
 
-- [Docker Compose](/kubernetes-cheatsheet/docker-compose/) · [Services in Kubernetes](/kubernetes-cheatsheet/services/)"""
+- [Docker Compose](/kubernetes-handbook/docker-compose/) · [Services in Kubernetes](/kubernetes-handbook/services/)"""
 
 
 def _body_multi_stage() -> str:
@@ -1012,7 +1012,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ## Related Topics
 
-- [Dockerfile](/kubernetes-cheatsheet/dockerfile/) · [Docker Best Practices](/kubernetes-cheatsheet/docker-best-practices/)"""
+- [Dockerfile](/kubernetes-handbook/dockerfile/) · [Docker Best Practices](/kubernetes-handbook/docker-best-practices/)"""
 
 
 def _body_docker_compose() -> str:
@@ -1036,7 +1036,7 @@ def _body_docker_compose() -> str:
 
 ## Related Topics
 
-- [Docker Networks](/kubernetes-cheatsheet/docker-networks/) · [Docker Volumes](/kubernetes-cheatsheet/docker-volumes/)"""
+- [Docker Networks](/kubernetes-handbook/docker-networks/) · [Docker Volumes](/kubernetes-handbook/docker-volumes/)"""
 
 
 def _body_docker_commands() -> str:
@@ -1062,7 +1062,7 @@ Essential **docker** CLI — images, containers, registry, and cleanup.
 
 ## Related Topics
 
-- [Container Lifecycle](/kubernetes-cheatsheet/container-lifecycle/) · [Docker Best Practices](/kubernetes-cheatsheet/docker-best-practices/)"""
+- [Container Lifecycle](/kubernetes-handbook/container-lifecycle/) · [Docker Best Practices](/kubernetes-handbook/docker-best-practices/)"""
 
 
 def _body_container_lifecycle() -> str:
@@ -1086,7 +1086,7 @@ Container states: **created → running → paused/stopped → removed**. Restar
 
 ## Related Topics
 
-- [Docker Commands](/kubernetes-cheatsheet/docker-commands/) · [Pods lifecycle](/kubernetes-cheatsheet/pods/)"""
+- [Docker Commands](/kubernetes-handbook/docker-commands/) · [Pods lifecycle](/kubernetes-handbook/pods/)"""
 
 
 def _body_docker_best_practices() -> str:
@@ -1108,7 +1108,7 @@ Run as **non-root**, use **minimal base images**, pin **digests**, scan in CI, k
 
 ## Related Topics
 
-- [Multi-stage Builds](/kubernetes-cheatsheet/multi-stage-builds/) · [Production Best Practices](/kubernetes-cheatsheet/production-best-practices/) · [Microservices — Application Containerization](/microservices/application-containerization-docker/)"""
+- [Multi-stage Builds](/kubernetes-handbook/multi-stage-builds/) · [Production Best Practices](/kubernetes-handbook/production-best-practices/) · [Microservices — Application Containerization](/microservices/application-containerization-docker/)"""
 
 
 def front_matter(slug: str, module_id: int, module_title: str, section_ref: str) -> str:
@@ -1126,6 +1126,8 @@ module: {module_id}
 moduleTitle: "{module_title}"
 sectionRef: "{section_ref}"
 ShowToc: true
+cheatSheet: true
+aliases: ["/kubernetes-cheatsheet/{slug}/"]
 ---
 """
     )
@@ -1133,7 +1135,7 @@ ShowToc: true
 
 def build() -> None:
     _register_bodies()
-    modules_data = yaml.safe_load((DATA / "kubernetes_cheatsheet_modules.yaml").read_text(encoding="utf-8"))
+    modules_data = yaml.safe_load((DATA / "kubernetes_handbook_modules.yaml").read_text(encoding="utf-8"))
     CONTENT.mkdir(parents=True, exist_ok=True)
 
     expected_slugs: set[str] = set()
@@ -1141,12 +1143,12 @@ def build() -> None:
         mid = mod["id"]
         mtitle = mod["focus"]
         for slug in mod["topics"]:
+            body = PAGE_BODIES.get(slug)
+            if not body:
+                continue
             expected_slugs.add(slug)
             local_idx = mod["topics"].index(slug) + 1
             ref = f"{mid}.{local_idx}"
-            body = PAGE_BODIES.get(slug)
-            if not body:
-                raise KeyError(f"Missing PAGE_BODIES for {slug}")
             content = front_matter(slug, mid, mtitle, ref) + "\n" + body + "\n"
             out = CONTENT / f"{slug}.md"
             out.write_text(content, encoding="utf-8")
@@ -1155,7 +1157,7 @@ def build() -> None:
     for path in CONTENT.glob("*.md"):
         if path.name == "_index.md":
             continue
-        if path.stem not in expected_slugs:
+        if path.stem in PAGE_BODIES and path.stem not in expected_slugs:
             path.unlink()
             print(f"Removed orphan {path.relative_to(ROOT)}")
 

@@ -1,3 +1,4 @@
+# Unified Kubernetes Handbook — workloads, Docker, ingress, mesh, and observability.
 modules:
   - id: 1
     focus: "Containers & Orchestration"
@@ -7,7 +8,70 @@ modules:
       - kubernetes
       - openshift
       - kubernetes-cronjobs
+
   - id: 2
+    focus: "Architecture & Workloads"
+    topics:
+      - kubernetes-architecture
+      - pods
+      - replicasets
+      - deployments
+      - statefulsets
+      - daemonsets
+      - jobs
+      - cronjobs
+
+  - id: 3
+    focus: "Networking & Exposure"
+    topics:
+      - services
+      - ingress
+      - network-policies
+
+  - id: 4
+    focus: "Configuration & Storage"
+    topics:
+      - configmaps
+      - secrets
+      - persistent-volumes
+      - storage-classes
+      - namespaces
+
+  - id: 5
+    focus: "Scheduling & Scaling"
+    topics:
+      - labels-and-selectors
+      - affinity-and-anti-affinity
+      - taints-and-tolerations
+      - resource-limits
+      - hpa
+
+  - id: 6
+    focus: "Operations & Security"
+    topics:
+      - rolling-updates
+      - probes
+      - rbac
+      - helm-basics
+      - common-kubectl-commands
+      - troubleshooting
+      - production-best-practices
+
+  - id: 7
+    focus: "Docker Deep Dive"
+    topics:
+      - docker-architecture
+      - dockerfile
+      - image-layers
+      - docker-volumes
+      - docker-networks
+      - multi-stage-builds
+      - docker-compose
+      - docker-commands
+      - container-lifecycle
+      - docker-best-practices
+
+  - id: 8
     focus: "Ingress, Gateway & Service Mesh"
     topics:
       - kong
@@ -21,7 +85,8 @@ modules:
       - istio
       - linkerd
       - consul
-  - id: 3
+
+  - id: 9
     focus: "Observability"
     topics:
       - prometheus

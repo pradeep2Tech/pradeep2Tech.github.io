@@ -49,8 +49,8 @@ sections:
   - slug: kubernetes-handbook
     menuLabel: Kubernetes Handbook
     group: handbooks
-  - slug: kubernetes-cheatsheet
-    menuLabel: Kubernetes Cheatsheet
+  - slug: redis-cheatsheet
+    menuLabel: Redis Cheatsheet
     group: handbooks
   - slug: database-handbook
     menuLabel: Database Handbook

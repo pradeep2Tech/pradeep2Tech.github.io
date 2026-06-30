@@ -35,9 +35,9 @@ sections:
   kubernetes-handbook:
     modules: kubernetes_handbook_modules
     order: kubernetes_handbook_order
-  kubernetes-cheatsheet:
-    modules: kubernetes_cheatsheet_modules
-    order: kubernetes_cheatsheet_order
+  postgresql-cheatsheet:
+    modules: postgresql_cheatsheet_modules
+    order: postgresql_cheatsheet_order
   database-handbook:
     modules: database_handbook_modules
     order: database_handbook_order

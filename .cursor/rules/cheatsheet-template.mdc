@@ -10,21 +10,23 @@ globs:
   - data/spring_boot_*.yaml
   - scripts/build_*cheatsheet*.py
   - scripts/build_*_handbook.py
+  - layouts/partials/curriculum-section-single.html
+  - layouts/partials/cs-quick-ref-head.html
 ---
 
 # Cheat Sheet Template (Canonical)
 
-**Audience:** Engineers who **already know** the topic. Goal = **brush up** — syntax, tables, snippets. Not tutorials.
+**Audience:** Engineers who **already know** the topic. Goal = **brush up in under 2 minutes** — tables, snippets, when-to-use. Not tutorials.
 
-## Separate From
+## Content Types (Do Not Mix)
 
-| Format | Sections | Examples |
-|---|---|---|
-| **Cheat sheet** | This rule | Java, Python, Go, Spring Boot, K8s CLI |
-| **Playbook** | Why, flows, trade-offs, code-tabs | Microservices, System Design |
-| **Interview** | Long-form Q&A | Interview Prep |
+| Type | UX | Sections | Examples |
+|---|---|---|---|
+| **Quick-reference cheat sheet** | **Flat** — all `##` visible, no expand/collapse | Ways to define + snippet + use-when | Java, Python, Go, Spring Boot CLI refs |
+| **Playbook / design post** | **Collapsible** `##` / `###` + API panels + diagram lightbox | Requirements, architecture, trade-offs | System Design, Microservices, Security Architecture |
+| **Interview** | Long-form Q&A | Probes, scenarios | Interview Prep |
 
-Do **not** use playbook sections (Why It Exists, Request Flow essays) on cheat sheets.
+Cheat sheets use `.cs-quick-ref` layout (no `.sd-collapsible-content`). Playbooks use `.sd-collapsible-content` — see `system-design-posts.mdc`.
 
 ## Hugo Front Matter
 
@@ -35,17 +37,24 @@ categories: ["<Section Title>"]
 tags: ["cheatsheet", "handbook", ...]
 ```
 
-## Required Sections (`##` headings)
+## Required Sections (`##` headings) — Slim Format
 
-1. **At a Glance** — 3–5 bullets max
-2. **Reference Tables** — primary content; club related basics on one page
-3. **Snippets** — minimal copy-paste; constructor injection for Java; one language per page
-4. **Internals & Gotchas** — short bullets
-5. **Production Notes** — ops tips (optional if truly N/A)
-6. **Interview Probes** — `{{< interview-answer >}}` 0–2 per page; full FAQ → Interview module only
-7. **See Also** — prev/next + index
+1. **At a Glance** — 2–3 bullets max
+2. **Ways to Define** (or **Reference Tables** for non-function topics) — primary table: `Form` · `Snippet` · `Use when`
+3. **Quick Gotchas** — 2–4 bullets (merge old Internals + critical Production tips)
+4. **See Also** — prev/next + index
 
 Separate with `---`. Use `note` / `tip` / `warning` sparingly.
+
+### Functions page pattern (Go / Python / Java)
+
+| Column | Content |
+|---|---|
+| Form | Named func, lambda, closure, variadic, method ref, etc. |
+| Snippet | One minimal line or fenced block |
+| Use when | One phrase — decision, not essay |
+
+**Omit on cheat sheets:** Interview Probes, Production Notes essays, long Internals sections.
 
 ## Clubbing Rules
 
@@ -53,13 +62,15 @@ Separate with `---`. Use `note` / `tip` / `warning` sparingly.
 |---|---|
 | Primitives + syntax + variables | Per-annotation pages for Spring |
 | All HTTP mapping annotations | "Creating a project" tutorials |
-| Repository hierarchy + paging | Beginner install guides |
+| Function forms + args + lambda | Separate page per syntax variant |
 
 ## Omit
 
+- Expand/collapse section wrappers (playbook only)
 - "How to create a project" walkthroughs (one-row bootstrap table is enough)
 - Long Mermaid lifecycle diagrams (tiny diagrams in tables OK)
 - `{{< code-tabs >}}` multi-language tabs (playbook only)
+- Interview probes on cheat sheet pages (→ Interview module)
 - Core Java / DSA / design patterns (other sections)
 
 ## Section-Specific Rules

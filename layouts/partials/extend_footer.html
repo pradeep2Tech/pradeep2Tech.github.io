@@ -35,7 +35,7 @@
 
   function wrapMermaidBlocks() {
     const mermaidCodeBlocks = document.querySelectorAll(
-      ".sd-collapsible-content pre > code.language-mermaid, .sd-collapsible-content pre > code[data-lang='mermaid']"
+      ".sd-collapsible-content pre > code.language-mermaid, .sd-collapsible-content pre > code[data-lang='mermaid'], .cs-quick-ref pre > code.language-mermaid, .cs-quick-ref pre > code[data-lang='mermaid'], .post-content pre > code.language-mermaid, .post-content pre > code[data-lang='mermaid']"
     );
 
     mermaidCodeBlocks.forEach((codeBlock, index) => {

@@ -37,7 +37,8 @@
   {{- end -}}
 
   {{- if $page.Content -}}
-  <div class="post-content sd-collapsible-content">
+  {{- $flatQuickRef := or ($page.Param "cheatSheet") (strings.HasSuffix $section "-cheatsheet") (eq $section "java-engineering") (eq $section "spring-boot") (eq $section "kubernetes-handbook") -}}
+  <div class="post-content{{ if not $flatQuickRef }} sd-collapsible-content{{ else }} cs-quick-ref{{ end }}">
     {{- if not ($page.Param "disableAnchoredHeadings") -}}
     {{- partial "anchored_headings.html" $page.Content -}}
     {{- else -}}{{- $page.Content -}}{{- end -}}
