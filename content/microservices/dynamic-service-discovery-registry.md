@@ -45,7 +45,7 @@ sequenceDiagram
 
 **State Management:** Registry engines utilize consensus algorithms (Raft or Paxos) to guarantee data replication and strong consistency across registry nodes, ensuring a uniform view of the service cluster state.
 
-See also: [API Gateway & BFF Pattern](/microservices/api-gateway-bff-pattern/), [Load Balancers & Routing Algorithms](/system-fundamentals/load-balancers-and-routing-algorithms/), and [Service Mesh Architecture](/microservices/service-mesh-architecture/).
+See also: [API Gateway & BFF Pattern](/microservices/api-gateway-bff-pattern/), [Load Balancers & Routing Algorithms](/system-design/load-balancers-and-routing-algorithms/), and [Service Mesh Architecture](/microservices/service-mesh-architecture/).
 
 ---
 

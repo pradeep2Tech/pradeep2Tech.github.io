@@ -1,0 +1,5 @@
+modules:
+  - id: 1
+    focus: "Spring Boot & Batch"
+    topics:
+      - spring-batch

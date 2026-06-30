@@ -383,11 +383,24 @@ flowchart TD
 
 ### Interface Design
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public interface IDeliveryMatcher {
     Optional<String> matchDriver(String orderId, GeoPoint restaurantLocation);
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 Implementations: `RedisGeoMatcher` (production — Redis Cluster geospatial index) and `QuadTreeMatcher` (in-memory alternative for isolated regions).
 

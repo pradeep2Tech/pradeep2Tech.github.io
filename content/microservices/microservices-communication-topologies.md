@@ -44,7 +44,7 @@ graph TD
 
 * **Context Propagation:** Synchronous calls pass telemetry context via standard HTTP/gRPC metadata headers. Asynchronous boundaries preserve this context by embedding W3C trace contexts inside message envelopes, ensuring unbroken distributed tracing across thread hops.
 
-See also: [Event-Driven Architecture & Log Streaming](/microservices/event-driven-architecture-log-streaming/), [API Gateway & BFF Pattern](/microservices/api-gateway-bff-pattern/), and [Transactional Outbox Pattern](/database-internals/transactional-outbox-pattern/).
+See also: [Event-Driven Architecture & Log Streaming](/microservices/event-driven-architecture-log-streaming/), [API Gateway & BFF Pattern](/microservices/api-gateway-bff-pattern/), and [Transactional Outbox Pattern](/database-handbook/transactional-outbox-pattern/).
 
 ---
 

@@ -1,0 +1,8 @@
+<div class="tp-technology-fit">
+  {{- range $key, $val := .Params -}}
+  <div class="tp-technology-fit-row">
+    <div class="tp-technology-fit-label">{{ $key | humanize | title }}</div>
+    <div class="tp-technology-fit-value">{{ $val | markdownify }}</div>
+  </div>
+  {{- end -}}
+</div>

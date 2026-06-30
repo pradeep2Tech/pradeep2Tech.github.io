@@ -1,13 +1,66 @@
-# Canonical registry of top-level curriculum sections.
-# Home page grid and header nav read this list — register new sections here.
+# Enterprise Knowledge Hub — canonical top-level sections (order = home grid + header nav).
+groups:
+  - id: design
+    label: "Design & Architecture"
+    accent: "#4f46e5"
+    accentSoft: "rgba(79, 70, 229, 0.12)"
+  - id: handbooks
+    label: "Engineering Handbooks"
+    accent: "#0d9488"
+    accentSoft: "rgba(13, 148, 136, 0.12)"
+  - id: practice
+    label: "Patterns & Practice"
+    accent: "#7c3aed"
+    accentSoft: "rgba(124, 58, 237, 0.12)"
+  - id: career
+    label: "Career & Emerging"
+    accent: "#d97706"
+    accentSoft: "rgba(217, 119, 6, 0.12)"
+  - id: security
+    label: "Security"
+    accent: "#e11d48"
+    accentSoft: "rgba(225, 29, 72, 0.12)"
+
 sections:
-  - slug: system-fundamentals
-    menuLabel: System Fundamentals
   - slug: system-design
     menuLabel: System Design
-  - slug: database-internals
-    menuLabel: Database Internals
+    group: design
+  - slug: microservices
+    menuLabel: Microservices
+    group: design
+  - slug: technology-playbook
+    menuLabel: Technology Decisions
+    group: design
+  - slug: java-engineering
+    menuLabel: Java Engineering
+    group: handbooks
+  - slug: spring-boot
+    menuLabel: Spring Boot
+    group: handbooks
+  - slug: kafka-handbook
+    menuLabel: Kafka Handbook
+    group: handbooks
+  - slug: kubernetes-handbook
+    menuLabel: Kubernetes Handbook
+    group: handbooks
+  - slug: database-handbook
+    menuLabel: Database Handbook
+    group: handbooks
+  - slug: cloud-handbook
+    menuLabel: Cloud Handbook
+    group: handbooks
+  - slug: design-patterns
+    menuLabel: Design Patterns
+    group: practice
+  - slug: dsa-coding
+    menuLabel: DSA & Coding
+    group: practice
+  - slug: interview-prep
+    menuLabel: Interview Preparation
+    group: career
+  - slug: ai-for-engineers
+    menuLabel: AI for Engineers
+    group: career
   - slug: security-architecture
     menuLabel: Security Architecture
-  - slug: microservices
-    menuLabel: Distributed Microservices
+    group: security

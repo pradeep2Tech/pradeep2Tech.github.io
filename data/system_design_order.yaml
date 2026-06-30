@@ -1,6 +1,24 @@
-# System Design index order (simple → advanced).
-# Edit this list to reorder the Table of Contents; chapter numbers follow this sequence.
+# System Design index order — fundamentals first, then case studies.
 topics:
+  - proxy-servers-forward-vs-reverse
+  - layer4-layer7-multi-tier-ingress-routing
+  - load-balancers-and-routing-algorithms
+  - hands-on-load-balancing-setup
+  - application-layer-protocols-rest-grpc
+  - transport-layer-mechanics-tcp-vs-udp
+  - http3-quic-and-websocket-transports
+  - networking-essentials-ip-dns-firewalls
+  - caching-and-cdns-hierarchical-arrays
+  - cache-eviction-and-mutation-policies
+  - cdc-based-cache-invalidation
+  - cache-stampede-and-penetration-mitigation
+  - relational-database-fundamentals-and-b-trees
+  - database-transactions-and-acid-isolation
+  - replication-lag-read-replica-topology
+  - database-sharding-provisioning-and-chunk-routing
+  - single-point-of-failure-elimination-redundancy
+  - multi-region-topologies-and-availability-zones
+  - crdts-and-multi-master-conflict-resolution
   - urlshortner
   - distributed-rate-limiter
   - leaderboard

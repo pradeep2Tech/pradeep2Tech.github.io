@@ -1,0 +1,25 @@
+topics:
+  - docker
+  - podman
+  - kubernetes
+  - openshift
+  - kubernetes-cronjobs
+  - kong
+  - nginx-api-gateway
+  - traefik
+  - ambassador
+  - aws-api-gateway
+  - nginx-ingress
+  - haproxy
+  - traefik-ingress
+  - istio
+  - linkerd
+  - consul
+  - prometheus
+  - grafana
+  - elk-stack
+  - opensearch-logging
+  - loki
+  - jaeger
+  - zipkin
+  - opentelemetry

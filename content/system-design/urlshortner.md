@@ -236,25 +236,66 @@ flowchart LR
 
 ### Write Path — Shorten Service
 
-1. Client sends `POST /v1/shorten` through DNS → load balancer.
-2. **Shorten Service** requests a unique short code from the **Key Generation Service (KGS)** backed by **ZooKeeper** for distributed ID range allocation.
-3. For custom aliases, the service checks uniqueness before insert.
-4. Mapping is persisted to the **PostgreSQL primary**.
-5. Mapping is **written to Redis** (write-through) so the first redirect avoids a cache miss.
+```mermaid
+sequenceDiagram
+    participant Client
+    participant LB as Load Balancer
+    participant Shorten as Shorten Service
+    participant KGS as Key Gen Service
+    participant ZK as ZooKeeper
+    participant PG as PostgreSQL Primary
+    participant Redis as Redis
+
+    Client->>LB: POST /v1/shorten
+    LB->>Shorten: forward
+    Shorten->>KGS: request short code
+    KGS->>ZK: allocate ID range
+    ZK-->>KGS: range ack
+    KGS-->>Shorten: unique code
+    opt custom alias
+        Shorten->>PG: uniqueness check
+    end
+    Shorten->>PG: INSERT mapping
+    Shorten->>Redis: write-through SET
+    Shorten-->>Client: 201 Created + short URL
+```
 
 ### Read Path — Redirect Service
 
-1. Client sends `GET /v1/{short_code}`.
-2. **Redirect Service** checks **Redis** first (cache-aside pattern).
-3. On cache miss, reads from a **PostgreSQL read replica**, then populates Redis with a TTL aligned to link expiration.
-4. Returns `302` redirect to the client.
-5. Publishes a click event to **Kafka** asynchronously (non-blocking).
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Redirect as Redirect Service
+    participant Redis as Redis
+    participant Replica as PG Read Replica
+    participant Kafka as Kafka
+
+    Client->>Redirect: GET /v1/{short_code}
+    Redirect->>Redis: GET short_code
+    alt cache hit
+        Redis-->>Redirect: long_url
+    else cache miss
+        Redirect->>Replica: SELECT by short_code
+        Replica-->>Redirect: long_url
+        Redirect->>Redis: SET with TTL
+    end
+    Redirect-->>Client: 302 redirect
+    Redirect--)Kafka: click event (async)
+```
 
 ### Analytics Path
 
-1. **Kafka** buffers click events at redirect throughput.
-2. **Analytics Service** consumes events and writes aggregates to **ClickHouse** (columnar OLAP store suited for time-series click data).
-3. Decoupling analytics from the redirect hot path keeps redirect latency stable.
+```mermaid
+sequenceDiagram
+    participant Kafka as Kafka
+    participant Analytics as Analytics Service
+    participant CH as ClickHouse
+
+    Kafka->>Analytics: consume click events
+    Analytics->>CH: write aggregates
+```
+
+Decoupling analytics from the redirect hot path keeps redirect latency stable.
 
 ---
 

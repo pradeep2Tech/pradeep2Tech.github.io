@@ -413,27 +413,81 @@ flowchart LR
 
 ### Read Path — Search & Seat Maps
 
-1. Client queries `/catalog/search` with keyword, location, and date window.
-2. **Catalog Discovery Service** runs full-text + geo query against **Elasticsearch**.
-3. Client fetches `/shows/{show_id}/seats` from **Event State Engine**.
-4. Engine reads compressed layout JSON from **Redis** (`show:layout:{show_id}`); on miss, hydrates from read replica and populates cache.
-5. Availability display is eventually consistent — acceptable for browsing; checkout re-validates under lock.
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Catalog as Catalog Discovery Service
+    participant ES as Elasticsearch
+    participant Engine as Event State Engine
+    participant Redis as Redis
+    participant Replica as PG Read Replica
+
+    Client->>Catalog: GET /catalog/search
+    Catalog->>ES: full-text + geo query
+    ES-->>Catalog: show results
+    Catalog-->>Client: search results
+    Client->>Engine: GET /shows/{show_id}/seats
+    Engine->>Redis: GET show:layout:{show_id}
+    alt cache hit
+        Redis-->>Engine: layout JSON
+    else cache miss
+        Engine->>Replica: hydrate layout
+        Replica-->>Engine: layout JSON
+        Engine->>Redis: populate cache
+    end
+    Engine-->>Client: seat map (eventually consistent)
+```
+
+Checkout re-validates availability under lock — browsing tolerates eventual consistency.
 
 ### Write Path — Reservation
 
-1. Gateway validates JWT, rate limits, and idempotency key.
-2. **Booking Orchestration Engine** executes atomic **Redis Lua script** across all target seat keys (`lock:show:{id}:seat:{seat_id}`, **600 s TTL**).
-3. On lock success, opens DB transaction with `SELECT ... FOR UPDATE` on `show_seats` rows.
-4. Transitions seats to `RESERVED`, inserts `bookings` + `booking_items`, commits.
-5. On any failure, releases Redis leases in `catch` block.
-6. Returns `201` with `expires_at`.
+```mermaid
+sequenceDiagram
+    participant Client
+    participant GW as API Gateway
+    participant Booking as Booking Orchestration Engine
+    participant Redis as Redis
+    participant PG as PostgreSQL Primary
+
+    Client->>GW: POST /bookings (idempotency key)
+    GW->>GW: JWT + rate limit
+    GW->>Booking: reserve seats
+    Booking->>Redis: Lua multi-seat lock (600s TTL)
+    alt lock failed
+        Redis-->>Booking: 0
+        Booking-->>Client: 409 conflict
+    else lock acquired
+        Redis-->>Booking: 1
+        Booking->>PG: BEGIN + SELECT FOR UPDATE
+        Booking->>PG: RESERVED + insert bookings
+        Booking->>PG: COMMIT
+        Booking-->>Client: 201 + expires_at
+    end
+    Note over Booking,Redis: On DB failure — release Redis leases in catch
+```
 
 ### Payment Confirmation
 
-1. External gateway calls webhook → **Payment Reconciliation Service**.
-2. Service publishes confirmation event to **Kafka**; consumer invokes confirm on Booking Engine.
-3. Seats transition to `OCCUPIED`; booking → `CONFIRMED`; cache key invalidated via CDC pipeline.
-4. On expired hold, **Eviction CronJob** bulk-releases seats and marks booking `EXPIRED`.
+```mermaid
+sequenceDiagram
+    participant PayGW as Payment Gateway
+    participant Recon as Payment Reconciliation Service
+    participant Kafka as Kafka
+    participant Booking as Booking Engine
+    participant PG as PostgreSQL
+    participant Cron as Eviction CronJob
+
+    PayGW->>Recon: webhook callback
+    Recon->>Kafka: payment confirmed event
+    Kafka->>Booking: consume confirm
+    Booking->>PG: seats OCCUPIED, booking CONFIRMED
+    Note over PG: CDC invalidates cache keys
+    opt hold expired
+        Cron->>PG: bulk release seats
+        Cron->>PG: booking EXPIRED
+    end
+```
 
 ---
 
@@ -442,6 +496,9 @@ flowchart LR
 ### Redis Lua Multi-Seat Lock
 
 All seats in a request must lock atomically — partial locks would leave orphaned holds.
+
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
 
 ```java
 // Atomic multi-resource isolation — all-or-nothing
@@ -454,6 +511,16 @@ private static final String LUA_RESERVE_SCRIPT =
     "end " +
     "return 1;";
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 | Step | Layer | Action |
 | :--- | :--- | :--- |

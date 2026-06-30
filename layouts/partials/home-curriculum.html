@@ -1,20 +1,46 @@
 {{- $sections := site.Data.curriculum_sections.sections | default slice -}}
+{{- $groups := site.Data.curriculum_sections.groups | default slice -}}
 {{- if gt (len $sections) 0 -}}
-<nav class="curriculum-grid" aria-label="Curriculum sections">
-  {{- range $sections -}}
-    {{- $slug := .slug -}}
-    {{- $menuLabel := .menuLabel -}}
-    {{- $page := or (site.GetPage (printf "/%s/" $slug)) (site.GetPage (printf "/%s" $slug)) (site.GetPage $slug) -}}
-    {{- with $page -}}
-      {{- $topicCount := len .RegularPages -}}
+<div class="ekh-hub" aria-label="Curriculum">
+  {{- range $groups -}}
+    {{- $groupId := .id -}}
+    {{- $groupLabel := .label -}}
+    {{- $groupAccent := .accent | default "#4f46e5" -}}
+    {{- $groupSections := slice -}}
+    {{- range $sections -}}
+      {{- if eq .group $groupId -}}
+        {{- $groupSections = $groupSections | append . -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if gt (len $groupSections) 0 -}}
+  <section class="ekh-group ekh-group--{{ $groupId }}" aria-labelledby="ekh-group-{{ $groupId }}" style="--ekh-accent: {{ $groupAccent }};">
+    <div class="ekh-group-head">
+      <span class="ekh-group-dot" aria-hidden="true"></span>
+      <h2 class="ekh-group-title" id="ekh-group-{{ $groupId }}">{{ $groupLabel }}</h2>
+    </div>
+    <nav class="curriculum-grid" aria-label="{{ $groupLabel }}">
+      {{- range $groupSections -}}
+        {{- $slug := .slug -}}
+        {{- $menuLabel := .menuLabel -}}
+        {{- $page := or (site.GetPage (printf "/%s/" $slug)) (site.GetPage (printf "/%s" $slug)) (site.GetPage $slug) -}}
+        {{- with $page -}}
+          {{- $topicCount := len .RegularPages -}}
       <a class="curriculum-card" href="{{ .RelPermalink }}">
-        <h2 class="curriculum-card-title">{{ $menuLabel | default .Title }}</h2>
-        {{- if .Description -}}
-        <p class="curriculum-card-desc">{{ .Description }}</p>
-        {{- end -}}
-        <p class="curriculum-card-meta">{{ $topicCount }} {{ cond (eq $topicCount 1) "topic" "topics" }}</p>
+        <span class="curriculum-card-accent" aria-hidden="true"></span>
+        <div class="curriculum-card-body">
+          <h3 class="curriculum-card-title">{{ $menuLabel | default .Title }}</h3>
+          <p class="curriculum-card-meta">
+            <span class="curriculum-card-badge">{{ $topicCount }}</span>
+            {{ cond (eq $topicCount 1) "topic" "topics" }}
+          </p>
+        </div>
+        <span class="curriculum-card-arrow" aria-hidden="true">→</span>
       </a>
+        {{- end -}}
+      {{- end -}}
+    </nav>
+  </section>
     {{- end -}}
   {{- end -}}
-</nav>
+</div>
 {{- end -}}

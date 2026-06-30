@@ -45,7 +45,7 @@ $$\text{Shard ID} = \text{Hash}(\text{Shard Key}) \pmod{\text{Total Shards}}$$
 
 The proxy then routes the raw query directly to the connection pool of the target database node containing that specific data partition.
 
-See also: [Config Server Assemblies & Shard Key Cardinality](/system-fundamentals/database-sharding-provisioning-and-chunk-routing/), [Consistent Hashing Rings with Virtual Nodes](/microservices/consistent-hashing-rings-virtual-nodes/), and [Database Replication & Scaling](/microservices/database-replication-scaling/).
+See also: [Config Server Assemblies & Shard Key Cardinality](/system-design/database-sharding-provisioning-and-chunk-routing/), [Consistent Hashing Rings with Virtual Nodes](/microservices/consistent-hashing-rings-virtual-nodes/), and [Database Replication & Scaling](/microservices/database-replication-scaling/).
 
 ---
 

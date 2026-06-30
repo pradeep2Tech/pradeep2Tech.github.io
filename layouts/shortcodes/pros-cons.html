@@ -1,0 +1,10 @@
+<div class="tp-pros-cons">
+  <div class="tp-pros-cons-col tp-pros-cons-col--pros">
+    <h4>Pros</h4>
+    {{ .Get "pros" | markdownify }}
+  </div>
+  <div class="tp-pros-cons-col tp-pros-cons-col--cons">
+    <h4>Cons</h4>
+    {{ .Get "cons" | markdownify }}
+  </div>
+</div>

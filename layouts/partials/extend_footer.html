@@ -16,6 +16,11 @@
 
 {{- partial "section-collapsible.html" . -}}
 
+{{- with resources.Get "js/code-tabs.js" -}}
+  {{- $js := . | minify | fingerprint -}}
+  <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" defer></script>
+{{- end -}}
+
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
@@ -274,6 +279,15 @@
       console.error("Section collapsibles failed:", err);
     }
     try {
+      if (typeof window.initCodeTabs === "function") {
+        window.initCodeTabs();
+      } else if (typeof window.initImplTabs === "function") {
+        window.initImplTabs();
+      }
+    } catch (err) {
+      console.error("Code tabs failed:", err);
+    }
+    try {
       await renderMermaidBlocks();
     } catch (err) {
       console.error("Mermaid rendering failed:", err);
@@ -283,8 +297,88 @@
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       renderPageEnhancements().catch(console.error);
+      initCurriculumSidebar();
+      initCurriculumMegaNav();
     });
   } else {
     renderPageEnhancements().catch(console.error);
+    initCurriculumSidebar();
+    initCurriculumMegaNav();
+  }
+
+  function initCurriculumMegaNav() {
+    const trigger = document.getElementById("ekh-nav-mega-trigger");
+    const panel = document.getElementById("ekh-nav-mega-panel");
+    const backdrop = document.getElementById("ekh-nav-mega-backdrop");
+    if (!trigger || !panel) return;
+
+    const open = () => {
+      panel.removeAttribute("hidden");
+      trigger.setAttribute("aria-expanded", "true");
+      backdrop?.removeAttribute("hidden");
+      backdrop?.classList.add("is-visible");
+    };
+
+    const shut = () => {
+      panel.setAttribute("hidden", "");
+      trigger.setAttribute("aria-expanded", "false");
+      backdrop?.classList.remove("is-visible");
+      backdrop?.setAttribute("hidden", "");
+    };
+
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (panel.hasAttribute("hidden")) open();
+      else shut();
+    });
+
+    backdrop?.addEventListener("click", shut);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") shut();
+    });
+    document.addEventListener("click", (e) => {
+      if (!panel.hasAttribute("hidden") && !panel.contains(e.target) && !trigger.contains(e.target)) {
+        shut();
+      }
+    });
+    panel.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", shut);
+    });
+  }
+
+  function initCurriculumSidebar() {
+    const sidebar = document.getElementById("ekh-sidebar");
+    const toggle = document.getElementById("ekh-sidebar-toggle");
+    const closeBtn = document.getElementById("ekh-sidebar-close");
+    const backdrop = document.getElementById("ekh-sidebar-backdrop");
+    if (!sidebar || !toggle) return;
+
+    const open = () => {
+      sidebar.classList.add("is-open");
+      backdrop?.removeAttribute("hidden");
+      backdrop?.classList.add("is-visible");
+      toggle.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    };
+
+    const shut = () => {
+      sidebar.classList.remove("is-open");
+      backdrop?.classList.remove("is-visible");
+      backdrop?.setAttribute("hidden", "");
+      toggle.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    };
+
+    toggle.addEventListener("click", () => {
+      if (sidebar.classList.contains("is-open")) shut();
+      else open();
+    });
+    closeBtn?.addEventListener("click", shut);
+    backdrop?.addEventListener("click", shut);
+    sidebar.querySelectorAll(".ekh-sidebar-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.matchMedia("(max-width: 960px)").matches) shut();
+      });
+    });
   }
 </script>

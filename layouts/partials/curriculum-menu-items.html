@@ -1,18 +1,99 @@
-{{- $sections := site.Data.curriculum_sections.sections | default slice -}}
 {{- $currentPage := . -}}
-{{- range $sections -}}
-  {{- $slug := .slug -}}
-  {{- $label := .menuLabel -}}
-  {{- $page := or (site.GetPage (printf "/%s/" $slug)) (site.GetPage (printf "/%s" $slug)) (site.GetPage $slug) -}}
-  {{- with $page -}}
-  {{- $section_url := .Permalink | absURL -}}
-  {{- $page_url := $currentPage.Permalink | absURL -}}
-  <li>
-    <a href="{{ .RelPermalink }}" title="{{ $label | default .Title }}">
-      <span {{- if eq $section_url $page_url }} class="active" {{- end }}>
-        {{- $label | default .Title -}}
-      </span>
-    </a>
-  </li>
+{{- $sections := site.Data.curriculum_sections.sections | default slice -}}
+{{- $groups := site.Data.curriculum_sections.groups | default slice -}}
+
+{{- $currentSection := "" -}}
+{{- $currentLabel := "" -}}
+{{- if not .IsHome -}}
+  {{- $currentSection = .Section -}}
+  {{- range $sections -}}
+    {{- if eq .slug $currentSection -}}
+      {{- $currentLabel = .menuLabel -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $homeURL := "" | absLangURL -}}
+{{- $homeActive := .IsHome -}}
+
+<li class="ekh-nav-item">
+  <a href="{{ $homeURL }}" class="ekh-nav-link{{ if $homeActive }} is-active{{ end }}">
+    <span class="ekh-nav-link-icon" aria-hidden="true">⌂</span>
+    <span>Home</span>
+  </a>
+</li>
+
+<li class="ekh-nav-item ekh-nav-mega">
+  <button
+    type="button"
+    class="ekh-nav-mega-trigger{{ if $currentLabel }} is-active{{ end }}"
+    id="ekh-nav-mega-trigger"
+    aria-expanded="false"
+    aria-controls="ekh-nav-mega-panel"
+    aria-haspopup="true">
+    <span>Curriculum</span>
+    <svg class="ekh-nav-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+      <path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <div class="ekh-nav-mega-panel" id="ekh-nav-mega-panel" hidden>
+    <div class="ekh-nav-mega-inner">
+      {{- range $groups -}}
+        {{- $groupId := .id -}}
+        {{- $groupLabel := .label -}}
+        {{- $accent := .accent | default "#4f46e5" -}}
+        {{- $groupSections := slice -}}
+        {{- range $sections -}}
+          {{- if eq .group $groupId -}}
+            {{- $groupSections = $groupSections | append . -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if gt (len $groupSections) 0 -}}
+      <section class="ekh-nav-mega-group" style="--ekh-nav-accent: {{ $accent }};">
+        <h3 class="ekh-nav-mega-group-title">{{ $groupLabel }}</h3>
+        <ul class="ekh-nav-mega-links">
+          {{- range $groupSections -}}
+            {{- $slug := .slug -}}
+            {{- $label := .menuLabel -}}
+            {{- $page := or (site.GetPage (printf "/%s/" $slug)) (site.GetPage (printf "/%s" $slug)) (site.GetPage $slug) -}}
+            {{- with $page -}}
+          <li>
+            <a href="{{ .RelPermalink }}"
+               class="ekh-nav-mega-link{{ if eq $slug $currentSection }} is-active{{ end }}">
+              {{ $label | default .Title }}
+            </a>
+          </li>
+            {{- end -}}
+          {{- end -}}
+        </ul>
+      </section>
+        {{- end -}}
+      {{- end -}}
+    </div>
+    <a class="ekh-nav-mega-all" href="{{ $homeURL }}">View all on home page →</a>
+  </div>
+</li>
+
+{{- if $currentLabel -}}
+  {{- $currentAccent := "#4f46e5" -}}
+  {{- $currentGroup := "" -}}
+  {{- range $sections -}}
+    {{- if eq .slug $currentSection -}}
+      {{- $currentGroup = .group -}}
+    {{- end -}}
+  {{- end -}}
+  {{- range $groups -}}
+    {{- if eq .id $currentGroup -}}
+      {{- $currentAccent = .accent | default $currentAccent -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with site.GetPage (printf "/%s/" $currentSection) -}}
+<li class="ekh-nav-item ekh-nav-current" aria-current="page" style="--ekh-nav-accent: {{ $currentAccent }};">
+  <a href="{{ .RelPermalink }}" class="ekh-nav-link ekh-nav-link--current is-active">
+    <span class="ekh-nav-current-dot" aria-hidden="true"></span>
+    <span>{{ $currentLabel }}</span>
+  </a>
+</li>
   {{- end -}}
 {{- end -}}

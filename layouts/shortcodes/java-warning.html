@@ -1,0 +1,6 @@
+{{- with .Inner -}}
+<div class="java-callout java-callout--warning">
+  <span class="java-callout-label">Warning</span>
+  {{ $.Page.RenderString . }}
+</div>
+{{- end -}}

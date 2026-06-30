@@ -46,7 +46,7 @@ graph TD
 
 All running application versions must interface with the same live database layer simultaneously during the rollout phase.
 
-See also: [Declarative Container Orchestration (Kubernetes)](/microservices/declarative-container-orchestration-kubernetes/), [Zero-Downtime Migration Frameworks](/database-internals/zero-downtime-migration-frameworks/), and [Service Mesh Architecture](/microservices/service-mesh-architecture/).
+See also: [Declarative Container Orchestration (Kubernetes)](/microservices/declarative-container-orchestration-kubernetes/), [Zero-Downtime Migration Frameworks](/database-handbook/zero-downtime-migration-frameworks/), and [Service Mesh Architecture](/microservices/service-mesh-architecture/).
 
 ---
 

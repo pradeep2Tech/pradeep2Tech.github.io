@@ -367,19 +367,52 @@ flowchart LR
 
 ### Real-Time Message Path
 
-1. Client opens **WebSocket** to the nearest edge node via dedicated TCP/WS load balancer.
-2. **Chat Stream Pod** registers the session in **Redis Connection Registry** (`user:session:{userId}` → server IP, 60s TTL heartbeat).
-3. Inbound `SEND_MESSAGE` frame is deduplicated by `traceId`, published to **Redis Streams**, and routed to the recipient's pod via registry lookup.
-4. **Message Consumer** drains the stream asynchronously and persists to **Cassandra**.
-5. If recipient is offline, **Notification Engine** dispatches push via FCM/APNS using `device_token`.
+```mermaid
+sequenceDiagram
+    participant Client as Sender Client
+    participant WS as Chat Stream Pod
+    participant Registry as Redis Connection Registry
+    participant Streams as Redis Streams
+    participant Consumer as Message Consumer
+    participant Cassandra as Cassandra
+    participant Push as Notification Engine
+    participant FCM as FCM / APNS
+
+    Client->>WS: WebSocket SEND_MESSAGE
+    WS->>Registry: register / lookup session
+    WS->>WS: dedupe by traceId
+    WS->>Streams: publish frame
+    Streams->>Consumer: drain async
+    Consumer->>Cassandra: persist message
+    alt recipient online
+        WS-->>Client: deliver to recipient pod
+    else recipient offline
+        Consumer->>Push: dispatch push
+        Push->>FCM: device_token
+    end
+```
 
 ### Media Path (Decoupled)
 
-1. Client uploads media via **`POST`** to Media Upload Service.
-2. Service stores raw object in **S3**, generates quality variants, returns CDN URL.
-3. Client sends the URL in the WebSocket `mediaUrl` field — keeping the duplex channel lightweight.
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Media as Media Upload Service
+    participant S3 as S3
+    participant CDN as CDN
+    participant WS as Chat Stream Pod
+
+    Client->>Media: POST upload
+    Media->>S3: store raw object
+    Media->>Media: generate quality variants
+    Media-->>Client: CDN URL
+    Client->>WS: SEND_MESSAGE (mediaUrl only)
+```
 
 ### Connection Registry (Low-Level)
+
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
 
 ```java
 public class ConnectionRegistryRepository implements ChatConnectionManager {
@@ -399,6 +432,16 @@ public class ConnectionRegistryRepository implements ChatConnectionManager {
     }
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 - **Local `ConcurrentHashMap`** — lock-free reads for sessions on this pod.
 - **Netty EventLoop** — non-blocking I/O prevents head-of-line blocking across thousands of sockets.

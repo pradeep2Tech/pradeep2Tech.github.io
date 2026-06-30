@@ -1,0 +1,12 @@
+topics:
+  - kafka
+  - redpanda
+  - rabbitmq
+  - activemq
+  - ibm-mq
+  - nats
+  - pulsar
+  - sqs
+  - sns
+  - google-pubsub
+  - azure-service-bus

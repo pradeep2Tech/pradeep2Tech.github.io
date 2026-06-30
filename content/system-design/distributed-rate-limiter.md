@@ -265,18 +265,51 @@ flowchart LR
 
 ### Request Evaluation Path
 
-1. Client request hits **Anycast Load Balancer** → **Envoy API Gateway**.
-2. **Auth Filter** decodes JWT claims (user ID, tier) without a database round-trip.
-3. **Rate Limiter Middleware** resolves applicable rules from local cache, executes atomic Lua script against **Redis Cluster**.
-4. Allowed requests forward to downstream microservices; denied requests return `429` with standard headers.
-5. Metrics ship asynchronously to **Kafka** → **ClickHouse** — never blocking the hot path.
+```mermaid
+sequenceDiagram
+    participant Client
+    participant LB as Anycast LB
+    participant Envoy as API Gateway
+    participant Auth as Auth Filter
+    participant RL as Rate Limiter Middleware
+    participant Redis as Redis Cluster
+    participant App as Downstream Services
+    participant Kafka as Kafka
+
+    Client->>LB: HTTPS request
+    LB->>Envoy: forward
+    Envoy->>Auth: decode JWT claims
+    Auth-->>Envoy: user id, tier
+    Envoy->>RL: evaluate rules (local cache)
+    RL->>Redis: Lua EVAL (atomic)
+    Redis-->>RL: allowed / denied
+    alt allowed
+        RL->>App: forward request
+        App-->>Client: 200 OK
+        RL--)Kafka: async metrics
+    else denied
+        RL-->>Client: 429 + Retry-After
+    end
+```
+
+Metrics ship asynchronously to **Kafka** → **ClickHouse** — never blocking the hot path.
 
 ### Admin Configuration Path
 
-1. Admin creates or updates rules via **Policy Service**.
-2. Rule persisted to **PostgreSQL** (source of truth).
-3. Policy Service writes through to Redis and issues cache invalidation for affected rule keys.
-4. Propagation completes across all gateway nodes within 60 seconds.
+```mermaid
+sequenceDiagram
+    participant Admin
+    participant Policy as Policy Service
+    participant PG as PostgreSQL
+    participant Redis as Redis Cluster
+    participant Gateway as Gateway Nodes
+
+    Admin->>Policy: create / update rule
+    Policy->>PG: persist (source of truth)
+    Policy->>Redis: write-through + invalidate keys
+    Policy-->>Admin: 200 OK
+    Note over Gateway,Redis: Propagation across gateway nodes within 60 s
+```
 
 ---
 

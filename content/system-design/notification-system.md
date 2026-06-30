@@ -396,22 +396,62 @@ flowchart LR
 
 ### Ingestion Path
 
-1. Client sends `POST /v1/notifications` through the API gateway (TLS 1.3, HMAC-SHA256 signature validation, rate limiting).
-2. **Notification Ingest Service** validates the idempotency key, resolves the template, and performs a **single ACID write** to the outbox table.
-3. **Debezium CDC** tails the PostgreSQL WAL and emits events to Kafka — no dual-write risk.
-4. Events route to priority-specific topics based on `priority` and `type` headers.
+```mermaid
+sequenceDiagram
+    participant Client
+    participant GW as API Gateway
+    participant Ingest as Notification Ingest Service
+    participant PG as PostgreSQL
+    participant CDC as Debezium CDC
+    participant Kafka as Kafka
+
+    Client->>GW: POST /v1/notifications
+    GW->>GW: TLS + HMAC + rate limit
+    GW->>Ingest: forward
+    Ingest->>Ingest: validate idempotency key + template
+    Ingest->>PG: ACID outbox write
+    PG-->>Ingest: committed
+    Ingest-->>Client: 202 Accepted
+    CDC->>PG: tail WAL
+    CDC->>Kafka: emit by priority + type headers
+```
 
 ### Delivery Path
 
-1. Worker pods consume from their dedicated topic (critical OTP workers never share resources with bulk promotional workers).
-2. Workers check **Redis** for user preferences (cache-aside) before rendering and dispatching.
-3. **Strategy pattern** selects the concrete engine (`EmailEngine`, `SMSEngine`, `PushEngine`) behind a shared `NotificationEngine` interface.
-4. Provider webhooks return delivery status to the **Callback Receiver**, which publishes to the telemetry Kafka topic.
+```mermaid
+sequenceDiagram
+    participant Kafka as Kafka
+    participant Worker as Delivery Worker
+    participant Redis as Redis
+    participant Engine as NotificationEngine
+    participant Provider as SMS / Email / Push
+    participant Callback as Callback Receiver
+    participant Telemetry as Telemetry Kafka
+
+    Kafka->>Worker: consume priority topic
+    Worker->>Redis: preferences (cache-aside)
+    Redis-->>Worker: channel prefs
+    Worker->>Engine: dispatch (strategy pattern)
+    Engine->>Provider: send notification
+    Provider-->>Callback: delivery webhook
+    Callback->>Telemetry: publish status
+```
 
 ### Analytics Path
 
-1. **Telemetry Consumer** updates base notification state in the OLTP store and appends denormalized rows to **BigQuery**.
-2. **Reporting Dashboard API** serves audit queries from BigQuery — keeping analytical load off the transactional primary.
+```mermaid
+sequenceDiagram
+    participant Telemetry as Telemetry Kafka
+    participant Consumer as Telemetry Consumer
+    participant PG as PostgreSQL OLTP
+    participant BQ as BigQuery
+    participant API as Reporting Dashboard API
+
+    Telemetry->>Consumer: delivery events
+    Consumer->>PG: update notification state
+    Consumer->>BQ: append denormalized rows
+    API->>BQ: audit queries
+```
 
 ---
 

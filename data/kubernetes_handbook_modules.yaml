@@ -1,0 +1,34 @@
+modules:
+  - id: 1
+    focus: "Containers & Orchestration"
+    topics:
+      - docker
+      - podman
+      - kubernetes
+      - openshift
+      - kubernetes-cronjobs
+  - id: 2
+    focus: "Ingress, Gateway & Service Mesh"
+    topics:
+      - kong
+      - nginx-api-gateway
+      - traefik
+      - ambassador
+      - aws-api-gateway
+      - nginx-ingress
+      - haproxy
+      - traefik-ingress
+      - istio
+      - linkerd
+      - consul
+  - id: 3
+    focus: "Observability"
+    topics:
+      - prometheus
+      - grafana
+      - elk-stack
+      - opensearch-logging
+      - loki
+      - jaeger
+      - zipkin
+      - opentelemetry

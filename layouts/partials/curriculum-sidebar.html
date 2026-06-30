@@ -1,0 +1,167 @@
+{{- $page := . -}}
+{{- $section := $page.Section -}}
+{{- $currentURL := $page.RelPermalink -}}
+{{- $isSectionIndex := $page.IsSection -}}
+
+{{- $menuLabel := $section | humanize -}}
+{{- $groupId := "design" -}}
+{{- $accent := "#4f46e5" -}}
+{{- range site.Data.curriculum_sections.sections -}}
+  {{- if eq .slug $section -}}
+    {{- $menuLabel = .menuLabel | default $menuLabel -}}
+    {{- $groupId = .group | default $groupId -}}
+  {{- end -}}
+{{- end -}}
+{{- range site.Data.curriculum_sections.groups -}}
+  {{- if eq .id $groupId -}}
+    {{- $accent = .accent | default $accent -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $sidebarCfg := index site.Data.curriculum_sidebar.sections $section -}}
+{{- $subSuffixes := slice "-interview-questions" "-debate-questions" -}}
+{{- $sectionIndexURL := (site.GetPage (printf "/%s/" $section)).RelPermalink -}}
+
+<aside class="ekh-sidebar" id="ekh-sidebar" aria-label="{{ $menuLabel }} navigation" style="--ekh-accent: {{ $accent }};">
+  <div class="ekh-sidebar-head">
+    <a class="ekh-sidebar-home" href="{{ "" | relLangURL }}" title="Home">← Home</a>
+    <a class="ekh-sidebar-title" href="{{ $sectionIndexURL }}">{{ $menuLabel }}</a>
+    <button type="button" class="ekh-sidebar-close" id="ekh-sidebar-close" aria-label="Close navigation">✕</button>
+  </div>
+
+  <nav class="ekh-sidebar-nav">
+    <a class="ekh-sidebar-link ekh-sidebar-link--overview{{ if $page.IsSection }} is-active{{ end }}"
+       href="{{ $sectionIndexURL }}">
+      <span class="ekh-sidebar-link-num">◎</span>
+      <span class="ekh-sidebar-link-text">Overview</span>
+    </a>
+
+    {{- if $sidebarCfg.modules -}}
+      {{- $modules := index site.Data $sidebarCfg.modules "modules" | default slice -}}
+      {{- range $modules -}}
+        {{- $modId := .id -}}
+        {{- $modOpen := false -}}
+        {{- range .topics -}}
+          {{- with site.GetPage (printf "%s/%s" $section .) -}}
+            {{- if eq $currentURL .RelPermalink -}}{{- $modOpen = true -}}{{- end -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if $page.Params.module -}}
+          {{- if eq $page.Params.module $modId -}}{{- $modOpen = true -}}{{- end -}}
+        {{- end -}}
+      <details class="ekh-sidebar-module" {{ if or $modOpen $page.IsSection }}open{{ end }}>
+        <summary class="ekh-sidebar-module-title">
+          <span class="ekh-sidebar-module-badge">{{ $modId }}</span>
+          {{ .focus }}
+        </summary>
+        <ul class="ekh-sidebar-topics">
+          {{- range $topicIdx, $slug := .topics -}}
+            {{- with site.GetPage (printf "%s/%s" $section $slug) -}}
+              {{- $sectionNum := printf "%d.%d" $modId (add $topicIdx 1) -}}
+              {{- $shortTitle := .Params.shortTitle | default .Title -}}
+              {{- $base := .File.BaseFileName -}}
+          <li>
+            <a class="ekh-sidebar-link{{ if eq $currentURL .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">
+              <span class="ekh-sidebar-link-num">{{ $sectionNum }}</span>
+              <span class="ekh-sidebar-link-text">{{ $shortTitle }}</span>
+            </a>
+              {{- $subPages := slice -}}
+              {{- range $subSuffixes -}}
+                {{- with site.GetPage (printf "%s/%s%s" $section $base .) -}}
+                  {{- $subPages = $subPages | append . -}}
+                {{- end -}}
+              {{- end -}}
+              {{- if gt (len $subPages) 0 -}}
+            <ul class="ekh-sidebar-subtopics">
+                {{- range $subPages -}}
+              <li>
+                <a class="ekh-sidebar-link ekh-sidebar-link--sub{{ if eq $currentURL .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">
+                  <span class="ekh-sidebar-link-text">{{ .Params.shortTitle | default "Interview Questions" }}</span>
+                </a>
+              </li>
+                {{- end -}}
+            </ul>
+              {{- end -}}
+          </li>
+            {{- end -}}
+          {{- end -}}
+        </ul>
+      </details>
+      {{- end -}}
+
+    {{- else if $sidebarCfg.flatGroups -}}
+      {{- $orderTopics := index site.Data $sidebarCfg.order "topics" | default slice -}}
+      {{- range $sidebarCfg.flatGroups -}}
+        {{- $splitAfter := .splitAfter | default 0 -}}
+        {{- $groupTopics := slice -}}
+        {{- if eq .id 1 -}}
+          {{- $groupTopics = first $splitAfter $orderTopics -}}
+        {{- else -}}
+          {{- $groupTopics = after $splitAfter $orderTopics -}}
+        {{- end -}}
+        {{- $groupOpen := false -}}
+        {{- range $groupTopics -}}
+          {{- with site.GetPage (printf "%s/%s" $section .) -}}
+            {{- if eq $currentURL .RelPermalink -}}{{- $groupOpen = true -}}{{- end -}}
+          {{- end -}}
+        {{- end -}}
+      <details class="ekh-sidebar-module" {{ if or $groupOpen $page.IsSection }}open{{ end }}>
+        <summary class="ekh-sidebar-module-title">{{ .label }}</summary>
+        <ul class="ekh-sidebar-topics">
+          {{- range $groupTopics -}}
+            {{- with site.GetPage (printf "%s/%s" $section .) -}}
+              {{- $shortTitle := .Params.shortTitle | default .Title -}}
+              {{- $base := .File.BaseFileName -}}
+          <li>
+            <a class="ekh-sidebar-link{{ if eq $currentURL .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">
+              <span class="ekh-sidebar-link-text">{{ $shortTitle }}</span>
+            </a>
+              {{- $subPages := slice -}}
+              {{- range $subSuffixes -}}
+                {{- with site.GetPage (printf "%s/%s%s" $section $base .) -}}
+                  {{- $subPages = $subPages | append . -}}
+                {{- end -}}
+              {{- end -}}
+              {{- if gt (len $subPages) 0 -}}
+            <ul class="ekh-sidebar-subtopics">
+                {{- range $subPages -}}
+              <li>
+                <a class="ekh-sidebar-link ekh-sidebar-link--sub{{ if eq $currentURL .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">
+                  <span class="ekh-sidebar-link-text">{{ .Params.shortTitle | default "Interview Questions" }}</span>
+                </a>
+              </li>
+                {{- end -}}
+            </ul>
+              {{- end -}}
+          </li>
+            {{- end -}}
+          {{- end -}}
+        </ul>
+      </details>
+      {{- end -}}
+
+    {{- else if $sidebarCfg.order -}}
+      {{- $orderTopics := index site.Data $sidebarCfg.order "topics" | default slice -}}
+      {{- $groupOpen := false -}}
+      {{- range $orderTopics -}}
+        {{- with site.GetPage (printf "%s/%s" $section .) -}}
+          {{- if eq $currentURL .RelPermalink -}}{{- $groupOpen = true -}}{{- end -}}
+        {{- end -}}
+      {{- end -}}
+      <details class="ekh-sidebar-module" {{ if or $groupOpen $page.IsSection }}open{{ end }}>
+        <summary class="ekh-sidebar-module-title">All Topics</summary>
+        <ul class="ekh-sidebar-topics">
+          {{- range $orderTopics -}}
+            {{- with site.GetPage (printf "%s/%s" $section .) -}}
+          <li>
+            <a class="ekh-sidebar-link{{ if eq $currentURL .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">
+              <span class="ekh-sidebar-link-text">{{ .Params.shortTitle | default .Title }}</span>
+            </a>
+          </li>
+            {{- end -}}
+          {{- end -}}
+        </ul>
+      </details>
+    {{- end -}}
+  </nav>
+</aside>

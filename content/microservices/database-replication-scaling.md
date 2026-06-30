@@ -48,7 +48,7 @@ sequenceDiagram
 
 Microservice connection pools use separate drivers or routing keys to divide traffic: **write operations** route to the primary node pool, while **read operations** are distributed across a pool of replicas using round-robin or least-connections load balancing.
 
-See also: [Replication Lag & Read-Replica Topology](/system-fundamentals/replication-lag-read-replica-topology/) and [Database Per Microservice](/microservices/database-per-microservice/).
+See also: [Replication Lag & Read-Replica Topology](/system-design/replication-lag-read-replica-topology/) and [Database Per Microservice](/microservices/database-per-microservice/).
 
 ---
 

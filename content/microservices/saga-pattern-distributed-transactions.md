@@ -51,7 +51,7 @@ sequenceDiagram
 
 * **Compensating Transactions:** If step $N$ fails (e.g., payment rejected), the system must explicitly fire backwards-looking compensating updates for steps $1$ to $N-1$ (e.g., reversing an inventory hold) to restore backward balance. These actions must be designed to be completely idempotent.
 
-See also: [Transactional Outbox Pattern](/database-internals/transactional-outbox-pattern/) for atomic state-machine persistence in the orchestrator layer.
+See also: [Transactional Outbox Pattern](/database-handbook/transactional-outbox-pattern/) for atomic state-machine persistence in the orchestrator layer.
 
 ---
 

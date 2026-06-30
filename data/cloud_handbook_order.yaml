@@ -1,0 +1,12 @@
+topics:
+  - cloud-providers-comparison
+  - aws-cloud
+  - azure-cloud
+  - gcp-cloud
+  - openshift-on-prem-kubernetes
+  - eks
+  - aks
+  - gke
+  - vault
+  - aws-secrets-manager
+  - azure-key-vault

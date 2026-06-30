@@ -1,0 +1,23 @@
+{{- $default := .Get "default" | default "java" -}}
+{{- $langs := slice "java" "golang" "python" "pseudo" -}}
+{{- $panels := .Inner | .Page.RenderString -}}
+<div class="code-tabs" data-code-tabs data-code-default="{{ $default }}">
+  <div class="code-tabs-bar" role="tablist" aria-label="Implementation language">
+    {{- range $langs -}}
+      {{- $label := $.Get . -}}
+      {{- if $label -}}
+    <button
+      type="button"
+      class="code-tab-btn"
+      role="tab"
+      data-tab="{{ . }}"
+      aria-selected="{{ if eq . $default }}true{{ else }}false{{ end }}"
+      tabindex="{{ if eq . $default }}0{{ else }}-1{{ end }}"
+    >{{ $label }}</button>
+      {{- end -}}
+    {{- end -}}
+  </div>
+  <div class="code-tabs-panels">
+    {{ $panels }}
+  </div>
+</div>

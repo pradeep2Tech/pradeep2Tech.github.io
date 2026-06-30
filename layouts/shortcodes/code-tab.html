@@ -1,0 +1,14 @@
+{{- $lang := .Get "lang" | default "java" -}}
+{{- $default := "java" -}}
+{{- with .Parent -}}
+  {{- $default = .Get "default" | default "java" -}}
+{{- end -}}
+<div
+  class="code-tab-panel{{ if eq $lang $default }} is-active{{ end }}"
+  data-code-tab="{{ $lang }}"
+  role="tabpanel"
+  tabindex="0"
+  {{- if ne $lang $default }} hidden{{ end }}
+>
+  {{ .Inner | .Page.RenderString }}
+</div>

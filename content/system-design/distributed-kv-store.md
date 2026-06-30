@@ -307,6 +307,9 @@ Virtual nodes (typically 100–200 per physical machine) ensure even distributio
 
 To avoid global lock contention, the entry space is partitioned into **64 lock stripes** based on `key.hashCode() % 64`. Each stripe independently guards both hash-map mutations and linked-list topology updates.
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public class ConcurrentLruCacheContainer<K, V> {
     private final int capacity;
@@ -360,6 +363,16 @@ public class ConcurrentLruCacheContainer<K, V> {
     }
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 **Why lock striping over `ConcurrentHashMap` alone?** `ConcurrentHashMap` locks at the bucket level, but LRU requires updating the doubly linked list on every read. Striping groups both structures under the same stripe lock, reducing contention on hot keys while preserving correctness.
 

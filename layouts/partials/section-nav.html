@@ -1,0 +1,21 @@
+{{- $section := .Section -}}
+{{- $label := .Params.sectionNavLabel | default (.Section | humanize | title) -}}
+{{- $sections := site.Data.curriculum_sections.sections | default slice -}}
+{{- range $sections -}}
+  {{- if eq .slug $section -}}
+    {{- $label = .menuLabel | default $label -}}
+  {{- end -}}
+{{- end -}}
+<nav class="sd-section-nav" aria-label="Section navigation">
+  <a href="{{ "" | absLangURL }}">Home</a>
+  <span class="sd-section-nav-sep" aria-hidden="true">·</span>
+  <a href="{{ (printf "/%s/" $section) | relLangURL }}">{{ $label }} Index</a>
+  {{- if and .Params.module .Params.moduleTitle -}}
+  <span class="sd-section-nav-sep" aria-hidden="true">·</span>
+  <span class="sd-section-nav-context">Module {{ .Params.module }}: {{ .Params.moduleTitle }}</span>
+  {{- end -}}
+  {{- if .Params.sectionRef -}}
+  <span class="sd-section-nav-sep" aria-hidden="true">·</span>
+  <span class="sd-section-nav-context">{{ .Params.sectionRef }} {{ .Params.shortTitle | default .Title }}</span>
+  {{- end -}}
+</nav>

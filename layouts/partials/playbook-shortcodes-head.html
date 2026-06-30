@@ -1,0 +1,121 @@
+<style>
+  .tp-decision-card {
+    margin: 1.25rem 0;
+    padding: 1rem 1.15rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--entry);
+  }
+  .tp-decision-card-title {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .tp-decision-card-body {
+    margin: 0;
+    font-size: 0.925rem;
+    line-height: 1.55;
+    color: var(--secondary);
+  }
+  .tp-decision-card-body > :last-child {
+    margin-bottom: 0;
+  }
+
+  .tp-comparison-table-wrap {
+    overflow-x: auto;
+    margin: 1.25rem 0;
+  }
+  .tp-comparison-table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .tp-comparison-table-wrap th,
+  .tp-comparison-table-wrap td {
+    border: 1px solid var(--border);
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .tp-comparison-table-wrap th {
+    background: var(--code-bg);
+    font-weight: 700;
+  }
+
+  .tp-pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  @media (max-width: 640px) {
+    .tp-pros-cons { grid-template-columns: 1fr; }
+  }
+  .tp-pros-cons-col {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    background: var(--entry);
+  }
+  .tp-pros-cons-col h4 {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tp-pros-cons-col--pros h4 { color: #3fb950; }
+  .tp-pros-cons-col--cons h4 { color: #f85149; }
+  html[data-theme="light"] .tp-pros-cons-col--pros h4 { color: #116329; }
+  html[data-theme="light"] .tp-pros-cons-col--cons h4 { color: #cf222e; }
+  .tp-pros-cons-col ul {
+    margin: 0;
+    padding-left: 1.15rem;
+    font-size: 0.9rem;
+  }
+
+  .tp-interview-answer {
+    margin: 1.25rem 0;
+    padding: 1rem 1.15rem;
+    border-left: 4px solid var(--secondary);
+    border-radius: 0 8px 8px 0;
+    background: var(--code-bg);
+    font-size: 0.925rem;
+    line-height: 1.6;
+  }
+  .tp-interview-answer-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 0.45rem;
+  }
+
+  .tp-technology-fit {
+    margin: 1.25rem 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .tp-technology-fit-row {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .tp-technology-fit-row:last-child {
+    border-bottom: none;
+  }
+  .tp-technology-fit-label {
+    padding: 0.55rem 0.75rem;
+    font-weight: 700;
+    background: var(--code-bg);
+    color: var(--secondary);
+  }
+  .tp-technology-fit-value {
+    padding: 0.55rem 0.75rem;
+  }
+</style>

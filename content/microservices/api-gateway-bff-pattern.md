@@ -54,7 +54,7 @@ sequenceDiagram
 
 * **Token verification** occurs at the edge via a local cache or a fast cryptographic signature check against a pre-fetched JSON Web Key Set (JWKS). The gateway then strips client credentials and appends sanitized user contexts into internal request headers (e.g., `X-User-Id`, `X-User-Roles`) before forwarding requests downstream.
 
-See also: [Layer 4 vs. Layer 7 Multi-Tier Ingress](/system-fundamentals/layer4-layer7-multi-tier-ingress-routing/) and [Forward vs. Reverse Proxy Topologies](/system-fundamentals/proxy-servers-forward-vs-reverse/).
+See also: [Layer 4 vs. Layer 7 Multi-Tier Ingress](/system-design/layer4-layer7-multi-tier-ingress-routing/) and [Forward vs. Reverse Proxy Topologies](/system-design/proxy-servers-forward-vs-reverse/).
 
 ---
 

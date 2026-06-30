@@ -398,6 +398,9 @@ flowchart LR
 
 Incoming heartbeats merge in memory before batch flush to Kafka, keeping only the latest playback offset per `(user_id, video_id)`:
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public void bufferTelemetryUpdate(String userVideoCompositeKey, TelemetryRecord incoming) {
     internalMemoryMatrix.merge(userVideoCompositeKey, incoming, (existing, newer) ->
@@ -405,6 +408,16 @@ public void bufferTelemetryUpdate(String userVideoCompositeKey, TelemetryRecord 
             ? newer : existing);
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 `ConcurrentHashMap.merge` provides optimistic concurrency without blocking network threads. A periodic `flushMemorySegment()` snapshots and clears the buffer under a write lock for bulk Kafka publish.
 

@@ -1,0 +1,5 @@
+{{- $title := .Get "title" | default "Decision Point" -}}
+<div class="tp-decision-card">
+  <p class="tp-decision-card-title">{{ $title }}</p>
+  <div class="tp-decision-card-body">{{ .Inner | markdownify }}</div>
+</div>

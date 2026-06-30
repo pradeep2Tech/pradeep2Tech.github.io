@@ -1,0 +1,208 @@
+---
+description: Template and conventions for LLD blog posts — SOLID, patterns, Java/Go impl-tabs for every code snippet
+globs: content/design-patterns/**/*.md, data/design_patterns_modules.yaml, data/design_patterns_order.yaml, layouts/shortcodes/impl-tabs.html, layouts/shortcodes/impl-tab.html, layouts/partials/impl-tabs-head.html, layouts/partials/extend_footer.html, scripts/generate_lld_stubs.py, .cursor/rules/lld-posts.mdc
+alwaysApply: false
+---
+
+# Design Patterns Blog Posts
+
+Reference implementation: `content/design-patterns/single-responsibility-principle.md`, `content/design-patterns/strategy-pattern.md`
+
+## Repo Layout
+
+| Path | Purpose |
+|---|---|
+| `content/design-patterns/_index.md` | Section landing page |
+| `content/design-patterns/<topic>.md` | One post per principle, pattern, or case study |
+| `data/design_patterns_modules.yaml` | Module grouping and topic order |
+| `data/design_patterns_order.yaml` | Flat topic order (derived from modules) |
+| `layouts/shortcodes/impl-tabs.html` | Tab container shortcode |
+| `layouts/shortcodes/impl-tab.html` | Per-language panel shortcode |
+| `layouts/partials/impl-tabs-head.html` | Tab bar + panel CSS (site-wide) |
+| `layouts/partials/extend_footer.html` | Tab switch JS (`activateImplTab`, click delegation) |
+
+URL pattern: `/design-patterns/<filename>/`
+
+## Hugo Front Matter
+
+```yaml
+---
+title: "<Topic Title>"
+date: 2026-06-30T10:00:00+00:00
+draft: true
+description: "One-line summary for SEO and social previews."
+tags: ["lld", "<topic-tag>", "java", "golang"]
+categories: ["Design Patterns"]
+shortTitle: "<Short Title>"
+module: 1
+moduleTitle: "SOLID & Design Foundations"
+sectionRef: "1.1"
+languages: ["java", "golang"]
+---
+```
+
+Set `draft: false` when the post is ready to publish.
+
+## Required Sections (use `###` headings)
+
+Microservices-style posts use `###` so section collapsibles group content cleanly.
+
+1. **Problem & Intent** — what design problem this solves (2–3 sentences)
+2. **When to Use / When NOT to Use** — decision table (always include anti-use cases)
+3. **Structure (Class Diagram)** — Mermaid `classDiagram`
+4. **Interaction Flow** — Mermaid `sequenceDiagram` or `flowchart TD`
+5. **Implementation** — **all code snippets** inside Java / Go `impl-tabs` (see below)
+6. **Trade-offs & Operational Realities** — table of complexity, testability, framework fit
+7. **Junior Mistakes** — common misapplications
+8. **Senior Questions** — numbered interview probes
+9. **Revision Cheat Sheet** — 30-second recall bullets
+10. **See Also** — links to related LLD topics and cross-curriculum posts
+
+Separate major sections with `---` horizontal rules.
+
+---
+
+## Code Snippets — Mandatory `impl-tabs` Rule
+
+**Every code snippet in an LLD post that shows implementation belongs inside `impl-tabs`.** Do not render Java and Go as separate vertical sections or as adjacent fenced blocks outside the shortcode.
+
+### When to use `impl-tabs`
+
+| Content type | Use `impl-tabs`? | Notes |
+|---|---|---|
+| Java / Go implementation code | **Yes — required** | Under `### Implementation` |
+| Anti-pattern vs fixed example (multiple blocks) | **Yes** | Put all Java blocks in `lang="java"` tab; all Go blocks in `lang="golang"` tab |
+| Mermaid diagrams | **No** | Keep in Structure / Interaction Flow sections |
+| One-line inline `` `code` `` in prose | **No** | Fine in any section |
+| Shell / YAML / config-only examples | **No** | Rare in LLD; if needed, single tab or prose only |
+
+### When NOT to use (forbidden patterns)
+
+| Do NOT | Why |
+|---|---|
+| `### Implementation (Java)` + `### Implementation (Go)` | Stacks languages vertically; breaks revision layout |
+| Raw ` ```java` / ` ```go` blocks directly under `### Implementation` | Bypasses tabs; page grows vertically |
+| `{< impl-tabs >}` (single brace) | Hugo will not parse shortcodes — use `{{< >}}` |
+| `impl-tab` without matching `java="..."` / `golang="..."` on parent | Tab bar renders empty |
+| `lang="go"` on `impl-tab` | Must be `lang="golang"` to match `data-tab` on buttons |
+
+### Canonical template
+
+```markdown
+### Implementation
+
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
+**Violation — describe the smell:**
+
+```java
+// bad example
+```
+
+**Fixed — describe the approach:**
+
+```java
+// good example
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+**Violation:**
+
+```go
+// bad example
+```
+
+**Fixed:**
+
+```go
+// good example
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
+```
+
+### Shortcode contract
+
+| Shortcode | Required params | Notes |
+|---|---|---|
+| `impl-tabs` | `default="java"`, `java="Java"`, `golang="Go"` | Tab labels on parent; `default` controls initial visible panel |
+| `impl-tab` | `lang="java"` or `lang="golang"` | Must match a key passed to `impl-tabs` |
+
+- Use `{{<` / `>}}` delimiters (not `{{% %}}`) when panels contain fenced code blocks.
+- **Java tab first** (default); **Go second**.
+- Multiple snippets inside one tab: separate with `**Bold labels:**` or `####` subheadings — stay inside the same `impl-tab` block.
+- If Go port is not ready yet, keep a minimal `// TODO` stub in the Go tab — do not omit the tab.
+- Active panel max-height `28rem` with internal scroll — long code scrolls inside the tab, not down the page.
+
+### Language conventions
+
+| Language | Convention |
+|----------|------------|
+| **Java** | Interfaces for abstractions; Spring mentions in architecture posts only when relevant |
+| **Go** | Small interfaces; composition over inheritance; no forced "pattern ceremony" |
+
+---
+
+## Mermaid Rules
+
+| Do | Avoid |
+|----|----|
+| `classDiagram` for structure | God-class diagrams with 15+ classes |
+| `sequenceDiagram` for one runtime path | Unquoted special chars in labels |
+| camelCase node IDs | Using `Redis`/`Kafka` as ambiguous node IDs |
+
+---
+
+## Stub Generator
+
+`scripts/generate_lld_stubs.py` — regenerates draft posts from `data/design_patterns_modules.yaml`.
+
+- Uses `IMPL_SECTION` constant with correct `{{< impl-tabs >}}` syntax (never embed shortcodes in Python f-strings — braces get eaten).
+- Skips reference posts: `single-responsibility-principle`, `strategy-pattern`.
+
+---
+
+## Companion Interview Files (optional)
+
+`content/design-patterns/<topic>-interview-questions.md` — linked automatically in section TOC when present (same as system-design / microservices).
+
+---
+
+## Workflow
+
+1. Add topic slug to `data/design_patterns_modules.yaml`
+2. Create `content/design-patterns/<slug>.md` using the template above
+3. Put **all** implementation code inside `impl-tabs` / `impl-tab`
+4. Update `content/design-patterns/_index.md` curriculum tables if module structure changes
+5. Preview: `hugo server -D` — hard refresh (`Ctrl+Shift+R`)
+6. Set `draft: false` when ready
+
+### Preview checklist (every LLD post)
+
+| Check | Expected |
+|---|---|
+| `### Implementation` | Single section heading (not Java/Go split headings) |
+| Tab bar | **Java** and **Go** buttons visible server-rendered in HTML |
+| Default panel | Java code visible on load without clicking |
+| Go tab click | Switches panel; Go code visible; Java panel hidden |
+| Long code | Scrolls inside tab panel, not full-page stretch |
+| Shortcodes | View source — no raw `{< impl-tabs` text |
+| Console | No errors on tab switch |
+
+Spot-check reference posts: `single-responsibility-principle.md`, `strategy-pattern.md`.
+
+---
+
+## Cross-Links
+
+Link outward where relevant:
+
+- Circuit breaker → [Proxy Pattern](/design-patterns/proxy-pattern/)
+- CQRS → [Command Pattern](/design-patterns/command-pattern/)
+- Outbox → [Observer Pattern](/design-patterns/observer-pattern/)
+
+Reference sections: `microservices`, `system-design`, `database-internals`.

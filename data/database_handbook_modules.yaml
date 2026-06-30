@@ -1,0 +1,59 @@
+modules:
+  - id: 1
+    focus: "Database Internals & Engine Mechanics"
+    topics:
+      - b-plus-tree-storage-mechanics
+      - sqlite-architecture-teardown
+      - acid-two-phase-commit-journaling
+      - transactional-outbox-pattern
+      - transactional-inbox-pattern
+      - outbox-inbox-performance-tuning
+      - primary-key-selection-strategies
+      - advanced-schema-optimization
+      - zero-downtime-migration-frameworks
+      - cost-based-query-optimization
+      - local-concurrency-mvcc
+      - lock-graphs-deadlocks-latching
+      - distributed-consistency-primitives
+  - id: 2
+    focus: "Relational & Document Stores"
+    topics:
+      - postgresql
+      - mysql
+      - oracle
+      - sql-server
+      - mongodb
+      - couchbase
+      - cosmos-db
+  - id: 3
+    focus: "Wide-Column, Key-Value & Graph"
+    topics:
+      - cassandra
+      - hbase
+      - scylladb
+      - redis
+      - dynamodb
+      - aerospike
+      - neo4j
+      - amazon-neptune
+  - id: 4
+    focus: "Time-Series, Search & Analytics"
+    topics:
+      - influxdb
+      - timescaledb
+      - opentsdb
+      - elasticsearch
+      - opensearch
+      - solr
+      - clickhouse
+      - snowflake
+      - bigquery
+  - id: 5
+    focus: "Selection Comparisons"
+    topics:
+      - mongodb-vs-postgresql
+      - cassandra-vs-mongodb
+      - oracle-vs-postgresql
+      - clickhouse-vs-elasticsearch
+      - elasticsearch-vs-opensearch
+      - redis-vs-memcached

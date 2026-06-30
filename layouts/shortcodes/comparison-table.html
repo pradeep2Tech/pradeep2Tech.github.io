@@ -1,0 +1,5 @@
+{{- $caption := .Get "caption" -}}
+<div class="tp-comparison-table-wrap">
+  {{- with $caption -}}<p><strong>{{ . }}</strong></p>{{- end -}}
+  {{ .Inner | markdownify }}
+</div>

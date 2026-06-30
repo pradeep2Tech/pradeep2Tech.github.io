@@ -1,0 +1,45 @@
+<style>
+  .db-submodule-heading {
+    margin: 0.75rem 0 0.35rem 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--secondary);
+  }
+
+  .java-callout {
+    margin: 1.1rem 0;
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    font-size: 0.925rem;
+    line-height: 1.55;
+    border: 1px solid var(--border);
+  }
+  .java-callout-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+  .java-callout--note {
+    background: var(--entry);
+    border-left: 4px solid var(--secondary);
+  }
+  .java-callout--note .java-callout-label { color: var(--secondary); }
+  .java-callout--tip {
+    background: rgba(63, 185, 80, 0.08);
+    border-left: 4px solid #3fb950;
+  }
+  .java-callout--tip .java-callout-label { color: #3fb950; }
+  html[data-theme="light"] .java-callout--tip .java-callout-label { color: #116329; }
+  .java-callout--warning {
+    background: rgba(248, 81, 73, 0.08);
+    border-left: 4px solid #f85149;
+  }
+  .java-callout--warning .java-callout-label { color: #f85149; }
+  html[data-theme="light"] .java-callout--warning .java-callout-label { color: #cf222e; }
+  .java-callout > :last-child { margin-bottom: 0; }
+</style>

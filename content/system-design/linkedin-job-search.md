@@ -311,6 +311,9 @@ The ranking pipeline uses a **funnel architecture** to meet the 200 ms SLA:
 
 ### PersonalizationRankingEngine (Circuit-Breaker Pattern)
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public interface JobRankingEngine {
     List<JobCandidate> rankJobs(String userId, List<JobCandidate> candidates)
@@ -336,6 +339,16 @@ public class PersonalizationRankingEngine implements JobRankingEngine {
     }
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ### Concurrency Model
 

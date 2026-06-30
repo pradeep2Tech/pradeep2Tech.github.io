@@ -374,6 +374,9 @@ The core challenge is feed generation at scale. A naive push model (write post I
 
 **Celebrity threshold: 25,000 followers.**
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public interface IFeedFanoutEngine {
     CompletableFuture<Void> fanoutPostEvent(PostEventPayload payload);
@@ -399,6 +402,16 @@ public class HybridFeedProcessor implements IFeedFanoutEngine {
     }
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ### Cursor-Based Pagination (Drift Prevention)
 

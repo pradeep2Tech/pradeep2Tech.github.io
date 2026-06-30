@@ -1,0 +1,16 @@
+{{- $page := . -}}
+{{- $groupId := "design" -}}
+{{- $accent := "#4f46e5" -}}
+{{- range site.Data.curriculum_sections.sections -}}
+  {{- if eq .slug $page.Section -}}
+    {{- $groupId = .group | default $groupId -}}
+  {{- end -}}
+{{- end -}}
+{{- range site.Data.curriculum_sections.groups -}}
+  {{- if eq .id $groupId -}}
+    {{- $accent = .accent | default $accent -}}
+  {{- end -}}
+{{- end -}}
+<div class="ekh-book-layout ekh-book-layout--{{ $groupId }}" style="--ekh-accent: {{ $accent }};">
+{{- partial "curriculum-sidebar.html" $page -}}
+<div class="ekh-book-main">

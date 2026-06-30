@@ -1,0 +1,65 @@
+# Technology Decision Playbook — slim index (architecture ADRs + decision matrix + workflow).
+modules:
+  - id: 1
+    slug: architecture-patterns
+    focus: "Architecture Patterns"
+    landingTitle: "Architecture Patterns"
+    landingDescription: "When to choose monolith, microservices, event-driven, CQRS, saga, resilience patterns, and integration boundaries."
+    topics:
+      - monolith-architecture
+      - modular-monolith-architecture
+      - microservices-architecture
+      - soa-architecture
+      - event-driven-architecture
+      - cqrs-pattern
+      - saga-pattern
+      - outbox-pattern
+      - strangler-pattern
+      - circuit-breaker-pattern
+      - bulkhead-pattern
+      - sidecar-pattern
+      - service-mesh
+      - api-gateway
+      - bff-pattern
+
+  - id: 2
+    slug: technology-decision-matrix
+    focus: "Technology Decision Matrix"
+    landingTitle: "Technology Decision Matrix"
+    landingDescription: "Decision frameworks for databases, caches, brokers, APIs, search, storage, workflow, rules, schedulers, and batch engines."
+    topics:
+      - how-to-choose-database
+      - how-to-choose-cache
+      - how-to-choose-message-broker
+      - how-to-choose-api-protocol
+      - how-to-choose-search-engine
+      - how-to-choose-object-storage
+      - how-to-choose-workflow-engine
+      - how-to-choose-rule-engine
+      - how-to-choose-scheduler
+      - how-to-choose-batch-engine
+
+  - id: 3
+    slug: workflow-batch-rules-schedulers
+    focus: "Workflow, Batch, Rules & Schedulers"
+    landingTitle: "Workflow, Batch, Rules & Schedulers"
+    landingDescription: "Orchestration, batch processing, business rules, and job scheduling for enterprise workloads."
+    topics:
+      - temporal
+      - camunda
+      - netflix-conductor
+      - airflow
+      - argo-workflows
+      - prefect
+      - apache-spark
+      - apache-flink
+      - apache-beam
+      - databricks
+      - drools
+      - easy-rules
+      - openl-tablets
+      - aws-rule-engine
+      - azure-logic-apps
+      - quartz
+      - control-m
+      - autosys

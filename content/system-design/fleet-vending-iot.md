@@ -317,6 +317,9 @@ Central orchestration on physical hardware. Interfaces with peripherals via **Mu
 
 Hardware events arrive asynchronously — a coil motor completion, a bill insertion, or a network state change can interleave. The edge controller uses a **deterministic State Pattern** with a `ReentrantLock` to serialize state mutations.
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public interface VendingState {
     void selectItem(String coordinate);
@@ -351,6 +354,16 @@ public class VendingStateMachine {
     }
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ### Concurrency Boundaries
 

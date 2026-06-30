@@ -44,7 +44,7 @@ graph TD
 
 **PACELC Real-World Extension:** If there is **Else** (no partition), the system must still choose between **Latency** vs. **Consistency**. Prioritizing consistency requires cross-node round-trip acknowledgments on every write, adding a structural latency penalty to the hot path.
 
-See also: [CRDTs & Multi-Master Conflict Resolution](/system-fundamentals/crdts-and-multi-master-conflict-resolution/), [Distributed Consistency Primitives](/database-internals/distributed-consistency-primitives/), and [Database Replication & Scaling](/microservices/database-replication-scaling/).
+See also: [CRDTs & Multi-Master Conflict Resolution](/system-design/crdts-and-multi-master-conflict-resolution/), [Distributed Consistency Primitives](/database-handbook/distributed-consistency-primitives/), and [Database Replication & Scaling](/microservices/database-replication-scaling/).
 
 ---
 
@@ -110,7 +110,7 @@ AP systems operate on an **eventual consistency** model. This introduces read-si
 | **CRDTs** | Mathematically mergeable types | Limited data structure set |
 | **Operational transform** | Ordered operation log merge | Complex; collaborative editing |
 
-See [CRDTs & Multi-Master Conflict Resolution](/system-fundamentals/crdts-and-multi-master-conflict-resolution/) for production merge semantics.
+See [CRDTs & Multi-Master Conflict Resolution](/system-design/crdts-and-multi-master-conflict-resolution/) for production merge semantics.
 
 ---
 

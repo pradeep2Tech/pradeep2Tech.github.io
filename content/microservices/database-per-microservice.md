@@ -42,7 +42,7 @@ Microservices connect to their assigned databases using **isolated connection po
 
 Shared master data (e.g., user profiles or product names) is replicated across service boundaries asynchronously using Change Data Capture (CDC) or event streaming. Services store lightweight, read-only copies of this external data locally to eliminate runtime dependencies on other services during transactions.
 
-See also: [Saga Pattern](/microservices/saga-pattern-distributed-transactions/), [CQRS & Event Sourcing](/microservices/cqrs-event-sourcing/), and [Transactional Outbox Pattern](/database-internals/transactional-outbox-pattern/).
+See also: [Saga Pattern](/microservices/saga-pattern-distributed-transactions/), [CQRS & Event Sourcing](/microservices/cqrs-event-sourcing/), and [Transactional Outbox Pattern](/database-handbook/transactional-outbox-pattern/).
 
 ---
 

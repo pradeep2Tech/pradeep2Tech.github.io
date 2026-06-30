@@ -1,0 +1,12 @@
+modules:
+  - id: 1
+    focus: "Technology Comparisons for Interviews"
+    topics:
+      - kafka-vs-rabbitmq
+      - rest-vs-grpc
+      - graphql-vs-rest
+      - temporal-vs-airflow
+      - spark-vs-flink
+      - kubernetes-vs-openshift
+      - eks-vs-aks-vs-gke
+      - kong-vs-nginx-vs-aws-api-gateway

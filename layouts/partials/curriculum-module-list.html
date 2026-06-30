@@ -1,0 +1,21 @@
+{{- $page := .page -}}
+{{- $navPartial := .navPartial | default "section-nav.html" -}}
+
+{{- partial "curriculum-book-open.html" $page -}}
+
+<header class="page-header ekh-page-header">
+  <h1>{{ $page.Title }}</h1>
+  {{- if $page.Description -}}
+  <div class="post-description">{{ $page.Description | markdownify }}</div>
+  {{- end -}}
+</header>
+
+{{- if $page.Content -}}
+<div class="post-content ekh-index-content">
+  {{- if not ($page.Param "disableAnchoredHeadings") -}}
+  {{- partial "anchored_headings.html" $page.Content -}}
+  {{- else -}}{{- $page.Content -}}{{- end -}}
+</div>
+{{- end -}}
+
+{{- partial "curriculum-book-close.html" $page -}}

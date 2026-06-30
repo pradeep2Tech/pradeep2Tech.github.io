@@ -20,7 +20,7 @@ buildFuture = true
 [params]
   env = "production"
   title = "Pradeep CS – Engineering Notes"
-  description = "Deep dives into PostgreSQL internals, distributed systems, caching strategies, and performance debugging."
+  description = "Enterprise Knowledge Hub — system design, microservices, technology decisions, domain handbooks, design patterns, and security architecture."
   keywords = ["PostgreSQL internals", "Distributed systems", "Caching strategies", "System design", "Performance tuning"]
   author = "Pradeep Chakravarthi"
   defaultTheme = "auto"
@@ -32,10 +32,6 @@ buildFuture = true
   ShowBreadCrumbs = true
   ShowToc = true
   TocOpen = false
-
-[params.homeInfoParams]
-  Title = "Engineering Deep Dives"
-  Content = "Structured masterclasses in system fundamentals, system design, database internals, security architecture, and distributed microservices."
 
 [params.assets]
   disableHLJS = true

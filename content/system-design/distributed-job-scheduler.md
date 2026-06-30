@@ -377,12 +377,25 @@ Enforce a unique composite constraint on `(job_id, schedule_time)` in `job_runs`
 
 ### Worker Thread Pool Isolation
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>(500);
 ThreadPoolExecutor executor = new ThreadPoolExecutor(
     50, 200, 60L, TimeUnit.SECONDS, queue, new ThreadPoolExecutor.AbortPolicy()
 );
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 Bounded queue + `AbortPolicy` prevents memory exhaustion from a single misbehaved job.
 

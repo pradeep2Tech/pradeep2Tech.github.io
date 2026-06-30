@@ -1,6 +1,6 @@
 ---
-description: Template and conventions for system design blog posts (Hugo + Mermaid + collapsibles)
-globs: content/system-design/**/*.md, layouts/partials/section-collapsible.html, layouts/partials/extend_footer.html, layouts/partials/diagram-lightbox-head.html, layouts/shortcodes/api-*.html
+description: Template and conventions for system design blog posts (Hugo + Mermaid + collapsibles + Java/Go code tabs)
+globs: content/system-design/**/*.md, layouts/partials/section-collapsible.html, layouts/partials/extend_footer.html, layouts/partials/diagram-lightbox-head.html, layouts/partials/impl-tabs-head.html, layouts/shortcodes/api-*.html, layouts/shortcodes/impl-tabs.html, layouts/shortcodes/impl-tab.html, scripts/migrate_system_design_code_tabs.py
 alwaysApply: false
 ---
 
@@ -233,21 +233,187 @@ Client-side features run in this order from `layouts/partials/extend_footer.html
 | `layouts/partials/diagram-lightbox-head.html` | Lightbox CSS |
 | `layouts/system-design/single.html` | Wraps post body in `.sd-collapsible-content` |
 | `layouts/shortcodes/api-*.html` | Collapsible API panels |
+| `layouts/shortcodes/impl-tabs.html` | Java / Go tab container (shared with LLD) |
+| `layouts/shortcodes/impl-tab.html` | Per-language code panel |
+| `layouts/partials/impl-tabs-head.html` | Tab bar + panel CSS (site-wide) |
+
+## Code Snippets — Mandatory `impl-tabs` Rule
+
+**Every fenced `java` or `go` implementation snippet in a system-design post must use `impl-tabs`.** These appear in §6 Core Algorithms, low-level subsections, or interface sketches — never as raw vertical Java-only blocks.
+
+### When to use `impl-tabs`
+
+| Content type | Use `impl-tabs`? | Notes |
+|---|---|---|
+| Java / Go class or interface sketches | **Yes — required** | §6 algorithms, connection registries, Lua-adjacent Java, etc. |
+| Multiple related snippets in one subsection | **Yes** | All Java in `lang="java"` tab; all Go in `lang="golang"` tab |
+| JSON in API shortcodes (`api-request` / `api-response`) | **No** | API §3 keeps existing shortcodes |
+| Mermaid / ASCII diagrams | **No** | Unchanged |
+| SQL, Redis CLI, shell one-liners | **No** | Single fence is fine |
+
+### When NOT to use (forbidden)
+
+| Do NOT | Why |
+|---|---|
+| Bare ` ```java` under a `###` heading | Stacks code without Go parity; page grows vertically |
+| `### Java` / `### Go` split headings | Use horizontal tabs instead |
+| `{< impl-tabs >}` (single brace) | Hugo will not parse — use `{{< >}}` |
+
+### Canonical template
+
+```markdown
+### Connection Registry (Low-Level)
+
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
+```java
+public class ConnectionRegistryRepository implements ChatConnectionManager {
+    // ...
+}
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+type ConnectionRegistry struct {
+    // idiomatic Go equivalent
+}
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
+```
+
+### Shortcode contract
+
+| Shortcode | Required params |
+|---|---|
+| `impl-tabs` | `default="java"`, `java="Java"`, `golang="Go"` |
+| `impl-tab` | `lang="java"` or `lang="golang"` |
+
+- Use `{{<` / `>}}` delimiters when panels contain fenced code.
+- Java tab first (default); Go second.
+- Replace `// TODO` Go stubs with real implementations when editing a post.
+
+Bulk migration: `python scripts/migrate_system_design_code_tabs.py` wraps existing ` ```java` fences.
+
+---
+
+## API & Request Flows — Prefer Sequence Diagrams
+
+After **§5 High-Level Architecture** (`flowchart LR`), path subsections must use **`sequenceDiagram`** — not numbered prose steps and not `flowchart TD` for multi-service request choreography.
+
+### Diagram type selection (canonical)
+
+| Layer | Mermaid type | Use when |
+|---|---|---|
+| **§5 HLD** | `flowchart LR` | Static topology — components and data stores |
+| **§5 path subsections** | `sequenceDiagram` | Request Evaluation, Read/Write paths, Ingestion/Delivery, Admin config |
+| **§6 algorithms (in-process)** | `flowchart TD` | LRU steps, token refill logic, lock-striping inside one node |
+| **§6 lifecycles** | `stateDiagram-v2` | Booking status, payment intent states |
+| **Async pipelines (no return path)** | `flowchart LR` or `sequenceDiagram` with `--)` | Kafka → consumer → warehouse |
+
+### Replace numbered lists with `sequenceDiagram` when
+
+| Pattern in markdown | Convert to |
+|---|---|
+| `### Request Evaluation Path` + steps | `sequenceDiagram` with `alt` allow/deny |
+| `### Read Path` / `### Write Path` | `sequenceDiagram` with `alt` cache hit/miss |
+| `### Ingestion Path` / `### Delivery Path` | `sequenceDiagram` |
+| `### Payment Confirmation` | `sequenceDiagram` |
+| `### Admin Configuration Path` | `sequenceDiagram` |
+| `**Estimation path:** A → B → C` one-liners | `sequenceDiagram` or `flowchart LR` |
+
+Use Mermaid `alt` / `opt` / `par` blocks for branches (allowed vs 429, cache hit vs miss, fail-open).
+
+### Keep as text (do not diagram)
+
+| Content | Why |
+|---|---|
+| §3 API Design overview table + `api-endpoint` shortcodes | Contract reference |
+| Component responsibility tables | Not a temporal flow |
+| Cache sizing / capacity math | Numbers, not choreography |
+| §6 class diagrams | Structure, not request path |
+
+### Canonical path subsection (reference: `distributed-rate-limiter.md`, `urlshortner.md` §5)
+
+```markdown
+### Request Evaluation Path
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Envoy as API Gateway
+    participant RL as Rate Limiter
+    participant Redis as Redis Cluster
+    participant App as Downstream Services
+
+    Client->>Envoy: HTTPS request
+    Envoy->>RL: evaluate rules
+    RL->>Redis: Lua EVAL (atomic)
+    Redis-->>RL: tokens remaining
+    alt allowed
+        RL->>App: forward
+        App-->>Client: 200 OK
+    else denied
+        RL-->>Client: 429 + Retry-After
+    end
+```
+```
+
+One optional sentence below the diagram for trade-offs — **do not** duplicate steps in a numbered list.
+
+### Sequence diagram conventions
+
+| Do | Avoid |
+|---|---|
+| `participant Redis as Redis Cluster` aliases for long names | Ambiguous participant IDs (`Redis` as sole ID when multiple caches exist) |
+| `alt` / `opt` for branches | Separate flowchart TD for the same request path |
+| `-->>` sync replies; `--)` async fire-and-forget | Blocking analytics on the hot-path arrow |
+| Keep 4–8 participants per diagram | 12+ participants — split into two diagrams |
+
+### Migration status (`content/system-design/`)
+
+| Post | Path sections | Status |
+|---|---|---|
+| `urlshortner.md` | Write, Read, Analytics | **Done** — sequence (Analytics: LR) |
+| `distributed-rate-limiter.md` | Request Evaluation, Admin Configuration | **Done** |
+| `ticket-booking.md` | Read, Write, Payment Confirmation | **Done** |
+| `notification-system.md` | Ingestion, Delivery, Analytics | **Done** |
+| `chat-application.md` | Real-Time Message, Media | **Done** |
+| `hotel-booking.md` | Read, Write, Payment Confirmation | Backlog |
+| `social-feed.md` | Write, Read | Backlog |
+| `leaderboard.md` | Ingestion, Read | Backlog |
+| `payment-gateway-orchestration.md` | Write, Read | Backlog |
+| `distributed-kv-store.md` | Read, Write | Backlog — consider `flowchart TD` for cache hit/miss only |
+| `ride-sharing.md` | Request Flow Summary | Backlog |
+
+**Other folders:** `microservices/` and `system-design/` — use `sequenceDiagram` only when adding new multi-service request paths.
+
+---
 
 ## Mermaid Rules (v11)
 
 | Do | Avoid |
 |----|-------|
 | Quote edge labels: `\|"GET /v1/resource"\|` | `\n` in unquoted labels |
-| Curly braces in labels: `{code}` | Reserved/special chars in node IDs |
+| `participant X as Display Name` in sequence diagrams | Reserved/special chars in participant aliases |
+| `alt` / `opt` / `par` blocks in `sequenceDiagram` | Duplicating the same path as `flowchart TD` under §5 |
+| Curly braces in labels: `{code}` | Ambiguous IDs like `Redis`, `Kafka` as sole node names |
 | Use `<br/>` for line breaks in nodes | Ambiguous IDs like `Redis`, `Kafka` as node names |
 | camelCase subgraph IDs: `subgraph readPath["Read Path"]` | Unquoted multi-line labels |
 | Cylinder nodes: `[("PostgreSQL<br/>Primary")]` | Static images when Mermaid suffices |
 
 **Required diagram types per post:**
-- `erDiagram` — data model
-- `flowchart LR` — architecture
-- `flowchart TD` — scaling stages or request flow
+- `erDiagram` — data model (§4)
+- `flowchart LR` — high-level architecture (§5 HLD only)
+- `sequenceDiagram` — read/write/ingest/delivery paths under §5 (required for multi-service flows)
+- `flowchart TD` — in-process algorithms, scaling stages (§6–§7)
+- `flowchart LR` — optional for linear async pipelines (analytics fire-and-forget)
+- `stateDiagram-v2` — optional for lifecycle state machines
+- `classDiagram` — optional for strategy/adapter structure (§6)
 
 ## Workflow
 
@@ -263,13 +429,15 @@ Client-side features run in this order from `layouts/partials/extend_footer.html
 |-------|----------|
 | §1–§11 headers | Bordered cards with **Expand** pill (§5 HLD always visible, no toggle) |
 | §4 Data Model | `erDiagram` renders as SVG inside `.diagram-frame`; **Click to expand** fills modal (not tiny centered thumbnail) |
-| §5 High-Level Architecture | `flowchart` renders as SVG; inline scrolls horizontally if wide; expand fills viewport |
+| §5 High-Level Architecture | `flowchart LR` renders as SVG; inline scrolls horizontally if wide; expand fills viewport |
+| §5 path subsections | `sequenceDiagram` for request paths — not numbered step lists |
 | API §3 | Overview table visible; endpoint panels collapse/expand |
 | Standalone error codes | No bogus `h2` between §3 and §4 — use `{{% api-errors %}}` |
 | Diagram lightbox | Reset/Fit re-centers diagram; scroll zooms; no console errors on expand |
+| Code tabs | **Java** / **Go** buttons visible; Java default; Go click switches panel |
 | Browser console | No `NotFoundError`, no uncaught DOM exceptions |
 
-Spot-check reference posts: `urlshortner.md`, `distributed-rate-limiter.md`.
+Spot-check reference posts: `urlshortner.md`, `distributed-rate-limiter.md`, `ticket-booking.md`.
 
 ## Writing Style
 

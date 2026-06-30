@@ -442,6 +442,9 @@ The outbox pattern guarantees durability before pipeline entry:
 
 Validators run concurrently via async worker pools (ForkJoinPool / Go worker pools) so long-running external checks never block ingress threads:
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public CompletableFuture<PipelineStatus> processEmailAsync(MessageContext context) {
     List<CompletableFuture<ValidationResult>> futures = validators.stream()
@@ -452,6 +455,16 @@ public CompletableFuture<PipelineStatus> processEmailAsync(MessageContext contex
         .thenApply(v -> ledgerRepo.commitValidationTraces(context.getMessageId(), results));
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ### UUIDv7 for Message IDs
 

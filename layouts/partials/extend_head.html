@@ -1,51 +1,28 @@
 {{- partial "diagram-lightbox-head.html" . -}}
 {{- partial "section-collapsible-head.html" . -}}
+{{- partial "code-tabs-head.html" . -}}
+{{- partial "playbook-shortcodes-head.html" . -}}
+{{- partial "java-cheatsheet-shortcodes-head.html" . -}}
+{{- partial "home-curriculum-head.html" . -}}
+{{- partial "curriculum-nav-head.html" . -}}
+{{- partial "curriculum-sidebar-head.html" . -}}
 {{- if .IsHome -}}
 <style>
+  /* legacy curriculum grid rules kept for non-home if needed */
   .curriculum-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.25rem;
-    margin: 1.5rem 0 2.5rem;
-  }
-  .curriculum-card {
-    display: block;
-    padding: 1.25rem 1.35rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--entry);
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .curriculum-card:hover {
-    border-color: var(--secondary);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-  .curriculum-card-title {
-    margin: 0 0 0.5rem;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--primary);
-    line-height: 1.35;
-  }
-  .curriculum-card-desc {
-    margin: 0 0 0.75rem;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: var(--secondary);
-  }
-  .curriculum-card-meta {
-    margin: 0;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--secondary);
   }
 </style>
 {{- end -}}
-{{- if or (eq .Section "system-design") (eq .Section "security-architecture") (eq .Section "database-internals") (eq .Section "system-fundamentals") (eq .Section "microservices") (and .IsSection (or (eq .Section "system-design") (eq .Section "security-architecture") (eq .Section "database-internals") (eq .Section "system-fundamentals") (eq .Section "microservices"))) -}}
+{{- $isCurriculumSection := false -}}
+{{- range site.Data.curriculum_sections.sections -}}
+  {{- if eq .slug $.Section -}}
+    {{- $isCurriculumSection = true -}}
+  {{- end -}}
+{{- end -}}
+{{- if or $isCurriculumSection (and .IsSection $isCurriculumSection) -}}
 <style>
   .sd-section-nav {
     font-size: 0.9rem;
@@ -62,6 +39,13 @@
   }
   .sd-section-nav-sep {
     margin: 0 0.35rem;
+  }
+  .sd-section-nav-context {
+    color: var(--primary);
+    font-weight: 600;
+  }
+  .curriculum-paginav .title {
+    font-size: 0.85rem;
   }
 
   .sd-toc {

@@ -347,6 +347,9 @@ flowchart LR
 
 Single master manifests contain alternate media tracks. The client monitors download performance per chunk and switches resolution on the next chunk boundary — not by swapping entire playlists.
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public interface ManifestGenerator {
     String generateManifest(UUID videoId, DeviceProfile profile, CodecPreference codec);
@@ -365,6 +368,16 @@ public class DashManifestGenerator implements ManifestGenerator {
     }
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 **I-frame alignment:** Transcode workers force keyframes at fixed intervals (e.g., every 2 seconds) so chunks align across all resolutions — enabling seamless bitrate switches without decoder artifacts.
 

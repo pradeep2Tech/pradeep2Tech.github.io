@@ -58,7 +58,7 @@ If another process mutated the row first, the affected row count returns 0, trig
 
 **Pessimistic Locking:** The app issues an explicit blocking statement (e.g., `SELECT ... FOR UPDATE` in SQL) over an active connection pool, forcing concurrent callers to block until the holding transaction issues an explicit `COMMIT` or `ROLLBACK`.
 
-See also: [MVCC Concurrency Anomalies & Locking Layers](/system-fundamentals/database-transactions-and-acid-isolation/), [Local Concurrency & MVCC](/database-internals/local-concurrency-mvcc/), and [Saga Pattern](/microservices/saga-pattern-distributed-transactions/).
+See also: [MVCC Concurrency Anomalies & Locking Layers](/system-design/database-transactions-and-acid-isolation/), [Local Concurrency & MVCC](/database-handbook/local-concurrency-mvcc/), and [Saga Pattern](/microservices/saga-pattern-distributed-transactions/).
 
 ---
 

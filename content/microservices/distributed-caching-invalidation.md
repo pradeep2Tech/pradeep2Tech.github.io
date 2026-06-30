@@ -42,7 +42,7 @@ graph TD
 
 **Atomic Eviction:** On data mutations, the service writes updates to the database first, and then explicitly fires a cache eviction (Delete Key) operation over the network to force the next read request to fetch fresh data.
 
-See also: [CDC-Based Cache Invalidation](/system-fundamentals/cdc-based-cache-invalidation/) and [Cache Stampede & Penetration Mitigation](/system-fundamentals/cache-stampede-and-penetration-mitigation/).
+See also: [CDC-Based Cache Invalidation](/system-design/cdc-based-cache-invalidation/) and [Cache Stampede & Penetration Mitigation](/system-design/cache-stampede-and-penetration-mitigation/).
 
 ---
 
@@ -107,7 +107,7 @@ The system faces unavoidable **eventual consistency** windows. If the database w
     ✓ Decouples cache coherence from application dual-write logic
 ```
 
-See [CDC-Based Cache Invalidation](/system-fundamentals/cdc-based-cache-invalidation/) for pipeline failure modes and binlog lag windows.
+See [CDC-Based Cache Invalidation](/system-design/cdc-based-cache-invalidation/) for pipeline failure modes and binlog lag windows.
 
 ---
 

@@ -400,6 +400,9 @@ Notifying 10,000 nearby drivers simultaneously creates lock contention and waste
 
 ### ZooKeeper Ephemeral Lock Manager
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public class DistributedLockManager {
     private final CuratorFramework client;
@@ -425,6 +428,16 @@ public class DistributedLockManager {
     }
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ### Booking State Machine
 

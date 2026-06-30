@@ -372,12 +372,25 @@ Two coordinates meters apart but on opposite sides of a Geohash quadrant boundar
 
 ### Core Interface
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public interface SpatialIndexEngine {
     List<POIEntity> findNearby(Coordinate center, double radiusMeters, SearchFilters filters);
     void updateLocation(String entityId, Coordinate newCoord, long timestamp);
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ### Distance Calculation Pipeline
 

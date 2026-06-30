@@ -1,0 +1,326 @@
+{{- $isCurriculumSection := false -}}
+{{- range site.Data.curriculum_sections.sections -}}
+  {{- if eq .slug $.Section -}}
+    {{- $isCurriculumSection = true -}}
+  {{- end -}}
+{{- end -}}
+{{- if $isCurriculumSection -}}
+<style>
+  .main:has(.ekh-book-layout) {
+    max-width: min(1440px, calc(100vw - 1.5rem));
+  }
+
+  .ekh-book-layout {
+    --ekh-accent: #4f46e5;
+    --ekh-sidebar-width: 288px;
+    display: grid;
+    grid-template-columns: var(--ekh-sidebar-width) minmax(0, 1fr);
+    gap: 0;
+    min-height: calc(100vh - 8rem);
+    margin: 0.5rem 0 2rem;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--ekh-accent) 20%, var(--border));
+    box-shadow: 0 4px 24px color-mix(in srgb, var(--ekh-accent) 8%, transparent);
+  }
+
+  .ekh-book-layout--design { --ekh-accent: #4f46e5; }
+  .ekh-book-layout--handbooks { --ekh-accent: #0d9488; }
+  .ekh-book-layout--practice { --ekh-accent: #7c3aed; }
+  .ekh-book-layout--career { --ekh-accent: #d97706; }
+  .ekh-book-layout--security { --ekh-accent: #e11d48; }
+
+  .ekh-sidebar {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: calc(100vh - 5rem);
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ekh-accent) 10%, var(--entry)) 0%,
+      var(--entry) 40%
+    );
+    border-right: 1px solid color-mix(in srgb, var(--ekh-accent) 18%, var(--border));
+  }
+
+  .ekh-sidebar-head {
+    flex-shrink: 0;
+    padding: 1rem 1rem 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--ekh-accent) 15%, var(--border));
+    background: color-mix(in srgb, var(--ekh-accent) 6%, var(--entry));
+  }
+
+  .ekh-sidebar-home {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--secondary);
+    text-decoration: none;
+    margin-bottom: 0.45rem;
+  }
+
+  .ekh-sidebar-home:hover {
+    color: var(--ekh-accent);
+  }
+
+  .ekh-sidebar-title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.35;
+    color: var(--ekh-accent);
+    text-decoration: none;
+  }
+
+  .ekh-sidebar-title:hover {
+    text-decoration: underline;
+  }
+
+  .ekh-sidebar-close {
+    display: none;
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
+    color: var(--secondary);
+    cursor: pointer;
+  }
+
+  .ekh-sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.65rem 0.5rem 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--ekh-accent) 40%, transparent) transparent;
+  }
+
+  .ekh-sidebar-module {
+    margin: 0.35rem 0;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--ekh-accent) 4%, var(--theme));
+    border: 1px solid color-mix(in srgb, var(--ekh-accent) 12%, var(--border));
+  }
+
+  .ekh-sidebar-module-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 0.55rem 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--primary);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .ekh-sidebar-module-title::-webkit-details-marker {
+    display: none;
+  }
+
+  .ekh-sidebar-module-title::before {
+    content: "▸";
+    flex-shrink: 0;
+    color: var(--ekh-accent);
+    transition: transform 0.15s ease;
+    margin-top: 0.05rem;
+  }
+
+  .ekh-sidebar-module[open] > .ekh-sidebar-module-title::before {
+    transform: rotate(90deg);
+  }
+
+  .ekh-sidebar-module-badge {
+    flex-shrink: 0;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--ekh-accent) 18%, var(--theme));
+    color: var(--ekh-accent);
+  }
+
+  .ekh-sidebar-topics {
+    list-style: none;
+    margin: 0;
+    padding: 0 0.35rem 0.5rem;
+  }
+
+  .ekh-sidebar-topics > li {
+    margin: 0.1rem 0;
+  }
+
+  .ekh-sidebar-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    padding: 0.38rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: var(--secondary);
+    text-decoration: none;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+
+  .ekh-sidebar-link:hover {
+    background: color-mix(in srgb, var(--ekh-accent) 10%, var(--theme));
+    color: var(--primary);
+  }
+
+  .ekh-sidebar-link.is-active {
+    background: color-mix(in srgb, var(--ekh-accent) 16%, var(--theme));
+    color: var(--ekh-accent);
+    font-weight: 700;
+    box-shadow: inset 3px 0 0 var(--ekh-accent);
+  }
+
+  .ekh-sidebar-link--overview.is-active {
+    margin-bottom: 0.35rem;
+  }
+
+  .ekh-sidebar-link-num {
+    flex-shrink: 0;
+    min-width: 1.6rem;
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--ekh-accent) 75%, var(--secondary));
+  }
+
+  .ekh-sidebar-link-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ekh-sidebar-link--nested .ekh-sidebar-link {
+    padding-left: 1.5rem;
+    font-size: 0.78rem;
+  }
+
+  .ekh-sidebar-subtopics {
+    list-style: none;
+    margin: 0.1rem 0 0.2rem;
+    padding: 0 0 0 0.85rem;
+    border-left: 2px solid color-mix(in srgb, var(--ekh-accent) 25%, var(--border));
+  }
+
+  .ekh-sidebar-link--sub {
+    padding: 0.28rem 0.45rem;
+    font-size: 0.76rem;
+  }
+
+  .ekh-book-main {
+    min-width: 0;
+    padding: 1.5rem 1.75rem 2.5rem;
+    background: var(--theme);
+  }
+
+  .ekh-page-header {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--ekh-accent) 15%, var(--border));
+  }
+
+  .ekh-page-header h1,
+  .ekh-page-header .post-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.65rem;
+    line-height: 1.25;
+    color: var(--primary);
+  }
+
+  .ekh-page-header .post-description,
+  .ekh-page-header .post-description p {
+    margin: 0;
+    color: var(--secondary);
+    line-height: 1.55;
+  }
+
+  .ekh-index-content {
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  .ekh-article .post-content {
+    max-width: none;
+  }
+
+  .ekh-sidebar-toggle {
+    display: none;
+    position: fixed;
+    bottom: 1.25rem;
+    left: 1.25rem;
+    z-index: 90;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--ekh-accent, #4f46e5);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  .ekh-book-layout--design ~ .ekh-sidebar-toggle { background: #4f46e5; }
+  .ekh-book-layout--handbooks ~ .ekh-sidebar-toggle { background: #0d9488; }
+  .ekh-book-layout--practice ~ .ekh-sidebar-toggle { background: #7c3aed; }
+  .ekh-book-layout--career ~ .ekh-sidebar-toggle { background: #d97706; }
+  .ekh-book-layout--security ~ .ekh-sidebar-toggle { background: #e11d48; }
+
+  .ekh-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 98;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  @media (max-width: 960px) {
+    .ekh-book-layout {
+      grid-template-columns: 1fr;
+      border-radius: 10px;
+    }
+
+    .ekh-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 99;
+      width: min(320px, 88vw);
+      max-height: none;
+      transform: translateX(-105%);
+      transition: transform 0.22s ease;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .ekh-sidebar.is-open {
+      transform: translateX(0);
+    }
+
+    .ekh-sidebar-close {
+      display: block;
+    }
+
+    .ekh-sidebar-toggle {
+      display: inline-flex;
+    }
+
+    .ekh-sidebar-backdrop.is-visible {
+      display: block;
+    }
+
+    .ekh-book-main {
+      padding: 1rem 1rem 2rem;
+    }
+  }
+</style>
+{{- end -}}

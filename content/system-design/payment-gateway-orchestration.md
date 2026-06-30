@@ -432,12 +432,25 @@ On processor outage, a **circuit breaker** opens and traffic fails over to the n
 
 ### Adapter Pattern
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public interface PaymentProcessorConnector {
     ProcessorResponse processCapture(CaptureRequest request) throws GatewayNetworkException;
     ProcessorResponse queryExternalStatus(String externalTransactionId);
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 Each processor (Razorpay, PayU, Stripe) implements this interface — core logic stays decoupled from third-party JSON contracts.
 

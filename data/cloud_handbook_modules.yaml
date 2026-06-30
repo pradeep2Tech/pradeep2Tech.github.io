@@ -1,0 +1,21 @@
+modules:
+  - id: 1
+    focus: "Cloud Provider Overview"
+    topics:
+      - cloud-providers-comparison
+      - aws-cloud
+      - azure-cloud
+      - gcp-cloud
+      - openshift-on-prem-kubernetes
+  - id: 2
+    focus: "Managed Kubernetes"
+    topics:
+      - eks
+      - aks
+      - gke
+  - id: 3
+    focus: "Secrets & Key Management"
+    topics:
+      - vault
+      - aws-secrets-manager
+      - azure-key-vault

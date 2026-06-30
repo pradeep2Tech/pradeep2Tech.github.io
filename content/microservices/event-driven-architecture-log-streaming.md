@@ -53,7 +53,7 @@ sequenceDiagram
 
 **Coordination & Atomic State Mechanics:**
 
-* **Transactional Outbox Pattern:** To prevent dual-write anti-patterns, the producing service writes the domain state mutation and appends the event payload into an outbox table within the same ACID-compliant database transaction. See [Transactional Outbox Pattern](/database-internals/transactional-outbox-pattern/) for schema design and relay engine trade-offs.
+* **Transactional Outbox Pattern:** To prevent dual-write anti-patterns, the producing service writes the domain state mutation and appends the event payload into an outbox table within the same ACID-compliant database transaction. See [Transactional Outbox Pattern](/database-handbook/transactional-outbox-pattern/) for schema design and relay engine trade-offs.
 * **Change Data Capture (CDC):** A log miner (e.g., Debezium) parses the database transaction log (WAL) and streams events to the message broker, assuring at-least-once delivery without adding overhead to application threads.
 * **Tracing Context Propagation:** Distributed trace headers (`traceparent`, `tracestate` via OpenTelemetry) are injected into the metadata/headers of the event record, allowing tracing tools to link asynchronous consumer execution spans across network boundaries.
 

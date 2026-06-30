@@ -1,0 +1,189 @@
+# Microservices Blog Posts — Architecture Playbook
+
+Reference implementation: `content/microservices/circuit-breaker-pattern.md`
+
+## Repo Layout
+
+| Path | Purpose |
+|---|---|
+| `content/microservices/_index.md` | Playbook landing (What/Goals/Principles/Pattern overview) |
+| `content/microservices/<topic>.md` | One post per pattern or concept |
+| `data/microservices_modules.yaml` | Module grouping and topic order |
+| `data/microservices_order.yaml` | Flat topic order (derived from modules) |
+| `layouts/shortcodes/code-tabs.html` | 4-language tab container |
+| `layouts/shortcodes/code-tab.html` | Per-language panel |
+| `assets/css/code-tabs.css` | Tab bar + panel styles (also covers legacy `impl-tabs`) |
+| `assets/js/code-tabs.js` | Tab switch JS |
+| `layouts/partials/code-tabs-head.html` | Loads fingerprinted CSS |
+| `layouts/partials/curriculum-nav-links.html` | Previous/Next from `*_order.yaml` |
+| `layouts/partials/microservices-nav.html` | Breadcrumb: Home · Playbook · Module · Topic |
+
+URL pattern: `/microservices/<filename>/` — **preserve filenames** to keep existing URLs.
+
+## Hugo Front Matter
+
+```yaml
+---
+title: "<Topic Title>"
+date: 2026-06-28T14:00:00+00:00
+draft: false
+description: "One-line summary for SEO and social previews."
+tags: ["microservices", "<topic-tag>", "distributed-systems"]
+categories: ["Distributed Microservices"]
+shortTitle: "<Short Title>"
+module: 2
+moduleTitle: "API Boundaries, Discovery & Fault Tolerance"
+sectionRef: "2.3"
+languages: ["java", "golang", "python", "pseudo"]
+playbookVersion: 2
+---
+```
+
+Set `draft: true` while writing; `draft: false` when ready.
+
+## Required Sections (11) — use `##` headings
+
+Microservices playbook posts use numbered `##` headings so section collapsibles group content cleanly.
+
+1. **Executive Summary** — plain engineering language (2–4 sentences)
+2. **Problem It Solves** — why naive approaches fail; symptom table
+3. **Visual Architecture** — Mermaid `flowchart LR`, `stateDiagram-v2`, or `classDiagram`
+4. **Core Flow** — Mermaid `sequenceDiagram` with `alt` branches (not numbered prose duplicating the diagram)
+5. **Real-World Example** — ERP, fintech, BFSI, order-mgmt, payments, inventory scenarios
+6. **Design Options / Patterns** — comparison tables (3+ options when applicable)
+7. **Trade-offs** — Pros | Cons | When NOT to Use table
+8. **Failure Scenarios** — production breakage table
+9. **Best Practices** — operational guidance, resilience stack where relevant
+10. **Interview Answer** — 60–90 second spoken blockquote
+11. **Implementation** — all code inside `code-tabs` (Java / Go / Python / Pseudo)
+
+Separate major sections with `---` horizontal rules.
+
+---
+
+## Code Snippets — Mandatory `code-tabs` Rule
+
+**Every implementation code snippet belongs inside `code-tabs`.** Do not render languages as separate vertical sections.
+
+### When to use `code-tabs`
+
+| Content type | Use `code-tabs`? | Notes |
+|---|---|---|
+| Java / Go / Python / Pseudo implementation | **Yes — required** | Under `## 11. Implementation` |
+| Anti-pattern vs fixed example | **Yes** | All Java in `lang="java"` tab, etc. |
+| Mermaid diagrams | **No** | Sections 3 and 4 |
+| One-line inline `` `code` `` in prose | **No** | Fine in any section |
+| Shell / YAML config snippets | **Optional** | Single fence in relevant tab or prose |
+
+### Canonical template
+
+```markdown
+## 11. Implementation
+
+{{< code-tabs default="java" java="Java" golang="Go" python="Python" pseudo="Pseudo" >}}
+{{< code-tab lang="java" >}}
+
+```java
+// example
+```
+
+{{< /code-tab >}}
+{{< code-tab lang="golang" >}}
+
+```go
+// example
+```
+
+{{< /code-tab >}}
+{{< code-tab lang="python" >}}
+
+```python
+# example
+```
+
+{{< /code-tab >}}
+{{< code-tab lang="pseudo" >}}
+
+```text
+STATE closed: CALL downstream
+```
+
+{{< /code-tab >}}
+{{< /code-tabs >}}
+```
+
+### Shortcode contract
+
+| Shortcode | Required params | Notes |
+|---|---|---|
+| `code-tabs` | `default="java"`, `java="Java"`, `golang="Go"`, `python="Python"`, `pseudo="Pseudo"` | Omit unused langs by omitting their label param |
+| `code-tab` | `lang="java"` \| `golang` \| `python` \| `pseudo` | Must match a key on parent |
+
+- Use `{{<` / `>}}` delimiters when panels contain fenced code blocks.
+- Java tab first (default).
+- LLD posts still use `impl-tabs` (Java/Go only) — shared CSS/JS via `code-tabs.css` / `code-tabs.js`.
+
+---
+
+## Mermaid Rules
+
+| Do | Avoid |
+|----|-----|
+| `sequenceDiagram` for multi-service flows (§4) | Numbered step lists duplicating the diagram |
+| `stateDiagram-v2` for breaker/lifecycle states | Unquoted special chars in labels |
+| `flowchart LR` for topology (§3) | 12+ participants — split diagrams |
+| `participant X as Display Name` aliases | Ambiguous node IDs (`Redis` as sole name) |
+
+---
+
+## Navigation
+
+- **Previous / Next:** driven by `data/microservices_order.yaml` via `curriculum-nav-links.html`
+- **Breadcrumb:** `microservices-nav.html` shows module + sectionRef
+- **Index TOC:** auto-generated in `layouts/microservices/list.html` from `microservices_modules.yaml`
+
+## Content Migration (old → new)
+
+| Old heading | New section |
+|---|---|
+| Core Microservices Pattern & Architectural Intent | §1 + §2 |
+| Production-Grade Implementation + Mermaid | §3 + §4 |
+| Graceful Degradation / examples | §5 |
+| Configuration / Comparison tables | §6 |
+| Critical System Design Trade-offs | §7 |
+| Failure Modes table | §8 |
+| Senior Counter-Measure / operational notes | §9 |
+| Interview Failure Modes & Pro-Tips | §10 |
+| (new) code examples | §11 |
+
+Preserve See also links, video references, and existing tables — reorganize, do not delete substance.
+
+## Cross-Links
+
+Link outward where relevant:
+
+- Saga → [Transactional Outbox](/database-handbook/transactional-outbox-pattern/)
+- Circuit breaker → [Proxy Pattern](/design-patterns/proxy-pattern/)
+- Rate limiting → [Distributed Rate Limiter](/system-design/distributed-rate-limiter/)
+
+## Workflow
+
+1. Add topic slug to `data/microservices_modules.yaml` (if new)
+2. Create/migrate `content/microservices/<slug>.md`
+3. Put implementation code inside `code-tabs` / `code-tab`
+4. Update `content/microservices/_index.md` if module structure changes
+5. Preview: `hugo server -D` — hard refresh (`Ctrl+Shift+R`)
+6. Set `draft: false` when ready
+
+### Preview checklist (every post)
+
+| Check | Expected |
+|---|---|
+| `## 1` through `## 11` | Section collapsibles with Expand pill |
+| §3 / §4 diagrams | Mermaid renders; click-to-expand lightbox works |
+| Tab bar | Java / Go / Python / Pseudo visible |
+| Default panel | Java visible on load |
+| Footer nav | Previous/Next follows curriculum order |
+| URLs | `/microservices/<slug>/` unchanged |
+
+Reference post: `circuit-breaker-pattern.md`.

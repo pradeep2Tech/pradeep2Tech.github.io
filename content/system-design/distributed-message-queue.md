@@ -317,6 +317,9 @@ MurmurHash3 produces a uniform 32-bit distribution. Modulo against partition cou
 
 Each partition maintains a `nextOffset` counter. On append, the broker assigns sequential offsets to every record in the batch:
 
+{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tab lang="java" >}}
+
 ```java
 public void append(MessageBatch batch) {
     rwLock.writeLock().lock();
@@ -333,6 +336,16 @@ public void append(MessageBatch batch) {
     }
 }
 ```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+// TODO: idiomatic Go equivalent — mirror the Java snippet above
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ### Idempotent Producer Deduplication
 
