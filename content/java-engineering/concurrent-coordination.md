@@ -1,16 +1,16 @@
 ---
-title: "Concurrent Coordination"
+title: "Concurrent Coordination Interview Guide"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "CountDownLatch, CyclicBarrier, Semaphore, Phaser, Exchanger use cases."
-tags: ["java", "java-engineering", "handbook"]
+description: "CountDownLatch, CyclicBarrier, Semaphore, Phaser — scenario-based interview answers."
+tags: ["java", "java-engineering", "handbook", "interview"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "Coordination"
-module: 6
+module: 3
 moduleTitle: "Concurrency"
-sectionRef: "6.4"
+sectionRef: "3.9"
 ShowToc: true
-cheatSheet: true
+interviewHandbook: true
 ---
 
 ## At a Glance
@@ -97,6 +97,7 @@ done.await();
 
 ## See Also
 
-- [Previous: Locks & Atomics](/java-engineering/locks-and-atomics/)
-- [Next: Virtual Threads](/java-engineering/virtual-threads-structured-concurrency/)
+- [Previous: Concurrent Collections](/java-engineering/concurrent-collections/)
+- [Next: CompletableFuture](/java-engineering/completablefuture-interview-guide/)
+- [Java Threading Interview Guide](/java-engineering/java-threading-interview-guide/)
 - [Java Engineering Handbook Index](/java-engineering/)

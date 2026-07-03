@@ -2,15 +2,15 @@
 title: "Java Engineering Handbook"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "Architect-grade Java quick reference — collections internals, concurrency, JVM/GC, LTS matrix, and interview one-pagers. Java 8–25."
-tags: ["java", "java-engineering", "handbook", "jvm", "cheat-sheet"]
+description: "Interview-focused Java handbook for senior engineers — collections internals, concurrency, JVM/GC, and Top 100 questions. Java 8–25."
+tags: ["java", "java-engineering", "handbook", "interview", "jvm"]
 categories: ["Java Engineering Handbook"]
 ShowPageNums: true
 ---
 
-Dense **cheat sheets** for senior engineers and architects — not a language tutorial. Basics are **clubbed** into one-pagers; depth sits where production decisions happen: **collections internals**, **concurrency**, **memory/GC**, **JVM flags**, and **LTS upgrades**.
+Dense **interview handbook** for senior engineers, leads, and architects — not a beginner tutorial. Questions first, production notes included, duplicate cheat sheets removed.
 
-**35 pages** · **11 modules** · Target JDK **8 → 25**
+**36 pages** · **6 modules** · Target JDK **8 → 25**
 
 ---
 
@@ -18,12 +18,13 @@ Dense **cheat sheets** for senior engineers and architects — not a language tu
 
 | You are… | Start here |
 | :--- | :--- |
-| **Architect / 15+ years** | [Collections Decision Matrix](/java-engineering/collections-decision-matrix/) → [JVM Flags](/java-engineering/jvm-flags-and-tuning/) → [LTS Matrix](/java-engineering/java-lts-release-matrix/) |
-| **Staff engineer in review** | [HashMap Internals](/java-engineering/hashmap-internals/) · [Virtual Threads](/java-engineering/virtual-threads-structured-concurrency/) · [CHM Internals](/java-engineering/concurrenthashmap-internals/) |
-| **Interview prep (no coding)** | Module 11 — [Collections Complexity](/java-engineering/collections-complexity/) and siblings |
+| **Interview prep (6+ years)** | [Top 100 Questions](/java-engineering/top-100-java-interview-questions/) |
+| **Staff engineer / architect** | [HashMap Internals](/java-engineering/hashmap-internals/) → [JVM Memory & GC](/java-engineering/jvm-memory-gc-oom-guide/) → [JVM Flags](/java-engineering/jvm-flags-and-tuning/) |
+| **Concurrency deep dive** | [Java Threading](/java-engineering/java-threading-interview-guide/) → [JMM](/java-engineering/java-memory-model/) → [Virtual Threads](/java-engineering/virtual-threads-interview-guide/) |
+| **Quick revision** | [Memory Diagram](/java-engineering/memory-diagram-cheatsheet/) · [Thread Lifecycle](/java-engineering/thread-lifecycle-cheatsheet/) · [Collections Big-O](/java-engineering/collections-complexity/) |
 
 {{% note %}}
-Spring, Hibernate, Maven, design patterns, and DSA live in **other handbook sections** — this is **Java language + JVM platform** only.
+Spring Boot, design patterns, and DSA live in **other handbook sections** — this is **Java language + JVM platform** only.
 {{% /note %}}
 
 ---
@@ -32,37 +33,24 @@ Spring, Hibernate, Maven, design patterns, and DSA live in **other handbook sect
 
 | # | Module | Pages | Focus |
 | :--: | :--- | :---: | :--- |
-| 1 | Language Essentials | 2 | Types, control flow, strings, enums — **clubbed basics** |
-| 2 | OOP | 2 | Inheritance, records/sealed, `equals`/`hashCode` contract |
-| 3 | Collections | 6 | Decision matrices + **HashMap / CHM internals** |
-| 4 | Exceptions & Generics | 2 | Checked vs unchecked, PECS, erasure gotchas |
-| 5 | Functional & Streams | 2 | Lambdas, collectors, parallel stream caveats |
-| 6 | Concurrency | 5 | Executors, locks, coordination, **virtual threads** |
-| 7 | Memory & GC | 2 | Generations, collectors, OOM, leaks |
-| 8 | JVM | 2 | Class loading, JIT, **startup flags & tuning** |
-| 9 | Modern Java | 2 | **LTS matrix** + recent non-LTS rollup |
-| 10 | Platform APIs | 3 | NIO, reflection, serialization (when to avoid Java ser) |
-| 11 | Interview Cheat Sheets | 7 | One-screen tables — complexity, GC, thread states |
+| 1 | Language Fundamentals | 7 | Primitives, strings, OOP, generics, exceptions, streams |
+| 2 | Collections | 4 | Selection matrix, HashMap/CHM internals, maps |
+| 3 | Concurrency | 11 | Threading, JMM, CAS, coordination, CF, virtual threads |
+| 4 | JVM | 7 | Memory/GC/OOM, class loaders, JIT, references, flags |
+| 5 | Platform APIs | 2 | Reflection, serialization |
+| 6 | Interview Cheat Sheets | 5 | Top 100, diagrams, Big-O, version migration |
 
 ---
 
 ## Page Format
 
-Every sheet uses the same scan-friendly layout:
+Depth pages use a consistent interview structure:
 
-**At a Glance** → **Reference Tables** → **Snippets** → **Internals & Gotchas** → **Production Notes** → **Interview Probes** → **See Also**
+**Question** → **Short Answer** → **Detailed Explanation** → **Internal Working** → **Production Notes** → **Common Mistakes** → **Follow-up Questions**
 
-No long tutorials. Tables and decision matrices first.
+Difficulty and answer time are on the [Top 100 index](/java-engineering/top-100-java-interview-questions/) only.
 
----
-
-## JDK vs JRE vs JVM
-
-| Term | Architect takeaway |
-| :--- | :--- |
-| **JVM** | Runs bytecode; owns GC, JIT, threads — tune here |
-| **JDK** | Compiler + tools + runtime — what CI and dev machines install |
-| **JRE** | Legacy term; use **jlink** images or full JDK in containers |
+Cheat sheets are one-screen tables and diagrams with links to depth pages.
 
 ---
 
@@ -76,7 +64,7 @@ No long tutorials. Tables and decision matrices first.
 | **21** | Virtual threads — changes default concurrency model |
 | **25** | Current long-term upgrade target |
 
-Full matrix: [Java LTS Release Matrix](/java-engineering/java-lts-release-matrix/)
+Full guide: [Java Version Migration](/java-engineering/java-version-migration-guide/)
 
 ---
 

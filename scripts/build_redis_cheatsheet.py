@@ -1,4 +1,8 @@
-"""Build Redis Cheatsheet pages from data/redis_cheatsheet_modules.yaml."""
+"""Build Redis Cheatsheet pages from data/redis_cheatsheet_modules.yaml.
+
+DEPRECATED for handbook structure: use scripts/generate_redis_handbook_refactor.py instead.
+This script regenerates the legacy flat layout and will overwrite Phase B nested content.
+"""
 from __future__ import annotations
 
 import textwrap
@@ -587,7 +591,10 @@ flowchart LR
 
 
 def main() -> None:
-    modules_path = DATA / "redis_cheatsheet_modules.yaml"
+    raise SystemExit(
+        "build_redis_cheatsheet.py is deprecated. "
+        "Run: python scripts/generate_redis_handbook_refactor.py"
+    )
     modules = yaml.safe_load(modules_path.read_text(encoding="utf-8"))["modules"]
     ordered = flatten_topics(modules)
     write_order_yaml(ordered, DATA / "redis_cheatsheet_order.yaml")

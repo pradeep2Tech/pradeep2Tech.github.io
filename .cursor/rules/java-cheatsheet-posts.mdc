@@ -1,48 +1,61 @@
 ---
-description: Java Engineering Handbook — architect cheat sheets (not tutorials)
-globs: content/java-engineering/**/*.md, data/java_engineering_modules.yaml, data/java_engineering_order.yaml, scripts/build_java_engineering_handbook.py
+description: Java Engineering Handbook — interview-focused handbook for senior engineers
+globs: content/java-engineering/**/*.md, data/java_engineering_modules.yaml, data/java_engineering_order.yaml, scripts/build_java_engineering_handbook.py, scripts/generate_java_handbook_refactor.py
 alwaysApply: false
 ---
 
 # Java Engineering Handbook
 
-Reference: `content/java-engineering/collections-decision-matrix.md`, `content/java-engineering/jvm-flags-and-tuning.md`
+Reference: `content/java-engineering/top-100-java-interview-questions.md`, `content/java-engineering/hashmap-internals.md`
 
 ## Audience
 
-Senior engineers and **architects** — quick revision, production decisions, interview probes. **Not** a beginner tutorial.
+Senior engineers, leads, and **architects** — interview preparation, quick revision, production decisions. **Not** a beginner tutorial.
 
 ## Structure
 
 | Path | Purpose |
 |---|---|
-| `data/java_engineering_modules.yaml` | 11 modules, **35 topics** (basics clubbed) |
+| `data/java_engineering_modules.yaml` | 6 modules, **36 topics** |
 | `data/java_engineering_order.yaml` | Flat prev/next nav |
-| `scripts/build_java_engineering_handbook.py` | Regenerate all pages + prune orphans |
-| `content/java-engineering/<slug>.md` | One cheat sheet per topic |
+| `scripts/build_java_engineering_handbook.py` | Sync order + prune orphans |
+| `scripts/generate_java_handbook_refactor.py` | Regenerate interview pages (optional) |
+| `content/java-engineering/<slug>.md` | Hand-maintained interview pages |
 
-URL: `/java-engineering/<slug>/`
+URL: `/java-engineering/<slug>/` — use `aliases:` in front matter for renamed slugs.
 
-## Page Format (`cheatSheet: true`)
+## Page Format (`interviewHandbook: true`)
 
-1. **At a Glance** — 3–5 bullets
-2. **Reference Tables** — main content (decision matrices, Big-O, flags)
-3. **Snippets** — minimal Java only when it saves time
-4. **Internals & Gotchas**
+1. **Question** as `##` heading
+2. **Short Answer**
+3. **Detailed Explanation**
+4. **Internal Working** (when relevant)
 5. **Production Notes**
-6. **Interview Probes** — `{{< interview-answer >}}` (2–3 max)
-7. **See Also**
+6. **Common Mistakes**
+7. **Follow-up Questions** with links
 
-**Do not** split primitives, wrappers, operators into separate pages — keep in `core-java-quick-ref`.
+Difficulty and expected answer time live on the [Top 100 index](/java-engineering/top-100-java-interview-questions/) only — not repeated on depth pages.
+
+Cheat sheets (`cheatSheet: true`): one-screen tables/diagrams only — link to depth pages.
+
+## Modules
+
+1. Language Fundamentals (incl. streams)
+2. Collections (internals + selection)
+3. Concurrency (JMM, CAS, threading, VT)
+4. JVM (memory/GC, class loaders, JIT)
+5. Platform APIs
+6. Interview Cheat Sheets (Top 100 index)
 
 ## Out of Scope
 
-Spring Boot, Hibernate, Maven, design patterns, DSA → other handbook sections.
+Spring Boot, Hibernate, Maven, design patterns, DSA, NIO deep dive → other sections.
 
-## Regenerate
+## Maintenance
 
 ```bash
-python scripts/build_java_engineering_handbook.py
+python scripts/build_java_engineering_handbook.py   # sync order, prune orphans
+python scripts/generate_java_handbook_refactor.py  # optional bulk regen of generated pages
 ```
 
-Edits to page bodies live in `PAGE_BODIES` inside the build script unless you hand-edit markdown (hand edits overwritten on regen).
+Content is **hand-maintained** in markdown. Build script does not overwrite page bodies.

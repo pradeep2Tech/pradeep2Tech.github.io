@@ -6,11 +6,11 @@ description: "Production flag sets for heap, GC, diagnostics, and container awar
 tags: ["java", "java-engineering", "handbook"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "JVM Flags"
-module: 8
+module: 4
 moduleTitle: "JVM"
-sectionRef: "8.2"
+sectionRef: "4.7"
 ShowToc: true
-cheatSheet: true
+interviewHandbook: true
 ---
 
 ## At a Glance
@@ -93,6 +93,7 @@ java -XshowSettings:system -version
 
 ## See Also
 
-- [Previous: JVM Internals](/java-engineering/jvm-internals-quick-ref/)
-- [Next: LTS Matrix](/java-engineering/java-lts-release-matrix/)
+- [Previous: Reference Types](/java-engineering/reference-types-interview/)
+- [Next: Reflection Interview](/java-engineering/reflection-interview/)
+- [JVM Memory, GC & OOM](/java-engineering/jvm-memory-gc-oom-guide/)
 - [Java Engineering Handbook Index](/java-engineering/)

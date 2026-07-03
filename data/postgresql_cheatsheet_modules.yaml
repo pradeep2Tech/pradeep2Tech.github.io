@@ -1,57 +1,75 @@
-# PostgreSQL Cheatsheet — module index.
-# Section numbers are Module.Topic (e.g. 1.1, 4.3).
+# PostgreSQL Handbook — module index.
 modules:
-  - id: 1
-    focus: "Getting Started"
-    topics:
-      - installation
-      - sql-basics
-      - most-common-sql-commands
-  - id: 2
-    focus: "DDL & DML"
-    topics:
-      - ddl
-      - dml
-      - joins
-  - id: 3
-    focus: "Query Performance"
-    topics:
-      - indexes
-      - explain
-      - performance-tuning
-  - id: 4
-    focus: "Transactions & Concurrency"
-    topics:
-      - transactions
-      - isolation-levels
-      - mvcc
-      - locks
-  - id: 5
-    focus: "Scaling & High Availability"
-    topics:
-      - partitioning
-      - sharding
-      - replication
-  - id: 6
-    focus: "Advanced SQL"
-    topics:
-      - views
-      - materialized-views
-      - ctes
-      - window-functions
-      - json
-  - id: 7
-    focus: "Server-Side Programming"
-    topics:
-      - functions
-      - triggers
-      - stored-procedures
-  - id: 8
-    focus: "Operations & Maintenance"
-    topics:
-      - vacuum
-      - backup-restore
-  - id: 9
-    focus: "Interview Prep"
-    topics:
-      - interview-questions
+- id: 1
+  focus: Fundamentals
+  topics:
+  - 01-fundamentals/sql-basics
+  - 01-fundamentals/ddl
+  - 01-fundamentals/dml
+  - 01-fundamentals/joins
+  - 01-fundamentals/ctes
+  - 01-fundamentals/window-functions
+  - 01-fundamentals/installation
+- id: 2
+  focus: Core PostgreSQL
+  topics:
+  - 02-core-postgresql/architecture
+  - 02-core-postgresql/storage-engine
+  - 02-core-postgresql/wal
+  - 02-core-postgresql/mvcc
+  - 02-core-postgresql/transactions
+  - 02-core-postgresql/isolation-levels
+  - 02-core-postgresql/locks
+- id: 3
+  focus: Query Performance
+  topics:
+  - 03-query-performance/indexes
+  - 03-query-performance/explain
+  - 03-query-performance/query-optimization
+  - 03-query-performance/performance-tuning
+  - 03-query-performance/partitioning
+  - 03-query-performance/sharding
+- id: 4
+  focus: High Availability
+  topics:
+  - 04-high-availability/replication
+  - 04-high-availability/failover
+  - 04-high-availability/backup-restore
+  - 04-high-availability/disaster-recovery
+- id: 5
+  focus: Advanced Features
+  topics:
+  - 05-advanced-features/functions
+  - 05-advanced-features/stored-procedures
+  - 05-advanced-features/triggers
+  - 05-advanced-features/materialized-views
+  - 05-advanced-features/json
+  - 05-advanced-features/views
+- id: 6
+  focus: Production Operations
+  topics:
+  - 06-production-operations/vacuum
+  - 06-production-operations/monitoring
+  - 06-production-operations/troubleshooting
+  - 06-production-operations/connection-pooling
+  - 06-production-operations/capacity-planning
+- id: 7
+  focus: Comparisons
+  topics:
+  - 07-comparisons/postgresql-vs-mysql
+  - 07-comparisons/postgresql-vs-oracle
+  - 07-comparisons/postgresql-vs-mongodb
+- id: 8
+  focus: Interview Guide
+  topics:
+  - 08-interview-guide/top-150-interview-questions
+  - 08-interview-guide/architect-questions
+  - 08-interview-guide/troubleshooting-questions
+  - 08-interview-guide/performance-questions
+- id: 9
+  focus: Learning Paths
+  topics:
+  - 09-learning-paths/postgresql-senior-engineer-path
+  - 09-learning-paths/postgresql-lead-path
+  - 09-learning-paths/postgresql-architect-path
+  - 09-learning-paths/postgresql-interview-revision-path

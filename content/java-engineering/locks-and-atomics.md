@@ -1,104 +1,84 @@
 ---
-title: "Locks & Atomics"
+title: "Locks & Atomics Interview Guide"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "synchronized, volatile, ReentrantLock, StampedLock, Atomic* and VarHandle."
-tags: ["java", "java-engineering", "handbook"]
+description: "synchronized, volatile, ReentrantLock, atomics, and when each is architecturally correct."
+tags: ["java", "java-engineering", "handbook", "interview"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "Locks & Atomics"
-module: 6
+module: 3
 moduleTitle: "Concurrency"
-sectionRef: "6.3"
+sectionRef: "3.3"
 ShowToc: true
-cheatSheet: true
+interviewHandbook: true
 ---
 
-## At a Glance
+## Why is volatile not enough for i++?
 
-- `synchronized` — intrinsic lock on object/monitor.
-- `volatile` — visibility + ordering, not atomic compound ops.
-- `ReentrantLock` — tryLock, fairness, interruptible lock.
-- `java.util.concurrent.atomic.*` — CAS primitives for counters/flags.
+### Short Answer
+
+`volatile` guarantees visibility and ordering, not atomicity of read-modify-write operations.
+
+### Detailed Explanation
+
+`i++` compiles to load → increment → store. Another thread can interleave between steps, losing updates. Use `AtomicInteger.incrementAndGet()`, `synchronized`, or `Lock` for compound updates.
+
+### Internal Working
+
+`volatile` inserts memory barriers so writes are visible to subsequent reads across threads. It does not make the full RMW sequence atomic.
+
+### Production Notes
+
+Prefer `LongAdder` for high-contention counters; `AtomicLong` when you need a consistent read of the exact value.
+
+### Common Mistakes
+
+Declaring a counter `volatile` and expecting thread-safe increments.
+
+### Follow-up Questions
+
+- [CAS & Lock-Free Programming](/java-engineering/cas-and-lock-free-programming/)
+- [Java Memory Model](/java-engineering/java-memory-model/)
 
 ---
 
-## Reference Tables
+## synchronized vs ReentrantLock?
 
-| Mechanism | Scope | Best for |
-| :--- | :--- | :--- |
-| `synchronized` | Block/method | Simple mutual exclusion |
-| `volatile` | Field | Single-writer flags, DCL idiom (with care) |
-| `ReentrantLock` | Explicit | tryLock, timeouts, conditions |
-| `ReadWriteLock` | Read-heavy | Many readers, rare writers |
-| `StampedLock` | Optimistic read | Read-mostly with validation |
-| `AtomicInteger` etc. | Single variable | Counters, sequence |
+### Short Answer
 
-| `happens-before` edge | |
+`synchronized` is simpler and JVM-optimized; `ReentrantLock` offers `tryLock`, fairness, timeouts, and multiple `Condition`s.
+
+### Detailed Explanation
+
+Both provide mutual exclusion and memory visibility (monitor release/acquire establishes happens-before). `ReentrantLock` must `unlock()` in `finally`. Avoid locking on `String` literals or boxed integers (intern collisions).
+
+### Production Notes
+
+Always `unlock()` in `finally`. For read-heavy maps, prefer `ConcurrentHashMap` over wrapping with locks.
+
+### Follow-up Questions
+
+- `ReadWriteLock` vs `StampedLock` optimistic read?
+- [Deadlock Detection](/java-engineering/deadlock-detection/)
+
+---
+
+## Mechanism selection
+
+| Mechanism | Best for |
 | :--- | :--- |
-| Monitor unlock → lock | `synchronized` |
-| `volatile` write → read | Visibility |
-| `Thread.start` | Start of thread |
-| `Concurrent` utils | Documented per class |
-
-| Deadlock needs | Prevention |
-| :--- | :--- |
-| Circular wait | Lock ordering |
-| Hold and wait | tryLock with backoff |
-| | Timed locks |
-
----
-
-## Snippets
-
-```java
-private final AtomicLong seq = new AtomicLong();
-long next = seq.incrementAndGet();
-
-lock.lock();
-try {
-    // critical section
-} finally {
-    lock.unlock();
-}
-```
-
----
-
-## Internals & Gotchas
-
-- `synchronized` biased locking (historically) — JVM elides uncontended locks until revocation.
-- `VarHandle` (9+) — low-level fences on fields/arrays.
-- False sharing: pad hot counters or use `@Contended` (JVM flag).
-
----
-
-## Production Notes
-
-- Prefer higher-level `ConcurrentHashMap`, `LongAdder` over raw locks when fits.
-- Always `unlock` in `finally`.
-- Avoid `synchronized` on Strings/literals/boxed Integers — intern collisions.
-
----
-
-## Interview Probes
-
-
-{< interview-answer >}
-**Q:** volatile enough for i++?
-
-**A:** No — read-modify-write not atomic. Use `AtomicInteger` or synchronization.
-{< /interview-answer >}
-
-{< interview-answer >}
-**Q:** ReentrantLock vs synchronized?
-
-**A:** Lock: tryLock, fairness, multiple Conditions. synchronized: simpler, JVM optimized, blocks in thread dump clearly.
-{< /interview-answer >}
+| `synchronized` | Simple mutual exclusion |
+| `volatile` | Single-writer flags, publication |
+| `ReentrantLock` | tryLock, timeouts, conditions |
+| `ReadWriteLock` | Many readers, rare writers |
+| `StampedLock` | Read-mostly with validation |
+| `Atomic*` | Counters, flags, CAS updates |
 
 ---
 
 ## See Also
 
-- [Previous: CompletableFuture](/java-engineering/async-completablefuture/)
-- [Next: Coordination](/java-engineering/concurrent-coordination/)
+- [Previous: Java Memory Model](/java-engineering/java-memory-model/)
+- [Next: CAS & Lock-Free](/java-engineering/cas-and-lock-free-programming/)
+- [ConcurrentHashMap Internals](/java-engineering/concurrenthashmap-internals/)
 - [Java Engineering Handbook Index](/java-engineering/)

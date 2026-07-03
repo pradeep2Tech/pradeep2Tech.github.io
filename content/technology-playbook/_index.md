@@ -39,5 +39,5 @@ Slim **technology choice guide** for staff engineers and architects — architec
 | CQRS & Event Sourcing | [Microservices](/microservices/cqrs-event-sourcing/) |
 | Saga Pattern | [Microservices](/microservices/saga-pattern-distributed-transactions/) |
 | Circuit Breaker | [Microservices](/microservices/circuit-breaker-pattern/) |
-| Kafka selection | [Kafka Handbook](/kafka-handbook/kafka/) |
+| Kafka selection | [Kafka Handbook](/kafka-handbook/02-kafka/kafka-core/) |
 | Database internals | [Database Handbook](/database-handbook/) |

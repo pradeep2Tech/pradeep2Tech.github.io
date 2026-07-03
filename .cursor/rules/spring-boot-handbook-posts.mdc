@@ -1,50 +1,56 @@
 ---
-description: Spring Boot Cheat Sheet — quick-reference format and regeneration
+description: Spring Boot Handbook — senior engineer / architect interview format
 globs:
   - content/spring-boot/**
   - data/spring_boot_*.yaml
   - scripts/build_spring_boot_handbook.py
+  - scripts/generate_spring_boot_handbook_refactor.py
 ---
 
-# Spring Boot Cheat Sheet
+# Spring Boot Handbook
 
-Quick recap at `/spring-boot/` — **not** a tutorial handbook. See `cheatsheet-template.mdc` for canonical format.
+Interview-focused handbook at `/spring-boot/` for senior engineers, tech leads, and architects.
 
-Reference: `content/spring-boot/spring-boot-quick-ref.md`, `content/spring-boot/annotations-stereotypes.md`
+Reference: `content/spring-boot/startup-and-internals.md`, `content/spring-boot/interview-questions.md`
 
 ## Audience
 
-Senior engineers brushing up — annotations, config keys, snippets. Assumes you know Spring.
+**6+ years** — internal workings, production trade-offs, architect probes. **Not** beginners. No project setup tutorials.
 
-**Versions:** Boot 2.x / 3.x — note `javax` → `jakarta` and `SecurityFilterChain` on Boot 3.
+**Versions:** Boot 3.x primary (Java 17+, `jakarta.*`, `SecurityFilterChain`).
 
 ## Structure
 
 | Path | Purpose |
 |---|---|
-| `data/spring_boot_modules.yaml` | 9 modules, **21 topics** |
+| `data/spring_boot_modules.yaml` | 11 modules, **11 topics** |
 | `data/spring_boot_order.yaml` | Flat prev/next (auto-generated) |
-| `scripts/build_spring_boot_handbook.py` | Regenerate pages |
-| `content/spring-boot/<slug>.md` | One cheat sheet per topic |
+| `scripts/generate_spring_boot_handbook_refactor.py` | Page bodies (interview Q&A) |
+| `scripts/build_spring_boot_handbook.py` | Regenerate pages + prune orphans |
+| `content/spring-boot/<slug>.md` | One handbook page per topic |
 
-## Page Format (`cheatSheet: true`)
+## Page Format (`interviewHandbook: true`)
 
-1. **At a Glance**
-2. **Reference Tables**
-3. **Snippets**
-4. **Internals & Gotchas**
+Each question block:
+
+1. **Difficulty** + **Expected Answer Time**
+2. **Short Answer**
+3. **Detailed Explanation**
+4. **Internal Working** (when relevant)
 5. **Production Notes**
-6. **Interview Probes** (0–2 max)
-7. **See Also**
+6. **Common Mistakes**
+7. **Follow-up Questions**
 
-**Do not** add per-annotation pages, "creating project" tutorials, or playbook-style Request Flow sections.
+`interview-questions.md` — categorized index (100+ questions) linking to topic pages.
 
-## Out of Scope
+## Out of Scope (link instead)
 
-Core Java, microservices architecture deep dives, Kafka broker internals → other sections.
+Saga, Outbox, CQRS, Event Sourcing, API Gateway, service discovery, distributed transactions → [Microservices](/microservices/). Kafka broker internals → [Kafka Handbook](/kafka-handbook/). Core Java → [Java Engineering](/java-engineering/).
 
 ## Regenerate
 
 ```bash
 python scripts/build_spring_boot_handbook.py
 ```
+
+Edits to page bodies live in `generate_spring_boot_handbook_refactor.py` unless hand-editing markdown (hand edits overwritten on regen).

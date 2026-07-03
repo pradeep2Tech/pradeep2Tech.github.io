@@ -1,66 +1,84 @@
-# Go Cheat Sheet — language quick-reference structure.
+# Go Handbook — module index.
 modules:
   - id: 1
-    focus: "Language Basics"
+    focus: "Fundamentals"
     topics:
-      - language-basics
-      - functions
+      - 01-fundamentals/language-basics
+      - 01-fundamentals/functions
+      - 01-fundamentals/structs
+      - 01-fundamentals/arrays
+      - 01-fundamentals/slices
+      - 01-fundamentals/maps
+      - 01-fundamentals/methods
 
   - id: 2
-    focus: "Types & Structs"
+    focus: "Core Go"
     topics:
-      - structs
-      - interfaces
-      - pointers
-      - methods
+      - 02-core-go/interfaces
+      - 02-core-go/pointers
+      - 02-core-go/packages
+      - 02-core-go/go-modules
+      - 02-core-go/dependency-management
+      - 02-core-go/error-handling
 
   - id: 3
-    focus: "Packages & Errors"
+    focus: "Go Internals"
     topics:
-      - packages
-      - error-handling
+      - 03-go-internals/go-runtime
+      - 03-go-internals/scheduler
+      - 03-go-internals/memory-model
+      - 03-go-internals/garbage-collection
+      - 03-go-internals/escape-analysis
+      - 03-go-internals/reflection
 
   - id: 4
-    focus: "Collections"
-    topics:
-      - slices
-      - arrays
-      - maps
-
-  - id: 5
     focus: "Concurrency"
     topics:
-      - goroutines
-      - channels
-      - select
-      - context
+      - 04-concurrency/goroutines
+      - 04-concurrency/channels
+      - 04-concurrency/select
+      - 04-concurrency/mutex
+      - 04-concurrency/rwmutex
+      - 04-concurrency/sync-package
+      - 04-concurrency/context
+      - 04-concurrency/concurrency-patterns
+
+  - id: 5
+    focus: "Performance"
+    topics:
+      - 05-performance/performance-optimization
+      - 05-performance/profiling
+      - 05-performance/benchmarking
+      - 05-performance/memory-optimization
 
   - id: 6
-    focus: "Synchronization"
+    focus: "Production Go"
     topics:
-      - mutex
-      - rwmutex
-      - sync-package
+      - 06-production-go/logging
+      - 06-production-go/configuration-management
+      - 06-production-go/observability
+      - 06-production-go/graceful-shutdown
+      - 06-production-go/production-checklists
 
   - id: 7
-    focus: "Testing & Reflection"
+    focus: "Testing"
     topics:
-      - testing
-      - reflection
+      - 07-testing/testing
+      - 07-testing/mocking
+      - 07-testing/test-strategies
 
   - id: 8
-    focus: "Runtime"
+    focus: "Interview Guide"
     topics:
-      - memory-model
-      - garbage-collection
+      - 08-interview-guide/top-150-interview-questions
+      - 08-interview-guide/architect-questions
+      - 08-interview-guide/troubleshooting-questions
+      - 08-interview-guide/performance-questions
 
   - id: 9
-    focus: "Modules & Tooling"
+    focus: "Learning Paths"
     topics:
-      - go-modules
-      - dependency-management
-
-  - id: 10
-    focus: "Interview"
-    topics:
-      - interview-questions
+      - 09-learning-paths/golang-senior-engineer-path
+      - 09-learning-paths/golang-lead-path
+      - 09-learning-paths/golang-architect-path
+      - 09-learning-paths/golang-interview-revision-path

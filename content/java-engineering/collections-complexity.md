@@ -1,16 +1,17 @@
 ---
-title: "Collections Complexity (Interview)"
+title: "Collections Complexity (Cheat Sheet)"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "Big-O cheat sheet for List, Set, Map, Queue — interview one-pager."
-tags: ["java", "java-engineering", "handbook"]
+description: "Big-O cheat sheet for List, Set, Map, Queue — one-screen interview revision."
+tags: ["java", "java-engineering", "handbook", "interview"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "Collections Big-O"
-module: 11
+module: 6
 moduleTitle: "Interview Cheat Sheets"
-sectionRef: "11.1"
+sectionRef: "6.4"
 ShowToc: true
 cheatSheet: true
+interviewHandbook: true
 ---
 
 ## At a Glance
@@ -91,6 +92,7 @@ NavigableMap<Integer, String> ranks = new TreeMap<>();
 
 ## See Also
 
-- [Previous: Serialization](/java-engineering/serialization-quick-ref/)
-- [Next: Streams Interview](/java-engineering/stream-operations-interview/)
+- [Previous: Thread Lifecycle Cheat Sheet](/java-engineering/thread-lifecycle-cheatsheet/)
+- [Next: Java Version Migration](/java-engineering/java-version-migration-guide/)
+- [Collection Selection Matrix](/java-engineering/collection-selection-matrix/)
 - [Java Engineering Handbook Index](/java-engineering/)

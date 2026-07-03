@@ -1,51 +1,80 @@
-# Redis Cheatsheet — module index.
-# Each module groups related topics; section numbers are Module.Topic (e.g. 1.1, 4.3).
+# Redis Handbook — module index.
 modules:
   - id: 1
-    focus: "Architecture & Model"
+    focus: "Fundamentals"
     topics:
-      - architecture
-      - data-structures
+      - 01-fundamentals/architecture
+      - 01-fundamentals/data-structures
+
   - id: 2
-    focus: "Core Data Types"
+    focus: "Core Redis"
     topics:
-      - strings
-      - hashes
-      - lists
-      - sets
-      - sorted-sets
+      - 02-core-redis/strings
+      - 02-core-redis/hashes
+      - 02-core-redis/lists
+      - 02-core-redis/sets
+      - 02-core-redis/sorted-sets
+      - 02-core-redis/bitmaps
+      - 02-core-redis/hyperloglog
+
   - id: 3
-    focus: "Specialized Structures"
+    focus: "Redis Internals"
     topics:
-      - bitmaps
-      - hyperloglog
-      - streams
+      - 03-redis-internals/memory-management
+      - 03-redis-internals/redis-protocol
+      - 03-redis-internals/persistence
+      - 03-redis-internals/replication
+      - 03-redis-internals/sentinel
+      - 03-redis-internals/cluster
+
   - id: 4
-    focus: "Messaging & Atomicity"
+    focus: "Distributed Systems"
     topics:
-      - pub-sub
-      - transactions
-      - lua-scripts
+      - 04-distributed-systems/distributed-lock
+      - 04-distributed-systems/transactions
+      - 04-distributed-systems/pub-sub
+      - 04-distributed-systems/streams
+      - 04-distributed-systems/lua-scripts
+
   - id: 5
-    focus: "Durability & High Availability"
+    focus: "Production Patterns"
     topics:
-      - persistence
-      - replication
-      - sentinel
-      - cluster
+      - 05-production-patterns/caching-patterns
+      - 05-production-patterns/cache-invalidation
+      - 05-production-patterns/cache-breakdown
+      - 05-production-patterns/cache-avalanche
+      - 05-production-patterns/cache-penetration
+      - 05-production-patterns/session-store
+      - 05-production-patterns/rate-limiter
+
   - id: 6
-    focus: "Memory Management"
+    focus: "Performance & Operations"
     topics:
-      - eviction-policies
+      - 06-performance-operations/eviction-policies
+      - 06-performance-operations/performance-tuning
+      - 06-performance-operations/monitoring
+      - 06-performance-operations/capacity-planning
+      - 06-performance-operations/troubleshooting
+
   - id: 7
-    focus: "Application Patterns"
+    focus: "Comparisons"
     topics:
-      - caching-patterns
-      - distributed-lock
-      - rate-limiter
-      - session-store
+      - 07-comparisons/redis-vs-memcached
+      - 07-comparisons/redis-vs-kafka
+      - 07-comparisons/redis-vs-rabbitmq
+
   - id: 8
-    focus: "Reference"
+    focus: "Interview Guide"
     topics:
-      - common-redis-commands
-      - interview-questions
+      - 08-interview-guide/top-150-interview-questions
+      - 08-interview-guide/architect-questions
+      - 08-interview-guide/troubleshooting-questions
+      - 08-interview-guide/performance-questions
+
+  - id: 9
+    focus: "Learning Paths"
+    topics:
+      - 09-learning-paths/redis-senior-engineer-path
+      - 09-learning-paths/redis-lead-path
+      - 09-learning-paths/redis-architect-path
+      - 09-learning-paths/redis-interview-revision-path

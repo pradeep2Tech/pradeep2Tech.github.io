@@ -1,29 +1,48 @@
-# Flat topic order — derived from postgresql_cheatsheet_modules.yaml.
+# Flat topic order — nested slugs.
 topics:
-  - installation
-  - sql-basics
-  - most-common-sql-commands
-  - ddl
-  - dml
-  - joins
-  - indexes
-  - explain
-  - performance-tuning
-  - transactions
-  - isolation-levels
-  - mvcc
-  - locks
-  - partitioning
-  - sharding
-  - replication
-  - views
-  - materialized-views
-  - ctes
-  - window-functions
-  - json
-  - functions
-  - triggers
-  - stored-procedures
-  - vacuum
-  - backup-restore
-  - interview-questions
+- 01-fundamentals/sql-basics
+- 01-fundamentals/ddl
+- 01-fundamentals/dml
+- 01-fundamentals/joins
+- 01-fundamentals/ctes
+- 01-fundamentals/window-functions
+- 01-fundamentals/installation
+- 02-core-postgresql/architecture
+- 02-core-postgresql/storage-engine
+- 02-core-postgresql/wal
+- 02-core-postgresql/mvcc
+- 02-core-postgresql/transactions
+- 02-core-postgresql/isolation-levels
+- 02-core-postgresql/locks
+- 03-query-performance/indexes
+- 03-query-performance/explain
+- 03-query-performance/query-optimization
+- 03-query-performance/performance-tuning
+- 03-query-performance/partitioning
+- 03-query-performance/sharding
+- 04-high-availability/replication
+- 04-high-availability/failover
+- 04-high-availability/backup-restore
+- 04-high-availability/disaster-recovery
+- 05-advanced-features/functions
+- 05-advanced-features/stored-procedures
+- 05-advanced-features/triggers
+- 05-advanced-features/materialized-views
+- 05-advanced-features/json
+- 05-advanced-features/views
+- 06-production-operations/vacuum
+- 06-production-operations/monitoring
+- 06-production-operations/troubleshooting
+- 06-production-operations/connection-pooling
+- 06-production-operations/capacity-planning
+- 07-comparisons/postgresql-vs-mysql
+- 07-comparisons/postgresql-vs-oracle
+- 07-comparisons/postgresql-vs-mongodb
+- 08-interview-guide/top-150-interview-questions
+- 08-interview-guide/architect-questions
+- 08-interview-guide/troubleshooting-questions
+- 08-interview-guide/performance-questions
+- 09-learning-paths/postgresql-senior-engineer-path
+- 09-learning-paths/postgresql-lead-path
+- 09-learning-paths/postgresql-architect-path
+- 09-learning-paths/postgresql-interview-revision-path

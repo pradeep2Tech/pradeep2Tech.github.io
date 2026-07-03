@@ -1,75 +1,45 @@
 ---
-title: "Go Cheat Sheet"
-date: 2026-06-30T10:00:00+00:00
+title: "Go Handbook"
+date: 2026-07-03T12:00:00+00:00
 draft: false
-description: "Go language quick reference — syntax, types, concurrency, sync primitives, modules, and interview probes."
-tags: ["golang", "go", "golang-cheatsheet", "handbook", "cheat-sheet"]
-categories: ["Go Cheat Sheet"]
-ShowPageNums: true
+description: "Go handbook — runtime, concurrency, performance, production engineering, and interview prep."
+tags: ["golang", "golang-cheatsheet", "golang-handbook", "go", "interview"]
+categories: ["Go Handbook"]
+shortTitle: "Handbook"
+module: 0
+moduleTitle: "Go Handbook"
+sectionRef: "0"
+weight: 1
+ShowToc: true
+interviewHandbook: true
 ---
 
-Dense **cheat sheets** for engineers who already know Go — syntax recap, copy-paste snippets, and concurrency gotchas. Pairs with [Design Patterns](/design-patterns/) for Go implementations and [Microservices](/microservices/) for distributed service patterns.
+# Go Handbook
 
-**25 pages** · **10 modules** · Target Go **1.22+**
+Production and interview knowledge base for **Senior Engineers**, **Technical Leads**, and **Architects** (6+ years). Target **Go 1.22+**.
 
-Start with [Language Basics](/golang-cheatsheet/language-basics/) — syntax, types, zero values, and variables on one page.
+## Learning Paths
 
----
+| Track | Start here | Goal |
+| :--- | :--- | :--- |
+| **Quick revision** | [Interview Revision Path](/golang-cheatsheet/09-learning-paths/golang-interview-revision-path/) | 48-hour cram |
+| **Senior engineer** | [Senior Engineer Path](/golang-cheatsheet/09-learning-paths/golang-senior-engineer-path/) | Language → concurrency → runtime → ops |
+| **Technical lead** | [Lead Path](/golang-cheatsheet/09-learning-paths/golang-lead-path/) | Patterns, observability, troubleshooting |
+| **Architect** | [Architect Path](/golang-cheatsheet/09-learning-paths/golang-architect-path/) | Runtime, performance, production tradeoffs |
+| **Interview prep** | [Top 150 Questions](/golang-cheatsheet/08-interview-guide/top-150-interview-questions/) | Role-specific banks |
 
-## Who This Is For
+## Modules
 
-| You are… | Start here |
-| :--- | :--- |
-| **Backend engineer** | [Language Basics](/golang-cheatsheet/language-basics/) → [Error Handling](/golang-cheatsheet/error-handling/) → [Goroutines](/golang-cheatsheet/goroutines/) |
-| **Java/Kotlin dev learning Go** | [Interfaces](/golang-cheatsheet/interfaces/) · [Slices](/golang-cheatsheet/slices/) · [Pointers](/golang-cheatsheet/pointers/) |
-| **Interview prep** | [Interview Questions](/golang-cheatsheet/interview-questions/) + Module 5–6 concurrency |
+1. **Fundamentals** — syntax, functions, structs, collections, methods
+2. **Core Go** — interfaces, pointers, packages, errors, modules
+3. **Go Internals** — runtime, scheduler, memory model, GC, escape analysis, reflection
+4. **Concurrency** — goroutines, channels, sync, context, patterns
+5. **Performance** — optimization, profiling, benchmarking, memory
+6. **Production Go** — logging, config, observability, shutdown, checklists
+7. **Testing** — unit tests, mocking, strategies
+8. **Interview Guide** — 150 questions + subsets
+9. **Learning Paths** — curated reading by role
 
-{{% note %}}
-Spring Boot, Kubernetes, and system design case studies live in **other handbook sections** — this is **Go language + runtime** only.
-{{% /note %}}
-
----
-
-## Module Map
-
-| # | Module | Pages | Focus |
-| :--: | :--- | :---: | :--- |
-| 1 | Language Basics | 2 | Language basics (clubbed), functions |
-| 2 | Types & Structs | 4 | Structs, interfaces, pointers, methods |
-| 3 | Packages & Errors | 2 | Layout, exports, `error` idioms |
-| 4 | Collections | 3 | Slices, arrays, maps |
-| 5 | Concurrency | 4 | Goroutines, channels, select, context |
-| 6 | Synchronization | 3 | Mutex, RWMutex, sync package |
-| 7 | Testing & Reflection | 2 | Table tests, benchmarks, reflect |
-| 8 | Runtime | 2 | Memory model, GC |
-| 9 | Modules & Tooling | 2 | go.mod, dependency management |
-| 10 | Interview | 1 | High-signal probes |
-
----
-
-## Page Format
-
-Every sheet uses the same scan-friendly layout:
-
-| # | Section |
-| :---: | :--- |
-| 1 | At a Glance |
-| 2 | Reference Tables |
-| 3 | Snippets |
-| 4 | Internals & Gotchas |
-| 5 | Production Notes |
-| 6 | See Also |
-
-**Executive Summary** → **Core Concepts** → **Quick Reference** → **Snippets** → **Common Gotchas** → **Related Topics**
-
-No long tutorials. Tables and code blocks first.
-
----
-
-## Regenerate
-
-```bash
-python scripts/build_golang_cheatsheet.py
-```
-
-Module structure lives in `data/golang_cheatsheet_modules.yaml`. Page bodies are in `PAGE_BODIES` inside the build script unless you hand-edit markdown (hand edits overwritten on regen).
+{% note %}
+Design patterns, system design, and microservices patterns live in **other handbook sections** — this is **Go language + runtime + production** only.
+{% /note %}

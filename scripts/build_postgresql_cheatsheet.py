@@ -1030,6 +1030,15 @@ def normalize(body: str) -> str:
 
 
 def main() -> None:
+    # Nested handbook structure — do not overwrite hand-crafted pages.
+    if (CONTENT / "01-fundamentals").is_dir():
+        print(
+            "PostgreSQL handbook uses nested modules. "
+            "Edit content under content/postgresql-cheatsheet/ or run "
+            "scripts/generate_postgresql_handbook_refactor.py — skipping flat regen."
+        )
+        return
+
     modules_path = DATA / "postgresql_cheatsheet_modules.yaml"
     with open(modules_path, encoding="utf-8") as f:
         modules = yaml.safe_load(f)["modules"]

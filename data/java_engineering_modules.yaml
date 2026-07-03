@@ -1,85 +1,65 @@
-# Java Engineering Handbook — architect quick-reference structure.
-# Basics are clubbed; depth is in collections internals, concurrency, JVM, and LTS matrix.
+# Java Engineering Handbook — interview-focused structure (6 modules + cheat sheets).
 modules:
   - id: 1
-    focus: "Language Essentials"
+    focus: "Language Fundamentals"
     topics:
-      - core-java-quick-ref
-      - strings-and-enums-ref
+      - language-fundamentals
+      - strings-and-enums-interview
+      - oop-interview
+      - generics-interview
+      - exceptions-interview
+      - object-contract-interview
+      - streams-collectors-interview-guide
 
   - id: 2
-    focus: "OOP"
+    focus: "Collections"
     topics:
-      - oop-quick-ref
-      - interfaces-and-object-contract
+      - collection-selection-matrix
+      - hashmap-internals
+      - concurrenthashmap-internals
+      - map-implementations
 
   - id: 3
-    focus: "Collections"
+    focus: "Concurrency"
     groups:
-      - name: "Choose & Compare"
+      - name: "Threading & Memory Model"
         topics:
-          - collections-decision-matrix
-          - list-set-queue-comparison
-          - map-implementations-ref
-          - collections-utils-and-ordering
-      - name: "Internals"
+          - java-threading-interview-guide
+          - java-memory-model
+          - locks-and-atomics
+          - cas-and-lock-free-programming
+          - threadlocal-internals
+          - forkjoinpool-internals
+          - deadlock-detection
+      - name: "Coordination & Async"
         topics:
-          - hashmap-internals
-          - concurrenthashmap-internals
+          - concurrent-collections
+          - concurrent-coordination
+          - completablefuture-interview-guide
+          - virtual-threads-interview-guide
 
   - id: 4
-    focus: "Exceptions & Generics"
-    topics:
-      - exceptions-quick-ref
-      - generics-quick-ref
-
-  - id: 5
-    focus: "Functional & Streams"
-    topics:
-      - functional-java-ref
-      - streams-quick-ref
-
-  - id: 6
-    focus: "Concurrency"
-    topics:
-      - threads-and-executors
-      - async-completablefuture
-      - locks-and-atomics
-      - concurrent-coordination
-      - virtual-threads-structured-concurrency
-
-  - id: 7
-    focus: "Memory & GC"
-    topics:
-      - jvm-memory-and-gc
-      - memory-leaks-and-oom
-
-  - id: 8
     focus: "JVM"
     topics:
-      - jvm-internals-quick-ref
+      - jvm-memory-gc-oom-guide
+      - jvm-internals
+      - classloader-internals
+      - classloader-memory-leaks
+      - jit-escape-analysis-safepoints
+      - reference-types-interview
       - jvm-flags-and-tuning
 
-  - id: 9
-    focus: "Modern Java"
-    topics:
-      - java-lts-release-matrix
-      - java-recent-features
-
-  - id: 10
+  - id: 5
     focus: "Platform APIs"
     topics:
-      - java-io-nio-ref
-      - reflection-annotations-ref
-      - serialization-quick-ref
+      - reflection-interview
+      - serialization-interview
 
-  - id: 11
+  - id: 6
     focus: "Interview Cheat Sheets"
     topics:
+      - top-100-java-interview-questions
+      - memory-diagram-cheatsheet
+      - thread-lifecycle-cheatsheet
       - collections-complexity
-      - stream-operations-interview
-      - concurrent-collections-interview
-      - gc-summary-interview
-      - java-version-features-interview
-      - memory-diagram-interview
-      - thread-lifecycle-interview
+      - java-version-migration-guide

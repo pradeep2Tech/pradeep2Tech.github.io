@@ -1,25 +1,14 @@
 # Flat topic order — derived from spring_boot_modules.yaml.
 # Prefer editing data/spring_boot_modules.yaml for module structure.
 topics:
-  - spring-boot-quick-ref
-  - annotations-stereotypes
-  - dependency-injection-ref
-  - configuration-ref
-  - rest-api-ref
-  - validation-ref
-  - exception-handling-ref
-  - jpa-quick-ref
-  - jpa-queries-ref
-  - transactions-ref
-  - security-quick-ref
-  - jwt-oauth-ref
-  - caching-ref
-  - scheduling-async-ref
-  - events-ref
-  - actuator-ref
-  - observability-ref
-  - testing-ref
-  - production-deployment-ref
-  - spring-cloud-ref
-  - messaging-ref
-  - spring-boot-interview-ref
+  - startup-and-internals
+  - configuration
+  - rest-api-design
+  - data-and-transactions
+  - security
+  - caching-performance
+  - messaging-events
+  - observability
+  - production-deployment
+  - testing
+  - interview-questions

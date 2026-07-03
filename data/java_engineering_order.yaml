@@ -1,38 +1,39 @@
 # Flat topic order — derived from java_engineering_modules.yaml.
 # Prefer editing data/java_engineering_modules.yaml for module structure.
 topics:
-  - core-java-quick-ref
-  - strings-and-enums-ref
-  - oop-quick-ref
-  - interfaces-and-object-contract
-  - collections-decision-matrix
-  - list-set-queue-comparison
-  - map-implementations-ref
-  - collections-utils-and-ordering
+  - language-fundamentals
+  - strings-and-enums-interview
+  - oop-interview
+  - generics-interview
+  - exceptions-interview
+  - object-contract-interview
+  - streams-collectors-interview-guide
+  - collection-selection-matrix
   - hashmap-internals
   - concurrenthashmap-internals
-  - exceptions-quick-ref
-  - generics-quick-ref
-  - functional-java-ref
-  - streams-quick-ref
-  - threads-and-executors
-  - async-completablefuture
+  - map-implementations
+  - java-threading-interview-guide
+  - java-memory-model
   - locks-and-atomics
+  - cas-and-lock-free-programming
+  - threadlocal-internals
+  - forkjoinpool-internals
+  - deadlock-detection
+  - concurrent-collections
   - concurrent-coordination
-  - virtual-threads-structured-concurrency
-  - jvm-memory-and-gc
-  - memory-leaks-and-oom
-  - jvm-internals-quick-ref
+  - completablefuture-interview-guide
+  - virtual-threads-interview-guide
+  - jvm-memory-gc-oom-guide
+  - jvm-internals
+  - classloader-internals
+  - classloader-memory-leaks
+  - jit-escape-analysis-safepoints
+  - reference-types-interview
   - jvm-flags-and-tuning
-  - java-lts-release-matrix
-  - java-recent-features
-  - java-io-nio-ref
-  - reflection-annotations-ref
-  - serialization-quick-ref
+  - reflection-interview
+  - serialization-interview
+  - top-100-java-interview-questions
+  - memory-diagram-cheatsheet
+  - thread-lifecycle-cheatsheet
   - collections-complexity
-  - stream-operations-interview
-  - concurrent-collections-interview
-  - gc-summary-interview
-  - java-version-features-interview
-  - memory-diagram-interview
-  - thread-lifecycle-interview
+  - java-version-migration-guide

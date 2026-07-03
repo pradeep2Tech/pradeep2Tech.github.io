@@ -2125,6 +2125,7 @@ t.join();
 
 
 def main() -> None:
+    """Sync topic order and prune orphan pages. Content is hand-maintained in content/."""
     modules_path = DATA / "java_engineering_modules.yaml"
     with open(modules_path, encoding="utf-8") as f:
         modules = yaml.safe_load(f)["modules"]
@@ -2132,23 +2133,10 @@ def main() -> None:
     ordered = flatten_topics(modules)
     write_order_yaml(ordered, DATA / "java_engineering_order.yaml")
 
-    missing_meta = [s for s in ordered if s not in TOPIC_META]
-    if missing_meta:
-        raise SystemExit(f"Missing TOPIC_META for: {missing_meta}")
-
-    missing_builders = [s for s in ordered if s not in TOPIC_BUILDERS]
-    if missing_builders:
-        raise SystemExit(f"Missing TOPIC_BUILDERS for: {missing_builders}")
-
     CONTENT.mkdir(parents=True, exist_ok=True)
-    written = 0
-    for mod_id, mod_title, slug, topic_idx in iter_module_topics(modules):
-        see_also = see_also_links(slug, ordered)
-        body = normalize(TOPIC_BUILDERS[slug](see_also))
-        path = CONTENT / f"{slug}.md"
-        path.write_text(front_matter(slug, mod_id, mod_title, topic_idx) + body, encoding="utf-8")
-        written += 1
-        print(f"Wrote {path.relative_to(ROOT)}")
+    missing_files = [s for s in ordered if not (CONTENT / f"{s}.md").exists()]
+    if missing_files:
+        raise SystemExit(f"Missing content files: {missing_files}")
 
     keep = {"_index.md"} | {f"{s}.md" for s in ordered}
     deleted = 0
@@ -2158,7 +2146,7 @@ def main() -> None:
             deleted += 1
             print(f"Deleted {path.relative_to(ROOT)}")
 
-    print(f"\nSummary: {written} pages written, {deleted} deleted, {len(ordered)} topics in order.")
+    print(f"\nSummary: order synced, {deleted} orphans deleted, {len(ordered)} topics.")
 
 
 if __name__ == "__main__":

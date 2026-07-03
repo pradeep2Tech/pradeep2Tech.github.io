@@ -41,7 +41,7 @@ sections:
     menuLabel: Java Engineering
     group: handbooks
   - slug: spring-boot
-    menuLabel: Spring Boot Cheat Sheet
+    menuLabel: Spring Boot Handbook
     group: handbooks
   - slug: kafka-handbook
     menuLabel: Kafka Handbook
@@ -50,7 +50,7 @@ sections:
     menuLabel: Kubernetes Handbook
     group: handbooks
   - slug: redis-cheatsheet
-    menuLabel: Redis Cheatsheet
+    menuLabel: Redis Handbook
     group: handbooks
   - slug: database-handbook
     menuLabel: Database Handbook
@@ -59,7 +59,7 @@ sections:
     menuLabel: PostgreSQL Cheatsheet
     group: handbooks
   - slug: mongodb-cheatsheet
-    menuLabel: MongoDB Cheatsheet
+    menuLabel: MongoDB Handbook
     group: handbooks
   - slug: cloud-handbook
     menuLabel: Cloud Handbook

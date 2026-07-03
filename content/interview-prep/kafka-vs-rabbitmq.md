@@ -80,7 +80,7 @@ flowchart LR
 | **Azure** | Event Hubs (Kafka protocol) | Service Bus (different model) |
 | **GCP** | Pub/Sub + Dataflow | Cloud AMQP partners / self-hosted |
 
-See also: [Kafka](/kafka-handbook/kafka/) · [RabbitMQ](/kafka-handbook/rabbitmq/) · [How to Choose a Message Broker](/technology-playbook/how-to-choose-message-broker/)
+See also: [Kafka Core](/kafka-handbook/02-kafka/kafka-core/) · [Kafka vs RabbitMQ](/kafka-handbook/03-broker-comparisons/kafka-vs-rabbitmq/) · [How to Choose a Message Broker](/technology-playbook/how-to-choose-message-broker/)
 
 ---
 
@@ -149,7 +149,7 @@ See also: [Kafka](/kafka-handbook/kafka/) · [RabbitMQ](/kafka-handbook/rabbitmq
 
 ## 12. Related Topics
 
-- [Apache Kafka](/kafka-handbook/kafka/) · [RabbitMQ](/kafka-handbook/rabbitmq/)
+- [Kafka Core](/kafka-handbook/02-kafka/kafka-core/) · [Kafka vs RabbitMQ (Handbook)](/kafka-handbook/03-broker-comparisons/kafka-vs-rabbitmq/)
 - [How to Choose a Message Broker](/technology-playbook/how-to-choose-message-broker/)
 - [Event-Driven Architecture](/technology-playbook/event-driven-architecture/) · [Microservices 1.1 Event-Driven](/microservices/event-driven-architecture-log-streaming/)
 - [Point-to-Point Message Queues](/microservices/point-to-point-message-queues/)

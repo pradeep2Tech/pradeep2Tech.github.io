@@ -1,58 +1,62 @@
 ---
-title: "Spring Boot Cheat Sheet"
+title: "Spring Boot Handbook"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "Spring Boot quick reference — annotations, config, REST, JPA, security, actuator, and production snippets. Boot 2.x and 3.x."
-tags: ["spring-boot", "spring", "cheatsheet", "handbook"]
+description: "Senior engineer and architect handbook — startup internals, transactions, security, observability, and 100+ interview questions. Boot 3.x focus."
+tags: ["spring-boot", "spring", "handbook", "interview"]
 ShowPageNums: true
 ---
 
-Dense **cheat sheets** for engineers who already know Spring Boot — tables and copy-paste snippets, not tutorials. Pairs with [Java Engineering](/java-engineering/) for language fundamentals and [Microservices](/microservices/) for distributed architecture.
+Interview-focused handbook for **senior engineers, tech leads, and architects** — internal workings, production trade-offs, and architect-level probes. Assumes you already know Spring Boot basics.
 
-**Target:** Spring Boot 2.x / 3.x · **21 pages** · **9 modules**
+**Target:** Spring Boot 3.x (Java 17+) · **11 pages** · **Not for beginners**
 
 {{% note %}}
-This is a **quick recap** section. No "how to create a project" walkthroughs — bootstrap commands live on the [Quick Reference](/spring-boot/spring-boot-quick-ref/) page only.
+Distributed patterns (Saga, Outbox, CQRS, API Gateway, service discovery) live in the [Microservices Playbook](/microservices/). Kafka broker internals → [Kafka Handbook](/kafka-handbook/). Security architecture → [Security Architecture](/security-architecture/).
 {{% /note %}}
 
 ---
 
 ## Module Map
 
-| # | Module | Start here |
+| # | Module | Page |
 | :--: | :--- | :--- |
-| 1 | Bootstrap & Core | [Quick Ref](/spring-boot/spring-boot-quick-ref/) · [Annotations](/spring-boot/annotations-stereotypes/) · [DI](/spring-boot/dependency-injection-ref/) |
-| 2 | Configuration | [Config](/spring-boot/configuration-ref/) |
-| 3 | REST & Validation | [REST](/spring-boot/rest-api-ref/) · [Validation](/spring-boot/validation-ref/) · [Exceptions](/spring-boot/exception-handling-ref/) |
-| 4 | Data & Transactions | [JPA](/spring-boot/jpa-quick-ref/) · [Queries](/spring-boot/jpa-queries-ref/) · [Transactions](/spring-boot/transactions-ref/) |
-| 5 | Security | [Security](/spring-boot/security-quick-ref/) · [JWT/OAuth](/spring-boot/jwt-oauth-ref/) |
-| 6 | Cross-Cutting | [Caching](/spring-boot/caching-ref/) · [Schedule/Async](/spring-boot/scheduling-async-ref/) · [Events](/spring-boot/events-ref/) |
-| 7 | Production | [Actuator](/spring-boot/actuator-ref/) · [Observability](/spring-boot/observability-ref/) · [Testing](/spring-boot/testing-ref/) · [Deploy](/spring-boot/production-deployment-ref/) |
-| 8 | Distributed | [Spring Cloud](/spring-boot/spring-cloud-ref/) · [Messaging](/spring-boot/messaging-ref/) |
-| 9 | Interview | [Interview Ref](/spring-boot/spring-boot-interview-ref/) |
+| 1 | Startup & Internals | [Startup & Internals](/spring-boot/startup-and-internals/) |
+| 2 | Configuration | [Configuration](/spring-boot/configuration/) |
+| 3 | REST API Design | [REST API Design](/spring-boot/rest-api-design/) |
+| 4 | Data & Transactions | [Data & Transactions](/spring-boot/data-and-transactions/) |
+| 5 | Security | [Security](/spring-boot/security/) |
+| 6 | Caching & Performance | [Caching & Performance](/spring-boot/caching-performance/) |
+| 7 | Messaging & Events | [Messaging & Events](/spring-boot/messaging-events/) |
+| 8 | Observability | [Observability](/spring-boot/observability/) |
+| 9 | Production | [Production Deployment](/spring-boot/production-deployment/) |
+| 10 | Testing | [Testing](/spring-boot/testing/) |
+| 11 | Interview | [100+ Interview Questions](/spring-boot/interview-questions/) |
 
 ---
 
 ## Page Format
 
-Every sheet uses the same scan-friendly layout:
+Every topic page uses the same interview structure:
 
 | Section | Purpose |
 | :--- | :--- |
-| **At a Glance** | 3–5 bullets |
-| **Reference Tables** | Main content |
-| **Snippets** | Copy-paste Java / YAML |
-| **Internals & Gotchas** | Short pitfalls |
-| **Production Notes** | Ops-focused tips |
-| **Interview Probes** | 1–2 max on key pages |
-
-Use **Previous / Next** at the bottom of each page to walk the curriculum.
+| **Short Answer** | Whiteboard-ready in 30 sec – 1 min |
+| **Detailed Explanation** | Trade-offs and design rationale |
+| **Internal Working** | Framework mechanics |
+| **Production Notes** | Ops and scale concerns |
+| **Common Mistakes** | What breaks in real systems |
+| **Follow-up Questions** | Next interviewer probes |
 
 ---
 
-## Out of Scope
+## See Also
 
-Core Java → [Java Engineering](/java-engineering/) · Design patterns → [Design Patterns](/design-patterns/) · K8s deep dive → [Kubernetes Handbook](/kubernetes-handbook/) · Kafka internals → [Kafka Handbook](/kafka-handbook/)
+- [Java Engineering](/java-engineering/) — language, JVM, concurrency
+- [Microservices Playbook](/microservices/) — distributed architecture
+- [Kafka Handbook](/kafka-handbook/) — broker internals
+- [Security Architecture](/security-architecture/) — platform security
+- [Kubernetes Handbook](/kubernetes-handbook/) — deployment and probes
 
 ---
 

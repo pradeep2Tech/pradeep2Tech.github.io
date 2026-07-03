@@ -1,32 +1,62 @@
-# MongoDB Cheatsheet — module index.
-# Section numbers are Module.Topic (e.g. 1.1, 2.3).
+# MongoDB Handbook — module index.
 modules:
   - id: 1
-    focus: "Core & Data Model"
+    focus: "Fundamentals"
     topics:
-      - architecture
-      - documents
-      - collections
-      - crud
+      - 01-fundamentals/documents
+      - 01-fundamentals/collections
+      - 01-fundamentals/crud
+      - 01-fundamentals/atlas-basics
+
   - id: 2
-    focus: "Queries & Indexes"
+    focus: "Core MongoDB"
     topics:
-      - indexes
-      - aggregation-pipeline
-      - ttl-index
-      - text-search
-      - geospatial
+      - 02-core-mongodb/architecture
+      - 02-core-mongodb/storage-engine
+      - 02-core-mongodb/replication
+      - 02-core-mongodb/sharding
+      - 02-core-mongodb/transactions
+      - 02-core-mongodb/schema-design
+
   - id: 3
-    focus: "Scale & Reliability"
+    focus: "Query & Performance"
     topics:
-      - replication
-      - sharding
-      - transactions
+      - 03-query-performance/indexes
+      - 03-query-performance/ttl-index
+      - 03-query-performance/text-search
+      - 03-query-performance/geospatial
+      - 03-query-performance/aggregation-pipeline
+      - 03-query-performance/query-optimization
+      - 03-query-performance/explain-plan
+
   - id: 4
-    focus: "Design, Ops & Reference"
+    focus: "Production Operations"
     topics:
-      - schema-design
-      - atlas-basics
-      - performance
-      - mongo-shell-commands
-      - interview-questions
+      - 04-production-operations/performance
+      - 04-production-operations/monitoring
+      - 04-production-operations/troubleshooting
+      - 04-production-operations/backup-recovery
+      - 04-production-operations/capacity-planning
+
+  - id: 5
+    focus: "Comparisons"
+    topics:
+      - 05-comparisons/mongodb-vs-postgresql
+      - 05-comparisons/mongodb-vs-cassandra
+      - 05-comparisons/mongodb-vs-couchbase
+
+  - id: 6
+    focus: "Interview Guide"
+    topics:
+      - 06-interview-guide/top-150-interview-questions
+      - 06-interview-guide/architect-questions
+      - 06-interview-guide/troubleshooting-questions
+      - 06-interview-guide/performance-questions
+
+  - id: 7
+    focus: "Learning Paths"
+    topics:
+      - 07-learning-paths/mongodb-senior-engineer-path
+      - 07-learning-paths/mongodb-lead-path
+      - 07-learning-paths/mongodb-architect-path
+      - 07-learning-paths/mongodb-interview-revision-path

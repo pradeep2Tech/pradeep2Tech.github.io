@@ -3,14 +3,14 @@ title: "HashMap Internals"
 date: 2026-06-30T10:00:00+00:00
 draft: false
 description: "Buckets, spread, resize, treeify, load factor, and JDK implementation shifts."
-tags: ["java", "java-engineering", "handbook"]
+tags: ["java", "java-engineering", "handbook", "interview"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "HashMap Internals"
-module: 3
+module: 2
 moduleTitle: "Collections"
-sectionRef: "3.5"
+sectionRef: "2.2"
 ShowToc: true
-cheatSheet: true
+interviewHandbook: true
 ---
 
 ## At a Glance
@@ -101,9 +101,7 @@ Do not use user-controlled keys with weak `hashCode` — collision DoS risk; con
 
 ## See Also
 
-- [Previous: Utils & Ordering](/java-engineering/collections-utils-and-ordering/)
+- [Previous: Collection Selection Matrix](/java-engineering/collection-selection-matrix/)
 - [Next: CHM Internals](/java-engineering/concurrenthashmap-internals/)
-- [Collection Choice](/java-engineering/collections-decision-matrix/)
-- [Maps](/java-engineering/map-implementations-ref/)
-- [CHM Internals](/java-engineering/concurrenthashmap-internals/)
+- [Map Implementations](/java-engineering/map-implementations/)
 - [Java Engineering Handbook Index](/java-engineering/)

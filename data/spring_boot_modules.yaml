@@ -1,59 +1,56 @@
-# Spring Boot Cheat Sheet — dense quick-reference (not a tutorial handbook).
+# Spring Boot Handbook — senior engineer / architect interview focus (11 pages).
 modules:
   - id: 1
-    focus: "Bootstrap & Core"
+    focus: "Startup & Internals"
     topics:
-      - spring-boot-quick-ref
-      - annotations-stereotypes
-      - dependency-injection-ref
+      - startup-and-internals
 
   - id: 2
     focus: "Configuration"
     topics:
-      - configuration-ref
+      - configuration
 
   - id: 3
-    focus: "REST & Validation"
+    focus: "REST API Design"
     topics:
-      - rest-api-ref
-      - validation-ref
-      - exception-handling-ref
+      - rest-api-design
 
   - id: 4
     focus: "Data & Transactions"
     topics:
-      - jpa-quick-ref
-      - jpa-queries-ref
-      - transactions-ref
+      - data-and-transactions
 
   - id: 5
     focus: "Security"
     topics:
-      - security-quick-ref
-      - jwt-oauth-ref
+      - security
 
   - id: 6
-    focus: "Cross-Cutting"
+    focus: "Caching & Performance"
     topics:
-      - caching-ref
-      - scheduling-async-ref
-      - events-ref
+      - caching-performance
 
   - id: 7
-    focus: "Production"
+    focus: "Messaging & Events"
     topics:
-      - actuator-ref
-      - observability-ref
-      - testing-ref
-      - production-deployment-ref
+      - messaging-events
 
   - id: 8
-    focus: "Distributed"
+    focus: "Observability"
     topics:
-      - spring-cloud-ref
-      - messaging-ref
+      - observability
 
   - id: 9
+    focus: "Production"
+    topics:
+      - production-deployment
+
+  - id: 10
+    focus: "Testing"
+    topics:
+      - testing
+
+  - id: 11
     focus: "Interview"
     topics:
-      - spring-boot-interview-ref
+      - interview-questions

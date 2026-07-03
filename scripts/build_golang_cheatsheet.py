@@ -1206,6 +1206,13 @@ cheatSheet: true
 
 
 def main() -> None:
+    if (CONTENT / "01-fundamentals").is_dir():
+        print(
+            "Go handbook uses nested module layout; "
+            "skipping flat cheat-sheet regen. Edit content/golang-cheatsheet/ directly."
+        )
+        return
+
     modules_path = DATA / "golang_cheatsheet_modules.yaml"
     with modules_path.open(encoding="utf-8") as f:
         modules = yaml.safe_load(f)["modules"]

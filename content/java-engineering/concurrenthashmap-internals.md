@@ -3,14 +3,14 @@ title: "ConcurrentHashMap Internals"
 date: 2026-06-30T10:00:00+00:00
 draft: false
 description: "Bins, CAS, sizeCtl, compute methods, and iteration semantics under contention."
-tags: ["java", "java-engineering", "handbook"]
+tags: ["java", "java-engineering", "handbook", "interview"]
 categories: ["Java Engineering Handbook"]
 shortTitle: "CHM Internals"
-module: 3
+module: 2
 moduleTitle: "Collections"
-sectionRef: "3.6"
+sectionRef: "2.3"
 ShowToc: true
-cheatSheet: true
+interviewHandbook: true
 ---
 
 ## At a Glance
@@ -94,8 +94,7 @@ chm.put(k, v + 1); // race
 ## See Also
 
 - [Previous: HashMap Internals](/java-engineering/hashmap-internals/)
-- [Next: Exceptions](/java-engineering/exceptions-quick-ref/)
-- [HashMap Internals](/java-engineering/hashmap-internals/)
+- [Next: Map Implementations](/java-engineering/map-implementations/)
 - [Locks & Atomics](/java-engineering/locks-and-atomics/)
-- [Concurrent Collections](/java-engineering/concurrent-collections-interview/)
+- [Concurrent Collections](/java-engineering/concurrent-collections/)
 - [Java Engineering Handbook Index](/java-engineering/)

@@ -1,55 +1,92 @@
-# Python Cheatsheet — quick-reference structure for senior engineers.
+# Python Handbook — module index.
 modules:
   - id: 1
-    focus: "Language Basics"
+    focus: "Fundamentals"
     topics:
-      - language-basics
-      - functions
+      - 01-fundamentals/language-basics
+      - 01-fundamentals/functions
+      - 01-fundamentals/collections
+      - 01-fundamentals/modules
+      - 01-fundamentals/exceptions
+      - 01-fundamentals/typing
 
   - id: 2
-    focus: "Collections & Comprehensions"
+    focus: "Core Python"
     topics:
-      - collections
-      - comprehensions
+      - 02-core-python/oop
+      - 02-core-python/classes
+      - 02-core-python/dataclasses
+      - 02-core-python/decorators
+      - 02-core-python/context-managers
+      - 02-core-python/iterators
+      - 02-core-python/generators
+      - 02-core-python/comprehensions
 
   - id: 3
-    focus: "OOP"
+    focus: "Python Internals"
     topics:
-      - classes
-      - oop
+      - 03-python-internals/python-runtime
+      - 03-python-internals/cpython-internals
+      - 03-python-internals/bytecode
+      - 03-python-internals/object-model
+      - 03-python-internals/memory-management
+      - 03-python-internals/garbage-collection
+      - 03-python-internals/gil
 
   - id: 4
-    focus: "Modules & Packages"
-    topics:
-      - modules
-
-  - id: 5
-    focus: "Advanced Language Features"
-    topics:
-      - exceptions
-      - decorators
-      - generators
-      - iterators
-      - context-managers
-      - typing
-      - dataclasses
-
-  - id: 6
     focus: "Concurrency"
     topics:
-      - concurrency
-      - asyncio
-      - multithreading
-      - multiprocessing
+      - 04-concurrency/concurrency
+      - 04-concurrency/asyncio
+      - 04-concurrency/multithreading
+      - 04-concurrency/multiprocessing
+      - 04-concurrency/concurrency-patterns
+
+  - id: 5
+    focus: "Performance"
+    topics:
+      - 05-performance/performance-optimization
+      - 05-performance/profiling
+      - 05-performance/benchmarking
+      - 05-performance/memory-optimization
+
+  - id: 6
+    focus: "Production Python"
+    topics:
+      - 06-production-python/logging
+      - 06-production-python/configuration-management
+      - 06-production-python/observability
+      - 06-production-python/error-handling
+      - 06-production-python/production-checklists
 
   - id: 7
-    focus: "Runtime & Tooling"
+    focus: "Packaging & Distribution"
     topics:
-      - memory-management
-      - packaging
-      - virtual-environments
+      - 07-packaging-distribution/packaging
+      - 07-packaging-distribution/dependency-management
+      - 07-packaging-distribution/poetry
+      - 07-packaging-distribution/virtual-environments
 
   - id: 8
-    focus: "Interview Cheat Sheets"
+    focus: "Testing"
     topics:
-      - interview-questions
+      - 08-testing/testing
+      - 08-testing/pytest
+      - 08-testing/mocking
+      - 08-testing/test-strategies
+
+  - id: 9
+    focus: "Interview Guide"
+    topics:
+      - 09-interview-guide/top-150-interview-questions
+      - 09-interview-guide/architect-questions
+      - 09-interview-guide/troubleshooting-questions
+      - 09-interview-guide/performance-questions
+
+  - id: 10
+    focus: "Learning Paths"
+    topics:
+      - 10-learning-paths/python-senior-engineer-path
+      - 10-learning-paths/python-lead-path
+      - 10-learning-paths/python-architect-path
+      - 10-learning-paths/python-interview-revision-path
