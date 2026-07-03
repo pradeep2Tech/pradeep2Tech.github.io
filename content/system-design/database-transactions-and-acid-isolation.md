@@ -6,10 +6,12 @@ description: "Transaction isolation failures — phantom reads under RR, lock es
 tags: ["system-fundamentals", "database", "acid", "mvcc"]
 categories: ["System Fundamentals"]
 shortTitle: "MVCC Concurrency Anomalies & Locking Layers"
-module: 4
-moduleTitle: "Stateful Storage Scaling & Data Partition Primitives"
-sectionRef: "4.2"
+module: 2
+moduleTitle: "Distributed Systems"
+sectionRef: "2.5"
 ---
+
+> **Curriculum note:** This page covers **single-node** ACID isolation and MVCC failure modes. For distributed consistency guarantees, see [Consistency Models](/system-design/consistency-models/). For production concurrency patterns and distributed locking, see [Microservices — Concurrency Control](/microservices/04-distributed-systems/concurrency-control/).
 
 ### Concurrency Control Engines: Two-Phase Locking vs. MVCC
 To enforce transaction isolation boundaries under ACID design principles, database engines rely on two fundamental concurrency paradigms:

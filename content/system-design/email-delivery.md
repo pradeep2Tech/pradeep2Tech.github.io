@@ -426,17 +426,11 @@ flowchart LR
 
 ---
 
-## 6. Core Delivery Pipeline — Outbox Pattern & ID Generation
+## 6. Core Delivery Pipeline — Outbox & ID Generation
 
 ### Transactional Outbox
 
-The outbox pattern guarantees durability before pipeline entry:
-
-| Step | Transaction boundary | Guarantee |
-| :--- | :--- | :--- |
-| Send request | Outbox insert + draft status update | Single local DB transaction |
-| CDC publish | Outbox row → Kafka | At-least-once delivery with idempotent consumers |
-| Internal delivery | `mailbox_messages` + `mailbox_metadata` | Atomic multi-table transaction |
+Mutation and outbox row commit in **one local DB transaction**; CDC publishes to Kafka after commit. See [Transactional Outbox Overview](/system-design/transactional-outbox-overview/). *This design:* outbox insert pairs with draft status update before the validation pipeline.
 
 ### Parallel Validation Orchestrator
 
@@ -597,7 +591,7 @@ Based on **5 billion sent emails / day** (~57,870 average ingress RPS):
 | Authentication | OAuth2 + JWT | Gateway-level validation before downstream services |
 | Rate limiting | Sliding window in Redis | 20 API req/sec per user; 100 sends/min outbound |
 | Encryption | TLS 1.3 in transit; AES-256 at rest | Application-layer encryption for credentials |
-| Observability | `X-Correlation-ID` + OpenTelemetry | End-to-end trace across Kafka and validation queues |
+| Observability | `X-Correlation-ID` + OpenTelemetry | [Observability Fundamentals](/system-design/observability-fundamentals/) — end-to-end trace across Kafka |
 
 ### Service Level Objectives
 

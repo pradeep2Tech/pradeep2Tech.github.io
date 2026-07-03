@@ -6,13 +6,13 @@ description: "Beyond CAP theory — conflict-free replicated data types, last-wr
 tags: ["system-fundamentals", "crdt", "distributed-systems", "multi-master"]
 categories: ["System Fundamentals"]
 shortTitle: "CRDTs & Multi-Master Conflict Resolution"
-module: 5
-moduleTitle: "Redundancy Engineering & Global System Governance"
-sectionRef: "5.3"
+module: 2
+moduleTitle: "Distributed Systems"
+sectionRef: "2.4"
 ---
 
 ### Multi-Master Concurrency & Global State Convergence
-In multi-region active-active topologies, application workloads execute writes concurrently across geographically separated database primary nodes. While this setup minimizes ingress propagation latency and provides extreme disaster resilience, it directly triggers network partition anomalies under the CAP theorem. When cross-region WAN links drop, concurrent multi-master operations mutate identical data fields independently, resulting in severe state divergence.
+In multi-region active-active topologies, application workloads execute writes concurrently across geographically separated database primary nodes. While this setup minimizes ingress propagation latency and provides extreme disaster resilience, partitions force consistency vs availability trade-offs — see [CAP & PACELC](/system-design/cap-and-pacelc/). When cross-region WAN links drop, concurrent multi-master operations mutate identical data fields independently, resulting in severe state divergence.
 
 ---
 

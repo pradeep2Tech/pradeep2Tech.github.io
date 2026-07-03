@@ -58,3 +58,7 @@ As a system transitions from a heavily saturated read-replica topology toward an
 | **Cluster Horizontal Scalability** | Low; adding more nodes exponentially slows down writes. | High; new read-replicas scale out seamlessly without blocking writes. |
 
 ---
+
+> **Scaling context:** Read replicas are horizontal **read** scale before sharding — see [Horizontal vs Vertical Scaling](/system-design/horizontal-vs-vertical-scaling/) and the full ladder in [Scaling Strategies Overview](/system-design/scaling-strategies-overview/).
+
+---

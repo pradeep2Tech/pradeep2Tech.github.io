@@ -454,7 +454,7 @@ Kubernetes HPA scales ingestion and retrieval pods when CPU exceeds **70%** or a
 | Ingestion contract | Delta events (not absolute scores) | Prevents client-side score inflation attacks |
 | Pagination | Cap at 1,000 per page | Protects bandwidth on K=10,000 requests |
 | Security | OAuth2 JWT + rate limiting | 60 req/min ingest; 200 req/min read per client |
-| Observability | OpenTelemetry + SLI/SLO | 99.95% availability; P99 read ≤ 100 ms |
+| Observability | OpenTelemetry + SLI/SLO | [Observability Fundamentals](/system-design/observability-fundamentals/) — 99.95% availability; P99 read ≤ 100 ms |
 
 ### Security Architecture
 
@@ -480,7 +480,7 @@ Kubernetes HPA scales ingestion and retrieval pods when CPU exceeds **70%** or a
 
 | Failure | Impact | Mitigation |
 | :--- | :--- | :--- |
-| **Redis cluster down** | Real-time reads fail or serve stale data | Circuit breaker routes to PostgreSQL aggregates (last Flink sync point); rebuild Redis by replaying Kafka from checkpoint |
+| **Redis cluster down** | Real-time reads fail or serve stale data | [Circuit breaker](/system-design/resilience-patterns-overview/) routes to PostgreSQL aggregates (last Flink sync); rebuild Redis from Kafka checkpoint |
 | **Kafka broker failure** | Ingestion slows or blocks | RF=3 with min.insync.replicas=2; producer retries with exponential backoff; fallback to secondary Kafka cluster |
 | **Redis network partition** | Potential split-brain | Sentinel quorum (N/2 + 1); `replica-validity-factor` prevents stale replica promotion |
 | **PostgreSQL unavailable** | Historical queries fail | Serve from Redis for active windows; return graceful degradation message for historical |

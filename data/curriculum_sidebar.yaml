@@ -4,13 +4,8 @@
 # flatGroups: optional labeled groups of topic slugs (system-design)
 sections:
   system-design:
+    modules: system_design_modules
     order: system_design_order
-    splitAfter: 19
-    flatGroups:
-      - id: 1
-        label: "System Fundamentals"
-      - id: 2
-        label: "Case Studies"
   microservices:
     modules: microservices_modules
     order: microservices_order

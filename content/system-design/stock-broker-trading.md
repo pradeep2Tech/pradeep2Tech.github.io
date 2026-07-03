@@ -420,7 +420,7 @@ All lifecycle events for a given `order_id` route to the **same Kafka partition*
 
 ### Transactional Outbox
 
-Order records and outbound event notifications are written in a **single ACID transaction**. Debezium tails the PostgreSQL WAL and streams events to Kafka — eliminating the dual-write problem.
+Order row and outbound event commit atomically; Debezium streams to Kafka after commit. [Transactional Outbox Overview](/system-design/transactional-outbox-overview/).
 
 ### ID Strategy
 

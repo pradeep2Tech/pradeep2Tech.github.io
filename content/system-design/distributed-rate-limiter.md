@@ -515,7 +515,7 @@ Kubernetes HPA scales gateway pods when p99 evaluation latency exceeds **3 ms** 
 
 | Metric | SLO / Purpose |
 | :--- | :--- |
-| Evaluation path latency (p99.9) | **≤ 2 ms** |
+| Evaluation path latency (p99.9) | **≤ 2 ms** — see [Latency vs Throughput](/system-design/latency-vs-throughput/) |
 | System availability | **99.99%** uptime for rule routing loops |
 | 429 vs 5xx ratio | Distinguish throttling from infrastructure failure |
 | Circuit breaker trip duration | Alert on prolonged fail-open state |

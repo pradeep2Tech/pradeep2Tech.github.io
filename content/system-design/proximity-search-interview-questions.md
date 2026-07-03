@@ -7,7 +7,7 @@ tags: ["system-design", "interview", "distributed-systems", "elasticsearch", "re
 categories: ["System Design"]
 ---
 
-Companion Q&A for [Designing a Proximity Search Engine at Scale](/system-design/proximity-search/). These questions probe spatial indexing math, 1M WPS telemetry ingestion, CQRS split storage, and production failure handling — the topics interviewers dig into after the whiteboard diagram.
+Companion Q&A for [Designing a Proximity Search Engine at Scale](/system-design/proximity-search/). Pattern primers: [CQRS](/system-design/cqrs-overview/) · [Observability Fundamentals](/system-design/observability-fundamentals/). These questions probe spatial indexing math, 1M WPS telemetry ingestion, CQRS split storage, and production failure handling — the topics interviewers dig into after the whiteboard diagram.
 
 ---
 

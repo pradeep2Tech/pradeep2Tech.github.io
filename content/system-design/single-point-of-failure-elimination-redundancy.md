@@ -56,3 +56,7 @@ When an ingress infrastructure ring utilizes overly sensitive health-check basel
 | **Inbound Traffic Scale Cap** | Constrained by the processing limits of a single active server. | Scales horizontally by spreading the load across the entire pool. |
 
 ---
+
+> **Reliability context:** Redundancy drives [Availability & Nines](/system-design/availability-and-nines/) targets. Pair with [Resilience Patterns Overview](/system-design/resilience-patterns-overview/) for dependency failure handling.
+
+---

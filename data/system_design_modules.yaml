@@ -1,0 +1,117 @@
+# System Design curriculum modules — navigation only (flat slugs, no file moves).
+# Phase 1: sidebar grouping + prev/next order via system_design_order.yaml.
+modules:
+  - id: 1
+    focus: "Foundations"
+    topics:
+      - what-is-system-design
+      - system-design-process
+      - non-functional-requirements
+      - capacity-estimation
+      - networking-essentials-ip-dns-firewalls
+      - transport-layer-mechanics-tcp-vs-udp
+      - http3-quic-and-websocket-transports
+      - hands-on-load-balancing-setup
+  - id: 2
+    focus: "Distributed Systems"
+    topics:
+      - cap-and-pacelc
+      - consistency-models
+      - consistent-hashing
+      - crdts-and-multi-master-conflict-resolution
+      - database-transactions-and-acid-isolation
+  - id: 3
+    focus: "Data Management"
+    topics:
+      - relational-database-fundamentals-and-b-trees
+      - cdc-based-cache-invalidation
+      - database-sharding-provisioning-and-chunk-routing
+      - cqrs-overview
+      - transactional-outbox-overview
+  - id: 4
+    focus: "Communication"
+    topics:
+      - proxy-servers-forward-vs-reverse
+      - layer4-layer7-multi-tier-ingress-routing
+      - application-layer-protocols-rest-grpc
+      - load-balancers-and-routing-algorithms
+  - id: 5
+    focus: "Scalability"
+    topics:
+      - latency-vs-throughput
+      - horizontal-vs-vertical-scaling
+      - scaling-strategies-overview
+      - caching-and-cdns-hierarchical-arrays
+      - cache-eviction-and-mutation-policies
+      - cache-stampede-and-penetration-mitigation
+      - replication-lag-read-replica-topology
+  - id: 6
+    focus: "Reliability"
+    topics:
+      - availability-and-nines
+      - reliability-vs-availability
+      - resilience-patterns-overview
+      - failure-patterns-overview
+      - single-point-of-failure-elimination-redundancy
+      - multi-region-topologies-and-availability-zones
+  - id: 7
+    focus: "Observability"
+    topics:
+      - observability-fundamentals
+      - distributed-logging-system
+  - id: 8
+    focus: "Architecture Styles"
+    topics:
+      - architecture-styles-overview
+  - id: 9
+    focus: "Case Studies"
+    topics:
+      - urlshortner
+      - distributed-rate-limiter
+      - leaderboard
+      - distributed-lru-cache
+      - distributed-kv-store
+      - notification-system
+      - chat-application
+      - social-feed
+      - email-delivery
+      - cloud-storage
+      - distributed-message-queue
+      - distributed-job-scheduler
+      - distributed-web-crawler
+      - proximity-search
+      - linkedin-job-search
+      - food-delivery
+      - ride-sharing
+      - ticket-booking
+      - hotel-booking
+      - ecommerce
+      - payment-gateway-orchestration
+      - stock-broker-trading
+      - sponsored-ads
+      - ott
+      - online-learning-platform
+      - fleet-vending-iot
+      - collaborative-text-editor
+  - id: 10
+    focus: "Interview Guide"
+    topics:
+      - distributed-rate-limiter-interview-questions
+      - leaderboard-interview-questions
+      - distributed-lru-cache-interview-questions
+      - distributed-kv-store-interview-questions
+      - chat-application-interview-questions
+      - social-feed-interview-questions
+      - email-delivery-interview-questions
+      - cloud-storage-interview-questions
+      - distributed-message-queue-interview-questions
+      - distributed-job-scheduler-interview-questions
+      - distributed-logging-system-interview-questions
+      - distributed-web-crawler-interview-questions
+      - proximity-search-interview-questions
+      - linkedin-job-search-interview-questions
+      - food-delivery-interview-questions
+      - payment-gateway-orchestration-interview-questions
+      - stock-broker-trading-interview-questions
+      - sponsored-ads-interview-questions
+      - fleet-vending-iot-interview-questions

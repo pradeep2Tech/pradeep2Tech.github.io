@@ -52,3 +52,7 @@ The primary operational risk in multi-AZ design is the logical coupling introduc
 | **Blast Radius Isolation** | Vulnerable to shared control-plane failures and regional grid blackouts. | High isolation; independent data domains shield against cascading drops. |
 
 ---
+
+> **Reliability context:** Regional failure modes — [Failure Patterns Overview](/system-design/failure-patterns-overview/). Availability math — [Availability & Nines](/system-design/availability-and-nines/).
+
+---

@@ -115,7 +115,7 @@ Use a multi-phase migration pattern: deploy the new schema alongside the old one
 
 **24. How do you protect against cascading failures if the Redis cluster suddenly becomes unavailable?**
 
-Implement a circuit breaker pattern at the API Gateway layer. If Redis drops, the breaker trips and routes traffic to the PostgreSQL aggregated database, serving slightly older data while protecting backend systems from being overwhelmed.
+Use a [circuit breaker](/system-design/resilience-patterns-overview/) at the API Gateway. If Redis drops, route to PostgreSQL aggregates while protecting backends from overload.
 
 **25. How do you recover from a scenario where corrupted application code writes bad score data into Kafka?**
 

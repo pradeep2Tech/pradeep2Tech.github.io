@@ -387,7 +387,7 @@ flowchart TD
 
 ### Transactional Outbox
 
-Booking mutation and outbound Kafka event are written in **one database transaction** to an `outbox` table. A log-tailing daemon publishes to Kafka after commit — eliminates dual-write partial-failure drift.
+Booking mutation and outbound Kafka event commit in **one database transaction** to an `outbox` table; a log tailer publishes after commit. Pattern: [Transactional Outbox Overview](/system-design/transactional-outbox-overview/).
 
 ---
 
@@ -497,7 +497,7 @@ Infrastructure sized for **2,691 peak RPS** and **87 peak booking WPS**:
 
 | Decision | Choice | Rationale |
 | :--- | :--- | :--- |
-| Read/write split | CQRS — ES for search, PG for writes | Asymmetric CAP: AP browse, CP book |
+| Read/write split | [CQRS](/system-design/cqrs-overview/) — ES for search, PG for writes | Asymmetric CAP: AP browse, CP book |
 | Search index sync | Debezium CDC → Kafka → ES | No dual-write; single source of truth |
 | Inventory model | Room-type daily rows (or compressed ranges) | Minimizes lock footprint vs per-room rows |
 | Concurrency | Pessimistic `FOR UPDATE` | Last-room scenarios; avoids optimistic retry storms |

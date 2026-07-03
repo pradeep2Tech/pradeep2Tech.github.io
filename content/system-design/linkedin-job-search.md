@@ -473,7 +473,7 @@ Kubernetes **HPA** scales search pods when cluster-wide CPU or memory exceeds **
 | Language search | OpenSearch language analyzers | Localized stemming/tokenization per field mapping |
 | Rate limiting | Distributed token bucket (Redis) | Global limits across thousands of container nodes |
 | Security | JWT + RBAC + mTLS internal | Least privilege; TLS 1.3 in transit; AES-256 at rest |
-| Observability | OpenTelemetry + distributed tracing | Trace IDs from gateway through OpenSearch, Redis, vector inference |
+| Observability | OpenTelemetry + distributed tracing | [Observability Fundamentals](/system-design/observability-fundamentals/) — trace IDs from gateway through OpenSearch |
 | SLOs | 99.99% availability; p95 ≤ 150 ms; p99 ≤ 250 ms | Search orchestrator execution boundaries |
 
 ### Security Architecture

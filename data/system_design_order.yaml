@@ -1,24 +1,52 @@
-# System Design index order — fundamentals first, then case studies.
+# System Design prev/next order — mirrors system_design_modules.yaml (flat slugs only).
 topics:
-  - proxy-servers-forward-vs-reverse
-  - layer4-layer7-multi-tier-ingress-routing
-  - load-balancers-and-routing-algorithms
-  - hands-on-load-balancing-setup
-  - application-layer-protocols-rest-grpc
+  # 1 — Foundations
+  - what-is-system-design
+  - system-design-process
+  - non-functional-requirements
+  - capacity-estimation
+  - networking-essentials-ip-dns-firewalls
   - transport-layer-mechanics-tcp-vs-udp
   - http3-quic-and-websocket-transports
-  - networking-essentials-ip-dns-firewalls
+  - hands-on-load-balancing-setup
+  # 2 — Distributed Systems
+  - cap-and-pacelc
+  - consistency-models
+  - consistent-hashing
+  - crdts-and-multi-master-conflict-resolution
+  - database-transactions-and-acid-isolation
+  # 3 — Data Management
+  - relational-database-fundamentals-and-b-trees
+  - cdc-based-cache-invalidation
+  - database-sharding-provisioning-and-chunk-routing
+  - cqrs-overview
+  - transactional-outbox-overview
+  # 4 — Communication
+  - proxy-servers-forward-vs-reverse
+  - layer4-layer7-multi-tier-ingress-routing
+  - application-layer-protocols-rest-grpc
+  - load-balancers-and-routing-algorithms
+  # 5 — Scalability
+  - latency-vs-throughput
+  - horizontal-vs-vertical-scaling
+  - scaling-strategies-overview
   - caching-and-cdns-hierarchical-arrays
   - cache-eviction-and-mutation-policies
-  - cdc-based-cache-invalidation
   - cache-stampede-and-penetration-mitigation
-  - relational-database-fundamentals-and-b-trees
-  - database-transactions-and-acid-isolation
   - replication-lag-read-replica-topology
-  - database-sharding-provisioning-and-chunk-routing
+  # 6 — Reliability
+  - availability-and-nines
+  - reliability-vs-availability
+  - resilience-patterns-overview
+  - failure-patterns-overview
   - single-point-of-failure-elimination-redundancy
   - multi-region-topologies-and-availability-zones
-  - crdts-and-multi-master-conflict-resolution
+  # 7 — Observability
+  - observability-fundamentals
+  - distributed-logging-system
+  # 8 — Architecture Styles
+  - architecture-styles-overview
+  # 9 — Case Studies
   - urlshortner
   - distributed-rate-limiter
   - leaderboard
@@ -31,7 +59,6 @@ topics:
   - cloud-storage
   - distributed-message-queue
   - distributed-job-scheduler
-  - distributed-logging-system
   - distributed-web-crawler
   - proximity-search
   - linkedin-job-search
@@ -47,3 +74,23 @@ topics:
   - online-learning-platform
   - fleet-vending-iot
   - collaborative-text-editor
+  # 10 — Interview Guide
+  - distributed-rate-limiter-interview-questions
+  - leaderboard-interview-questions
+  - distributed-lru-cache-interview-questions
+  - distributed-kv-store-interview-questions
+  - chat-application-interview-questions
+  - social-feed-interview-questions
+  - email-delivery-interview-questions
+  - cloud-storage-interview-questions
+  - distributed-message-queue-interview-questions
+  - distributed-job-scheduler-interview-questions
+  - distributed-logging-system-interview-questions
+  - distributed-web-crawler-interview-questions
+  - proximity-search-interview-questions
+  - linkedin-job-search-interview-questions
+  - food-delivery-interview-questions
+  - payment-gateway-orchestration-interview-questions
+  - stock-broker-trading-interview-questions
+  - sponsored-ads-interview-questions
+  - fleet-vending-iot-interview-questions

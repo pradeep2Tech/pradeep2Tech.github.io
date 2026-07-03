@@ -7,7 +7,7 @@ tags: ["system-design", "interview", "distributed-systems", "kafka", "elasticsea
 categories: ["System Design"]
 ---
 
-Companion Q&A for [Designing a Distributed Logging System at Scale](/system-design/distributed-logging-system/). These questions probe ingestion backpressure, multi-tier retention, stream processing trade-offs, and production failure handling — the topics interviewers dig into after the whiteboard diagram.
+Companion Q&A for [Designing a Distributed Logging System at Scale](/system-design/distributed-logging-system/). For the broader observability curriculum (metrics, traces, RED/USE, alerting), see [Observability Fundamentals](/system-design/observability-fundamentals/). These questions probe ingestion backpressure, multi-tier retention, stream processing trade-offs, and production failure handling — the topics interviewers dig into after the whiteboard diagram.
 
 ---
 

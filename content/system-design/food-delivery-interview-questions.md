@@ -31,7 +31,7 @@ R-Tree writes scale poorly on disk under high write volumes. Representing coordi
 
 **5. How do you prevent cascading failure of the order processing service if the payment gateway experiences latency spikes?**
 
-Implement a circuit breaker (e.g., Resilience4j) on the payment API client. If latency spikes or error rates cross thresholds, open the breaker immediately and fail fast to save core resources.
+Use a **[circuit breaker](/system-design/resilience-patterns-overview/)** on the payment API client. If latency spikes or error rates cross thresholds, open the breaker and fail fast to protect core resources.
 
 **6. How do you prevent data loss if a driver's network drops out while they are in transit?**
 
@@ -79,7 +79,7 @@ Deploy a dedicated connection proxy layer like PgBouncer as a sidecar for your d
 
 **16. What happens if an order event is written to the database but the message queue broker fails before publishing?**
 
-Implement the transactional outbox pattern. Write both the order record and the event into the same database transaction, then use a log miner like Debezium to stream events out reliably.
+Use the [transactional outbox](/system-design/transactional-outbox-overview/): order row and event in one DB transaction; CDC publishes after commit.
 
 **17. How do you safely store and handle user passwords?**
 

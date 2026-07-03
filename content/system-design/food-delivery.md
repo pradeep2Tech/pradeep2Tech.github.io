@@ -440,7 +440,7 @@ State transitions are **single-writer per order** (partition key = `order_id` in
 ```mermaid
 flowchart TD
     P1["Phase 1: Monolithic PostgreSQL<br/>Single-node core"]
-    P2["Phase 2: CQRS + Read Replicas<br/>Discovery off primary"]
+    P2["Phase 2: [CQRS](/system-design/cqrs-overview/) + Read Replicas<br/>Discovery off primary"]
     P3["Phase 3: Domain Partitioning<br/>OrderDB / UserDB / RestaurantDB"]
     P4["Phase 4: Geo Sharding<br/>hash(country_state)"]
     P5["Phase 5: Multi-Region<br/>Geo-fenced planes"]
@@ -529,7 +529,7 @@ Target footprint for **100K telemetry RPS** and **~5K read RPS** at peak:
 | Pagination | Cursor tokens | Stable O(log N) vs OFFSET scan degradation |
 | Security | JWT @ gateway, mTLS mesh, AES-256 at rest | TLS 1.3 edge; KMS-managed keys |
 | Rate limiting | 60 discovery/min, 2 checkout/min per user | Token bucket at gateway via Redis sidecar |
-| Observability | Prometheus + OpenTelemetry + Vector | Alert if `/api/v1/orders` 5XX > 0.5% over 2 min |
+| Observability | Prometheus + OpenTelemetry + Vector | [Observability Fundamentals](/system-design/observability-fundamentals/) — alert if `/api/v1/orders` 5XX > 0.5% |
 | HA / DR | Patroni + etcd failover; Aurora multi-AZ | Order ledger RPO = 0; RTO < 15 s |
 
 ### Production Improvements Over Naive Designs

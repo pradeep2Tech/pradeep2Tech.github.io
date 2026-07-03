@@ -1,51 +1,76 @@
-# Distributed Microservices — module index (canonical structure).
-# Each module groups related topics; section numbers are Module.Topic (e.g. 1.1, 2.3).
+# Microservices Architecture Playbook — module index.
 modules:
   - id: 1
-    focus: "Event-Driven Messaging & Async Coordination"
+    focus: "Architecture Styles"
     topics:
-      - event-driven-architecture-log-streaming
-      - point-to-point-message-queues
-      - saga-pattern-distributed-transactions
-      - cqrs-event-sourcing
-      - microservices-communication-topologies
+      - 01-architecture-styles/architecture-styles
   - id: 2
-    focus: "API Boundaries, Discovery & Fault Tolerance"
+    focus: "Service Communication"
     topics:
-      - api-gateway-bff-pattern
-      - dynamic-service-discovery-registry
-      - circuit-breaker-pattern
-      - transient-fault-handling-timeouts-retries
+      - 02-service-communication/api-gateway-and-bff
+      - 02-service-communication/service-discovery
+      - 02-service-communication/communication-topologies
   - id: 3
-    focus: "Data Ownership & Persistence Scaling"
+    focus: "Data Management"
     topics:
-      - database-per-microservice
-      - monolithic-database-decomposition
-      - database-replication-scaling
-      - database-sharding-horizontal-partitioning
-      - database-isolation-levels-concurrency-control
+      - 03-data-management/database-per-service
+      - 03-data-management/cqrs-and-event-sourcing
+      - 03-data-management/saga
+      - 03-data-management/outbox-and-cdc
   - id: 4
-    focus: "Runtime Infrastructure & Deployment Topologies"
+    focus: "Distributed Systems"
     topics:
-      - application-containerization-docker
-      - declarative-container-orchestration-kubernetes
-      - externalized-configuration-management
-      - zero-downtime-deployment-topologies
-      - strangler-fig-application-pattern
+      - 04-distributed-systems/cap-and-pacelc
+      - 04-distributed-systems/consistent-hashing
+      - 04-distributed-systems/concurrency-control
   - id: 5
-    focus: "Observability, Mesh & Runtime Isolation"
+    focus: "Resilience Patterns"
     topics:
-      - distributed-tracing-log-aggregation
-      - three-pillars-observability
-      - sidecar-integration-pattern
-      - service-mesh-architecture
-      - bulkhead-isolation-pattern
-      - distributed-rate-limiting-throttling
+      - 05-resilience-patterns/resilience-patterns
   - id: 6
-    focus: "Distributed Theory, Caching & Quality Gates"
+    focus: "Event-Driven Architecture"
     topics:
-      - distributed-caching-invalidation
-      - consistent-hashing-rings-virtual-nodes
-      - consumer-driven-contract-testing-cdct
-      - cap-theorem-pacelc-framework
-      - architectural-pragmatist-monolith-vs-microservices
+      - 06-event-driven/event-driven-architecture
+      - 06-event-driven/messaging-and-streaming-patterns
+  - id: 7
+    focus: "Platform Patterns"
+    topics:
+      - 07-platform-patterns/sidecar-and-service-mesh
+      - 07-platform-patterns/kubernetes-patterns
+  - id: 8
+    focus: "Observability"
+    topics:
+      - 08-observability/observability
+  - id: 9
+    focus: "Migration & Modernization"
+    topics:
+      - 09-migration-modernization/strangler-pattern
+      - 09-migration-modernization/monolith-decomposition
+      - 09-migration-modernization/database-decomposition
+      - 09-migration-modernization/zero-downtime-deployments
+  - id: 10
+    focus: "Production Playbook"
+    topics:
+      - 10-production-playbook/scalability-patterns
+      - 10-production-playbook/caching-patterns
+      - 10-production-playbook/deployment-strategies
+      - 10-production-playbook/reliability-engineering
+      - 10-production-playbook/architecture-decision-records
+      - 10-production-playbook/failure-scenarios
+      - 10-production-playbook/architecture-review-checklist
+  - id: 11
+    focus: "Interview Guide"
+    topics:
+      - 11-interview-guide/top-300-microservices-questions
+      - 11-interview-guide/architect-questions
+      - 11-interview-guide/troubleshooting-questions
+      - 11-interview-guide/scalability-questions
+      - 11-interview-guide/reliability-questions
+      - 11-interview-guide/observability-questions
+  - id: 12
+    focus: "Learning Paths"
+    topics:
+      - 12-learning-paths/senior-engineer-path
+      - 12-learning-paths/lead-engineer-path
+      - 12-learning-paths/architect-path
+      - 12-learning-paths/interview-revision-path

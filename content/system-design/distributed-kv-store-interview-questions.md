@@ -91,7 +91,7 @@ The client library serializes composite attributes into a deterministic delimite
 
 **19. How does consistent hashing minimize key redistribution when a node joins or leaves the cluster?**
 
-Only keys mapped to the added/removed node's virtual positions on the ring need reassignment. Unlike modulo hashing (`hash(key) % N`), consistent hashing avoids reshuffling the entire keyspace on every topology change.
+Only keys on the added/removed vnode range move — unlike `hash(key) % N`. Ring mechanics: [Consistent Hashing](/system-design/consistent-hashing/).
 
 **20. Why use MurmurHash3 specifically for key-to-shard mapping?**
 
@@ -111,7 +111,7 @@ Add replicas when read RPS exceeds per-node capacity but memory is sufficient. S
 
 **23. What is the purpose of virtual nodes on the consistent hashing ring?**
 
-Virtual nodes (100–200 per physical machine) ensure even key distribution and reduce the impact of a single physical node failure. Without virtual nodes, a machine with fewer ring positions would carry less data and traffic.
+Even distribution and smaller rebalance units per physical node — see [Consistent Hashing](/system-design/consistent-hashing/) § virtual nodes.
 
 **24. How do you add a new shard to the cluster without downtime?**
 

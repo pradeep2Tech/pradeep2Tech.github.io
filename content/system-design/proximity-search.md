@@ -267,7 +267,7 @@ CREATE TABLE poi_operating_hours (
 
 ## 5. High-Level Architecture
 
-The system uses **CQRS** — high-throughput telemetry writes are isolated from search reads via Kafka buffering and dual storage engines.
+The system separates high-volume **writes** (telemetry) from low-latency **reads** (search) using [CQRS](/system-design/cqrs-overview/) — Kafka buffering and dual storage engines isolate the 1M WPS write path from sub-50ms reads.
 
 ```mermaid
 flowchart LR
@@ -508,7 +508,7 @@ Target footprint for **1M peak WPS** and **~9,260 peak read RPS**:
 
 | Decision | Choice | Rationale |
 | :--- | :--- | :--- |
-| Architecture pattern | **CQRS** | Isolates 1M WPS write path from sub-50ms read path |
+| Architecture pattern | **[CQRS](/system-design/cqrs-overview/)** | Isolates 1M WPS write path from sub-50ms read path |
 | Static POI store | PostgreSQL + PostGIS | Durable system of record; GiST spatial index for admin queries |
 | Dynamic location store | Redis Enterprise Geo | Native geospatial ops at O(log N + M); fits in ~256 MB |
 | Hybrid text + geo search | Elasticsearch via CDC | PostGIS cannot fuzzy-match at scale; no dual-write drift |
@@ -520,14 +520,14 @@ Target footprint for **1M peak WPS** and **~9,260 peak read RPS**:
 | Serialization | Protobuf for telemetry | ~70% smaller than JSON; lower CPU and bandwidth |
 | Security | JWT @ gateway, mTLS mesh (SPIFFE), AES-256 at rest | TLS 1.3 edge; KMS-managed keys |
 | Rate limiting | 100 searches/min per user_id | Sliding window log in Redis at gateway |
-| Observability | Prometheus + OpenTelemetry → Jaeger | W3C Trace Context from gateway through Kafka |
+| Observability | Prometheus + OpenTelemetry → Jaeger | W3C Trace Context — see [Observability Fundamentals](/system-design/observability-fundamentals/) |
 | HA / DR | Patroni + etcd; Redis master-replica per shard | Static POI RPO ≤ 10 s; driver location RPO ≤ 4 s (ephemeral) |
 
 ### Production Improvements Over Naive Designs
 
 | Naive pattern | Production correction |
 | :--- | :--- |
-| Single database for reads and 250K WPS writes | CQRS split: Kafka → Redis for telemetry; PostGIS for static only |
+| Single database for reads and 250K WPS writes | [CQRS](/system-design/cqrs-overview/) split: Kafka → Redis for telemetry; PostGIS for static only |
 | Quad-Tree in application memory | Redis Geo sharded cluster with consistent hashing on Geohash prefix |
 | Geohash single-cell lookup | Always query center + 8 neighbors to fix border clipping |
 | PostGIS Haversine on every search | Two-stage filter: index coarse candidates → exact Haversine on top-K |

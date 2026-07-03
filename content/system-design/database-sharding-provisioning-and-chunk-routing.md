@@ -12,7 +12,7 @@ sectionRef: "4.4"
 ---
 
 ### Horizontal State Partitioning Architecture
-When storage tiers exhaust vertical hardware scaling limits, systems leverage database sharding to partition a logical dataset across multiple independent physical database engines. Unlike read-replica arrays which mirror identical data blocks, a sharded topology distributes discrete subsets of data (chunks or ranges) across distinct nodes.
+When storage tiers exhaust vertical hardware scaling limits, systems leverage database sharding to partition a logical dataset across multiple independent physical database engines. Unlike read-replica arrays which mirror identical data blocks, a sharded topology distributes discrete subsets of data (chunks or ranges) across distinct nodes. Key-to-shard routing often uses [consistent hashing](/system-design/consistent-hashing/) or range partitioning — see the comparison in that overview.
 
 #### Core Topology Components
 1. **The Routing Tier (Stateless Routers):** Intermediate query proxies intercept client connections. They do not hold data; they evaluate incoming queries to determine which physical shard holds the requested records.
@@ -45,5 +45,9 @@ When a brand-new, empty physical shard is added to a highly loaded cluster, the 
 * **The Failure Mode:** If rebalancing thresholds lack smoothing throttles, the config server will simultaneously initiate multiple parallel chunk migrations from existing shards over to the new node.
 * **The Result:** The newly added shard is immediately flooded with high-volume inbound data transfers from multiple sources, consuming its network bandwidth and CPU. The instance will fail health check probes and crash, triggering a cascading failover loop across the infrastructure.
 * *Mitigation:* Enforce sequential migration pacing policies, allowing only a single active chunk migration per shard at any given moment.
+
+---
+
+> **Scaling context:** Sharding is the write-path escalation after replicas and cache — see [Scaling Strategies Overview](/system-design/scaling-strategies-overview/) and [Horizontal vs Vertical Scaling](/system-design/horizontal-vs-vertical-scaling/).
 
 ---

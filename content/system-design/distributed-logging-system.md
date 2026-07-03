@@ -7,6 +7,8 @@ tags: ["system-design", "distributed-systems", "kafka", "elasticsearch", "cassan
 categories: ["System Design"]
 ---
 
+> **Curriculum note:** This post is an **APPLICATION** case study — designing a distributed **logging platform** (one pillar of observability). For the full metrics · logs · traces · alerting primer, start with [Observability Fundamentals](/system-design/observability-fundamentals/).
+
 A distributed logging platform ingests telemetry from arbitrary sources — Kubernetes pods, bare-metal hosts, mobile clients, and serverless runtimes — normalizes heterogeneous formats, and makes logs searchable across hot, cold, and archival tiers. At production scale it is a **write-heavy, AP-biased system**: ingestion must never drop client data during partitions or indexing lag, while search paths stay decoupled from the continuous intake pipeline.
 
 This post captures the full design — from requirements and capacity math through API contracts, data modeling, stream processing, multi-tier storage, caching, Kubernetes sizing, and failure runbooks.
@@ -379,7 +381,7 @@ Stream processors maintain a sliding-window signature cache in Redis to drop dup
 ```mermaid
 flowchart TD
     S1["Phase 1: Single Region Bootstrap<br/>Co-located ingest + baseline DBs<br/>Trigger: > 15K RPS disk I/O bottlenecks"]
-    S2["Phase 2: CQRS Decoupling<br/>Kafka buffer + ScyllaDB replicas<br/>Trigger: storage scans degrade performance"]
+    S2["Phase 2: [CQRS](/system-design/cqrs-overview/) Decoupling<br/>Kafka buffer + ScyllaDB replicas<br/>Trigger: storage scans degrade performance"]
     S3["Phase 3: Hot/Cold Tier Partitioning<br/>Isolate search from ingestion<br/>Trigger: enterprise global scale"]
     S4["Phase 4: Multi-Region Hub-and-Spoke<br/>Regional ingest → central analytics<br/>Trigger: data residency requirements"]
     S5["Phase 5: Global Active-Active<br/>Cross-region mesh sync<br/>Trigger: ultra-low edge latency"]

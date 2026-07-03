@@ -9,7 +9,7 @@ categories: ["System Design"]
 
 A multi-channel notification system routes templated messages to end users across Email, SMS, and In-App Push — from sub-2-second OTP delivery to throttled bulk promotions. At production scale it is a **write-heavy, priority-sensitive ingestion pipeline**: throughput dominates, but critical transactional traffic must never be blocked by promotional backlogs.
 
-This post captures the full design — from requirements and capacity math through API contracts, data modeling, the transactional outbox pattern, priority streaming, caching, infrastructure sizing, and failure runbooks.
+This post captures the full design — from requirements and capacity math through API contracts, data modeling, the [transactional outbox](/system-design/transactional-outbox-overview/) (ingest durability), priority streaming, caching, infrastructure sizing, and failure runbooks.
 
 ---
 
@@ -588,7 +588,7 @@ Infrastructure sized for **1,000,000 notifications/minute** baseline:
 
 | Decision | Choice | Rationale |
 | :--- | :--- | :--- |
-| Ingest durability | Transactional outbox + Debezium CDC | Eliminates dual-write consistency risk |
+| Ingest durability | [Transactional outbox](/system-design/transactional-outbox-overview/) + Debezium CDC | Eliminates dual-write consistency risk |
 | Status updates | Kafka telemetry bus → async consumer | Prevents provider webhook storms from locking the OLTP primary |
 | Priority isolation | Separate Kafka topics + dedicated worker pools | Bulk promotions cannot delay OTP delivery |
 | Topic routing | Kafka headers + throttled consumer groups | Simpler than N×M topic permutations per channel/priority |
@@ -596,7 +596,7 @@ Infrastructure sized for **1,000,000 notifications/minute** baseline:
 | Preference lookups | Redis cache-aside with topic-driven invalidation | Protects DB from per-message preference queries |
 | Analytics store | BigQuery (denormalized) | Columnar scans over petabyte event horizons |
 | Consistency model | Eventual for metadata; at-least-once for delivery | AP over CP under partition |
-| Provider failover | Circuit breaker + alternate vendor routing | Maintains SLAs when Twilio/SendGrid/FCM degrades |
+| Provider failover | [Circuit breaker](/system-design/resilience-patterns-overview/) + alternate vendor routing | Maintains SLAs when Twilio/SendGrid/FCM degrades |
 | Security | HMAC-SHA256 + TLS 1.3 + AES-256 at rest | PII (email, phone) encrypted in transit and storage |
 
 ---

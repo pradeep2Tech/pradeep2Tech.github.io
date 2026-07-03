@@ -295,13 +295,7 @@ flowchart LR
 
 ### Client-Side Consistent Hashing
 
-Keys are routed deterministically using **MurmurHash3** mapped onto a consistent hashing ring with **virtual nodes**:
-
-```
-shard_index = murmur3(key) mod num_virtual_nodes → physical_shard
-```
-
-Virtual nodes (typically 100–200 per physical machine) ensure even distribution and minimize key redistribution when nodes join or leave the ring.
+Shard routing uses a hash ring with virtual nodes — fundamentals in [Consistent Hashing](/system-design/consistent-hashing/). **This design:** MurmurHash3 maps keys to 100–200 vnodes per machine; the client library watches ZooKeeper for topology updates.
 
 ### Single-Node LRU Engine — Lock Striping
 

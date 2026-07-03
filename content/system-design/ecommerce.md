@@ -409,7 +409,7 @@ On failure: compensating events (`StockFailed`, `PaymentFailed`) trigger rollbac
 
 ### Transactional Outbox
 
-Payment Service writes payment log + outbox event in a **single local ACID transaction**. Debezium tails the outbox table to guarantee at-least-once Kafka delivery — prevents inconsistency when payment succeeds but the broker is unreachable.
+Payment log and outbox event share **one ACID transaction**; Debezium tails the outbox for at-least-once Kafka delivery. [Transactional Outbox Overview](/system-design/transactional-outbox-overview/).
 
 ### ID Generation — Snowflake
 
@@ -530,7 +530,7 @@ Target: **2,778 peak RPS** with 50 ms average processing time per request.
 | Static assets | S3 + CloudFront CDN | Global edge delivery; reduced origin egress |
 | Observability | Prometheus + Grafana + distributed tracing (X-B3-TraceId) | SLI/SLO monitoring; P99 latency alerts |
 | Service mesh | Istio mTLS | Encrypted pod-to-pod communication |
-| Analytics separation | CQRS — OLTP vs data lake (Snowflake/BigQuery) | Reporting queries never touch checkout databases |
+| Analytics separation | [CQRS](/system-design/cqrs-overview/) — OLTP vs data lake (Snowflake/BigQuery) | Reporting queries never touch checkout databases |
 
 ---
 
@@ -546,7 +546,7 @@ Target: **2,778 peak RPS** with 50 ms average processing time per request.
 | **Debezium CDC lag** | Stale search results | Monitor consumer lag; alert at > 5 s; catalog direct-lookup unaffected |
 | **Availability zone failure** | Partial cluster loss | Multi-AZ pod spread; Route53 health checks redirect to surviving region |
 | **Cache cold start** | Thundering herd on MongoDB | Pre-warm top 5% SKUs from analytics before traffic cutover |
-| **Slow downstream service** | Thread exhaustion upstream | Circuit breaker (Envoy); request timeout deadlines; fail-fast |
+| **Slow downstream service** | Thread exhaustion upstream | [Circuit breaker](/system-design/resilience-patterns-overview/) (Envoy); request timeout deadlines; fail-fast |
 | **Duplicate Kafka delivery** | Double notification emails | Idempotent consumer: `SETNX` on event ID in Redis before dispatch |
 
 ### HA / DR Objectives

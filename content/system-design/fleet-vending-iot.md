@@ -498,7 +498,7 @@ Kubernetes HPA on telemetry processor pods targets **70% CPU utilization**. Scal
 | Fleet administration API availability | **99.95%** over trailing 30-day window |
 | API error rate | Alert when non-200 responses exceed **0.5%** over 5-minute window |
 
-Distributed tracing via **OpenTelemetry** — the `transaction_id` propagates as a trace context header across edge proxies, MQTT bridges, Kafka consumers, and database writers.
+Distributed tracing via **OpenTelemetry** — `transaction_id` propagates as trace context ([Observability Fundamentals](/system-design/observability-fundamentals/)).
 
 ---
 

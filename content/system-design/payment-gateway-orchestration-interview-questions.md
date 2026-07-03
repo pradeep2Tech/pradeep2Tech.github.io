@@ -15,7 +15,7 @@ Companion Q&A for [Designing a Payment Gateway Orchestration System at Scale](/s
 
 **1. What prevents a slow payment processor from exhausting the gateway's worker thread pool?**
 
-Implement the **bulkhead pattern** via isolated thread pools per processor connector. Configure aggressive HTTP client timeouts (maximum 3,000 ms). If one processor slows down, only its dedicated pool saturates; other processors continue normally.
+Implement the **[bulkhead pattern](/system-design/resilience-patterns-overview/)** via isolated thread pools per processor connector. Configure aggressive HTTP client timeouts (maximum 3,000 ms). If one processor slows down, only its dedicated pool saturates; other processors continue normally.
 
 **2. How do you handle a scenario where a transaction succeeds at the processor but the gateway crashes before updating the DB?**
 
@@ -159,7 +159,7 @@ Configure external processor webhooks with backoff retry protocols. For missed n
 
 **34. What strategy prevents slow analytical queries from degrading primary transaction performance?**
 
-Separate workloads via **CQRS**: ingestion targets write-heavy PostgreSQL; analytical queries route to read replicas or **ClickHouse**.
+Separate workloads via **[CQRS](/system-design/cqrs-overview/)**: ingestion targets write-heavy PostgreSQL; analytical queries route to read replicas or **ClickHouse**.
 
 **35. How do you execute safe failovers from a primary data center to a secondary passive site?**
 

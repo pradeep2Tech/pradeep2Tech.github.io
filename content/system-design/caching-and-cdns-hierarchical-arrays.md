@@ -64,3 +64,7 @@ When engineering edge proxy definitions, ensure standard transit variables are v
 * `Surrogate-Key` / `Tags` — Appends custom indexing names to response headers, enabling instant, atomic bulk purging of related items across global PoPs out-of-band.
 
 ---
+
+> **Scaling context:** Caching is step 2 on the escalation ladder — see [Scaling Strategies Overview](/system-design/scaling-strategies-overview/). Pair with [Latency vs Throughput](/system-design/latency-vs-throughput/) for cache hit SLOs.
+
+---

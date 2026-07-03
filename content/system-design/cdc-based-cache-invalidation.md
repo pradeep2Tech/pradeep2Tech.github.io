@@ -11,6 +11,8 @@ moduleTitle: "Distributed Hierarchical Caching Infrastructure"
 sectionRef: "3.3"
 ---
 
+> **Scope:** This page covers **CDC-driven cache invalidation** only. For atomic DB + broker publish, see [Transactional Outbox Overview](/system-design/transactional-outbox-overview/) · MS [Outbox & CDC](/microservices/03-data-management/outbox-and-cdc/).
+
 ### Asynchronous Cache Invalidation Architecture
 To maintain cache coherency at scale without introducing write-amplification delays or tight application-tier coupling, modern architectures isolate cache mutations from the primary write pathway. **Change Data Capture (CDC)** design patterns tap directly into the source database's non-volatile transaction write-ahead log (e.g., PostgreSQL WAL, MySQL binlog).
 

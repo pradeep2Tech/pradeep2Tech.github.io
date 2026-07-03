@@ -191,7 +191,7 @@ High-signal explicit actions (such as adding a skill) trigger updates within min
 
 **41. How do you protect your systems from cascading failures across microservices?**
 
-We place downstream network operations behind circuit breakers (using tools like Resilience4j). If a dependency fails or slows down, the circuit opens to fail fast and protect upstream systems.
+We place downstream calls behind [circuit breakers](/system-design/resilience-patterns-overview/). If a dependency fails or slows, the circuit opens to fail fast and protect upstream systems.
 
 **42. What is your recovery playbook for a localized data corruption event in OpenSearch?**
 

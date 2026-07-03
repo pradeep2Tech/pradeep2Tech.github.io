@@ -309,7 +309,7 @@ Moving a node to the head requires detaching it from its current position. A sin
 | :--- | :--- | :--- | :--- |
 | **Storage engine** | Custom in-memory engine | Sub-ms ops; no disk WAL on hot path | PostgreSQL/MySQL: disk I/O bottlenecks |
 | **Coordination** | etcd | Raft consensus; Go-native; container-friendly | ZooKeeper: JVM tuning; heavier client libs |
-| **Partitioning** | Consistent hashing + vnodes | Even key distribution; minimal resharding on node add/remove | Static range sharding: hotspot risk on key prefixes |
+| **Partitioning** | [Consistent hashing](/system-design/consistent-hashing/) + vnodes | Even key distribution; minimal resharding on node add/remove | Static range sharding: hotspot risk on key prefixes |
 | **Miss fallback** | PostgreSQL / MongoDB | Durable source of truth | None: data loss on full cache flush |
 | **Replication** | Async primary → replica | Offloads read traffic; fast writes | Sync replication: latency penalty per write |
 

@@ -35,7 +35,7 @@ We do not perform runtime `LIKE` queries against primary relational shards. An o
 
 **6. Why is the outbox pattern necessary instead of publishing to Kafka directly from the send API?**
 
-If the API writes to Kafka but the local DB transaction fails (or vice versa), you get inconsistent state — a message in the pipeline with no outbox record, or an outbox record never published. The transactional outbox writes both the outbox row and draft status update in a single DB transaction; CDC guarantees the Kafka publish happens only after durable commit.
+Dual-write risk: broker publish can succeed while the DB rolls back (or vice versa). [Transactional Outbox Overview](/system-design/transactional-outbox-overview/) — same-transaction outbox row + CDC relay.
 
 **7. Why shard by `owner_user_id` instead of `message_id`?**
 

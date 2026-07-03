@@ -383,7 +383,7 @@ flowchart LR
 
 1. Merchant or checkout UI polls `GET /v1/payment_intents/{id}` or `GET /v1/transactions/{id}`.
 2. **Redis read-through** serves active session and recent intent state.
-3. On cache miss → PostgreSQL read replica (CQRS phase) → populate Redis.
+3. On cache miss → PostgreSQL read replica ([CQRS](/system-design/cqrs-overview/) phase) → populate Redis.
 4. Terminal states trigger async merchant webhooks via a dedicated Kafka dispatch topic.
 
 ### Component Responsibilities
@@ -428,7 +428,7 @@ The orchestrator reads `routing_strategy_json` from cache and selects a processo
 effective_weight(processor) = base_weight × health_score × success_rate_24h
 ```
 
-On processor outage, a **circuit breaker** opens and traffic fails over to the next weighted processor (e.g., Razorpay → PayU).
+On processor outage, a **circuit breaker** opens ([Resilience Patterns](/system-design/resilience-patterns-overview/)) and traffic fails over to the next weighted processor (e.g., Razorpay → PayU).
 
 ### Adapter Pattern
 
@@ -472,7 +472,7 @@ Each processor (Razorpay, PayU, Stripe) implements this interface — core logic
 
 ### Retry & Reconciliation
 
-- Processor HTTP client timeout: **3,000 ms** with **bulkhead-isolated thread pools** per connector.
+- Processor HTTP client timeout: **3,000 ms** with **[bulkhead](/system-design/resilience-patterns-overview/)**-isolated thread pools per connector.
 - On timeout: idempotent retry up to **3 attempts** with the same idempotency token.
 - After exhaustion: transition to `PENDING_RECONCILIATION`; background worker polls processor status API.
 

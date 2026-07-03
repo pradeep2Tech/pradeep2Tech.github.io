@@ -532,7 +532,7 @@ Infrastructure sized for **10M DAU**, **~9,260 peak API RPS**, and **200,000 tel
 | :--- | :--- | :--- |
 | Consistency split | AP for catalog/progress; CP for payments | Search staleness acceptable; double-charge is not |
 | Telemetry path | Kafka buffer → batch consumer | 200K RPS cannot hit PostgreSQL synchronously |
-| Checkout events | Transactional outbox + Debezium CDC | Atomic DB + event publish; no phantom orders on rollback |
+| Checkout events | [Transactional outbox](/system-design/transactional-outbox-overview/) + Debezium CDC | Atomic DB + event publish; no phantom orders on rollback |
 | Stats denormalization | Separate `course_stats` table | Decouples counter writes from catalog row locks |
 | Multi-tenancy | `org_id` on all rows + RLS + subdomain routing | Enterprise isolation without separate databases per tenant |
 | Video access | CloudFront signed cookies | Edge-local ACL verification; no per-segment origin auth |
@@ -559,7 +559,7 @@ Infrastructure sized for **10M DAU**, **~9,260 peak API RPS**, and **200,000 tel
 
 ### Interview Deep-Dive Highlights
 
-**Why outbox instead of direct Kafka publish in checkout?** If the DB transaction rolls back after a Kafka message is sent, a phantom order appears in downstream consumers. The outbox pattern ties event emission to the same ACID commit.
+**Why outbox instead of direct Kafka publish in checkout?** Avoids phantom orders when the DB rolls back after a broker send — see [Transactional Outbox Overview](/system-design/transactional-outbox-overview/).
 
 **How prevent telemetry data loss at peak?** Kafka acts as a durable buffer with partitioned topics. Consumers batch-upsert at a rate matching database write capacity rather than synchronously blocking the API.
 

@@ -23,7 +23,7 @@ Load balancers act as traffic controllers at the edge of distributed architectur
 ### Critical Failure Modes & Operational Vulnerabilities
 
 #### 1. Consistent Hashing Hotspotting via CGNAT Subnets
-While consistent hashing rings are highly effective at maintaining session stickiness to optimize local memory cache hits, they become vulnerable to load hotspots when traffic passes through network address translations.
+While [consistent hashing](/system-design/consistent-hashing/) rings are highly effective at maintaining session stickiness to optimize local memory cache hits, they become vulnerable to load hotspots when traffic passes through network address translations.
 
 * **The Failure Mode:** When dealing with massive enterprise offices, university subnets, or mobile carrier Carrier-Grade NAT (CGNAT) gateways, thousands of independent end-users are mapped behind a single public egress IP signature.
 * **The Result:** The load balancer computes the exact same hash token for every single request originating from that gateway, routing thousands of concurrent users onto the exact same backend instance. The target host is crushed under the sudden load skew, while alternative instances in the scaling pool sit completely empty.
