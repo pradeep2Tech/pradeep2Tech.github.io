@@ -1,0 +1,39 @@
+---
+description: Enterprise Knowledge Hub — project index and AI routing (read before broad codebase search)
+alwaysApply: true
+---
+
+# Project Index
+
+Hugo static site — **Enterprise Knowledge Hub** (~900 pages). **Do not scan the full repo.**
+
+## Start Here
+
+| Doc | When to read |
+|-----|--------------|
+| `AGENTS.md` | Any task — routing table + build commands |
+| `docs/ai-index/SECTION-REGISTRY.md` | Find which section/file to edit |
+| `docs/ai-index/ARCHITECTURE.md` | Layouts, shortcodes, navigation wiring |
+
+## Section → Rule
+
+| Section | Rule file |
+|---------|-----------|
+| New section registration | `curriculum-sections.mdc` |
+| dsa-coding | `dsa-coding-posts.mdc` |
+| design-patterns | `lld-posts.mdc` |
+| system-design | `system-design-posts.mdc` |
+| microservices | `microservices-posts.mdc` |
+| Cheat-sheet handbooks | `cheatsheet-template.mdc` (+ `java-cheatsheet-posts.mdc`, `spring-boot-handbook-posts.mdc`, `engineering-handbook-cheatsheets.mdc`) |
+
+## Key Config (edit nav here, not layouts)
+
+- `data/curriculum_sections.yaml` — home + header sections
+- `data/curriculum_sidebar.yaml` — per-section modules/order keys
+- `data/<section>_modules.yaml` + `data/<section>_order.yaml` — TOC + prev/next
+
+## Regenerate Index
+
+```bash
+python scripts/generate_ai_index.py
+```
