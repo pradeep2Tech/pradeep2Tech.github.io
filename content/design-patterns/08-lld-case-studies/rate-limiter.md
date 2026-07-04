@@ -11,7 +11,6 @@ moduleTitle: "LLD Case Studies"
 sectionRef: "8.2"
 weight: 802
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/in-memory-rate-limiter-lld/"
 ---
@@ -104,7 +103,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — unsynchronized global counter:**
@@ -226,6 +225,29 @@ func (s *RateLimiterService) Allow(key string) bool {
 ```
 
 Go's `sync.Map` suits many keys with scattered access; a sharded `map[string]*LimiterState` with `RWMutex` per shard scales further.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+import time
+from collections import deque
+
+class SlidingWindowLimiter:
+    def __init__(self, limit: int, window_sec: float) -> None:
+        self._limit = limit
+        self._window = window_sec
+        self._ts: deque[float] = deque()
+
+    def allow(self) -> bool:
+        now = time.monotonic()
+        while self._ts and now - self._ts[0] > self._window:
+            self._ts.popleft()
+        if len(self._ts) >= self._limit:
+            return False
+        self._ts.append(now)
+        return True
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

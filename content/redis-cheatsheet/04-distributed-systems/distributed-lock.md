@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "Distributed Systems"
 sectionRef: "4.1"
 weight: 401
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/distributed-lock/"

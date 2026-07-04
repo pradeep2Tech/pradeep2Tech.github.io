@@ -9,7 +9,6 @@ shortTitle: "JVM Flags"
 module: 4
 moduleTitle: "JVM"
 sectionRef: "4.7"
-ShowToc: true
 interviewHandbook: true
 ---
 

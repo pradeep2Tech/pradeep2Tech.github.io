@@ -10,7 +10,6 @@ module: 7
 moduleTitle: "Testing"
 sectionRef: "7.1"
 weight: 701
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 aliases:

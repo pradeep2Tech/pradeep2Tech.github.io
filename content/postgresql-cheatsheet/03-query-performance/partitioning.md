@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Query Performance"
 sectionRef: "3.5"
 weight: 305
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/partitioning/

@@ -9,7 +9,6 @@ shortTitle: "CAP & PACELC"
 module: 2
 moduleTitle: "Distributed Systems"
 sectionRef: "2.1"
-ShowToc: true
 ---
 
 ## Overview

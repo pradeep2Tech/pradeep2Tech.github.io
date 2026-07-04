@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/missing-number/"
 sourceLabel: "LeetCode 268"
 pattern: "Binary Search"
-ShowToc: true
 interviewHandbook: true
 ---
 # Missing Number in Sorted Array

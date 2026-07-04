@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/letter-combinations-of-a-phone-number/"
 sourceLabel: "LeetCode 17"
 pattern: "Backtracking"
-ShowToc: true
 interviewHandbook: true
 ---
 # Letter Combinations of a Phone Number

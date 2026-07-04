@@ -10,7 +10,6 @@ module: 2
 moduleTitle: "Core MongoDB"
 sectionRef: "2.5"
 weight: 205
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 aliases:

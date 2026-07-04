@@ -9,7 +9,6 @@ shortTitle: "Availability & Nines"
 module: 6
 moduleTitle: "Reliability"
 sectionRef: "6.1"
-ShowToc: true
 ---
 
 ## Overview

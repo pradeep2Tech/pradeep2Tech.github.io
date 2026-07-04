@@ -10,7 +10,6 @@ module: 11
 moduleTitle: "Interview Guide"
 sectionRef: "11.x"
 weight: 1102
-ShowToc: true
 playbookVersion: 3
 interviewHandbook: true
 ---
@@ -56,28 +55,18 @@ Sourced from [Top 300](/microservices/11-interview-guide/top-300-microservices-q
 33. When does shared library coupling negate microservices benefits?
 34. How do you govern API versioning across autonomous teams?
 35. What is smart endpoints and dumb pipes in practice today?
-36. Architecture scenario 1: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-37. Architecture scenario 2: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-38. Architecture scenario 3: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-39. Architecture scenario 4: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-40. Architecture scenario 5: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-41. Architecture scenario 6: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-42. Architecture scenario 7: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-43. Architecture scenario 8: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-44. Architecture scenario 9: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-45. Architecture scenario 10: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-46. Architecture scenario 11: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-47. Architecture scenario 12: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-48. Architecture scenario 13: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-49. Architecture scenario 14: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-50. Architecture scenario 15: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-51. Architecture scenario 16: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-52. Architecture scenario 17: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-53. Architecture scenario 18: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-54. Architecture scenario 19: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-55. Architecture scenario 20: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-56. Architecture scenario 21: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-57. Architecture scenario 22: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-58. Architecture scenario 23: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-59. Architecture scenario 24: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-60. Architecture scenario 25: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
+36. **E-commerce checkout:** 5 services, payment partner SLA 200ms — design sync/async split and fallback when payment is down.
+37. **Banking ledger:** Strong consistency for balances — can you use choreography saga? Defend orchestration choice.
+38. **Multi-tenant SaaS:** Noisy neighbor on shared Kafka cluster — isolation options at platform level.
+39. **Global deployment:** EU data residency — how do service boundaries and databases align to regions?
+40. **Legacy ERP integration:** SOAP monolith + new microservices — strangler vs dual-write risks.
+41. **Black Friday scale:** 10× traffic on catalog only — which services scale independently?
+42. **Observability gap:** P99 spikes but all services green — how do you find the tail dependency?
+43. **Mesh adoption:** 40 teams, only 3 want Istio — when is mesh tax not justified?
+44. **Shared library drift:** DTO JAR shared by 15 services — governance model.
+45. **Event schema evolution:** Add field to `OrderCreated` — compatibility rules for 12 consumers.
+46. **On-call incident:** Circuit breaker stuck OPEN on recommendations — business impact vs fail-fast tradeoff.
+47. **Database decomposition:** Orders still JOIN customers cross-schema — extraction blocked — remediation plan.
+48. **API versioning:** Mobile clients lag 6 months — breaking change policy.
+49. **Saga stuck:** Compensation failed on inventory release — ops playbook.
+50. **Cost review:** 80 microservices, 12 actually deploy independently — rationalization approach.

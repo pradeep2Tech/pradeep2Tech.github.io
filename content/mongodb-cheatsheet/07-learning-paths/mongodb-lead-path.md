@@ -10,17 +10,44 @@ module: 7
 moduleTitle: "Learning Paths"
 sectionRef: "7.2"
 weight: 702
-ShowToc: true
 interviewHandbook: true
 ---
 
-# MongoDB Technical Lead Path
+# Mongodb Lead Path
 
-**Goal:** Lead teams through schema, scale, and incident response.
+**Audience:** Senior engineers (6+ years) building depth in this handbook.
 
-1. [Schema Design](/mongodb-cheatsheet/02-core-mongodb/schema-design/) — embed/reference ADRs
-2. [Sharding](/mongodb-cheatsheet/02-core-mongodb/sharding/) — shard key workshops
-3. [Capacity Planning](/mongodb-cheatsheet/04-production-operations/capacity-planning/) — growth models
-4. [Monitoring](/mongodb-cheatsheet/04-production-operations/monitoring/) + [Troubleshooting](/mongodb-cheatsheet/04-production-operations/troubleshooting/) — runbooks
-5. [Backup & Recovery](/mongodb-cheatsheet/04-production-operations/backup-recovery/) — drill ownership
-6. [Top 150 — Troubleshooting subset](/mongodb-cheatsheet/06-interview-guide/troubleshooting-questions/)
+**Duration:** 2–3 weeks at ~3 hours/week.
+
+**Prerequisite:** document modeling. Start from the [handbook index](/mongodb-cheatsheet/) if terms feel unfamiliar.
+
+---
+
+## How to use this path
+
+1. Read modules **in sidebar order** — later modules assume earlier ones.
+2. For each topic page: read **Executive Summary → diagram → implementation tabs**.
+3. End each week with [interview guide](/mongodb-cheatsheet/) questions for that module.
+4. Pair with [System Design](/system-design/) when the topic affects distributed architecture.
+
+---
+
+## Suggested pace
+
+| Week | Focus |
+| :---: | :--- |
+| 1 | Fundamentals module — complete every page, run examples locally |
+| 2 | Core/internals module — depth over speed |
+| 3 | Production + interview modules — troubleshooting and architect questions |
+
+---
+
+## Exit criteria
+
+- Explain top 10 topics from this handbook in 60 seconds each.
+- Debug one realistic failure using the handbook's troubleshooting page.
+- Link handbook concepts to a [System Design](/system-design/) case study where relevant.
+
+---
+
+[← Back to handbook index](/mongodb-cheatsheet/)

@@ -11,7 +11,6 @@ moduleTitle: "Structural Patterns"
 sectionRef: "3.6"
 weight: 306
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/flyweight-pattern/"
 ---
@@ -86,7 +85,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **One object per character on screen:**
@@ -208,6 +207,23 @@ func (e *DocumentEditor) AddChar(font string, ch rune, x, y int, c color.Color) 
 ```
 
 Use `sync.Map` for read-heavy pools; extrinsic state stays in `GlyphPlacement`, never in the flyweight.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

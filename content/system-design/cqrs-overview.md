@@ -9,7 +9,6 @@ shortTitle: "CQRS Overview"
 module: 3
 moduleTitle: "Data Management"
 sectionRef: "3.4"
-ShowToc: true
 ---
 
 ## Overview

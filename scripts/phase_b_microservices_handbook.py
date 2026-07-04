@@ -57,7 +57,6 @@ module: {mod}
 moduleTitle: "{mod_title}"
 sectionRef: "{ref}"
 weight: {weight}
-ShowToc: true
 playbookVersion: 3{aliases}{extra_fm}
 ---
 

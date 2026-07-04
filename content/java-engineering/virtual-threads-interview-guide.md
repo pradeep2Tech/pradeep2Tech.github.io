@@ -9,13 +9,14 @@ shortTitle: "Virtual Threads"
 module: 3
 moduleTitle: "Concurrency"
 sectionRef: "3.11"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - virtual-threads-structured-concurrency
 ---
 
 ## Platform vs virtual threads?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -25,6 +26,11 @@ Platform: 1:1 OS thread, ~MB stack. Virtual: JVM-scheduled, cheap — mount on c
 
 Blocking IO on VT releases carrier when unmounted. Massive concurrency for thread-per-request without reactive rewrite.
 
+### Interview Questions
+
+1. What is pinning?
+2. Structured concurrency goal?
+
 ### Follow-up Questions
 
 - What is pinning?
@@ -32,6 +38,8 @@ Blocking IO on VT releases carrier when unmounted. Massive concurrency for threa
 
 ---
 ## What is thread pinning?
+
+**Difficulty:** Hard · **Time:** 2 min
 
 ### Short Answer
 

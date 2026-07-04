@@ -10,7 +10,6 @@ module: 11
 moduleTitle: "Interview Guide"
 sectionRef: "11.1"
 weight: 1101
-ShowToc: true
 playbookVersion: 3
 interviewHandbook: true
 ---

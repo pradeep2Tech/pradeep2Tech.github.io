@@ -10,7 +10,6 @@ module: 9
 moduleTitle: "Interview Guide"
 sectionRef: "9.1"
 weight: 901
-ShowToc: true
 interviewHandbook: true
 aliases:
 - "/python-cheatsheet/interview-questions/"

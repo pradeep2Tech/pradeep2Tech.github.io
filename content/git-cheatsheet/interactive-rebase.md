@@ -9,7 +9,6 @@ shortTitle: "Interactive Rebase"
 module: 2
 moduleTitle: "Branching & Integration"
 sectionRef: "2.5"
-ShowToc: true
 ---
 
 ## Executive Summary

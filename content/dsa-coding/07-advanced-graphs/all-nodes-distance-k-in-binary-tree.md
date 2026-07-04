@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/"
 sourceLabel: "LeetCode 863"
 pattern: "Graph + BFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # All Nodes Distance K in Binary Tree

@@ -6,10 +6,9 @@ description: "Scheduled Jobs with cron syntax and concurrency policies."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "CronJobs"
-module: 1
+module: 2
 moduleTitle: "Architecture & Workloads"
-sectionRef: "1.8"
-ShowToc: true
+sectionRef: "2.8"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/cronjobs/"]
 ---

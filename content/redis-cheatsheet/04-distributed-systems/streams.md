@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "Distributed Systems"
 sectionRef: "4.4"
 weight: 404
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/streams/"

@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Fundamentals"
 sectionRef: "1.4"
 weight: 114
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 aliases:

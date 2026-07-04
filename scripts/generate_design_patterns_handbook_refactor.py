@@ -23,8 +23,7 @@ module: {mod}
 moduleTitle: "{mod_title}"
 sectionRef: "{ref}"
 weight: {weight}
-languages: [{languages}]
-ShowToc: true{extra_fm}{aliases}
+languages: [{languages}]{extra_fm}{aliases}
 ---
 
 """
@@ -41,7 +40,6 @@ module: {mod}
 moduleTitle: "{mod_title}"
 sectionRef: "{ref}"
 weight: {weight}
-ShowToc: true
 interviewHandbook: true{aliases}
 ---
 
@@ -243,7 +241,7 @@ def write_simple(rel: str, body: str, *, title: str, desc: str, short: str, mod:
         text = FM_INDEX.format(title=title, date=DATE, desc=desc, short=short, aliases=alias) + body.strip() + "\n"
     else:
         text = FM_INDEX.format(title=title, date=DATE, desc=desc, short=short, aliases=alias).replace(
-            'ShowPageNums: true', f"module: {mod}\nmoduleTitle: \"{mod_title}\"\nsectionRef: \"{ref}\"\nweight: {weight}\nShowToc: true"
+            'ShowPageNums: true', f"module: {mod}\nmoduleTitle: \"{mod_title}\"\nsectionRef: \"{ref}\"\nweight: {weight}"
         ) + body.strip() + "\n"
     path.write_text(text, encoding="utf-8")
 

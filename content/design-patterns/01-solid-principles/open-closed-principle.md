@@ -11,7 +11,6 @@ moduleTitle: "SOLID Principles"
 sectionRef: "1.2"
 weight: 102
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/open-closed-principle/"
 ---
@@ -89,7 +88,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — edit core logic for every new rule:**
@@ -214,6 +213,23 @@ func (s *InvoiceService) CalculateTotal(inv Invoice) float64 {
 ```
 
 Register policies at startup (`main` or wire) — adding `SeasonalDiscount` never edits `InvoiceService`.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class Notifier(Protocol):
+    def send(self, msg: str) -> None: ...
+
+class OrderService:
+    def __init__(self, notifier: Notifier) -> None:
+        self._notifier = notifier
+
+    def confirm(self, order_id: str) -> None:
+        self._notifier.send(f"Order {order_id} confirmed")
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

@@ -11,7 +11,6 @@ moduleTitle: "Creational Patterns"
 sectionRef: "2.4"
 weight: 204
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/prototype-pattern/"
 ---
@@ -88,7 +87,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — rebuild from scratch every time:**
@@ -229,6 +228,23 @@ func (r *PrototypeRegistry) Create(key string, customize func(*Document)) (*Docu
 ```
 
 Go has no built-in clone — implement `Clone()` explicitly and document deep vs shallow copy.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

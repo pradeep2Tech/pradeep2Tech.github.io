@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Broker Comparisons"
 sectionRef: "3.4"
 weight: 304
-ShowToc: true
 interviewHandbook: true
 ---
 

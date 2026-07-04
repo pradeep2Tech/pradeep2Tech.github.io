@@ -10,7 +10,6 @@ module: 8
 moduleTitle: "LLD Case Studies"
 sectionRef: "8.6"
 weight: 806
-ShowToc: true
 ---
 
 ### Problem & Intent
@@ -73,8 +72,8 @@ sequenceDiagram
 
 ### Implementation
 
-{< impl-tabs default="java" java="Java" golang="Go" >}
-{< impl-tab lang="java" >}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
+{{< impl-tab lang="java" >}}
 
 ```java
 public record Loan(String id, String memberId, String copyId, LocalDate dueDate) {
@@ -84,8 +83,8 @@ public record Loan(String id, String memberId, String copyId, LocalDate dueDate)
 }
 ```
 
-{< /impl-tab >}
-{< impl-tab lang="golang" >}
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
 
 ```go
 type Loan struct {
@@ -94,8 +93,30 @@ type Loan struct {
 }
 ```
 
-{< /impl-tab >}
-{< /impl-tabs >}
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from dataclasses import dataclass
+from datetime import date
+from typing import Protocol
+
+class FinePolicy(Protocol):
+    def calculate(self, due: date, returned: date) -> float: ...
+
+@dataclass
+class Loan:
+    id: str
+    member_id: str
+    copy_id: str
+    due_date: date
+
+    def fine_on(self, returned: date, policy: FinePolicy) -> float:
+        return policy.calculate(self.due_date, returned)
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ---
 

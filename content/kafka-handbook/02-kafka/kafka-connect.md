@@ -10,7 +10,6 @@ module: 2
 moduleTitle: "Apache Kafka"
 sectionRef: "2.10"
 weight: 210
-ShowToc: true
 interviewHandbook: true
 ---
 

@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/merge-sorted-array/"
 sourceLabel: "LeetCode 88"
 pattern: "Two Pointers"
-ShowToc: true
 interviewHandbook: true
 ---
 # Merge Sorted Array

@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://www.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1"
 sourceLabel: "GFG"
 pattern: "DP"
-ShowToc: true
 interviewHandbook: true
 ---
 # Subset Sum

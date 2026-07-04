@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Python Handbook"
 sectionRef: "0"
 weight: 3
-ShowToc: true
 interviewHandbook: true
 ---
 

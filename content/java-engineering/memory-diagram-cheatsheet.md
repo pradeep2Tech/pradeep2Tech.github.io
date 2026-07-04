@@ -9,7 +9,6 @@ shortTitle: "Memory Diagram"
 module: 6
 moduleTitle: "Interview Cheat Sheets"
 sectionRef: "6.2"
-ShowToc: true
 interviewHandbook: true
 cheatSheet: true
 aliases:

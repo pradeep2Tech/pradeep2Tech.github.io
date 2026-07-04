@@ -9,7 +9,6 @@ shortTitle: "Remote"
 module: 4
 moduleTitle: "Collaboration"
 sectionRef: "4.1"
-ShowToc: true
 ---
 
 ## Executive Summary

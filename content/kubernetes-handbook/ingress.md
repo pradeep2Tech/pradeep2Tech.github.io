@@ -6,10 +6,9 @@ description: "HTTP/S routing, TLS, and ingress controller annotations."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Ingress"
-module: 2
+module: 3
 moduleTitle: "Networking & Exposure"
-sectionRef: "2.2"
-ShowToc: true
+sectionRef: "3.2"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/ingress/"]
 ---

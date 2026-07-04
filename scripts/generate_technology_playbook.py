@@ -336,7 +336,6 @@ def fm(slug: str, mod_id: int, mod_title: str, topic_idx: int, draft: bool = Fal
         moduleTitle: "{mod_title}"
         sectionRef: "{section_ref}"
         weight: {mod_id * 100 + topic_idx}
-        ShowToc: true
         ---
         """
     )

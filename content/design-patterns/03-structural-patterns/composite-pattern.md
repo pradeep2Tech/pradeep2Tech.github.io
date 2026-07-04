@@ -11,7 +11,6 @@ moduleTitle: "Structural Patterns"
 sectionRef: "3.3"
 weight: 303
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/composite-pattern/"
 ---
@@ -82,7 +81,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Branching on type everywhere:**
@@ -200,6 +199,23 @@ func (d Directory) SizeBytes() int64 {
 ```
 
 Go uses **interface + struct slices**; unexported fields prevent external slices mutation if needed.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

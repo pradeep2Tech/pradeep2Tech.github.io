@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/binary-search/"
 sourceLabel: "LeetCode 704"
 pattern: "Classic"
-ShowToc: true
 interviewHandbook: true
 ---
 # Binary Search

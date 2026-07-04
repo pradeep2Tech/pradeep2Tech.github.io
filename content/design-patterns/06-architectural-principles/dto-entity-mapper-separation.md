@@ -11,7 +11,6 @@ moduleTitle: "Architectural Principles"
 sectionRef: "6.4"
 weight: 604
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/dto-entity-mapper-separation/"
 ---
@@ -97,7 +96,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — JPA entity returned from REST controller:**
@@ -216,6 +215,22 @@ func ToResponse(o Order) OrderResponse {
 ```
 
 Use separate struct tags only on DTOs — domain types stay JSON-agnostic.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol, Optional
+
+class OrderRepository(Protocol):
+    def find(self, order_id: str) -> Optional[dict]: ...
+    def save(self, order: dict) -> None: ...
+
+class UnitOfWork(Protocol):
+    def orders(self) -> OrderRepository: ...
+    def commit(self) -> None: ...
+    def rollback(self) -> None: ...
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

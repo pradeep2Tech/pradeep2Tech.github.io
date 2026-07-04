@@ -11,7 +11,6 @@ moduleTitle: "Architectural Principles"
 sectionRef: "6.1"
 weight: 601
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/dependency-injection-inversion-of-control/"
 ---
@@ -87,7 +86,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — class constructs its own dependencies:**
@@ -194,6 +193,23 @@ func main() {
 ```
 
 Go has no Spring — **`main` is the composition root**; use `wire`, `fx`, or manual constructor calls.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

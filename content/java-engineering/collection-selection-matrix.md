@@ -9,7 +9,6 @@ shortTitle: "Collection Choice"
 module: 2
 moduleTitle: "Collections"
 sectionRef: "2.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - collections-decision-matrix
@@ -57,6 +56,8 @@ flowchart TD
 
 ## ArrayList vs LinkedList for 10M random reads?
 
+**Difficulty:** Easy · **Time:** 30 sec
+
 ### Short Answer
 
 `ArrayList` — O(1) indexed access. `LinkedList` is O(n) per get.
@@ -65,12 +66,18 @@ flowchart TD
 
 LinkedList rarely wins on modern CPUs due to cache misses walking nodes. Use ArrayList unless deque operations at both ends without index access.
 
+### Interview Questions
+
+1. When is LinkedList justified?
+
 ### Follow-up Questions
 
 - When is LinkedList justified?
 
 ---
 ## When LinkedHashMap over HashMap?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 

@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 3
-ShowToc: true
 ---
 
 # Structural Patterns

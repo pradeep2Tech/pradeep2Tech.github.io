@@ -9,7 +9,6 @@ shortTitle: "Repository"
 module: 1
 moduleTitle: "Getting Started"
 sectionRef: "1.2"
-ShowToc: true
 ---
 
 ## Executive Summary

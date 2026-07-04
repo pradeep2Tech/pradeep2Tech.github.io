@@ -6,10 +6,9 @@ description: "Dynamic provisioning, provisioners, and volume parameters."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Storage Classes"
-module: 3
+module: 4
 moduleTitle: "Configuration & Storage"
-sectionRef: "3.4"
-ShowToc: true
+sectionRef: "4.4"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/storage-classes/"]
 ---

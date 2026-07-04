@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/longest-palindromic-substring/"
 sourceLabel: "LeetCode 5"
 pattern: "Expand Around Center"
-ShowToc: true
 interviewHandbook: true
 ---
 # Longest Palindromic Substring

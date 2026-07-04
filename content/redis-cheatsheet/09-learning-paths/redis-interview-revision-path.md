@@ -10,21 +10,43 @@ module: 9
 moduleTitle: "Learning Paths"
 sectionRef: "9.4"
 weight: 904
-ShowToc: true
 ---
+
 # Redis Interview Revision Path
 
-**Goal:** High-signal 48-hour revision before senior and architect interviews.
+**Audience:** Senior engineers (6+ years) building depth in this handbook.
 
-| Block | Focus |
-| :--- | :--- |
-| 1 | [Architecture](/redis-cheatsheet/01-fundamentals/architecture/) + [Data Structures](/redis-cheatsheet/01-fundamentals/data-structures/) |
-| 2 | [Persistence](/redis-cheatsheet/03-redis-internals/persistence/) + [Replication](/redis-cheatsheet/03-redis-internals/replication/) + [Cluster](/redis-cheatsheet/03-redis-internals/cluster/) |
-| 3 | [Distributed Lock](/redis-cheatsheet/04-distributed-systems/distributed-lock/) + [Streams](/redis-cheatsheet/04-distributed-systems/streams/) |
-| 4 | [Cache failure pages](/redis-cheatsheet/05-production-patterns/cache-breakdown/) + [Troubleshooting](/redis-cheatsheet/06-performance-operations/troubleshooting/) |
-| 5 | [Top 150 Questions](/redis-cheatsheet/08-interview-guide/top-150-interview-questions/) |
+**Duration:** 2–3 weeks at ~3 hours/week.
 
-## See Also
+**Prerequisite:** Redis data structures. Start from the [handbook index](/redis-cheatsheet/) if terms feel unfamiliar.
 
-- [Previous: Architect Path](/redis-cheatsheet/09-learning-paths/redis-architect-path/)
-- [Redis Handbook Index](/redis-cheatsheet/)
+---
+
+## How to use this path
+
+1. Read modules **in sidebar order** — later modules assume earlier ones.
+2. For each topic page: read **Executive Summary → diagram → implementation tabs**.
+3. End each week with [interview guide](/redis-cheatsheet/) questions for that module.
+4. Pair with [System Design](/system-design/) when the topic affects distributed architecture.
+
+---
+
+## Suggested pace
+
+| Week | Focus |
+| :---: | :--- |
+| 1 | Fundamentals module — complete every page, run examples locally |
+| 2 | Core/internals module — depth over speed |
+| 3 | Production + interview modules — troubleshooting and architect questions |
+
+---
+
+## Exit criteria
+
+- Explain top 10 topics from this handbook in 60 seconds each.
+- Debug one realistic failure using the handbook's troubleshooting page.
+- Link handbook concepts to a [System Design](/system-design/) case study where relevant.
+
+---
+
+[← Back to handbook index](/redis-cheatsheet/)

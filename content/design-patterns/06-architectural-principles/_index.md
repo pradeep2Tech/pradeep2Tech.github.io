@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 6
-ShowToc: true
 ---
 
 # Architectural Principles

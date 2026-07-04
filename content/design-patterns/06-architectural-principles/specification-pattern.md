@@ -11,7 +11,6 @@ moduleTitle: "Architectural Principles"
 sectionRef: "6.6"
 weight: 606
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/specification-pattern/"
 ---
@@ -89,7 +88,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Scattered boolean checks:**
@@ -198,6 +197,22 @@ func (s *DiscountService) ApplyDiscount(c Customer, o Order) float64 {
 ```
 
 Go uses **function types** as specs — structs when a spec needs configuration (e.g. `MinOrderTotalSpec{Min: 50}`).
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol, Optional
+
+class OrderRepository(Protocol):
+    def find(self, order_id: str) -> Optional[dict]: ...
+    def save(self, order: dict) -> None: ...
+
+class UnitOfWork(Protocol):
+    def orders(self) -> OrderRepository: ...
+    def commit(self) -> None: ...
+    def rollback(self) -> None: ...
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

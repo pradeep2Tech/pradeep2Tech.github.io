@@ -9,7 +9,6 @@ shortTitle: "Observability"
 module: 8
 moduleTitle: "Observability"
 sectionRef: "8.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - actuator-ref

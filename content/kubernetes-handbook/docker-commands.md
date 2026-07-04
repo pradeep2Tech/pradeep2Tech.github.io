@@ -6,10 +6,9 @@ description: "Essential docker CLI for images, containers, and registry."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Docker CLI"
-module: 6
-moduleTitle: "Docker"
-sectionRef: "6.8"
-ShowToc: true
+module: 7
+moduleTitle: "Docker Deep Dive"
+sectionRef: "7.8"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/docker-commands/"]
 ---

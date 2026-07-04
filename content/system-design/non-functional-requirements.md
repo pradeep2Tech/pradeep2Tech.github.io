@@ -9,7 +9,6 @@ shortTitle: "Non-Functional Requirements"
 module: 1
 moduleTitle: "Foundations"
 sectionRef: "1.3"
-ShowToc: true
 ---
 
 ## Overview

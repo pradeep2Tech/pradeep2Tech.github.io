@@ -9,7 +9,6 @@ shortTitle: "Memory & GC"
 module: 4
 moduleTitle: "JVM"
 sectionRef: "4.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - jvm-memory-and-gc
@@ -19,6 +18,8 @@ aliases:
 ---
 
 ## Stack vs heap?
+
+**Difficulty:** Easy · **Time:** 30 sec
 
 ### Short Answer
 
@@ -32,12 +33,18 @@ References on stack point to heap objects. Static field data lives in heap; clas
 
 See [Memory Diagram Cheat Sheet](/java-engineering/memory-diagram-cheatsheet/).
 
+### Interview Questions
+
+1. Where do static fields live?
+
 ### Follow-up Questions
 
 - Where do static fields live?
 
 ---
 ## Minor vs major GC?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -51,6 +58,11 @@ Generational hypothesis: most objects die young. Promotion when survivors exceed
 
 TLAB: per-thread Eden buffers reduce allocation contention.
 
+### Interview Questions
+
+1. G1 mixed GC?
+2. When ZGC over G1?
+
 ### Follow-up Questions
 
 - G1 mixed GC?
@@ -58,6 +70,8 @@ TLAB: per-thread Eden buffers reduce allocation contention.
 
 ---
 ## G1 vs ZGC?
+
+**Difficulty:** Hard · **Time:** 2 min
 
 ### Short Answer
 
@@ -71,6 +85,11 @@ Tune with `-Xlog:gc*` and pause P99. Container: `-XX:MaxRAMPercentage`.
 
 `-XX:+HeapDumpOnOutOfMemoryError` on persistent volume.
 
+### Interview Questions
+
+1. Shenandoah?
+2. Humongous objects in G1?
+
 ### Follow-up Questions
 
 - Shenandoah?
@@ -79,6 +98,8 @@ Tune with `-Xlog:gc*` and pause P99. Container: `-XX:MaxRAMPercentage`.
 ---
 ## Can you leak memory with a GC?
 
+**Difficulty:** Medium · **Time:** 1 min
+
 ### Short Answer
 
 Yes — logical leaks keep strong references (static maps, listeners, ThreadLocal, classloader chains).
@@ -86,6 +107,11 @@ Yes — logical leaks keep strong references (static maps, listeners, ThreadLoca
 ### Detailed Explanation
 
 OOM types: heap, Metaspace, direct buffer, unable to create native thread.
+
+### Interview Questions
+
+1. See Reference Types
+2. ThreadLocal in pools
 
 ### Follow-up Questions
 

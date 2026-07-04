@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/alien-dictionary/"
 sourceLabel: "LeetCode 269"
 pattern: "Topological Sort"
-ShowToc: true
 interviewHandbook: true
 ---
 # Alien Dictionary

@@ -9,13 +9,14 @@ shortTitle: "Language Basics"
 module: 1
 moduleTitle: "Language Fundamentals"
 sectionRef: "1.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - core-java-quick-ref
 ---
 
 ## Why prefer primitives over wrappers in hot loops?
+
+**Difficulty:** Easy · **Time:** 30 sec
 
 ### Short Answer
 
@@ -37,6 +38,11 @@ Profile before micro-optimizing; readability wins in business logic.
 
 Using `Integer` in `List` where values are always non-null.
 
+### Interview Questions
+
+1. What is the default value of a local `int` vs field?
+2. When does widening vs narrowing apply?
+
 ### Follow-up Questions
 
 - What is the default value of a local `int` vs field?
@@ -44,6 +50,8 @@ Using `Integer` in `List` where values are always non-null.
 
 ---
 ## What does `final` on a reference mean?
+
+**Difficulty:** Easy · **Time:** 30 sec
 
 ### Short Answer
 
@@ -53,12 +61,18 @@ The reference binding cannot change; the referenced object may still mutate.
 
 `final User user` means you cannot reassign `user` to another object. If `User` is mutable, `user.setName()` is still legal. Immutability requires an immutable class design (records, unmodifiable fields).
 
+### Interview Questions
+
+1. How do `final` fields affect JVM initialization and visibility?
+
 ### Follow-up Questions
 
 - How do `final` fields affect JVM initialization and visibility?
 
 ---
 ## Arrays covariant but generics invariant — explain.
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -76,6 +90,11 @@ Type erasure: `List<String>` bytecode is `List`.
 
 Don't use arrays for generic APIs — prefer `List<T>`.
 
+### Interview Questions
+
+1. What is heap pollution?
+2. Why no `new T[]`?
+
 ### Follow-up Questions
 
 - What is heap pollution?
@@ -84,6 +103,8 @@ Don't use arrays for generic APIs — prefer `List<T>`.
 ---
 ## Pattern matching switch and exhaustiveness (17+/21+)
 
+**Difficulty:** Medium · **Time:** 1 min
+
 ### Short Answer
 
 Switch on sealed types must cover all permitted subtypes; compiler enforces exhaustiveness.
@@ -91,6 +112,10 @@ Switch on sealed types must cover all permitted subtypes; compiler enforces exha
 ### Detailed Explanation
 
 Sealed classes/interfaces restrict subclasses (`permits`). Combined with pattern switches, the compiler verifies all cases are handled — no default needed when exhaustive. Records destructure in case labels: `case Point(int x, int y)`.
+
+### Interview Questions
+
+1. Difference between classic switch and switch expressions?
 
 ### Follow-up Questions
 

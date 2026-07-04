@@ -9,7 +9,6 @@ shortTitle: "What Is System Design?"
 module: 1
 moduleTitle: "Foundations"
 sectionRef: "1.1"
-ShowToc: true
 ---
 
 ## Overview

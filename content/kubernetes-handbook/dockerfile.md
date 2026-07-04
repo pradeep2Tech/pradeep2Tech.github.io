@@ -6,10 +6,9 @@ description: "FROM, COPY, RUN, CMD, ENTRYPOINT, and layer caching."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Dockerfile"
-module: 6
-moduleTitle: "Docker"
-sectionRef: "6.2"
-ShowToc: true
+module: 7
+moduleTitle: "Docker Deep Dive"
+sectionRef: "7.2"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/dockerfile/"]
 ---

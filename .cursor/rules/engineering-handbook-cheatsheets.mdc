@@ -26,7 +26,6 @@ shortTitle: "<Short>"
 module: 1
 moduleTitle: "<Module Name>"
 sectionRef: "1.1"
-ShowToc: true
 ---
 ```
 

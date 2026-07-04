@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.9"
 weight: 409
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/template-method-pattern/"
 ---
@@ -82,7 +81,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — duplicated pipeline:**
@@ -177,6 +176,23 @@ func NewCsvExporter(repo RowRepository, store FileStore) Exporter {
 ```
 
 Go has no inheritance — **compose the template as a struct with function fields** or an unexported orchestration function plus injected step functions.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

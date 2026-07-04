@@ -11,7 +11,6 @@ moduleTitle: "Structural Patterns"
 sectionRef: "3.7"
 weight: 307
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/proxy-pattern/"
 ---
@@ -85,7 +84,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Direct remote calls — no control layer:**
@@ -197,6 +196,23 @@ func (p *CachingDocumentProxy) Render(ctx context.Context, docID string) ([]byte
 ```
 
 For lazy init, hold `sync.Once` around real subject construction — same interface, deferred allocation.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

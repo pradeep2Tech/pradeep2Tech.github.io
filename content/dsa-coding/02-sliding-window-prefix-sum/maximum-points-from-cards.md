@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/"
 sourceLabel: "LeetCode 1423"
 pattern: "Sliding Window"
-ShowToc: true
 interviewHandbook: true
 ---
 # Maximum Points You Can Obtain from Cards

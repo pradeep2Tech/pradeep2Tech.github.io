@@ -9,7 +9,6 @@ shortTitle: "Stash"
 module: 3
 moduleTitle: "History & Workspace"
 sectionRef: "3.3"
-ShowToc: true
 ---
 
 ## Executive Summary

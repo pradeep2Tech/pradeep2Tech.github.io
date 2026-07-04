@@ -11,7 +11,6 @@ moduleTitle: "Architectural Principles"
 sectionRef: "6.2"
 weight: 602
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/layered-vs-hexagonal-architecture/"
 ---
@@ -99,7 +98,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Layered leak — controller reaches repository:**
@@ -218,6 +217,25 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 ```
 
 Package layout: `internal/core`, `internal/adapters/http`, `internal/adapters/postgres`.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+**Python note:** compare trade-offs using the Java/Go tabs — Python uses Protocols, dataclasses, and composition similarly.
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

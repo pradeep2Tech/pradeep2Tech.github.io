@@ -11,7 +11,6 @@ moduleTitle: "Structural Patterns"
 sectionRef: "3.5"
 weight: 305
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/facade-pattern/"
 ---
@@ -83,7 +82,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Without facade — client orchestrates everything:**
@@ -195,6 +194,23 @@ func (h *OrderHandler) Place(w http.ResponseWriter, r *http.Request) {
 ```
 
 Keep transaction and saga boundaries explicit — the facade orchestrates but should not swallow partial-failure semantics.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

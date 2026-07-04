@@ -9,7 +9,6 @@ shortTitle: "Clone"
 module: 1
 moduleTitle: "Getting Started"
 sectionRef: "1.3"
-ShowToc: true
 ---
 
 ## Executive Summary

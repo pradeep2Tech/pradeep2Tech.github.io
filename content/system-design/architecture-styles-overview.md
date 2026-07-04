@@ -9,7 +9,6 @@ shortTitle: "Architecture Styles Overview"
 module: 8
 moduleTitle: "Architecture Styles"
 sectionRef: "8.1"
-ShowToc: true
 ---
 
 ## Overview

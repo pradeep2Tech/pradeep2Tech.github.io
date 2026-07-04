@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Production Patterns"
 sectionRef: "5.6"
 weight: 506
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/session-store/"

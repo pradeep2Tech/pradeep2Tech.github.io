@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/"
 sourceLabel: "LeetCode 235"
 pattern: "DFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Lowest Common Ancestor of a BST

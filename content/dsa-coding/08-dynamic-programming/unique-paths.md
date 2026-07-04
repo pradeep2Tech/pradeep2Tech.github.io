@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/unique-paths/"
 sourceLabel: "LeetCode 62"
 pattern: "Grid DP"
-ShowToc: true
 interviewHandbook: true
 ---
 # Unique Paths

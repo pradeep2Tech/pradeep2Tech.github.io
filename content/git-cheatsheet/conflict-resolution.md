@@ -9,7 +9,6 @@ shortTitle: "Conflicts"
 module: 4
 moduleTitle: "Collaboration"
 sectionRef: "4.4"
-ShowToc: true
 ---
 
 ## Executive Summary

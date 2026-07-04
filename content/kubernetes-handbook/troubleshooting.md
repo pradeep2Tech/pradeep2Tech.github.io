@@ -6,10 +6,9 @@ description: "CrashLoopBackOff, ImagePullBackOff, pending pods, and events."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Troubleshooting"
-module: 5
+module: 6
 moduleTitle: "Operations & Security"
-sectionRef: "5.6"
-ShowToc: true
+sectionRef: "6.6"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/troubleshooting/"]
 ---

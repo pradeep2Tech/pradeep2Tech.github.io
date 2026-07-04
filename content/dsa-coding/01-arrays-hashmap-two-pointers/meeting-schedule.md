@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/meeting-rooms/"
 sourceLabel: "LeetCode 252"
 pattern: "Two Arrays + Sorting"
-ShowToc: true
 interviewHandbook: true
 ---
 # Meeting Schedule

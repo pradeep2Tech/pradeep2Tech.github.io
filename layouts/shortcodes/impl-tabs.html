@@ -1,5 +1,5 @@
 {{- $default := .Get "default" | default "java" -}}
-{{- $langs := slice "java" "golang" -}}
+{{- $langs := slice "java" "golang" "python" -}}
 {{- $panels := .Inner | .Page.RenderString -}}
 <div class="impl-tabs" data-impl-tabs data-impl-default="{{ $default }}">
   <div class="impl-tabs-bar" role="tablist" aria-label="Implementation language">

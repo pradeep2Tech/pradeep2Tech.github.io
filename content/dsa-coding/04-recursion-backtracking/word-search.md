@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/word-search/"
 sourceLabel: "LeetCode 79"
 pattern: "Backtracking"
-ShowToc: true
 interviewHandbook: true
 ---
 # Word Search

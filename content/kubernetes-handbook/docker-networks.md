@@ -6,10 +6,9 @@ description: "Bridge, host, overlay, and container DNS."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Networks"
-module: 6
-moduleTitle: "Docker"
-sectionRef: "6.5"
-ShowToc: true
+module: 7
+moduleTitle: "Docker Deep Dive"
+sectionRef: "7.5"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/docker-networks/"]
 ---

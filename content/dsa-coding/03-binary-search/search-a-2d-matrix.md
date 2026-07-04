@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/search-a-2d-matrix/"
 sourceLabel: "LeetCode 74"
 pattern: "Matrix Binary Search"
-ShowToc: true
 interviewHandbook: true
 ---
 # Search a 2D Matrix

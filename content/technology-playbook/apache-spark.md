@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Workflow, Batch, Rules & Schedulers"
 sectionRef: "5.8"
 weight: 507
-ShowToc: true
 ---
 ## 1. Executive Summary
 

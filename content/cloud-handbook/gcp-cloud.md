@@ -10,7 +10,6 @@ module: 7
 moduleTitle: "Cloud Providers Comparison"
 sectionRef: "7.4"
 weight: 703
-ShowToc: true
 ---
 ## 1. Executive Summary
 

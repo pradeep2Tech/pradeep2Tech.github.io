@@ -11,7 +11,6 @@ moduleTitle: "LLD Case Studies"
 sectionRef: "8.4"
 weight: 804
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/notification-service-lld/"
 ---
@@ -119,7 +118,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — switch on channel in every caller:**
@@ -280,6 +279,23 @@ type OrderPlacedSubscriber struct {
 func (s *OrderPlacedSubscriber) Handle(e OrderPlacedEvent) {
     _ = s.Notifications.Send(NewOrderConfirmation(e))
 }
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class DomainPort(Protocol):
+    def execute(self) -> None: ...
+
+class ApplicationService:
+    def __init__(self, port: DomainPort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
 ```
 
 {{< /impl-tab >}}

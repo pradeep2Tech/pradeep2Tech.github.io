@@ -6,10 +6,9 @@ description: "PV, PVC, binding, access modes, and reclaim policies."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Persistent Volumes"
-module: 3
+module: 4
 moduleTitle: "Configuration & Storage"
-sectionRef: "3.3"
-ShowToc: true
+sectionRef: "4.3"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/persistent-volumes/"]
 ---

@@ -10,7 +10,6 @@ module: 2
 moduleTitle: "Core Python"
 sectionRef: "2.8"
 weight: 208
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 aliases:

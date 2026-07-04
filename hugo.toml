@@ -30,8 +30,7 @@ buildFuture = true
   ShowCodeCopyButtons = true
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
-  ShowToc = true
-  TocOpen = false
+  ShowToc = false
 
 [params.assets]
   disableHLJS = true

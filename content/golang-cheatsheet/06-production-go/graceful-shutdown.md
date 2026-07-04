@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Production Go"
 sectionRef: "6.4"
 weight: 604
-ShowToc: true
 interviewHandbook: true
 ---
 

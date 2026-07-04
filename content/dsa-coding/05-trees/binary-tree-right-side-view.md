@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/binary-tree-right-side-view/"
 sourceLabel: "LeetCode 199"
 pattern: "BFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Binary Tree Right Side View

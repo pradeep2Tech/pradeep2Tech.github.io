@@ -9,7 +9,6 @@ shortTitle: "Interview"
 module: 11
 moduleTitle: "Interview"
 sectionRef: "11.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - spring-boot-interview-ref

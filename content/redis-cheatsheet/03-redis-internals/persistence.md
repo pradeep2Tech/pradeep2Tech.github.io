@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Redis Internals"
 sectionRef: "3.3"
 weight: 303
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/persistence/"

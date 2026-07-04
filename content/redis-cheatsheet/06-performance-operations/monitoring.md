@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Performance & Operations"
 sectionRef: "6.3"
 weight: 603
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/common-redis-commands/"

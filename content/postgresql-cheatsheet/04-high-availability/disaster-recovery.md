@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "High Availability"
 sectionRef: "4.4"
 weight: 404
-ShowToc: true
 interviewHandbook: true
 ---
 

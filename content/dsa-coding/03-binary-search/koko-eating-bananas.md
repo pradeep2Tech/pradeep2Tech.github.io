@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/koko-eating-bananas/"
 sourceLabel: "LeetCode 875"
 pattern: "Binary Search on Answer"
-ShowToc: true
 interviewHandbook: true
 ---
 # Koko Eating Bananas

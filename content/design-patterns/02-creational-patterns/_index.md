@@ -10,7 +10,6 @@ module: 2
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 2
-ShowToc: true
 ---
 
 # Creational Patterns

@@ -10,19 +10,43 @@ module: 9
 moduleTitle: "Learning Paths"
 sectionRef: "9.3"
 weight: 903
-ShowToc: true
 ---
+
 # Redis Architect Path
 
-**Goal:** Make ADR-grade platform choices for Redis in distributed systems.
+**Audience:** Senior engineers (6+ years) building depth in this handbook.
 
-1. [Redis Protocol](/redis-cheatsheet/03-redis-internals/redis-protocol/) + [Memory Management](/redis-cheatsheet/03-redis-internals/memory-management/)
-2. [Cluster](/redis-cheatsheet/03-redis-internals/cluster/) and [Distributed Lock](/redis-cheatsheet/04-distributed-systems/distributed-lock/)
-3. [Comparisons](/redis-cheatsheet/07-comparisons/) for broker/cache tradeoffs
-4. [Database Handbook — Redis](/database-handbook/redis/) for cross-database ADR context
+**Duration:** 2–3 weeks at ~3 hours/week.
 
-## See Also
+**Prerequisite:** Redis data structures. Start from the [handbook index](/redis-cheatsheet/) if terms feel unfamiliar.
 
-- [Previous: Lead Path](/redis-cheatsheet/09-learning-paths/redis-lead-path/)
-- [Next: Interview Revision Path](/redis-cheatsheet/09-learning-paths/redis-interview-revision-path/)
-- [Redis Handbook Index](/redis-cheatsheet/)
+---
+
+## How to use this path
+
+1. Read modules **in sidebar order** — later modules assume earlier ones.
+2. For each topic page: read **Executive Summary → diagram → implementation tabs**.
+3. End each week with [interview guide](/redis-cheatsheet/) questions for that module.
+4. Pair with [System Design](/system-design/) when the topic affects distributed architecture.
+
+---
+
+## Suggested pace
+
+| Week | Focus |
+| :---: | :--- |
+| 1 | Fundamentals module — complete every page, run examples locally |
+| 2 | Core/internals module — depth over speed |
+| 3 | Production + interview modules — troubleshooting and architect questions |
+
+---
+
+## Exit criteria
+
+- Explain top 10 topics from this handbook in 60 seconds each.
+- Debug one realistic failure using the handbook's troubleshooting page.
+- Link handbook concepts to a [System Design](/system-design/) case study where relevant.
+
+---
+
+[← Back to handbook index](/redis-cheatsheet/)

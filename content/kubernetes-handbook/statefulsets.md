@@ -6,10 +6,9 @@ description: "Stable identity, ordered rollout, and persistent storage for state
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "StatefulSets"
-module: 1
+module: 2
 moduleTitle: "Architecture & Workloads"
-sectionRef: "1.5"
-ShowToc: true
+sectionRef: "2.5"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/statefulsets/"]
 ---

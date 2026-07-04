@@ -11,7 +11,6 @@ moduleTitle: "LLD Case Studies"
 sectionRef: "8.7"
 weight: 807
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/task-scheduler-lld/"
 ---
@@ -107,7 +106,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — unbounded `newThread` per task:**
@@ -274,6 +273,23 @@ func (s *TaskScheduler) Shutdown() {
 ```
 
 Go alternative: `container/heap` internally, or channel-per-priority for simpler semantics at lower scale.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class DomainPort(Protocol):
+    def execute(self) -> None: ...
+
+class ApplicationService:
+    def __init__(self, port: DomainPort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

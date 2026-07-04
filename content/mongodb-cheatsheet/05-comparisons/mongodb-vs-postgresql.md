@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Comparisons"
 sectionRef: "5.1"
 weight: 501
-ShowToc: true
 interviewHandbook: true
 ---
 

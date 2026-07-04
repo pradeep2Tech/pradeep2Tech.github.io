@@ -9,7 +9,6 @@ shortTitle: "Kubernetes"
 module: 1
 moduleTitle: "Containers & Orchestration"
 sectionRef: "1.3"
-ShowToc: true
 ---
 
 ## Executive Summary

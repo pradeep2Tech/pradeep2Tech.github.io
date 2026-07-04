@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Redis Handbook"
 sectionRef: "0"
 weight: 3
-ShowToc: true
 ---
 # Redis Internals
 

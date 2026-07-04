@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/graph-valid-tree/"
 sourceLabel: "LeetCode 261"
 pattern: "DFS/BFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Graph Valid Tree

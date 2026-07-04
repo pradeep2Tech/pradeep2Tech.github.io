@@ -9,13 +9,14 @@ shortTitle: "Object Contract"
 module: 1
 moduleTitle: "Language Fundamentals"
 sectionRef: "1.6"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - interfaces-and-object-contract
 ---
 
 ## equals/hashCode contract?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -33,6 +34,11 @@ HashMap bin lookup uses hash then equals.
 
 Don't use mutable fields in equals/hashCode for map keys.
 
+### Interview Questions
+
+1. What fields to include in equals?
+2. IDE generate pitfalls?
+
 ### Follow-up Questions
 
 - What fields to include in equals?
@@ -40,6 +46,8 @@ Don't use mutable fields in equals/hashCode for map keys.
 
 ---
 ## Comparable vs Comparator?
+
+**Difficulty:** Easy · **Time:** 30 sec
 
 ### Short Answer
 

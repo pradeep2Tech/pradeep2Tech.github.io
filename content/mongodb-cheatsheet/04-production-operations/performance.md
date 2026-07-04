@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "Production Operations"
 sectionRef: "4.1"
 weight: 401
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 aliases:

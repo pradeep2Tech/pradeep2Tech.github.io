@@ -9,7 +9,6 @@ shortTitle: "Consistency Models"
 module: 2
 moduleTitle: "Distributed Systems"
 sectionRef: "2.2"
-ShowToc: true
 ---
 
 ## Overview

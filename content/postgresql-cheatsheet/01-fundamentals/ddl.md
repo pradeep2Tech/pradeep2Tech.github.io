@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Fundamentals"
 sectionRef: "1.2"
 weight: 102
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/ddl/

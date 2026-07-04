@@ -10,7 +10,6 @@ module: 7
 moduleTitle: "Redis Handbook"
 sectionRef: "0"
 weight: 7
-ShowToc: true
 ---
 # Comparisons
 

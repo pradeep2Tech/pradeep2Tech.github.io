@@ -6,10 +6,9 @@ description: "ClusterIP, NodePort, LoadBalancer, and stable pod endpoints."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Services"
-module: 2
+module: 3
 moduleTitle: "Networking & Exposure"
-sectionRef: "2.1"
-ShowToc: true
+sectionRef: "3.1"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/services/"]
 ---

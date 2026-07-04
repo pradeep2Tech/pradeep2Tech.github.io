@@ -10,7 +10,6 @@ module: 7
 moduleTitle: "Anti-Patterns"
 sectionRef: "7.5"
 weight: 705
-ShowToc: true
 ---
 
 ### Problem & Intent
@@ -52,7 +51,70 @@ flowchart LR
 
 ### Implementation
 
-Use [pattern decision tree](/design-patterns/09-pattern-selection-guide/pattern-decision-tree/) and [when-to-use guide](/design-patterns/09-pattern-selection-guide/when-to-use-which-pattern/).
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
+{{< impl-tab lang="java" >}}
+
+**Violation — Kafka for everything:**
+
+```java
+public class UserController {
+    @PostMapping("/users")
+    public User create(@RequestBody User u) {
+        kafka.send("user-create", u);
+        return userRepo.findById(u.getId());
+    }
+}
+```
+
+**Fixed — match pattern to problem:**
+
+```java
+public class UserController {
+  private final UserService users;
+  @PostMapping("/users")
+  public User create(@RequestBody CreateUser cmd) {
+    return users.create(cmd); // sync + transactional
+  }
+}
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+**Violation:** Redis on every read because "Netflix uses it."
+
+**Fixed:** Measure p99; cache hot keys with explicit TTL and invalidation only.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+**Violation:**
+
+```python
+class OrderManager:
+    def place(self, req: dict) -> None:
+        # many unrelated responsibilities in one type
+        ...
+```
+
+**Fixed:**
+
+```python
+class OrderService:
+    def __init__(self, validator, repo, notifier) -> None:
+        self._validator = validator
+        self._repo = repo
+        self._notifier = notifier
+
+    def place(self, req: dict) -> str:
+        self._validator.check(req)
+        return self._repo.save(req)
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
+
+Use [pattern decision tree](/design-patterns/09-pattern-selection-guide/pattern-decision-tree/) before adopting a pattern.
 
 ---
 

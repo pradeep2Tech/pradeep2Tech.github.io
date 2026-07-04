@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Production Operations"
 sectionRef: "6.1"
 weight: 601
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/vacuum/

@@ -10,7 +10,6 @@ module: 11
 moduleTitle: "DSA & Coding"
 sectionRef: "11.0"
 weight: 1100
-ShowToc: true
 interviewHandbook: true
 cheatSheet: true
 ---

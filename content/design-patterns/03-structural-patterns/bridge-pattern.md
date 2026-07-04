@@ -11,7 +11,6 @@ moduleTitle: "Structural Patterns"
 sectionRef: "3.2"
 weight: 302
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/bridge-pattern/"
 ---
@@ -94,7 +93,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Subclass explosion:**
@@ -197,6 +196,23 @@ func (r AdvancedRemote) VolumeUp(current int) { r.Device.SetVolume(current + 1) 
 ```
 
 Go favors **struct embedding of the Device interface field** and small abstraction interfaces per remote capability.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

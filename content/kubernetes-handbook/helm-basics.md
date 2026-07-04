@@ -6,10 +6,9 @@ description: "Charts, releases, values, and upgrade/rollback workflow."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Helm"
-module: 5
+module: 6
 moduleTitle: "Operations & Security"
-sectionRef: "5.4"
-ShowToc: true
+sectionRef: "6.4"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/helm-basics/"]
 ---

@@ -9,7 +9,6 @@ shortTitle: "Reliability vs Availability"
 module: 6
 moduleTitle: "Reliability"
 sectionRef: "6.2"
-ShowToc: true
 ---
 
 ## Overview

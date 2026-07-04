@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/rotten-oranges/"
 sourceLabel: "LeetCode 994"
 pattern: "Multi-Source BFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Rotten Oranges

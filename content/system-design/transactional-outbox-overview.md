@@ -9,7 +9,6 @@ shortTitle: "Transactional Outbox"
 module: 3
 moduleTitle: "Data Management"
 sectionRef: "3.5"
-ShowToc: true
 ---
 
 ## Overview

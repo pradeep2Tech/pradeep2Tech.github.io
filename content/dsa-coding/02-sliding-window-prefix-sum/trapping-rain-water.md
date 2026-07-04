@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/trapping-rain-water/"
 sourceLabel: "LeetCode 42"
 pattern: "Prefix/Suffix"
-ShowToc: true
 interviewHandbook: true
 ---
 # Trapping Rain Water

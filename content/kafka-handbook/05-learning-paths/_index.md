@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Learning Paths"
 sectionRef: "0"
 weight: 1
-ShowToc: true
 interviewHandbook: true
 ---
 

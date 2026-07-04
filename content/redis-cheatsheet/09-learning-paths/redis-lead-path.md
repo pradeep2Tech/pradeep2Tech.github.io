@@ -10,19 +10,43 @@ module: 9
 moduleTitle: "Learning Paths"
 sectionRef: "9.2"
 weight: 902
-ShowToc: true
 ---
+
 # Redis Lead Path
 
-**Goal:** Lead architecture and incident readiness for Redis-backed platforms.
+**Audience:** Senior engineers (6+ years) building depth in this handbook.
 
-1. [Replication](/redis-cheatsheet/03-redis-internals/replication/) + [Sentinel](/redis-cheatsheet/03-redis-internals/sentinel/) + [Cluster](/redis-cheatsheet/03-redis-internals/cluster/)
-2. [Cache Invalidation](/redis-cheatsheet/05-production-patterns/cache-invalidation/) and failure-mode pages
-3. [Capacity Planning](/redis-cheatsheet/06-performance-operations/capacity-planning/) + [Troubleshooting](/redis-cheatsheet/06-performance-operations/troubleshooting/)
-4. [Architect Questions](/redis-cheatsheet/08-interview-guide/architect-questions/) for panel preparation
+**Duration:** 2–3 weeks at ~3 hours/week.
 
-## See Also
+**Prerequisite:** Redis data structures. Start from the [handbook index](/redis-cheatsheet/) if terms feel unfamiliar.
 
-- [Previous: Senior Engineer Path](/redis-cheatsheet/09-learning-paths/redis-senior-engineer-path/)
-- [Next: Architect Path](/redis-cheatsheet/09-learning-paths/redis-architect-path/)
-- [Redis Handbook Index](/redis-cheatsheet/)
+---
+
+## How to use this path
+
+1. Read modules **in sidebar order** — later modules assume earlier ones.
+2. For each topic page: read **Executive Summary → diagram → implementation tabs**.
+3. End each week with [interview guide](/redis-cheatsheet/) questions for that module.
+4. Pair with [System Design](/system-design/) when the topic affects distributed architecture.
+
+---
+
+## Suggested pace
+
+| Week | Focus |
+| :---: | :--- |
+| 1 | Fundamentals module — complete every page, run examples locally |
+| 2 | Core/internals module — depth over speed |
+| 3 | Production + interview modules — troubleshooting and architect questions |
+
+---
+
+## Exit criteria
+
+- Explain top 10 topics from this handbook in 60 seconds each.
+- Debug one realistic failure using the handbook's troubleshooting page.
+- Link handbook concepts to a [System Design](/system-design/) case study where relevant.
+
+---
+
+[← Back to handbook index](/redis-cheatsheet/)

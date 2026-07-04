@@ -10,7 +10,6 @@ module: 2
 moduleTitle: "Core PostgreSQL"
 sectionRef: "2.6"
 weight: 206
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/isolation-levels/

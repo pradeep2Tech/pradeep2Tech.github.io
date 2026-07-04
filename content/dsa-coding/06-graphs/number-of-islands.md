@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/number-of-islands/"
 sourceLabel: "LeetCode 200"
 pattern: "DFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Number of Islands

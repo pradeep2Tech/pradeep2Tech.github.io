@@ -9,7 +9,6 @@ shortTitle: "Reset"
 module: 3
 moduleTitle: "History & Workspace"
 sectionRef: "3.1"
-ShowToc: true
 ---
 
 ## Executive Summary

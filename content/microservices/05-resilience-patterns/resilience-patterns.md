@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Resilience Patterns"
 sectionRef: "5.1"
 weight: 501
-ShowToc: true
 playbookVersion: 3
 aliases:
   - "/microservices/circuit-breaker-pattern/"

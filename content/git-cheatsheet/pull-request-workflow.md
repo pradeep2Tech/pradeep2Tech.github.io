@@ -9,7 +9,6 @@ shortTitle: "PR Workflow"
 module: 4
 moduleTitle: "Collaboration"
 sectionRef: "4.3"
-ShowToc: true
 ---
 
 ## Executive Summary

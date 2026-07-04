@@ -252,7 +252,6 @@ shortTitle: "{short}"
 module: {mod_id}
 moduleTitle: "{mod_title}"
 sectionRef: "{mod_id}.{topic_idx}"
-ShowToc: true
 cheatSheet: true
 ---
 

@@ -6,10 +6,9 @@ description: "Declarative rollouts, scaling, and rollback for stateless apps."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Deployments"
-module: 1
+module: 2
 moduleTitle: "Architecture & Workloads"
-sectionRef: "1.4"
-ShowToc: true
+sectionRef: "2.4"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/deployments/"]
 ---

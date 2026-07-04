@@ -9,7 +9,6 @@ shortTitle: "HashMap Internals"
 module: 2
 moduleTitle: "Collections"
 sectionRef: "2.2"
-ShowToc: true
 interviewHandbook: true
 ---
 

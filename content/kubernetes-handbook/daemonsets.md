@@ -6,10 +6,9 @@ description: "Run one pod per node — agents, log collectors, CNI plugins."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "DaemonSets"
-module: 1
+module: 2
 moduleTitle: "Architecture & Workloads"
-sectionRef: "1.6"
-ShowToc: true
+sectionRef: "2.6"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/daemonsets/"]
 ---

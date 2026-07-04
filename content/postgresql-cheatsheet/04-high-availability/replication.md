@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "High Availability"
 sectionRef: "4.1"
 weight: 401
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/replication/

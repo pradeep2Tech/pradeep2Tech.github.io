@@ -11,7 +11,6 @@ moduleTitle: "Creational Patterns"
 sectionRef: "2.5"
 weight: 205
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/singleton-pattern/"
 ---
@@ -84,7 +83,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — unsafe lazy singleton + service locator:**
@@ -227,6 +226,32 @@ func main() {
 ```
 
 Package-level `var defaultRegistry = GetMetricsRegistry()` is idiomatic only when injection is impractical (small CLIs).
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+# Prefer module-level singleton or explicit DI — not metaclass tricks.
+
+_config: dict | None = None
+
+def get_config() -> dict:
+    global _config
+    if _config is None:
+        _config = {"loaded": True}
+    return _config
+
+# Thread-safe variant:
+import threading
+_lock = threading.Lock()
+def get_config_safe() -> dict:
+    global _config
+    if _config is None:
+        with _lock:
+            if _config is None:
+                _config = {"loaded": True}
+    return _config
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

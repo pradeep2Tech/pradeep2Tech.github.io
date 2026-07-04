@@ -9,7 +9,6 @@ shortTitle: "Threading"
 module: 3
 moduleTitle: "Concurrency"
 sectionRef: "3.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - threads-and-executors
@@ -17,6 +16,8 @@ aliases:
 ---
 
 ## Platform thread states — BLOCKED vs WAITING?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -30,12 +31,18 @@ BLOCKED: waiting for monitor entry. WAITING: voluntary park without timeout (`wa
 
 See [Thread Lifecycle Cheat Sheet](/java-engineering/thread-lifecycle-cheatsheet/) for diagram.
 
+### Interview Questions
+
+1. How do virtual threads affect thread dumps?
+
 ### Follow-up Questions
 
 - How do virtual threads affect thread dumps?
 
 ---
 ## Fixed thread pool sizing?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -53,6 +60,11 @@ Name threads via custom ThreadFactory for diagnostics.
 
 Using `availableProcessors()` alone for mixed IO/CPU workloads.
 
+### Interview Questions
+
+1. shutdown vs shutdownNow?
+2. When cached thread pool?
+
 ### Follow-up Questions
 
 - shutdown vs shutdownNow?
@@ -61,6 +73,8 @@ Using `availableProcessors()` alone for mixed IO/CPU workloads.
 ---
 ## Thread.start happens-before run?
 
+**Difficulty:** Easy · **Time:** 30 sec
+
 ### Short Answer
 
 Yes — actions in parent before `start()` visible to child thread when `run` begins.
@@ -68,6 +82,10 @@ Yes — actions in parent before `start()` visible to child thread when `run` be
 ### Detailed Explanation
 
 Part of JMM happens-before rules. Also monitor unlock/lock, volatile write/read.
+
+### Interview Questions
+
+1. See Java Memory Model page
 
 ### Follow-up Questions
 

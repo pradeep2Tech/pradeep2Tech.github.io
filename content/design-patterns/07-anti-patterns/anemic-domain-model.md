@@ -10,7 +10,6 @@ module: 7
 moduleTitle: "Anti-Patterns"
 sectionRef: "7.2"
 weight: 702
-ShowToc: true
 ---
 
 ### Problem & Intent
@@ -58,7 +57,95 @@ sequenceDiagram
 
 ### Implementation
 
-Move invariants into entities; services coordinate transactions and infrastructure.
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
+{{< impl-tab lang="java" >}}
+
+**Violation — anemic entity:**
+
+```java
+public class Order {
+    private String status;
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+}
+
+public class OrderService {
+    public void cancel(Order order) {
+        if ("SHIPPED".equals(order.getStatus())) throw new IllegalStateException();
+        order.setStatus("CANCELLED");
+    }
+}
+```
+
+**Fixed — rich domain:**
+
+```java
+public class Order {
+    private OrderStatus status;
+    public void cancel() {
+        if (status == OrderStatus.SHIPPED) {
+            throw new IllegalStateException("Cannot cancel shipped order");
+        }
+        this.status = OrderStatus.CANCELLED;
+    }
+}
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+**Violation:**
+
+```go
+type Order struct { Status string }
+
+func (s *OrderService) Cancel(o *Order) error {
+    if o.Status == "SHIPPED" { return errors.New("cannot cancel") }
+    o.Status = "CANCELLED"
+    return nil
+}
+```
+
+**Fixed:**
+
+```go
+func (o *Order) Cancel() error {
+    if o.Status == Shipped {
+        return errors.New("cannot cancel shipped order")
+    }
+    o.Status = Cancelled
+    return nil
+}
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+**Violation:**
+
+```python
+class OrderManager:
+    def place(self, req: dict) -> None:
+        # many unrelated responsibilities in one type
+        ...
+```
+
+**Fixed:**
+
+```python
+class OrderService:
+    def __init__(self, validator, repo, notifier) -> None:
+        self._validator = validator
+        self._repo = repo
+        self._notifier = notifier
+
+    def place(self, req: dict) -> str:
+        self._validator.check(req)
+        return self._repo.save(req)
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ---
 

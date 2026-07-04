@@ -10,7 +10,6 @@ module: 9
 moduleTitle: "Pattern Selection Guide"
 sectionRef: "9.2"
 weight: 902
-ShowToc: true
 ---
 
 # Pattern Decision Tree

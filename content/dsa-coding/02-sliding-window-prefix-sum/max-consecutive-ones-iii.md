@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/max-consecutive-ones-iii/"
 sourceLabel: "LeetCode 1004"
 pattern: "Variable Window"
-ShowToc: true
 interviewHandbook: true
 ---
 # Max Consecutive Ones III

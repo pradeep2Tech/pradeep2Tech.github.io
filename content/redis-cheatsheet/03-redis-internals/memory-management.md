@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Redis Internals"
 sectionRef: "3.1"
 weight: 301
-ShowToc: true
 ---
 
 ## Quick Revision

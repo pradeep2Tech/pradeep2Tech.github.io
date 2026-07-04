@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "Distributed Systems"
 sectionRef: "4.3"
 weight: 403
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/pub-sub/"

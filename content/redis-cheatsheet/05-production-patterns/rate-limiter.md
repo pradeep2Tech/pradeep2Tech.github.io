@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Production Patterns"
 sectionRef: "5.7"
 weight: 507
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/rate-limiter/"

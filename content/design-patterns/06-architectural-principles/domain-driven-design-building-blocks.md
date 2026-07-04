@@ -11,7 +11,6 @@ moduleTitle: "Architectural Principles"
 sectionRef: "6.3"
 weight: 603
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/domain-driven-design-building-blocks/"
 ---
@@ -94,7 +93,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Anemic model — logic outside domain:**
@@ -230,6 +229,23 @@ func (PricingService) Total(lines []OrderLine) (Money, error) {
 ```
 
 Export only aggregate-root constructors; keep `Order` mutation methods on the root type.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

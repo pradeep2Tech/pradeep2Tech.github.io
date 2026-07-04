@@ -9,7 +9,6 @@ shortTitle: "REST API"
 module: 3
 moduleTitle: "REST API Design"
 sectionRef: "3.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - rest-api-ref

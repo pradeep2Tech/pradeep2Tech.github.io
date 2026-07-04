@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Performance & Operations"
 sectionRef: "6.4"
 weight: 604
-ShowToc: true
 ---
 
 ## Quick Revision

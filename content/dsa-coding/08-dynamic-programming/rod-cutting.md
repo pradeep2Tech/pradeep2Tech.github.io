@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://www.geeksforgeeks.org/problems/rod-cutting0840/1"
 sourceLabel: "GFG"
 pattern: "Unbounded Knapsack"
-ShowToc: true
 interviewHandbook: true
 ---
 # Rod Cutting

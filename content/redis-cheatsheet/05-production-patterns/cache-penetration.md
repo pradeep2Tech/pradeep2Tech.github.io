@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Production Patterns"
 sectionRef: "5.5"
 weight: 505
-ShowToc: true
 ---
 
 ## Quick Revision

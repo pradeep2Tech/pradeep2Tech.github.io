@@ -11,7 +11,6 @@ moduleTitle: "Structural Patterns"
 sectionRef: "3.4"
 weight: 304
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/decorator-pattern/"
 ---
@@ -87,7 +86,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Subclass explosion:**
@@ -198,6 +197,28 @@ fetcher := &CachingDecorator{
 ```
 
 Go has no inheritance — **embedding + interface satisfaction** or explicit wrapper structs achieve the same stacking.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class Notifier(Protocol):
+    def send(self, msg: str) -> None: ...
+
+class EmailNotifier:
+    def send(self, msg: str) -> None:
+        print(f"email: {msg}")
+
+class LoggingDecorator:
+    def __init__(self, inner: Notifier) -> None:
+        self._inner = inner
+
+    def send(self, msg: str) -> None:
+        print("log: sending")
+        self._inner.send(msg)
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

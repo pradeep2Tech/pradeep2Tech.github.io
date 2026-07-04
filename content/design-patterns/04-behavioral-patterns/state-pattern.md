@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.7"
 weight: 407
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/state-pattern/"
 ---
@@ -97,7 +96,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — switch explosion:**
@@ -186,6 +185,27 @@ func (c *OrderContext) Ship() { c.state.Ship(c) }
 ```
 
 Go uses **empty struct state types** and interface delegation — no inheritance. State singletons (`var pending = PendingState{}`) avoid allocations on hot paths.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class OrderState(Protocol):
+    def ship(self, ctx: "Order") -> None: ...
+    def cancel(self, ctx: "Order") -> None: ...
+
+class Paid:
+    def ship(self, ctx: "Order") -> None:
+        ctx.state = Shipped()
+    def cancel(self, ctx: "Order") -> None:
+        ctx.state = Cancelled()
+
+class Order:
+    def __init__(self) -> None:
+        self.state: OrderState = Paid()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

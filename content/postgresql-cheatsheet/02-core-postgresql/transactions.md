@@ -10,7 +10,6 @@ module: 2
 moduleTitle: "Core PostgreSQL"
 sectionRef: "2.5"
 weight: 205
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/transactions/

@@ -38,6 +38,8 @@ def cmd(
 
 def yaml_block(name: str, purpose: str, syntax: str, example: str, mistakes: list[str]) -> str:
     bullets = "\n".join(f"- {m}" for m in mistakes)
+    syntax = syntax.replace("\\n", "\n")
+    example = example.replace("\\n", "\n")
     return (
         f"### {name}\n\n"
         f"**Purpose:** {purpose}\n\n"
@@ -704,6 +706,35 @@ def _body_probes() -> str:
 
 **livenessProbe** restarts unhealthy containers. **readinessProbe** removes pod from Service endpoints. **startupProbe** protects slow-starting apps from premature liveness kills.
 
+| Probe | Kubelet action on failure | Use when |
+| :--- | :--- | :--- |
+| **Startup** | Blocks other probes until success | JVM/Spring slow boot (>30s) |
+| **Liveness** | Restart container | Deadlock, unrecoverable hang |
+| **Readiness** | Remove from Service endpoints | Temporarily cannot serve traffic |
+
+**Rule:** Liveness = "should restart?" Readiness = "should receive traffic?" Never point both at the same shallow `/health` if it does not distinguish the two.
+
+---
+
+## Core Concepts
+
+```mermaid
+flowchart LR
+    subgraph probes [Probe lifecycle]
+        S[startupProbe] -->|pass| R[readinessProbe]
+        R -->|pass| T[Receives traffic]
+        L[livenessProbe] -->|fail| X[Container restart]
+        R -->|fail| N[Removed from endpoints]
+    end
+```
+
+| Setting | Typical value | Notes |
+| :--- | :--- | :--- |
+| `periodSeconds` | 5–10 | How often to probe |
+| `timeoutSeconds` | 1–3 | Must be < app SLA |
+| `failureThreshold` | 3 | Failures before action |
+| `startupProbe.failureThreshold` | 30+ | Allows 5 min boot at period=10 |
+
 ---
 
 ## Commands
@@ -716,7 +747,22 @@ def _body_probes() -> str:
 
 ## YAML Snippet
 
-{yaml_block("HTTP readiness + liveness", "Standard Spring Boot / HTTP service probes.", "readinessProbe:\\n  httpGet:\\n    path: /actuator/health/readiness\\n    port: 8080\\n  initialDelaySeconds: 10\\n  periodSeconds: 5\\nlivenessProbe:\\n  httpGet:\\n    path: /actuator/health/liveness\\n    port: 8080\\n  initialDelaySeconds: 30", "startupProbe:\\n  httpGet:\\n    path: /actuator/health\\n    port: 8080\\n  failureThreshold: 30\\n  periodSeconds: 10", ["Same path for liveness and readiness causes traffic to unhealthy instances", "initialDelaySeconds deprecated pattern — prefer startupProbe"])}
+{yaml_block("HTTP readiness + liveness", "Standard Spring Boot / HTTP service probes.", """readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 5
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: 8080
+  initialDelaySeconds: 30""", """startupProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8080
+  failureThreshold: 30
+  periodSeconds: 10""", ["Same path for liveness and readiness causes traffic to unhealthy instances", "initialDelaySeconds deprecated pattern — prefer startupProbe"])}
 
 ---
 
@@ -1125,7 +1171,6 @@ shortTitle: "{short}"
 module: {module_id}
 moduleTitle: "{module_title}"
 sectionRef: "{section_ref}"
-ShowToc: true
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/{slug}/"]
 ---

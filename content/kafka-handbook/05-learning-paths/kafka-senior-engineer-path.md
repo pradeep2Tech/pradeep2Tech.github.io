@@ -10,38 +10,44 @@ module: 5
 moduleTitle: "Learning Paths"
 sectionRef: "5.1"
 weight: 501
-ShowToc: true
 interviewHandbook: true
 ---
 
-# Senior Engineer Path
+# Kafka Senior Engineer Path
 
-**Audience:** Senior engineers (5–8 years) shipping Kafka producers and consumers in production.  
-**Time:** ~6–8 hours across multiple sessions.  
-**Outcome:** Design correct partition keys, delivery semantics, consumer groups, and basic lag triage.
+**Audience:** Senior engineers (6+ years) building depth in this handbook.
 
-## Reading Order
+**Duration:** 2–3 weeks at ~3 hours/week.
 
-1. [Messaging Models](/kafka-handbook/01-fundamentals/messaging-models/) — log vs queue mental model
-2. [Queue vs Stream](/kafka-handbook/01-fundamentals/queue-vs-stream/) — when Kafka fits
-3. [Kafka Core](/kafka-handbook/02-kafka/kafka-core/) — producers, consumers, topics, partitions
-4. [Kafka Internals](/kafka-handbook/02-kafka/kafka-internals/) — ISR, replication, segments
-5. [Consumer Groups](/kafka-handbook/02-kafka/kafka-consumer-groups/) — rebalance, parallelism
-6. [Delivery Semantics](/kafka-handbook/02-kafka/kafka-delivery-semantics/) — at-least-once, idempotency, EOS boundaries
-7. [Kafka Performance](/kafka-handbook/02-kafka/kafka-performance/) — partition sizing, batching, hot partitions
-8. [Kafka Operations](/kafka-handbook/02-kafka/kafka-operations/) — lag metrics, retention, capacity
+**Prerequisite:** messaging fundamentals. Start from the [handbook index](/kafka-handbook/) if terms feel unfamiliar.
 
-## Practice
+---
 
-- Work through [Top 150](/kafka-handbook/04-interview-guide/top-150-interview-questions/) rows tagged **Senior Engineer**
-- Drill [Performance Questions](/kafka-handbook/04-interview-guide/performance-questions/) after step 7
+## How to use this path
 
-## Skip for Now
+1. Read modules **in sidebar order** — later modules assume earlier ones.
+2. For each topic page: read **Executive Summary → diagram → implementation tabs**.
+3. End each week with [interview guide](/kafka-handbook/) questions for that module.
+4. Pair with [System Design](/system-design/) when the topic affects distributed architecture.
 
-- Broker comparison matrices (architect path)
-- Security hardening depth (lead path adds ACLs/mTLS)
+---
 
-## See Also
+## Suggested pace
 
-- [Interview Revision Path](/kafka-handbook/05-learning-paths/kafka-interview-revision-path/)
-- [Lead Path](/kafka-handbook/05-learning-paths/kafka-lead-path/)
+| Week | Focus |
+| :---: | :--- |
+| 1 | Fundamentals module — complete every page, run examples locally |
+| 2 | Core/internals module — depth over speed |
+| 3 | Production + interview modules — troubleshooting and architect questions |
+
+---
+
+## Exit criteria
+
+- Explain top 10 topics from this handbook in 60 seconds each.
+- Debug one realistic failure using the handbook's troubleshooting page.
+- Link handbook concepts to a [System Design](/system-design/) case study where relevant.
+
+---
+
+[← Back to handbook index](/kafka-handbook/)

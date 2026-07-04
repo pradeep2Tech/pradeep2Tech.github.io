@@ -10,20 +10,44 @@ module: 7
 moduleTitle: "Learning Paths"
 sectionRef: "7.4"
 weight: 704
-ShowToc: true
 interviewHandbook: true
 ---
 
-# MongoDB Interview Revision Path
+# Mongodb Interview Revision Path
 
-**Goal:** 48-hour cram before senior/architect interviews.
+**Audience:** Senior engineers (6+ years) building depth in this handbook.
 
-| Block | Time | Focus |
-| :--- | :--- | :--- |
-| **Block 1** | 2h | [Architecture](/mongodb-cheatsheet/02-core-mongodb/architecture/) · [Storage Engine](/mongodb-cheatsheet/02-core-mongodb/storage-engine/) · [Replication](/mongodb-cheatsheet/02-core-mongodb/replication/) |
-| **Block 2** | 2h | [Sharding](/mongodb-cheatsheet/02-core-mongodb/sharding/) · [Schema Design](/mongodb-cheatsheet/02-core-mongodb/schema-design/) |
-| **Block 3** | 2h | [Query Optimization](/mongodb-cheatsheet/03-query-performance/query-optimization/) · [Explain Plan](/mongodb-cheatsheet/03-query-performance/explain-plan/) |
-| **Block 4** | 2h | [Troubleshooting](/mongodb-cheatsheet/04-production-operations/troubleshooting/) · [Monitoring](/mongodb-cheatsheet/04-production-operations/monitoring/) |
-| **Block 5** | 2h | [Top 150 Questions](/mongodb-cheatsheet/06-interview-guide/top-150-interview-questions/) — skim all categories |
+**Duration:** 2–3 weeks at ~3 hours/week.
 
-Pair with [Architect Questions](/mongodb-cheatsheet/06-interview-guide/architect-questions/) for panel prep.
+**Prerequisite:** document modeling. Start from the [handbook index](/mongodb-cheatsheet/) if terms feel unfamiliar.
+
+---
+
+## How to use this path
+
+1. Read modules **in sidebar order** — later modules assume earlier ones.
+2. For each topic page: read **Executive Summary → diagram → implementation tabs**.
+3. End each week with [interview guide](/mongodb-cheatsheet/) questions for that module.
+4. Pair with [System Design](/system-design/) when the topic affects distributed architecture.
+
+---
+
+## Suggested pace
+
+| Week | Focus |
+| :---: | :--- |
+| 1 | Fundamentals module — complete every page, run examples locally |
+| 2 | Core/internals module — depth over speed |
+| 3 | Production + interview modules — troubleshooting and architect questions |
+
+---
+
+## Exit criteria
+
+- Explain top 10 topics from this handbook in 60 seconds each.
+- Debug one realistic failure using the handbook's troubleshooting page.
+- Link handbook concepts to a [System Design](/system-design/) case study where relevant.
+
+---
+
+[← Back to handbook index](/mongodb-cheatsheet/)

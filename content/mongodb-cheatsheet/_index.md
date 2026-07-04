@@ -10,7 +10,6 @@ module: 0
 moduleTitle: "MongoDB Handbook"
 sectionRef: "0"
 weight: 1
-ShowToc: true
 interviewHandbook: true
 ---
 

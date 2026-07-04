@@ -9,13 +9,14 @@ shortTitle: "Concurrent Collections"
 module: 3
 moduleTitle: "Concurrency"
 sectionRef: "3.8"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - concurrent-collections-interview
 ---
 
 ## CHM vs Collections.synchronizedMap?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -25,12 +26,18 @@ CHM: bin-level locking/CAS — better write scalability. synchronizedMap: locks 
 
 CHM forbids null keys/values. Weakly consistent iterators.
 
+### Interview Questions
+
+1. See ConcurrentHashMap Internals
+
 ### Follow-up Questions
 
 - See ConcurrentHashMap Internals
 
 ---
 ## CopyOnWriteArrayList when?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -42,6 +49,8 @@ Write copies entire array — O(n). Good for listener lists, config snapshots. B
 
 ---
 ## BlockingQueue for backpressure?
+
+**Difficulty:** Easy · **Time:** 30 sec
 
 ### Short Answer
 

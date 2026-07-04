@@ -10,7 +10,6 @@ module: 7
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 7
-ShowToc: true
 ---
 
 # Anti-Patterns

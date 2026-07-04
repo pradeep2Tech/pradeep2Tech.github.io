@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://www.geeksforgeeks.org/problems/max-sum-subarray-of-size-k5313/1"
 sourceLabel: "GFG"
 pattern: "Fixed Window"
-ShowToc: true
 interviewHandbook: true
 ---
 # Max Sum Subarray of Size K

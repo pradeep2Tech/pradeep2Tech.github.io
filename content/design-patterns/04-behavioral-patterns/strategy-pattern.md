@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.8"
 weight: 408
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/strategy-pattern/"
 ---
@@ -83,7 +82,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — switch explosion:**
@@ -177,6 +176,41 @@ func PricingForTier(tier string) (PricingStrategy, error) {
 ```
 
 Go favors **small interfaces** and **functions as strategies** (`type PricingFunc func(Cart) float64`) when stateless — use structs when strategies hold configuration.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from dataclasses import dataclass
+from typing import Protocol
+
+@dataclass
+class Cart:
+    subtotal: float
+
+class PricingStrategy(Protocol):
+    def calculate(self, cart: Cart) -> float: ...
+
+class StandardPricing:
+    def calculate(self, cart: Cart) -> float:
+        return cart.subtotal
+
+class PremiumPricing:
+    def calculate(self, cart: Cart) -> float:
+        return cart.subtotal * 0.90
+
+class CheckoutService:
+    def __init__(self, strategy: PricingStrategy) -> None:
+        self._strategy = strategy
+
+    def total(self, cart: Cart) -> float:
+        return self._strategy.calculate(cart)
+
+def pricing_for_tier(tier: str) -> PricingStrategy:
+    return {"STANDARD": StandardPricing(), "PREMIUM": PremiumPricing()}[tier]
+```
+
+Python uses **Protocols** for structural typing; stateless strategies can also be plain `Callable[[Cart], float]`.
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

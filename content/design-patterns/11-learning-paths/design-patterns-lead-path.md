@@ -10,16 +10,44 @@ module: 11
 moduleTitle: "Learning Paths"
 sectionRef: "11.2"
 weight: 1102
-ShowToc: true
 interviewHandbook: true
 ---
 
-# Technical Lead Path
+# Design Patterns Lead Path
 
-**Goal:** Lead design reviews — tradeoffs, anti-patterns, architecture boundaries.
+**Audience:** Senior engineers (6+ years) building depth in this handbook.
 
-1. [Architectural Principles](/design-patterns/06-architectural-principles/) — DI, DDD, layering
-2. [Anti-Patterns](/design-patterns/07-anti-patterns/) — all five
-3. [LLD Case Studies](/design-patterns/08-lld-case-studies/) — elevator, notification, ride sharing
-4. [Pattern Comparison Questions](/design-patterns/10-interview-guide/pattern-comparison-questions/)
-5. [Repository & Unit of Work](/design-patterns/06-architectural-principles/repository-and-unit-of-work/)
+**Duration:** 2–3 weeks at ~3 hours/week.
+
+**Prerequisite:** SOLID and GoF pattern fluency. Start from the [handbook index](/design-patterns/) if terms feel unfamiliar.
+
+---
+
+## How to use this path
+
+1. Read modules **in sidebar order** — later modules assume earlier ones.
+2. For each topic page: read **Executive Summary → diagram → implementation tabs**.
+3. End each week with [interview guide](/design-patterns/) questions for that module.
+4. Pair with [System Design](/system-design/) when the topic affects distributed architecture.
+
+---
+
+## Suggested pace
+
+| Week | Focus |
+| :---: | :--- |
+| 1 | Fundamentals module — complete every page, run examples locally |
+| 2 | Core/internals module — depth over speed |
+| 3 | Production + interview modules — troubleshooting and architect questions |
+
+---
+
+## Exit criteria
+
+- Explain top 10 topics from this handbook in 60 seconds each.
+- Debug one realistic failure using the handbook's troubleshooting page.
+- Link handbook concepts to a [System Design](/system-design/) case study where relevant.
+
+---
+
+[← Back to handbook index](/design-patterns/)

@@ -10,7 +10,6 @@ module: 2
 moduleTitle: "Core Redis"
 sectionRef: "2.7"
 weight: 207
-ShowToc: true
 cheatSheet: true
 
 aliases:

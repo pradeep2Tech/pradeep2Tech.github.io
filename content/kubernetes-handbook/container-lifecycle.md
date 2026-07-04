@@ -6,10 +6,9 @@ description: "Create, start, stop, pause, restart, and remove."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Lifecycle"
-module: 6
-moduleTitle: "Docker"
-sectionRef: "6.9"
-ShowToc: true
+module: 7
+moduleTitle: "Docker Deep Dive"
+sectionRef: "7.9"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/container-lifecycle/"]
 ---

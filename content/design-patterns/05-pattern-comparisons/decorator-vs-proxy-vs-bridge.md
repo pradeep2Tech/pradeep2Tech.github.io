@@ -11,7 +11,6 @@ moduleTitle: "Pattern Comparisons"
 sectionRef: "5.3"
 weight: 503
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/decorator-vs-proxy-vs-bridge/"
 ---
@@ -183,7 +182,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Decorator — stack logging + retry on notifier:**
@@ -367,6 +366,25 @@ func (n EmailNotification) Notify(user User, body string) error {
 ```
 
 `http.Handler` middleware is **Decorator**; `database/sql` driver behind `DB` is closer to **Bridge** (abstraction vs driver impl).
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+**Python note:** compare trade-offs using the Java/Go tabs — Python uses Protocols, dataclasses, and composition similarly.
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

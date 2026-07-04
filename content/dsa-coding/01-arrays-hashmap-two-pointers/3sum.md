@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/3sum/"
 sourceLabel: "LeetCode 15"
 pattern: "Two Pointers"
-ShowToc: true
 interviewHandbook: true
 ---
 # 3Sum

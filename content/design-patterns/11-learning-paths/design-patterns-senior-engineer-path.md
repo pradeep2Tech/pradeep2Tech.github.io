@@ -10,31 +10,46 @@ module: 11
 moduleTitle: "Learning Paths"
 sectionRef: "11.1"
 weight: 1101
-ShowToc: true
 interviewHandbook: true
 ---
 
 # Senior Engineer Path
 
-**Audience:** Senior engineers (5–8 years) sharpening LLD and GoF pattern fluency.  
-**Time:** ~8–10 hours.  
-**Outcome:** Select patterns by force, implement with Java/Go, pass LLD screens.
+**Audience:** Senior engineers (5–8 years) sharpening LLD and GoF pattern fluency.
 
-## Reading Order
+**Duration:** 2 weeks (~4 hours/week).
 
-1. [SOLID Principles](/design-patterns/01-solid-principles/) — SRP through DIP
-2. [SOLID Composition Guide](/design-patterns/01-solid-principles/solid-principles-composition-guide/)
-3. [Creational](/design-patterns/02-creational-patterns/) + [Structural](/design-patterns/03-structural-patterns/) — skim all
-4. [Behavioral](/design-patterns/04-behavioral-patterns/) — focus Strategy, Observer, State, Command
-5. [Pattern Comparisons](/design-patterns/05-pattern-comparisons/) — all six pages
-6. [Pattern Selection](/design-patterns/09-pattern-selection-guide/)
-7. [Parking Lot](/design-patterns/08-lld-case-studies/parking-lot/) + [Rate Limiter](/design-patterns/08-lld-case-studies/rate-limiter/)
+**Prerequisite:** Comfortable with OOP in Java or Go; skim [SRP](/design-patterns/01-solid-principles/single-responsibility-principle/) first.
 
-## Practice
+**Outcome:** Select patterns by force, implement with Java/Go tabs, pass LLD screens.
 
-- [Top 150](/design-patterns/10-interview-guide/top-150-design-pattern-questions/) — Senior Engineer rows
-- [SOLID Questions](/design-patterns/10-interview-guide/solid-principles-questions/)
+---
 
-## See Also
+## Week 1 — Foundations and creational/structural
+
+| Day | Read | Practice |
+| :---: | :--- | :--- |
+| 1 | [SOLID module](/design-patterns/01-solid-principles/) — all 5 principles | Draw class diagram for checkout without god class |
+| 2 | [SOLID Composition Guide](/design-patterns/01-solid-principles/solid-principles-composition-guide/) | Refactor one smell from [God Object](/design-patterns/07-anti-patterns/god-object/) |
+| 3 | [Creational patterns](/design-patterns/02-creational-patterns/) — Factory, Builder, Singleton | When **not** to use singleton |
+| 4 | [Structural patterns](/design-patterns/03-structural-patterns/) — Adapter, Decorator, Facade | Compare [Decorator vs Proxy](/design-patterns/05-pattern-comparisons/decorator-vs-proxy-vs-bridge/) |
+| 5 | [Pattern comparisons](/design-patterns/05-pattern-comparisons/) — first 3 pages | Answer 5 rows from [Top 150](/design-patterns/10-interview-guide/top-150-design-pattern-questions/) |
+
+---
+
+## Week 2 — Behavioral, selection, case studies
+
+| Day | Read | Practice |
+| :---: | :--- | :--- |
+| 6 | [Behavioral](/design-patterns/04-behavioral-patterns/) — Strategy, Observer, State, Command | Whiteboard vending machine state |
+| 7 | [Pattern selection guide](/design-patterns/09-pattern-selection-guide/) | [Decision tree](/design-patterns/09-pattern-selection-guide/pattern-decision-tree/) for notification system |
+| 8 | [Parking Lot LLD](/design-patterns/08-lld-case-studies/parking-lot/) | Implement core entities in Java or Go |
+| 9 | [Rate Limiter LLD](/design-patterns/08-lld-case-studies/rate-limiter/) | Token bucket vs sliding window |
+| 10 | **Mock** | 45 min LLD: library management — cite 3 patterns with tradeoffs |
+
+---
+
+## See also
 
 - [Interview Revision Path](/design-patterns/11-learning-paths/design-patterns-interview-revision-path/)
+- [Architect Path](/design-patterns/11-learning-paths/design-patterns-architect-path/)

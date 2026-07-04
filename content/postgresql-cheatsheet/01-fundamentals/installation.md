@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Fundamentals"
 sectionRef: "1.7"
 weight: 107
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/installation/

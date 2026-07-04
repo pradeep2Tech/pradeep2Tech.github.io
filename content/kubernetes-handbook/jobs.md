@@ -6,10 +6,9 @@ description: "Run-to-completion workloads with parallelism and backoff."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Jobs"
-module: 1
+module: 2
 moduleTitle: "Architecture & Workloads"
-sectionRef: "1.7"
-ShowToc: true
+sectionRef: "2.7"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/jobs/"]
 ---

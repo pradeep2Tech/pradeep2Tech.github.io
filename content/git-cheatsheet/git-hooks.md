@@ -9,7 +9,6 @@ shortTitle: "Hooks"
 module: 5
 moduleTitle: "Internals & Automation"
 sectionRef: "5.2"
-ShowToc: true
 ---
 
 ## Executive Summary

@@ -10,7 +10,6 @@ module: 2
 moduleTitle: "Core Go"
 sectionRef: "2.4"
 weight: 204
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 aliases:

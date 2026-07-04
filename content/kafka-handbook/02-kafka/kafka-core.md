@@ -12,7 +12,6 @@ sectionRef: "2.1"
 weight: 201
 aliases:
   - /kafka-handbook/kafka/
-ShowToc: true
 interviewHandbook: true
 ---
 

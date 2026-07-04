@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Redis Handbook"
 sectionRef: "0"
 weight: 6
-ShowToc: true
 ---
 # Performance & Operations
 

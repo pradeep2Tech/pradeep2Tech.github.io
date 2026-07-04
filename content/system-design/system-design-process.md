@@ -9,7 +9,6 @@ shortTitle: "System Design Process"
 module: 1
 moduleTitle: "Foundations"
 sectionRef: "1.2"
-ShowToc: true
 ---
 
 ## Overview

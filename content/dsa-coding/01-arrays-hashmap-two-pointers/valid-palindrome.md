@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/valid-palindrome/"
 sourceLabel: "LeetCode 125"
 pattern: "Two Pointers"
-ShowToc: true
 interviewHandbook: true
 ---
 # Valid Palindrome

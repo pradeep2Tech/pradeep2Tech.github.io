@@ -10,7 +10,6 @@ module: 0
 moduleTitle: "Redis Handbook"
 sectionRef: "0"
 weight: 1
-ShowToc: true
 ---
 # Redis Handbook
 

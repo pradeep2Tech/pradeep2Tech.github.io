@@ -9,7 +9,6 @@ shortTitle: "Rebase"
 module: 2
 moduleTitle: "Branching & Integration"
 sectionRef: "2.3"
-ShowToc: true
 ---
 
 ## Executive Summary

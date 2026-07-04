@@ -11,7 +11,6 @@ moduleTitle: "LLD Case Studies"
 sectionRef: "8.3"
 weight: 803
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/parking-lot-system-lld/"
 ---
@@ -127,7 +126,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — god class with inline pricing:**
@@ -320,6 +319,23 @@ func (s *ParkingLotService) Exit(ticketID string) (Receipt, error) {
     s.allocator.Release(ticket.SpotID)
     return Receipt{TicketID: ticketID, Fee: fee}, nil
 }
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class DomainPort(Protocol):
+    def execute(self) -> None: ...
+
+class ApplicationService:
+    def __init__(self, port: DomainPort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
 ```
 
 {{< /impl-tab >}}

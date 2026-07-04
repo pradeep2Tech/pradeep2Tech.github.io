@@ -6,10 +6,9 @@ description: "Separate build and runtime stages for smaller images."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Multi-stage"
-module: 6
-moduleTitle: "Docker"
-sectionRef: "6.6"
-ShowToc: true
+module: 7
+moduleTitle: "Docker Deep Dive"
+sectionRef: "7.6"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/multi-stage-builds/"]
 ---

@@ -6,10 +6,9 @@ description: "CPU/memory requests and limits, QoS classes, and LimitRange."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Resource Limits"
-module: 4
+module: 5
 moduleTitle: "Scheduling & Scaling"
-sectionRef: "4.4"
-ShowToc: true
+sectionRef: "5.4"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/resource-limits/"]
 ---

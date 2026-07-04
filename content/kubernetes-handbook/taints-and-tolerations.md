@@ -6,10 +6,9 @@ description: "Repel pods from nodes unless they tolerate specific taints."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Taints"
-module: 4
+module: 5
 moduleTitle: "Scheduling & Scaling"
-sectionRef: "4.3"
-ShowToc: true
+sectionRef: "5.3"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/taints-and-tolerations/"]
 ---

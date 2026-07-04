@@ -9,7 +9,6 @@ shortTitle: "Collections Big-O"
 module: 6
 moduleTitle: "Interview Cheat Sheets"
 sectionRef: "6.4"
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 ---

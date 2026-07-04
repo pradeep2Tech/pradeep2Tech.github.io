@@ -10,44 +10,44 @@ module: 5
 moduleTitle: "Learning Paths"
 sectionRef: "5.3"
 weight: 503
-ShowToc: true
 interviewHandbook: true
 ---
 
-# Architect Path
+# Kafka Architect Path
 
-**Audience:** Solution and platform architects evaluating event backbones and multi-broker estates.  
-**Time:** ~6–8 hours focused on ADRs and comparisons.  
-**Outcome:** Defend Kafka (or alternatives) in ADRs with ordering, ops, cost, and cloud trade-offs.
+**Audience:** Senior engineers (6+ years) building depth in this handbook.
 
-## Reading Order
+**Duration:** 2–3 weeks at ~3 hours/week.
 
-1. [Messaging Patterns](/kafka-handbook/01-fundamentals/messaging-patterns/) — pub/sub, event-carried state, CDC
-2. [Broker Selection Guide](/kafka-handbook/01-fundamentals/broker-selection-guide/) — ADR criteria
-3. [Kafka Core](/kafka-handbook/02-kafka/kafka-core/) — platform capabilities and limits
-4. [Kafka vs RabbitMQ](/kafka-handbook/03-broker-comparisons/kafka-vs-rabbitmq/)
-5. [Kafka vs Pulsar](/kafka-handbook/03-broker-comparisons/kafka-vs-pulsar/)
-6. [Kafka vs NATS](/kafka-handbook/03-broker-comparisons/kafka-vs-nats/)
-7. [Kafka vs Redpanda](/kafka-handbook/03-broker-comparisons/kafka-vs-redpanda/)
-8. [Cloud Messaging Services](/kafka-handbook/03-broker-comparisons/cloud-messaging-services/) — MSK, Confluent Cloud, SQS/Pub/Sub
-9. [Kafka Internals](/kafka-handbook/02-kafka/kafka-internals/) — ISR, compaction for CDC topics
-10. [Delivery Semantics](/kafka-handbook/02-kafka/kafka-delivery-semantics/) — EOS boundaries across services
+**Prerequisite:** messaging fundamentals. Start from the [handbook index](/kafka-handbook/) if terms feel unfamiliar.
 
-## Practice
+---
 
-- [Architect-Level Questions](/kafka-handbook/04-interview-guide/architect-questions/)
-- [Design & Architecture Questions](/kafka-handbook/04-interview-guide/design-tradeoffs/)
+## How to use this path
 
-## ADR Prompts
+1. Read modules **in sidebar order** — later modules assume earlier ones.
+2. For each topic page: read **Executive Summary → diagram → implementation tabs**.
+3. End each week with [interview guide](/kafka-handbook/) questions for that module.
+4. Pair with [System Design](/system-design/) when the topic affects distributed architecture.
 
-| Decision | Handbook anchors |
-| :--- | :--- |
-| Event backbone | Broker selection guide + cloud comparison |
-| Ordering SLO | Core + performance (partition keys) |
-| Multi-region | Operations + internals (RF, min ISR) |
-| Managed vs self-hosted | Cloud messaging + operations cost |
+---
 
-## See Also
+## Suggested pace
 
-- [How to Choose a Message Broker](/technology-playbook/how-to-choose-message-broker/)
-- [Event-Driven Architecture](/microservices/event-driven-architecture-log-streaming/)
+| Week | Focus |
+| :---: | :--- |
+| 1 | Fundamentals module — complete every page, run examples locally |
+| 2 | Core/internals module — depth over speed |
+| 3 | Production + interview modules — troubleshooting and architect questions |
+
+---
+
+## Exit criteria
+
+- Explain top 10 topics from this handbook in 60 seconds each.
+- Debug one realistic failure using the handbook's troubleshooting page.
+- Link handbook concepts to a [System Design](/system-design/) case study where relevant.
+
+---
+
+[← Back to handbook index](/kafka-handbook/)

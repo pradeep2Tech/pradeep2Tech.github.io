@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/two-sum/"
 sourceLabel: "LeetCode 1"
 pattern: "HashMap"
-ShowToc: true
 interviewHandbook: true
 ---
 # Two Sum

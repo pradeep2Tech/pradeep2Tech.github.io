@@ -11,7 +11,6 @@ moduleTitle: "Architectural Principles"
 sectionRef: "6.5"
 weight: 605
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/repository-and-unit-of-work/"
 ---
@@ -91,7 +90,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — service owns SQL and transaction details:**
@@ -230,6 +229,22 @@ func (s *OrderService) PlaceOrder(ctx context.Context, req OrderRequest) (OrderR
 ```
 
 Go typically implements UoW with `sql.Tx` passed into repository constructors for the request scope.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol, Optional
+
+class OrderRepository(Protocol):
+    def find(self, order_id: str) -> Optional[dict]: ...
+    def save(self, order: dict) -> None: ...
+
+class UnitOfWork(Protocol):
+    def orders(self) -> OrderRepository: ...
+    def commit(self) -> None: ...
+    def rollback(self) -> None: ...
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

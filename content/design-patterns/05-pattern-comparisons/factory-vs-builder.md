@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Pattern Comparisons"
 sectionRef: "5.1"
 weight: 501
-ShowToc: true
 aliases:
   - "/design-patterns/factory-method-vs-abstract-factory-vs-builder/"
 ---

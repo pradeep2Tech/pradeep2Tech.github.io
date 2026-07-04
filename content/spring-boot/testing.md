@@ -9,7 +9,6 @@ shortTitle: "Testing"
 module: 10
 moduleTitle: "Testing"
 sectionRef: "10.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - testing-ref

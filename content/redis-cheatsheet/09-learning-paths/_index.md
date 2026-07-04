@@ -10,7 +10,6 @@ module: 9
 moduleTitle: "Redis Handbook"
 sectionRef: "0"
 weight: 9
-ShowToc: true
 ---
 # Learning Paths
 

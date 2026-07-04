@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Fundamentals"
 sectionRef: "0"
 weight: 1
-ShowToc: true
 interviewHandbook: true
 ---
 

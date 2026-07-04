@@ -6,10 +6,9 @@ description: "Sensitive data — encoding, mounting, and production secret manag
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Secrets"
-module: 3
+module: 4
 moduleTitle: "Configuration & Storage"
-sectionRef: "3.2"
-ShowToc: true
+sectionRef: "4.2"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/secrets/"]
 ---

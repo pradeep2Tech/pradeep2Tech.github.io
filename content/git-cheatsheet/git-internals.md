@@ -9,7 +9,6 @@ shortTitle: "Internals"
 module: 5
 moduleTitle: "Internals & Automation"
 sectionRef: "5.1"
-ShowToc: true
 ---
 
 ## Executive Summary

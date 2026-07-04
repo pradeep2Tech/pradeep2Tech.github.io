@@ -9,7 +9,6 @@ shortTitle: "Revert"
 module: 3
 moduleTitle: "History & Workspace"
 sectionRef: "3.2"
-ShowToc: true
 ---
 
 ## Executive Summary

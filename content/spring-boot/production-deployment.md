@@ -9,7 +9,6 @@ shortTitle: "Production"
 module: 9
 moduleTitle: "Production"
 sectionRef: "9.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - production-deployment-ref

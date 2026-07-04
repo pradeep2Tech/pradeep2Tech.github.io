@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/"
 sourceLabel: "LeetCode 103"
 pattern: "BFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Binary Tree Zigzag Level Order Traversal

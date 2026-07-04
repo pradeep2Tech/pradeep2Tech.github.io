@@ -9,7 +9,6 @@ shortTitle: "Streams"
 module: 1
 moduleTitle: "Language Fundamentals"
 sectionRef: "1.7"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - streams-quick-ref
@@ -18,6 +17,8 @@ aliases:
 ---
 
 ## Why are streams lazy?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -35,6 +36,11 @@ Spliterator characteristics (`SIZED`, `ORDERED`, `DISTINCT`) enable optimization
 
 Don't reuse a Stream after terminal operation.
 
+### Interview Questions
+
+1. What is a Spliterator?
+2. Difference reduce vs collect?
+
 ### Follow-up Questions
 
 - What is a Spliterator?
@@ -42,6 +48,8 @@ Don't reuse a Stream after terminal operation.
 
 ---
 ## When to use parallel streams?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -59,6 +67,11 @@ Default parallelism = CPUs - 1.
 
 Parallelizing by default in services.
 
+### Interview Questions
+
+1. What makes a combiner associative?
+2. Common pool starvation risk?
+
 ### Follow-up Questions
 
 - What makes a combiner associative?
@@ -66,6 +79,8 @@ Parallelizing by default in services.
 
 ---
 ## Collectors.toMap duplicate key pitfall?
+
+**Difficulty:** Easy · **Time:** 30 sec
 
 ### Short Answer
 
@@ -78,6 +93,8 @@ Use `toMap(keyFn, valFn, mergeFn)` or `groupingBy`. Java 16+ prefer `toList()` o
 ---
 ## Optional in API design — good or bad?
 
+**Difficulty:** Medium · **Time:** 1 min
+
 ### Short Answer
 
 Good as return type signaling absence; bad as field, parameter, or collection element.
@@ -85,6 +102,10 @@ Good as return type signaling absence; bad as field, parameter, or collection el
 ### Detailed Explanation
 
 Optional not serializable by default; JSON mapping awkward. Use overloads for optional params. Never `optional.get()` without check.
+
+### Interview Questions
+
+1. Effectively final in lambdas — why?
 
 ### Follow-up Questions
 

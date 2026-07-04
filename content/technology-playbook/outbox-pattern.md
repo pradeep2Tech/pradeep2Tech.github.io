@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Architecture Patterns"
 sectionRef: "1.8"
 weight: 107
-ShowToc: true
 ---
 ## 1. Executive Summary
 

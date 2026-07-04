@@ -6,10 +6,9 @@ description: "Control plane, worker nodes, etcd, and component responsibilities.
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Architecture"
-module: 1
+module: 2
 moduleTitle: "Architecture & Workloads"
-sectionRef: "1.1"
-ShowToc: true
+sectionRef: "2.1"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/kubernetes-architecture/"]
 ---

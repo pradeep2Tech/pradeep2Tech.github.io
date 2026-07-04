@@ -10,7 +10,6 @@ module: 8
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 8
-ShowToc: true
 ---
 
 # LLD Case Studies

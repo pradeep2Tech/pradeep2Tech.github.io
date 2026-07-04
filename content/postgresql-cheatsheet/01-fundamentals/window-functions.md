@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Fundamentals"
 sectionRef: "1.6"
 weight: 106
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/window-functions/

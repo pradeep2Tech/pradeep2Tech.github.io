@@ -8,7 +8,6 @@ categories: ["Kafka Handbook"]
 shortTitle: "Interview"
 aliases:
   - /kafka-handbook/02-kafka/kafka-interview-guide/
-ShowToc: false
 interviewHandbook: true
 ---
 

@@ -11,7 +11,6 @@ moduleTitle: "Structural Patterns"
 sectionRef: "3.1"
 weight: 301
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/adapter-pattern/"
 ---
@@ -82,7 +81,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Without adapter — domain leaks vendor types:**
@@ -193,6 +192,27 @@ func (s *CheckoutService) Pay(order Order) (Receipt, error) {
 ```
 
 Go favors **small port interfaces** at package boundaries; adapters live in an `integration` or `vendor` package to keep import cycles clean.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+class LegacyXmlClient:
+    def fetch_xml(self) -> str:
+        return "<user id='1'/>"
+
+class UserPort:
+    def get_user(self) -> dict:
+        raise NotImplementedError
+
+class XmlUserAdapter(UserPort):
+    def __init__(self, legacy: LegacyXmlClient) -> None:
+        self._legacy = legacy
+
+    def get_user(self) -> dict:
+        xml = self._legacy.fetch_xml()
+        return {"id": "1", "raw": xml}
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

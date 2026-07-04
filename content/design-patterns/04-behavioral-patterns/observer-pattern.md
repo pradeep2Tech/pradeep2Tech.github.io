@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.6"
 weight: 406
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/observer-pattern/"
 ---
@@ -90,7 +89,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — hard-coded side effects:**
@@ -187,6 +186,24 @@ func (MetricsCollector) OnStatusChanged(order Order) {
 ```
 
 Go has no built-in observer framework — use **function callbacks** (`type ObserverFunc func(Order)`) for simple cases, or channel-based pub/sub when observers run asynchronously.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Callable, List
+
+class EventBus:
+    def __init__(self) -> None:
+        self._subs: List[Callable[[str], None]] = []
+
+    def subscribe(self, handler: Callable[[str], None]) -> None:
+        self._subs.append(handler)
+
+    def publish(self, event: str) -> None:
+        for h in list(self._subs):
+            h(event)
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

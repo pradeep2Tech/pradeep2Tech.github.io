@@ -10,7 +10,6 @@ module: 7
 moduleTitle: "Packaging & Distribution"
 sectionRef: "7.1"
 weight: 701
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 aliases:

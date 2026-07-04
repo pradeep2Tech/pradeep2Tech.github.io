@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/"
 sourceLabel: "LeetCode 340"
 pattern: "Variable Window"
-ShowToc: true
 interviewHandbook: true
 ---
 # Longest Substring with At Most K Distinct Characters

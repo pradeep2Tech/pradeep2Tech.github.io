@@ -9,7 +9,6 @@ shortTitle: "Cache & Perf"
 module: 6
 moduleTitle: "Caching & Performance"
 sectionRef: "6.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - caching-ref

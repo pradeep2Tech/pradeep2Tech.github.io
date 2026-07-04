@@ -10,7 +10,6 @@ module: 9
 moduleTitle: "Interview Guide"
 sectionRef: "9.0"
 weight: 964
-ShowToc: true
 interviewHandbook: true
 ---
 # Top 30 Must-Solve Problems

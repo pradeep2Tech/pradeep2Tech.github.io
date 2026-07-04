@@ -11,7 +11,6 @@ moduleTitle: "Creational Patterns"
 sectionRef: "2.1"
 weight: 201
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/factory-method-pattern/"
 ---
@@ -91,7 +90,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — `new` in business logic:**
@@ -207,6 +206,32 @@ func NewOnPremPipeline(path string) *LogPipeline {
 ```
 
 Go has no inheritance — use **constructor functions** that close over dependencies, or a `ShipperFactory` func type passed into the pipeline.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from abc import ABC, abstractmethod
+
+class Document(ABC):
+    @abstractmethod
+    def render(self) -> str: ...
+
+class PdfDocument(Document):
+    def render(self) -> str:
+        return "<pdf>"
+
+class DocumentCreator(ABC):
+    @abstractmethod
+    def create(self) -> Document: ...
+
+    def deliver(self) -> str:
+        return self.create().render()
+
+class PdfCreator(DocumentCreator):
+    def create(self) -> Document:
+        return PdfDocument()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

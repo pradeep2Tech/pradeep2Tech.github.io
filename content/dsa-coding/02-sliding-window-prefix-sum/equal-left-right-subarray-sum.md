@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/find-pivot-index/"
 sourceLabel: "LeetCode 724"
 pattern: "Prefix Sum"
-ShowToc: true
 interviewHandbook: true
 ---
 # Equal Left and Right Subarray Sum

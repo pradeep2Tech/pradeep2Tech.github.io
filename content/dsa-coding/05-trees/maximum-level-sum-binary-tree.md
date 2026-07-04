@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/"
 sourceLabel: "LeetCode 1161"
 pattern: "BFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Maximum Level Sum of a Binary Tree

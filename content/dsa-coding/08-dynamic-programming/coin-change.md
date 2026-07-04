@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/coin-change/"
 sourceLabel: "LeetCode 322"
 pattern: "DP"
-ShowToc: true
 interviewHandbook: true
 ---
 # Coin Change

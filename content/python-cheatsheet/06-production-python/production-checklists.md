@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Production Python"
 sectionRef: "6.5"
 weight: 605
-ShowToc: true
 interviewHandbook: true
 ---
 

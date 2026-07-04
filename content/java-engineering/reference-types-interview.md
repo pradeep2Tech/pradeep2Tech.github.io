@@ -9,11 +9,12 @@ shortTitle: "References"
 module: 4
 moduleTitle: "JVM"
 sectionRef: "4.6"
-ShowToc: true
 interviewHandbook: true
 ---
 
 ## Soft vs weak vs phantom?
+
+**Difficulty:** Medium · **Time:** 2 min
 
 ### Short Answer
 
@@ -22,6 +23,11 @@ Soft: cleared before OOM — memory-sensitive cache. Weak: next GC — canonical
 ### Detailed Explanation
 
 ReferenceQueue notifies when referent cleared. Prefer `Cleaner` over finalization (deprecated).
+
+### Interview Questions
+
+1. WeakHashMap behavior?
+2. PhantomReference use case?
 
 ### Follow-up Questions
 

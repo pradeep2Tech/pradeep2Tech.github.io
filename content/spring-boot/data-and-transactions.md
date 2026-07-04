@@ -9,7 +9,6 @@ shortTitle: "Data & TX"
 module: 4
 moduleTitle: "Data & Transactions"
 sectionRef: "4.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - jpa-quick-ref

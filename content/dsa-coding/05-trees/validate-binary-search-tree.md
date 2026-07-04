@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/validate-binary-search-tree/"
 sourceLabel: "LeetCode 98"
 pattern: "DFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Validate Binary Search Tree

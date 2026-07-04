@@ -9,13 +9,14 @@ shortTitle: "OOP"
 module: 1
 moduleTitle: "Language Fundamentals"
 sectionRef: "1.3"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - oop-quick-ref
 ---
 
 ## Composition over inheritance — when to inherit?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -25,12 +26,18 @@ Prefer composition for reuse; inherit for true subtype polymorphism (Liskov).
 
 Inheritance couples subclasses to parent implementation — fragile base class problem. Use composition + delegation for behavior reuse. Inherit when `is-a` relationship is stable and you need virtual dispatch (`@Override`).
 
+### Interview Questions
+
+1. What is the fragile base class problem?
+
 ### Follow-up Questions
 
 - What is the fragile base class problem?
 
 ---
 ## Overloading vs overriding?
+
+**Difficulty:** Easy · **Time:** 30 sec
 
 ### Short Answer
 
@@ -40,12 +47,18 @@ Overloading: same name, different signatures — resolved at compile time. Overr
 
 Static methods hide, not override. `@Override` catches signature mistakes. `private`/`final` methods cannot be overridden.
 
+### Interview Questions
+
+1. Can you override a static method?
+
 ### Follow-up Questions
 
 - Can you override a static method?
 
 ---
 ## Record vs class — when not to use a record?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -55,12 +68,18 @@ Records are immutable data carriers — not for JPA entities or types needing in
 
 Records provide canonical constructor, equals/hashCode/toString. They are `final` with final fields. Poor fit for JPA lazy proxies, mutable domain models, or types requiring inheritance hierarchies.
 
+### Interview Questions
+
+1. Record vs Lombok `@Value`?
+
 ### Follow-up Questions
 
 - Record vs Lombok `@Value`?
 
 ---
 ## Sealed classes purpose?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -69,6 +88,10 @@ Closed hierarchies enabling exhaustive pattern matching and controlled extension
 ### Detailed Explanation
 
 Sealed types list permitted subclasses (`permits`). Compiler enforces exhaustiveness in switches. Models ADTs: `sealed interface Result permits Ok, Err`.
+
+### Interview Questions
+
+1. Sealed vs final class?
 
 ### Follow-up Questions
 

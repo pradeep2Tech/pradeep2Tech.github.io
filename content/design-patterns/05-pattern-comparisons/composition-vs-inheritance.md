@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Pattern Comparisons"
 sectionRef: "5.5"
 weight: 505
-ShowToc: true
 ---
 
 ### Problem & Intent

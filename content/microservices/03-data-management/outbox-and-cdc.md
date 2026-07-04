@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Data Management"
 sectionRef: "3.4"
 weight: 304
-ShowToc: true
 playbookVersion: 3
 ---
 

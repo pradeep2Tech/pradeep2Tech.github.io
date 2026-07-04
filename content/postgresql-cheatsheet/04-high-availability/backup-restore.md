@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "High Availability"
 sectionRef: "4.3"
 weight: 403
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/backup-restore/

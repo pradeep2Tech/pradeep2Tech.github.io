@@ -10,7 +10,6 @@ module: 9
 moduleTitle: "Microservices Architecture Playbook"
 sectionRef: "0"
 weight: 900
-ShowToc: true
 playbookVersion: 3
 ---
 

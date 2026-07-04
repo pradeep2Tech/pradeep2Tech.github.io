@@ -9,7 +9,6 @@ shortTitle: "Capacity Estimation"
 module: 1
 moduleTitle: "Foundations"
 sectionRef: "1.4"
-ShowToc: true
 ---
 
 ## Overview

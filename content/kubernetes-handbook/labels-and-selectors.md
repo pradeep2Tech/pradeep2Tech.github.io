@@ -6,10 +6,9 @@ description: "Key-value metadata for grouping, selection, and service routing."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Labels & Selectors"
-module: 4
+module: 5
 moduleTitle: "Scheduling & Scaling"
-sectionRef: "4.1"
-ShowToc: true
+sectionRef: "5.1"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/labels-and-selectors/"]
 ---

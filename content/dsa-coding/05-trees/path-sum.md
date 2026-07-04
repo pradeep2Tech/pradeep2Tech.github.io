@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/path-sum/"
 sourceLabel: "LeetCode 112"
 pattern: "DFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Path Sum

@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 1
-ShowToc: true
 ---
 
 # SOLID Principles

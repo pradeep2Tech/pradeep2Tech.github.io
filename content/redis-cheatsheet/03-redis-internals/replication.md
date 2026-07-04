@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Redis Internals"
 sectionRef: "3.4"
 weight: 304
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/replication/"

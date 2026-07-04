@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 4
-ShowToc: true
 ---
 
 # Behavioral Patterns

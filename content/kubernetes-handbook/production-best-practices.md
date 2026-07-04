@@ -6,10 +6,9 @@ description: "Security, reliability, observability, and cluster hygiene checklis
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Production"
-module: 5
+module: 6
 moduleTitle: "Operations & Security"
-sectionRef: "5.7"
-ShowToc: true
+sectionRef: "6.7"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/production-best-practices/"]
 ---

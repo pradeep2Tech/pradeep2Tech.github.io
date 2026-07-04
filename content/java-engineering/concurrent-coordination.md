@@ -9,7 +9,6 @@ shortTitle: "Coordination"
 module: 3
 moduleTitle: "Concurrency"
 sectionRef: "3.9"
-ShowToc: true
 interviewHandbook: true
 ---
 

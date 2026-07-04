@@ -6,10 +6,9 @@ description: "Union filesystem, layer caching, and image inspection."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Layers"
-module: 6
-moduleTitle: "Docker"
-sectionRef: "6.3"
-ShowToc: true
+module: 7
+moduleTitle: "Docker Deep Dive"
+sectionRef: "7.3"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/image-layers/"]
 ---

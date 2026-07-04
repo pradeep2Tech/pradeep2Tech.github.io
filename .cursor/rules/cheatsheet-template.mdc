@@ -32,7 +32,6 @@ Cheat sheets use `.cs-quick-ref` layout (no `.sd-collapsible-content`). Playbook
 
 ```yaml
 cheatSheet: true
-ShowToc: true
 categories: ["<Section Title>"]
 tags: ["cheatsheet", "handbook", ...]
 ```

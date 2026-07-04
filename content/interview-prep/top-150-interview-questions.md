@@ -6,7 +6,6 @@ description: "Interview-first knowledge base — 150 senior-level questions acro
 tags: ["interview-prep", "interview", "architecture", "senior-engineer"]
 categories: ["Interview Preparation"]
 shortTitle: "Top 150"
-ShowToc: true
 interviewHandbook: true
 ---
 

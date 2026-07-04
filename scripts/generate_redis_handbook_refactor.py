@@ -45,8 +45,7 @@ def make_fm(
         f'moduleTitle: "{mod_title}"',
         f'sectionRef: "{ref}"',
         f"weight: {weight}",
-        "ShowToc: true",
-    ]
+        ]
     if cheat:
         lines.append("cheatSheet: true")
     if interview:

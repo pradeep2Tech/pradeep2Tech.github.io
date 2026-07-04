@@ -9,7 +9,6 @@ shortTitle: "Config"
 module: 2
 moduleTitle: "Configuration"
 sectionRef: "2.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - configuration-ref

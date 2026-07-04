@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Advanced Features"
 sectionRef: "5.4"
 weight: 504
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/materialized-views/

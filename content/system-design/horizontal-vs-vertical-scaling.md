@@ -9,7 +9,6 @@ shortTitle: "Horizontal vs Vertical Scaling"
 module: 5
 moduleTitle: "Scalability"
 sectionRef: "5.2"
-ShowToc: true
 ---
 
 ## Overview

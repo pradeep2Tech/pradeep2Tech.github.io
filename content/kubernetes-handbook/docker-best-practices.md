@@ -6,10 +6,9 @@ description: "Non-root users, slim bases, .dockerignore, and scanning."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Docker Prod"
-module: 6
-moduleTitle: "Docker"
-sectionRef: "6.10"
-ShowToc: true
+module: 7
+moduleTitle: "Docker Deep Dive"
+sectionRef: "7.10"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/docker-best-practices/"]
 ---

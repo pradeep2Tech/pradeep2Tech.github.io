@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Advanced Features"
 sectionRef: "5.5"
 weight: 505
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/json/

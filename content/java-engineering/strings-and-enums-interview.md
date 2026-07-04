@@ -9,13 +9,14 @@ shortTitle: "Strings & Enums"
 module: 1
 moduleTitle: "Language Fundamentals"
 sectionRef: "1.2"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - strings-and-enums-ref
 ---
 
 ## Why is String immutable?
+
+**Difficulty:** Easy · **Time:** 1 min
 
 ### Short Answer
 
@@ -37,6 +38,11 @@ Never build SQL by concatenation — use prepared statements.
 
 Assuming `substring` always copies (modern JDKs may share backing).
 
+### Interview Questions
+
+1. String pool vs `intern()`?
+2. Text blocks (15+) use cases?
+
 ### Follow-up Questions
 
 - String pool vs `intern()`?
@@ -44,6 +50,8 @@ Assuming `substring` always copies (modern JDKs may share backing).
 
 ---
 ## StringBuilder vs String concat in loops?
+
+**Difficulty:** Easy · **Time:** 30 sec
 
 ### Short Answer
 
@@ -53,12 +61,18 @@ Concat in loop is O(n²); StringBuilder is O(n) total.
 
 Each `+` in a loop may create intermediate String objects. Compiler optimizes few-operand concat but not arbitrary loops. `StringBuilder` (not thread-safe) for single-thread; `StringBuffer` only for legacy.
 
+### Interview Questions
+
+1. When is `+` concat acceptable?
+
 ### Follow-up Questions
 
 - When is `+` concat acceptable?
 
 ---
 ## Enum vs int constants — why enum?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -67,6 +81,10 @@ Type safety, singleton semantics, `EnumSet`/`EnumMap`, serialization by name.
 ### Detailed Explanation
 
 Enums are classes with fixed instances — compiler checks exhaustiveness in switches. `EnumSet` is bit-vector backed. Persist `name()`, never `ordinal()`. Strategy enum pattern embeds behavior per constant.
+
+### Interview Questions
+
+1. When use `EnumSet` over `HashSet<Day>`?
 
 ### Follow-up Questions
 

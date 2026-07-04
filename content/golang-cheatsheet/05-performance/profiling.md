@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Performance"
 sectionRef: "5.2"
 weight: 502
-ShowToc: true
 interviewHandbook: true
 ---
 

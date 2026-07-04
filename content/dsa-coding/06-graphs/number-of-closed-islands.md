@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/number-of-closed-islands/"
 sourceLabel: "LeetCode 1254"
 pattern: "DFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Number of Closed Islands

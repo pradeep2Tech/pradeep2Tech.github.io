@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Fundamentals"
 sectionRef: "1.5"
 weight: 105
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/ctes/

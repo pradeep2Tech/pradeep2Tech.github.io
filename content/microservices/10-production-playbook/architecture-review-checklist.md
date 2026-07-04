@@ -10,7 +10,6 @@ module: 10
 moduleTitle: "Production Playbook"
 sectionRef: "10.7"
 weight: 1007
-ShowToc: true
 playbookVersion: 3
 ---
 

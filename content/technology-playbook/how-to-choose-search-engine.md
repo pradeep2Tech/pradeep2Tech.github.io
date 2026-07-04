@@ -10,7 +10,6 @@ module: 2
 moduleTitle: "Technology Decision Matrix"
 sectionRef: "2.5"
 weight: 204
-ShowToc: true
 ---
 ## 1. Executive Summary
 

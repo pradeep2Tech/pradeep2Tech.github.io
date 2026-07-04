@@ -10,7 +10,6 @@ module: 8
 moduleTitle: "Redis Handbook"
 sectionRef: "0"
 weight: 8
-ShowToc: true
 ---
 # Interview Guide
 

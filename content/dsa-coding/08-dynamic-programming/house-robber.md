@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/house-robber/"
 sourceLabel: "LeetCode 198"
 pattern: "Include/Exclude"
-ShowToc: true
 interviewHandbook: true
 ---
 # House Robber

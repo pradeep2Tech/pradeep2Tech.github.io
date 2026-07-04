@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/shortest-path-in-binary-matrix/"
 sourceLabel: "LeetCode 1091"
 pattern: "BFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Shortest Path in Binary Matrix

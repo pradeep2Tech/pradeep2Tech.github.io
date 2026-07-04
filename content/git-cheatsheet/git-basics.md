@@ -9,7 +9,6 @@ shortTitle: "Basics"
 module: 1
 moduleTitle: "Getting Started"
 sectionRef: "1.1"
-ShowToc: true
 ---
 
 ## Executive Summary

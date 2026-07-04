@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Cloud Native Ecosystem"
 sectionRef: "6.15"
 weight: 614
-ShowToc: true
 ---
 ## 1. Executive Summary
 

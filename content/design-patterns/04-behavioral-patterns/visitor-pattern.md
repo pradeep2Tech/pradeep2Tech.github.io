@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.10"
 weight: 410
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/visitor-pattern/"
 ---
@@ -91,7 +90,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — instanceof sprawl:**
@@ -193,6 +192,23 @@ func WalkCart(items []CartElement, v CartVisitor) {
 ```
 
 Go has no overloads — **one interface method per element type**. Alternative: type switch in a single `Walk` function when visitor count is low (simpler, less extensible).
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

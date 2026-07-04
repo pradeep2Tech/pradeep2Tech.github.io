@@ -10,7 +10,6 @@ module: 8
 moduleTitle: "LLD Case Studies"
 sectionRef: "8.5"
 weight: 805
-ShowToc: true
 ---
 
 ### Problem & Intent
@@ -76,8 +75,8 @@ sequenceDiagram
 
 ### Implementation
 
-{< impl-tabs default="java" java="Java" golang="Go" >}
-{< impl-tab lang="java" >}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
+{{< impl-tab lang="java" >}}
 
 ```java
 public enum RideStatus { REQUESTED, ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED }
@@ -91,8 +90,8 @@ public final class Ride {
 }
 ```
 
-{< /impl-tab >}
-{< impl-tab lang="golang" >}
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
 
 ```go
 type RideStatus int
@@ -108,8 +107,32 @@ type Ride struct {
 }
 ```
 
-{< /impl-tab >}
-{< /impl-tabs >}
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from dataclasses import dataclass, field
+from enum import Enum, auto
+
+class RideStatus(Enum):
+    REQUESTED = auto()
+    ACCEPTED = auto()
+    IN_PROGRESS = auto()
+    COMPLETED = auto()
+    CANCELLED = auto()
+
+@dataclass
+class Ride:
+    status: RideStatus = RideStatus.REQUESTED
+
+    def accept(self) -> None:
+        if self.status is not RideStatus.REQUESTED:
+            raise ValueError("invalid transition")
+        self.status = RideStatus.ACCEPTED
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
 
 ---
 

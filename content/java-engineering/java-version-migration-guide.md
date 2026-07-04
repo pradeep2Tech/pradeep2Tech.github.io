@@ -9,7 +9,6 @@ shortTitle: "Version Migration"
 module: 6
 moduleTitle: "Interview Cheat Sheets"
 sectionRef: "6.5"
-ShowToc: true
 interviewHandbook: true
 cheatSheet: true
 aliases:
@@ -41,6 +40,8 @@ aliases:
 ---
 
 ## Why LTS for enterprises?
+
+**Difficulty:** Easy · **Time:** 30 sec
 
 ### Short Answer
 

@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/generate-parentheses/"
 sourceLabel: "LeetCode 22"
 pattern: "Backtracking"
-ShowToc: true
 interviewHandbook: true
 ---
 # Generate Parentheses

@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "Distributed Systems"
 sectionRef: "4.2"
 weight: 402
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/transactions/"

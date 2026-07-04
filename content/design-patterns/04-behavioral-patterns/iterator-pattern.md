@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.3"
 weight: 403
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/iterator-pattern/"
 ---
@@ -85,7 +84,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — expose internal list:**
@@ -200,6 +199,23 @@ func Walk(root *Node, order TraversalOrder) iter.Seq[Employee] {
 ```
 
 Go 1.23+ `iter.Seq` is the idiomatic iterator. For older code, return `[]Employee` or a custom struct with `Next() (Employee, bool)`.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

@@ -264,7 +264,7 @@ SKIP = {"single-responsibility-principle", "strategy-pattern"}
 IMPL_SECTION = r"""
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 ```java
@@ -282,6 +282,17 @@ public interface Example {
 type Example interface {
     Execute()
 }
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+# TODO: idiomatic Python equivalent (Protocol / dataclass)
+from typing import Protocol
+
+class Example(Protocol):
+    def execute(self) -> None: ...
 ```
 
 {{< /impl-tab >}}

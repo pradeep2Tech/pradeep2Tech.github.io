@@ -9,11 +9,12 @@ shortTitle: "JIT & Safepoints"
 module: 4
 moduleTitle: "JVM"
 sectionRef: "4.5"
-ShowToc: true
 interviewHandbook: true
 ---
 
 ## What is escape analysis?
+
+**Difficulty:** Hard · **Time:** 2 min
 
 ### Short Answer
 
@@ -23,12 +24,18 @@ JIT determines if object escapes method/thread — non-escaping objects may be s
 
 Not guaranteed observable — don't rely on for correctness. Eliminates allocation for short-lived non-escaping objects.
 
+### Interview Questions
+
+1. Scalar replacement?
+
 ### Follow-up Questions
 
 - Scalar replacement?
 
 ---
 ## What is a safepoint?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 

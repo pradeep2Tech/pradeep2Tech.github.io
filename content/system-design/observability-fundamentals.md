@@ -9,7 +9,6 @@ shortTitle: "Observability Fundamentals"
 module: 7
 moduleTitle: "Observability"
 sectionRef: "7.1"
-ShowToc: true
 ---
 
 ## Overview

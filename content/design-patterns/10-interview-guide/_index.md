@@ -10,7 +10,6 @@ module: 10
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 10
-ShowToc: true
 ---
 
 # Interview Guide

@@ -9,11 +9,12 @@ shortTitle: "CL Leaks"
 module: 4
 moduleTitle: "JVM"
 sectionRef: "4.4"
-ShowToc: true
 interviewHandbook: true
 ---
 
 ## Why classloader leaks on WAR redeploy?
+
+**Difficulty:** Hard · **Time:** 2 min
 
 ### Short Answer
 

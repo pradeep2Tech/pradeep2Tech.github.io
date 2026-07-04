@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/4sum/"
 sourceLabel: "LeetCode 18"
 pattern: "Two Pointers"
-ShowToc: true
 interviewHandbook: true
 ---
 # 4Sum

@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/search-in-rotated-sorted-array/"
 sourceLabel: "LeetCode 33"
 pattern: "Modified Binary Search"
-ShowToc: true
 interviewHandbook: true
 ---
 # Search in Rotated Sorted Array

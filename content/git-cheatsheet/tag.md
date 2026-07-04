@@ -9,7 +9,6 @@ shortTitle: "Tag"
 module: 4
 moduleTitle: "Collaboration"
 sectionRef: "4.2"
-ShowToc: true
 ---
 
 ## Executive Summary

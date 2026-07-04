@@ -27,7 +27,6 @@ def fm(
         f"module: {module}",
         f'moduleTitle: "{module_title}"',
         f'sectionRef: "{section}"',
-        "ShowToc: true",
         "interviewHandbook: true",
     ]
     if aliases:

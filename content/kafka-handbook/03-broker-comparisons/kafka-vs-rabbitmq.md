@@ -12,7 +12,6 @@ sectionRef: "3.1"
 weight: 301
 aliases:
   - /kafka-handbook/rabbitmq/
-ShowToc: true
 interviewHandbook: true
 ---
 

@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/time-needed-to-inform-all-employees/"
 sourceLabel: "LeetCode 1376"
 pattern: "BFS/DFS on Tree"
-ShowToc: true
 interviewHandbook: true
 ---
 # Time Needed to Inform All Employees

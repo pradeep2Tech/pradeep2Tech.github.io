@@ -9,7 +9,6 @@ shortTitle: "Security"
 module: 5
 moduleTitle: "Security"
 sectionRef: "5.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - security-quick-ref

@@ -9,7 +9,6 @@ shortTitle: "Locks & Atomics"
 module: 3
 moduleTitle: "Concurrency"
 sectionRef: "3.3"
-ShowToc: true
 interviewHandbook: true
 ---
 

@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Python Internals"
 sectionRef: "3.7"
 weight: 307
-ShowToc: true
 interviewHandbook: true
 ---
 

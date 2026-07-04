@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/maximum-width-of-binary-tree/"
 sourceLabel: "LeetCode 662"
 pattern: "BFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Maximum Width of Binary Tree

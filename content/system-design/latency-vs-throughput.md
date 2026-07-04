@@ -9,7 +9,6 @@ shortTitle: "Latency vs Throughput"
 module: 5
 moduleTitle: "Scalability"
 sectionRef: "5.1"
-ShowToc: true
 ---
 
 ## Overview

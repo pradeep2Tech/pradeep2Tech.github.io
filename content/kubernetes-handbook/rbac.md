@@ -6,10 +6,9 @@ description: "Roles, ClusterRoles, bindings, and least-privilege access."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "RBAC"
-module: 5
+module: 6
 moduleTitle: "Operations & Security"
-sectionRef: "5.3"
-ShowToc: true
+sectionRef: "6.3"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/rbac/"]
 ---

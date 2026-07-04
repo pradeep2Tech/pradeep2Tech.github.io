@@ -6,10 +6,9 @@ description: "Everyday kubectl for apply, get, logs, exec, port-forward, and deb
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "kubectl"
-module: 5
+module: 6
 moduleTitle: "Operations & Security"
-sectionRef: "5.5"
-ShowToc: true
+sectionRef: "6.5"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/common-kubectl-commands/"]
 ---

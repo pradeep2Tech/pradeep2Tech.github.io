@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "Redis Handbook"
 sectionRef: "0"
 weight: 4
-ShowToc: true
 ---
 # Distributed Systems
 

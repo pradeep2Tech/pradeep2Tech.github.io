@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.1"
 weight: 401
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/chain-of-responsibility-pattern/"
 ---
@@ -88,7 +87,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — monolithic filter method:**
@@ -192,6 +191,23 @@ func AuthHandler(next Handler) Handler {
 ```
 
 Go middleware uses **higher-order functions** wrapping `http.Handler` — idiomatic chain without abstract base classes.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

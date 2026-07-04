@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/count-number-of-pairs-with-absolute-difference-k/"
 sourceLabel: "LeetCode 2006"
 pattern: "HashMap"
-ShowToc: true
 interviewHandbook: true
 ---
 # Count Pairs With Absolute Difference K

@@ -9,7 +9,6 @@ shortTitle: "Branch"
 module: 2
 moduleTitle: "Branching & Integration"
 sectionRef: "2.1"
-ShowToc: true
 ---
 
 ## Executive Summary

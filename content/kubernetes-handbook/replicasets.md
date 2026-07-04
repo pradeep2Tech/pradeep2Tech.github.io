@@ -6,10 +6,9 @@ description: "Replica count enforcement and pod template matching."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "ReplicaSets"
-module: 1
+module: 2
 moduleTitle: "Architecture & Workloads"
-sectionRef: "1.3"
-ShowToc: true
+sectionRef: "2.3"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/replicasets/"]
 ---

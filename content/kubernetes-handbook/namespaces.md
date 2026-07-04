@@ -6,10 +6,9 @@ description: "Logical isolation, quotas, and multi-tenant boundaries."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Namespaces"
-module: 3
+module: 4
 moduleTitle: "Configuration & Storage"
-sectionRef: "3.5"
-ShowToc: true
+sectionRef: "4.5"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/namespaces/"]
 ---

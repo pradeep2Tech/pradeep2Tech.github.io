@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://www.geeksforgeeks.org/problems/aggressive-cows/1"
 sourceLabel: "GFG"
 pattern: "Binary Search on Answer"
-ShowToc: true
 interviewHandbook: true
 ---
 # Aggressive Cows

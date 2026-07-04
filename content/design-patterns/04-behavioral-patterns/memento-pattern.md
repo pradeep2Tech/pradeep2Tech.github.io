@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.5"
 weight: 405
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/memento-pattern/"
 ---
@@ -84,7 +83,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — expose mutable state:**
@@ -187,6 +186,23 @@ func (c *Caretaker) Undo(editor *TextEditor) bool {
 ```
 
 Lowercase fields on `EditorMemento` (same package) enforce encapsulation. Cross-package opacity: export `Save`/`Restore` only on editor, keep memento type unexported.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

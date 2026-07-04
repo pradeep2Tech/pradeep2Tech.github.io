@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.4"
 weight: 404
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/mediator-pattern/"
 ---
@@ -86,7 +85,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — peers reference each other:**
@@ -195,6 +194,23 @@ func (u *User) Receive(msg string) {
 ```
 
 Go mediators are **interfaces + registries**; avoid cyclic imports by keeping colleague types in the same package as the mediator.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

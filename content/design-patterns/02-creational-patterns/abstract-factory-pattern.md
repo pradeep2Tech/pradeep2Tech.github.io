@@ -11,7 +11,6 @@ moduleTitle: "Creational Patterns"
 sectionRef: "2.2"
 weight: 202
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/abstract-factory-pattern/"
 ---
@@ -108,7 +107,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — mismatched concrete types:**
@@ -233,6 +232,23 @@ func (s *IngestService) Ingest(payload []byte) error {
     }
     return meta.Save(IngestRecord{Key: key})
 }
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
 ```
 
 {{< /impl-tab >}}

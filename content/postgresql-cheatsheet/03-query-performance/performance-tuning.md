@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Query Performance"
 sectionRef: "3.4"
 weight: 304
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/performance-tuning/

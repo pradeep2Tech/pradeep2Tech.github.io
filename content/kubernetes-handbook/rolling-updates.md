@@ -6,10 +6,9 @@ description: "maxSurge, maxUnavailable, and deployment strategy."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Rolling Updates"
-module: 5
+module: 6
 moduleTitle: "Operations & Security"
-sectionRef: "5.1"
-ShowToc: true
+sectionRef: "6.1"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/rolling-updates/"]
 ---

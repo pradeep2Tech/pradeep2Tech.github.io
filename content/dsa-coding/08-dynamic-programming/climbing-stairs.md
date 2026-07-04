@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/climbing-stairs/"
 sourceLabel: "LeetCode 70"
 pattern: "Fibonacci DP"
-ShowToc: true
 interviewHandbook: true
 ---
 # Climbing Stairs

@@ -10,7 +10,6 @@ module: 8
 moduleTitle: "Interview Guide"
 sectionRef: "8.1"
 weight: 801
-ShowToc: true
 interviewHandbook: true
 aliases:
   - "/golang-cheatsheet/interview-questions/"

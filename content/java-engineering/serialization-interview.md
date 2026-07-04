@@ -9,13 +9,14 @@ shortTitle: "Serialization"
 module: 5
 moduleTitle: "Platform APIs"
 sectionRef: "5.2"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - serialization-quick-ref
 ---
 
 ## Why avoid Java serialization in new systems?
+
+**Difficulty:** Medium · **Time:** 1 min
 
 ### Short Answer
 
@@ -24,6 +25,10 @@ Security (gadget chains), brittleness across versions, poor cross-language suppo
 ### Detailed Explanation
 
 Prefer JSON, Protobuf, Avro. If required: `serialVersionUID`, whitelist ObjectInputFilter (9+).
+
+### Interview Questions
+
+1. Externalizable vs Serializable?
 
 ### Follow-up Questions
 

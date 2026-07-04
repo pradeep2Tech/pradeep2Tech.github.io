@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "Distributed Systems"
 sectionRef: "4.5"
 weight: 405
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/lua-scripts/"

@@ -11,7 +11,6 @@ moduleTitle: "Pattern Comparisons"
 sectionRef: "5.10"
 weight: 510
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/strategy-vs-state-vs-template-method/"
 ---
@@ -173,7 +172,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Strategy — shipping cost by carrier (external swap):**
@@ -384,6 +383,25 @@ csv.Export(rows)
 ```
 
 Go rarely uses inheritance; **embed a struct with function hooks** instead of abstract classes.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+**Python note:** compare trade-offs using the Java/Go tabs — Python uses Protocols, dataclasses, and composition similarly.
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

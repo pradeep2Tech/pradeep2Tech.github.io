@@ -6,10 +6,9 @@ description: "Non-sensitive configuration as env vars or mounted files."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "ConfigMaps"
-module: 3
+module: 4
 moduleTitle: "Configuration & Storage"
-sectionRef: "3.1"
-ShowToc: true
+sectionRef: "4.1"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/configmaps/"]
 ---

@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/subdomain-visit-count/"
 sourceLabel: "LeetCode 811"
 pattern: "HashMap"
-ShowToc: true
 interviewHandbook: true
 ---
 # Subdomain Visit Count

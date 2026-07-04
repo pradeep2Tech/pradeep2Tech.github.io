@@ -6,10 +6,9 @@ description: "Smallest deployable unit — containers, init containers, and pod 
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Pods"
-module: 1
+module: 2
 moduleTitle: "Architecture & Workloads"
-sectionRef: "1.2"
-ShowToc: true
+sectionRef: "2.2"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/pods/"]
 ---
@@ -124,12 +123,33 @@ HTTP/1.1 200 OK
 
 **Syntax:**
 ```yaml
-apiVersion: v1\nkind: Pod\nmetadata:\n  name: api\n  labels:\n    app: api\nspec:\n  containers:\n    - name: api\n      image: myapp:1.0.0\n      ports:\n        - containerPort: 8080
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api
+  labels:
+    app: api
+spec:
+  containers:
+    - name: api
+      image: myapp:1.0.0
+      ports:
+        - containerPort: 8080
 ```
 
 **Example:**
 ```yaml
-apiVersion: v1\nkind: Pod\nmetadata:\n  name: debug\n  namespace: myapp\nspec:\n  restartPolicy: Never\n  containers:\n    - name: curl\n      image: curlimages/curl:8.5.0\n      command: ["sleep", "3600"]
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug
+  namespace: myapp
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl
+      image: curlimages/curl:8.5.0
+      command: ["sleep", "3600"]
 ```
 
 **Common mistakes:**

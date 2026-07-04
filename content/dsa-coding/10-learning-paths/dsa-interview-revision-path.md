@@ -10,7 +10,6 @@ module: 10
 moduleTitle: "Learning Paths"
 sectionRef: "10.2"
 weight: 1002
-ShowToc: true
 ---
 # Interview Revision Path
 

@@ -10,7 +10,6 @@ module: 4
 moduleTitle: "Concurrency"
 sectionRef: "4.3"
 weight: 403
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 aliases:

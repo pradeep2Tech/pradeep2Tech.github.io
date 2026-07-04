@@ -11,7 +11,6 @@ moduleTitle: "Creational Patterns"
 sectionRef: "2.3"
 weight: 203
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/builder-pattern/"
 ---
@@ -92,7 +91,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — telescoping constructor:**
@@ -233,6 +232,34 @@ report, err := (&ReportBuilder{}).
 ```
 
 Go also uses the **functional options** pattern (`NewServer(WithPort(8080), WithTLS(cfg))`) for similar goals with less type ceremony.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass
+class HttpRequest:
+    method: str = "GET"
+    path: str = "/"
+    headers: dict = field(default_factory=dict)
+
+class HttpRequestBuilder:
+    def __init__(self) -> None:
+        self._req = HttpRequest()
+
+    def get(self, path: str) -> "HttpRequestBuilder":
+        self._req.method, self._req.path = "GET", path
+        return self
+
+    def header(self, k: str, v: str) -> "HttpRequestBuilder":
+        self._req.headers[k] = v
+        return self
+
+    def build(self) -> HttpRequest:
+        return self._req
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

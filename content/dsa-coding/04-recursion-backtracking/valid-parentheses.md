@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/valid-parentheses/"
 sourceLabel: "LeetCode 20"
 pattern: "Stack / Recursion Thinking"
-ShowToc: true
 interviewHandbook: true
 ---
 # Valid Parentheses

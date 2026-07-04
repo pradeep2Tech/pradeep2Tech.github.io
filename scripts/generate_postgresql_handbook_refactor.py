@@ -24,7 +24,6 @@ module: {mod}
 moduleTitle: "{mod_title}"
 sectionRef: "{ref}"
 weight: {weight}
-ShowToc: true
 interviewHandbook: true{aliases}
 ---
 

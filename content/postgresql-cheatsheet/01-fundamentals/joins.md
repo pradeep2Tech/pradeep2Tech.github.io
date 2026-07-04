@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Fundamentals"
 sectionRef: "1.4"
 weight: 104
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/joins/

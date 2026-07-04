@@ -10,7 +10,6 @@ module: 9
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 9
-ShowToc: true
 ---
 
 # Pattern Selection Guide

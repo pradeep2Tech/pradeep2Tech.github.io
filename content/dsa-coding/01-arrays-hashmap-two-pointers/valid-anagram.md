@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/valid-anagram/"
 sourceLabel: "LeetCode 242"
 pattern: "HashMap"
-ShowToc: true
 interviewHandbook: true
 ---
 # Valid Anagram

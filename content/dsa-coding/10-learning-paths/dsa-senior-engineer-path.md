@@ -10,7 +10,6 @@ module: 10
 moduleTitle: "Learning Paths"
 sectionRef: "10.1"
 weight: 1001
-ShowToc: true
 ---
 # Senior Engineer Path
 

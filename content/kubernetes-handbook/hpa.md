@@ -6,10 +6,9 @@ description: "Horizontal Pod Autoscaler — CPU, memory, and custom metrics scal
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "HPA"
-module: 4
+module: 5
 moduleTitle: "Scheduling & Scaling"
-sectionRef: "4.5"
-ShowToc: true
+sectionRef: "5.5"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/hpa/"]
 ---

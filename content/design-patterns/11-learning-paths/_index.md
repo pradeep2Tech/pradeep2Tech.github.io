@@ -10,7 +10,6 @@ module: 11
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 11
-ShowToc: true
 ---
 
 # Learning Paths

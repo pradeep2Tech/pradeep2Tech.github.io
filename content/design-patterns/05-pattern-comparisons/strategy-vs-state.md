@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Pattern Comparisons"
 sectionRef: "5.4"
 weight: 504
-ShowToc: true
 aliases:
   - "/design-patterns/strategy-vs-state-vs-template-method/"
 ---

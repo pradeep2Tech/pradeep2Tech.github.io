@@ -9,7 +9,6 @@ shortTitle: "Merge"
 module: 2
 moduleTitle: "Branching & Integration"
 sectionRef: "2.2"
-ShowToc: true
 ---
 
 ## Executive Summary

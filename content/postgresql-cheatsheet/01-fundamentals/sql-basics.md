@@ -10,7 +10,6 @@ module: 1
 moduleTitle: "Fundamentals"
 sectionRef: "1.1"
 weight: 101
-ShowToc: true
 interviewHandbook: true
 aliases:
   - /postgresql-cheatsheet/sql-basics/

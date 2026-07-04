@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Redis Internals"
 sectionRef: "3.6"
 weight: 306
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/cluster/"

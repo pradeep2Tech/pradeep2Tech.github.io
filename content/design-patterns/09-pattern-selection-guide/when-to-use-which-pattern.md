@@ -10,7 +10,6 @@ module: 9
 moduleTitle: "Pattern Selection Guide"
 sectionRef: "9.1"
 weight: 901
-ShowToc: true
 ---
 
 # When To Use Which Pattern

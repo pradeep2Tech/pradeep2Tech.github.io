@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/group-anagrams/"
 sourceLabel: "LeetCode 49"
 pattern: "HashMap"
-ShowToc: true
 interviewHandbook: true
 ---
 # Group Anagrams

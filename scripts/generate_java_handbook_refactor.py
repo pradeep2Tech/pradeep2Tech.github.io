@@ -30,7 +30,6 @@ def fm(
         f"module: {module}",
         f'moduleTitle: "{module_title}"',
         f'sectionRef: "{section}"',
-        "ShowToc: true",
         "interviewHandbook: true",
     ]
     if cheat_sheet:
@@ -51,11 +50,15 @@ def q(
     detail: str,
     internal: str = "",
     production: str = "",
-    mistakes: str = "",
+    mistakes: str | list[str] = "",
     followups: list[str] | None = None,
+    interview_probes: list[str] | None = None,
+    code: str = "",
 ) -> str:
     parts = [
         f"## {title}",
+        "",
+        f"**Difficulty:** {difficulty} · **Time:** {time}",
         "",
         "### Short Answer",
         "",
@@ -67,10 +70,20 @@ def q(
     ]
     if internal:
         parts.extend(["", "### Internal Working", "", internal])
+    if code:
+        parts.extend(["", "### Code Example", "", code])
     if production:
         parts.extend(["", "### Production Notes", "", production])
     if mistakes:
-        parts.extend(["", "### Common Mistakes", "", mistakes])
+        parts.extend(["", "### Common Mistakes", ""])
+        if isinstance(mistakes, list):
+            parts.extend(f"- {m}" for m in mistakes)
+        else:
+            parts.append(mistakes)
+    probes = interview_probes or followups
+    if probes:
+        parts.extend(["", "### Interview Questions", ""])
+        parts.extend(f"{i}. {p}" for i, p in enumerate(probes, 1))
     if followups:
         parts.extend(["", "### Follow-up Questions", ""])
         parts.extend(f"- {f}" for f in followups)
@@ -78,6 +91,18 @@ def q(
     parts.append("---")
     parts.append("")
     return "\n".join(parts)
+
+
+def page_intro(text: str) -> str:
+    return text.strip() + "\n\n---\n\n"
+
+
+def interview_bank(title: str, rows: list[tuple[str, str]]) -> str:
+    """Append a numbered interview drill section (question, what interviewer wants)."""
+    lines = [f"## {title}", ""]
+    for i, (question, hint) in enumerate(rows, 1):
+        lines.extend([f"### {i}. {question}", "", hint, "", "---", ""])
+    return "\n".join(lines)
 
 
 PAGES: dict[str, str] = {}
@@ -397,7 +422,9 @@ PAGES["java-memory-model"] = fm(
     "happens-before, visibility, ordering, and volatile semantics.",
     "JMM",
     3, "Concurrency", "3.2",
-) + q(
+) + page_intro("""
+The **Java Memory Model (JMM)** defines which writes are visible to which reads across threads. Without happens-before edges, CPUs and compilers may reorder or cache values — leading to subtle bugs in double-checked locking, lazy init, and lock-free code.
+""") + q(
     "What is happens-before?",
     "Hard", "3 min",
     "Partial ordering guaranteeing visibility — if A happens-before B, B sees A's writes.",
@@ -410,40 +437,169 @@ PAGES["java-memory-model"] = fm(
     "Visibility and ordering for reads/writes — not atomicity of compound ops like i++.",
     "Volatile read/write establish happens-before. No torn reads/writes for 32/64-bit volatiles on supported platforms. i++ is read-modify-write — use `AtomicInteger` or lock.",
     followups=["Why volatile not enough for i++?"],
-)
+) + q(
+    "Double-checked locking — why broken and fix?",
+    "Hard", "2 min",
+    "Without volatile on instance ref, another thread may see partially constructed object due to reordering.",
+    "Fix: `private volatile Singleton instance`, holder idiom, or enum singleton. Volatile write establishes happens-before for readers.",
+    production="Prefer DI or enum singleton — avoid hand-rolled DCL in new code.",
+    mistakes=[
+        "DCL without volatile on the instance reference (broken pre-JMM5 pattern).",
+        "Using volatile on fields inside the object but not on the publishing reference.",
+    ],
+    interview_probes=[
+        "List three happens-before rules without looking them up.",
+        "Why does `Thread.start` establish happens-before?",
+        "Safe publication: stack confinement vs volatile vs final fields?",
+    ],
+    followups=["Safe publication idioms?"],
+) + interview_bank("JMM Interview Drill", [
+    ("Is `volatile` enough for `count++`?", "No — compound RMW needs atomics or synchronization."),
+    ("Does reordering happen on single-threaded code?", "Yes, compiler may reorder if as-if-serial semantics preserved."),
+    ("How does `ConcurrentHashMap` relate to JMM?", "Documented happens-before on successful `put` → subsequent `get`."),
+])
 
 PAGES["cas-and-lock-free-programming"] = fm(
     "CAS & Lock-Free Programming",
     "Compare-and-swap, ABA problem, AtomicReference, LongAdder vs AtomicLong.",
     "CAS",
     3, "Concurrency", "3.4",
-) + q(
+) + page_intro("""
+Lock-free code uses **hardware CAS** (compare-and-swap) instead of mutexes for hot counters, queues, and map bins. Interviewers probe CAS mechanics, the **ABA problem**, when to pick `LongAdder`, and how `java.util.concurrent.atomic` maps to CPU instructions.
+
+```mermaid
+flowchart LR
+    A[Read current V] --> B{V == expected?}
+    B -->|yes| C[Write new value atomically]
+    B -->|no| D[Retry or fail]
+    C --> E[Success]
+    D --> A
+```
+""") + q(
     "What is CAS?",
-    "Medium", "1 min",
-    "Compare-And-Swap: atomically update if current value equals expected — hardware primitive (cmpxchg).",
-    "Basis of `AtomicInteger.incrementAndGet`, CHM bin updates. Lock-free algorithms retry on contention instead of blocking.",
-    "On x86, CAS maps to LOCK CMPXCHG.",
-    followups=["CAS vs lock — when prefer each?"],
+    "Medium", "1–2 min",
+    "Compare-And-Swap atomically updates a memory location **only if** the current value equals an expected value — a hardware primitive (`cmpxchg` on x86).",
+    "Java exposes CAS via `sun.misc.Unsafe` (internal) and public APIs: `AtomicInteger.compareAndSet`, `AtomicReference`, `VarHandle` (Java 9+). Lock-free algorithms **retry** when CAS fails due to contention instead of parking threads. `AtomicInteger.incrementAndGet` loops: read, compute, CAS until success. CHM uses CAS on empty bins before escalating to synchronized bin heads.",
+    "On x86: `LOCK CMPXCHG`. Contended CAS causes cache-line bouncing — `LongAdder` stripes to reduce this.",
+    production="Prefer atomics for metrics and single-word updates; use locks when invariants span multiple fields.",
+    mistakes=[
+        "Assuming CAS makes `i++` on a plain `int` atomic — need `AtomicInteger` or synchronized.",
+        "Spinning forever on hot CAS without backoff or striping.",
+    ],
+    interview_probes=[
+        "Walk through `incrementAndGet` at the CPU level — what happens on failure?",
+        "When would you choose a lock over CAS for a counter?",
+        "How does CAS relate to optimistic concurrency in databases?",
+    ],
+    code="""```java
+AtomicInteger counter = new AtomicInteger(0);
+
+// incrementAndGet: CAS loop internally
+int next = counter.incrementAndGet();
+
+// explicit CAS — returns false if another thread won
+boolean ok = counter.compareAndSet(5, 6);
+```""",
+    followups=["CAS vs lock — when prefer each?", "What is lock-free vs wait-free?"],
+) + q(
+    "CAS vs synchronized — when prefer each?",
+    "Medium", "2 min",
+    "CAS for **single-word** optimistic updates under moderate contention; `synchronized`/`Lock` when you must hold **multi-field invariants** or block waiting.",
+    "CAS wins for counters, stack heads, and CHM-style structures where failure = retry. Locks win when work inside the critical section is non-trivial, when you need `wait`/`notify`, or when retry storms would waste CPU. `ReentrantLock` with `tryLock` blends both: optimistic attempt, fallback to blocking.",
+    production="Micrometer counters: `LongAdder`. Sequence IDs needing strict ordering: `AtomicLong` or DB sequence.",
+    mistakes=["Using CAS loops to guard three related fields — use a lock or transactional model."],
+    interview_probes=[
+        "Design a rate limiter with atomics only — what breaks?",
+        "Why can contended CAS be slower than a short lock?",
+    ],
 ) + q(
     "ABA problem?",
-    "Hard", "2 min",
-    "Value changes A→B→A; CAS sees expected A and succeeds though state changed in between.",
-    "Problem in lock-free stacks/queues with recycling. Fix: versioned references (`AtomicStampedReference`, `AtomicMarkableReference`) or hazard pointers / epoch-based reclamation.",
-    followups=["Where does ABA matter in Java APIs?"],
+    "Hard", "2–3 min",
+    "Value changes **A → B → A**; a CAS comparing against expected **A** succeeds even though the structure changed in between.",
+    "Classic in lock-free **stacks/queues** that recycle nodes — thread 1 pops A, thread 2 pops/modifies/pushes A back, thread 1's CAS still sees A. Fixes: **versioned references** (`AtomicStampedReference`, `AtomicMarkableReference`), **hazard pointers**, or **epoch-based reclamation** (non-blocking memory management). Java's `ConcurrentLinkedQueue` uses safe algorithms; don't hand-roll lock-free lists without studying reclamation.",
+    mistakes=[
+        "Ignoring ABA when reusing object pools with CAS-linked structures.",
+        "Assuming `AtomicReference` alone prevents ABA — it does not without stamps.",
+    ],
+    interview_probes=[
+        "Why doesn't `AtomicInteger` suffer ABA for a counter?",
+        "When would you use `AtomicStampedReference` in production?",
+        "How do hazard pointers differ from version stamps?",
+    ],
+    followups=["Where does ABA matter outside Java?"],
 ) + q(
     "LongAdder vs AtomicLong?",
-    "Medium", "1 min",
-    "LongAdder stripes counters across cells — lower contention under many writers; AtomicLong single value.",
-    "LongAdder: `add` spreads across cells, `sum` aggregates. Better for high-throughput metrics. AtomicLong when you need consistent reads of exact current value or CAS on single counter.",
-    production="Use LongAdder for request counters; AtomicLong for sequence IDs.",
-)
+    "Medium", "1–2 min",
+    "`LongAdder` **stripes** increments across internal cells — lower contention under many writers; `AtomicLong` holds a **single** value with CAS on every update.",
+    "`LongAdder.add` spreads writes; `sum()` aggregates cells (not a linearizable snapshot under concurrent adds, but fine for metrics). Use `AtomicLong` when you need **exact current value** on every read, CAS-based sequences, or `getAndIncrement` semantics visible to other threads immediately.",
+    production="Request/error counters: `LongAdder`. Global sequence / ledger balance: `AtomicLong` or DB.",
+    code="""```java
+LongAdder requests = new LongAdder();
+requests.increment();
+long approx = requests.sum();  // good for dashboards
+
+AtomicLong sequence = new AtomicLong();
+long id = sequence.incrementAndGet();  // strict unique ID
+```""",
+    interview_probes=[
+        "Is `sum()` on LongAdder linearizable? When does that matter?",
+        "How would you expose LongAdder to Prometheus?",
+    ],
+    followups=["DoubleAdder vs AtomicDouble?"],
+) + q(
+    "AtomicReference use cases?",
+    "Medium", "1–2 min",
+    "Holds a reference updated atomically — lock-free **swap** of immutable snapshots (config, cache entry, state object).",
+    "Pattern: keep an **immutable** object; CAS replaces whole reference when config changes. Readers never see torn state. `AtomicReference<Config>` + `compareAndSet(old, new)` after validation. Used in `ConcurrentHashMap` treeify transitions and lazy initialization patterns.",
+    code="""```java
+AtomicReference<Config> live = new AtomicReference<>(Config.defaults());
+
+void publish(Config next) {
+    Config prev;
+    do {
+        prev = live.get();
+        if (!next.isValid()) throw new IllegalArgumentException();
+    } while (!live.compareAndSet(prev, next));
+}
+```""",
+    interview_probes=[
+        "Why must referenced objects be immutable for safe CAS swap?",
+        "AtomicReference vs volatile reference field?",
+    ],
+) + q(
+    "VarHandle vs legacy Atomic*?",
+    "Hard", "2 min",
+    "`VarHandle` (Java 9+) provides typed CAS/volatile access on fields and arrays — foundation for future intrinsics; `Atomic*` classes are ergonomic wrappers.",
+    "VarHandles enable off-heap / array element CAS with fence modes (`plain`, `opaque`, `release`, `acquire`, `volatile`). Library authors use them; application code usually sticks to `AtomicInteger` etc. Conceptually same CAS semantics.",
+    interview_probes=[
+        "What fence modes does VarHandle expose and why?",
+        "How does this relate to `Unsafe` deprecation path?",
+    ],
+) + q(
+    "Lock-free vs wait-free?",
+    "Hard", "2 min",
+    "**Lock-free:** system-wide progress — some thread completes in finite steps. **Wait-free:** every thread completes in bounded steps regardless of others.",
+    "Most `java.util.concurrent.atomic` ops are lock-free (retry under contention). True wait-free structures are rare in JDK — harder to implement. Interview answer: lock-free is practical JDK goal; wait-free is stronger theoretical guarantee.",
+    interview_probes=[
+        "Is `ConcurrentLinkedQueue.offer` wait-free?",
+        "Why do production systems rarely require wait-freedom?",
+    ],
+) + interview_bank("Rapid-Fire Interview Drill", [
+    ("Explain CAS in one sentence to a junior.", "Atomic update if-and-only-if current value matches expected; retry on failure."),
+    ("Your metrics spike CPU after switching to AtomicLong — fix?", "Stripe with LongAdder or sample; check cache-line false sharing."),
+    ("Can you implement a lock-free stack with only AtomicReference?", "Yes, but address ABA and safe node reclamation."),
+    ("When does CHM use CAS vs synchronized bin lock?", "Empty bin CAS install; collision chains synchronize on bin head."),
+    ("How do you test lock-free code?", "Stress tests, jcstress, Thread.sleep jitter — not single-threaded unit tests only."),
+])
 
 PAGES["threadlocal-internals"] = fm(
     "ThreadLocal Internals",
     "Per-thread storage, ThreadLocalMap, leaks in pooled threads.",
     "ThreadLocal",
     3, "Concurrency", "3.5",
-) + q(
+) + page_intro("""
+`ThreadLocal` gives each thread its own copy of a variable — common for `SimpleDateFormat`, request context, and tracing IDs. In **pooled threads**, failure to `remove()` causes leaks and cross-request contamination.
+""") + q(
     "How does ThreadLocal work internally?",
     "Medium", "2 min",
     "Each `Thread` holds a `ThreadLocalMap` — weak keys (ThreadLocal), strong values.",
@@ -457,7 +613,24 @@ PAGES["threadlocal-internals"] = fm(
     "Pool threads live forever — ThreadLocal values retained until removed.",
     "Request context in ThreadLocal without `remove()` after task leaks prior request data and heap. Critical in Tomcat/executor pools.",
     production="try/finally with remove(); prefer ScopedValue (21+) for virtual threads.",
-)
+    interview_probes=[
+        "Why are ThreadLocal keys weak but values strong?",
+        "What breaks if you use ThreadLocal with 1M virtual threads?",
+        "How would you migrate request context to ScopedValue?",
+    ],
+) + q(
+    "ThreadLocal vs ScopedValue (Java 21+)?",
+    "Medium", "2 min",
+    "`ScopedValue` binds immutable context for a **dynamic scope** — inherited by child threads, no map per thread, better for virtual threads.",
+    "ThreadLocal: map on each `Thread`, manual remove. ScopedValue: `ScopedValue.where(KEY, value).run(() -> ...)` — automatic cleanup when scope ends. Preferred for request context in VT-heavy apps.",
+    interview_probes=[
+        "Can ScopedValue replace all ThreadLocal uses?",
+        "How does structured concurrency interact with ScopedValue?",
+    ],
+) + interview_bank("ThreadLocal Interview Drill", [
+    ("Symptom: user A sees user B data in Tomcat — cause?", "ThreadLocal not cleared in pool thread after request."),
+    ("Where is ThreadLocalMap stored?", "On the Thread object (`threadLocals` field)."),
+])
 
 PAGES["forkjoinpool-internals"] = fm(
     "ForkJoinPool Internals",
@@ -471,8 +644,26 @@ PAGES["forkjoinpool-internals"] = fm(
     "Divide-and-conquer tasks `fork` subtasks, `join` results. Stealing balances load. `commonPool()` shared by parallel streams and default `CompletableFuture` async — risk of starvation.",
     "Not used for virtual thread scheduling.",
     production="Pass explicit Executor to CompletableFuture; don't block inside common pool.",
+    interview_probes=[
+        "Why is blocking in parallelStream dangerous?",
+        "ForkJoinPool common pool parallelism default?",
+        "Difference between work-stealing and traditional thread pool queue?",
+    ],
     followups=["Parallel stream thread pool?"],
-)
+) + q(
+    "Parallel streams and common pool pitfalls?",
+    "Medium", "2 min",
+    "`parallelStream()` uses `ForkJoinPool.commonPool()` — shared globally; blocking or IO inside pipeline starves other users of the pool.",
+    "Fix: custom pool via `ForkJoinPool.submit(() -> list.parallelStream()...).get()` or use explicit Executor. CPU-bound, non-blocking transforms only in parallel streams.",
+    mistakes=["Calling `parallelStream` on small collections — overhead exceeds benefit."],
+    interview_probes=[
+        "When is parallelStream actually faster?",
+        "How does Spliterator SPLIT_CHARACTERISTICS affect parallelism?",
+    ],
+) + interview_bank("ForkJoinPool Interview Drill", [
+    ("CompletableFuture.supplyAsync with no executor — which pool?", "ForkJoinPool.commonPool()."),
+    ("Virtual threads use ForkJoinPool?", "No — carrier pool is separate (ForkJoinPool by default for carriers)."),
+])
 
 PAGES["deadlock-detection"] = fm(
     "Deadlock Detection & Prevention",
@@ -485,8 +676,25 @@ PAGES["deadlock-detection"] = fm(
     "Mutual exclusion, hold-and-wait, no preemption, circular wait — break one to prevent.",
     "Prevention: global lock ordering, `tryLock` with backoff, timeouts. Detection: thread dump shows 'Found one Java-level deadlock'.",
     production="jcmd Thread.print / JFR lock events.",
+    interview_probes=[
+        "Break circular wait without global ordering — possible?",
+        "Difference between deadlock and livelock?",
+        "How does `ReentrantLock.tryLock` help?",
+    ],
     followups=["Live lock vs deadlock?"],
-)
+) + q(
+    "How do you diagnose deadlock in production?",
+    "Medium", "2 min",
+    "Thread dump (`jcmd <pid> Thread.print`, `jstack`) shows 'Found one Java-level deadlock' with cycle. JFR `jdk.JavaMonitorEnter` / lock events give timing.",
+    "Prevention beats detection: consistent lock order, timeout locks, avoid nested locks across subsystems. Libraries like deadlock detectors in tests (cycle in lock graph).",
+    interview_probes=[
+        "Can you have deadlock without synchronized?",
+        "Database deadlock vs JVM deadlock — same four conditions?",
+    ],
+) + interview_bank("Deadlock Interview Drill", [
+    ("Transfer between two accounts — classic fix?", "Lock accounts in consistent order (e.g. by id)."),
+    ("tryLock with timeout — what do you do on failure?", "Backoff, log, fail transaction, or ordered retry."),
+])
 
 PAGES["concurrent-collections"] = fm(
     "Concurrent Collections Interview Guide",
@@ -525,6 +733,18 @@ PAGES["completablefuture-interview-guide"] = fm(
     "Nested `get()` blocks — chain with thenCompose. Completion uses CAS on result stack (AltResult for exceptions).",
     production="Always pass explicit Executor for app work — not commonPool().",
     followups=["orTimeout / completeOnTimeout?", "exceptionally vs handle?"],
+) + q(
+    "CompletableFuture allOf vs anyOf?",
+    "Medium", "1 min",
+    "`allOf` completes when all complete (void aggregate). `anyOf` completes when first completes.",
+    "Use `allOf` then join each future for batch fan-in. `anyOf` for racing redundant calls — cancel losers to avoid waste.",
+    production="Set timeouts on each leg; do not block on `get()` without timeout in reactive services.",
+    followups=["See [Virtual Threads](/java-engineering/virtual-threads-interview-guide/) for blocking style"],
+) + q(
+    "exceptionally vs handle?",
+    "Medium", "1 min",
+    "`exceptionally` only runs on failure and returns recovery value. `handle` runs always with (result, ex) — unified success/failure path.",
+    "Prefer `handle` when both branches need same downstream type. `whenComplete` for side effects without transforming result.",
 )
 
 PAGES["virtual-threads-interview-guide"] = fm(
@@ -589,32 +809,113 @@ PAGES["jvm-internals"] = fm(
     "JVM Internals",
     4, "JVM", "4.2",
     aliases=["jvm-internals-quick-ref"],
-) + q(
+) + page_intro("""
+The JVM loads `.class` files, verifies bytecode, interprets cold code, and **JIT-compiles** hot methods. Senior interviews connect class loading, verification, tiered compilation, and deoptimization.
+""") + q(
     "Class loading phases?",
-    "Medium", "1 min",
-    "Loading → Linking (verify, prepare, resolve) → Initialization (run clinit).",
-    "Loading: define Class. Linking: allocate static fields, resolve symbolic refs. Init: execute static blocks once.",
-    followups=["See ClassLoader Internals"],
+    "Medium", "2 min",
+    "**Loading** → **Linking** (verify, prepare, resolve) → **Initialization** (`<clinit>`).",
+    "**Loading:** read bytecode, create `Class` object in Metaspace. **Verify:** bytecode safety checks. **Prepare:** allocate static fields (default values). **Resolve:** symbolic references → direct (can be lazy). **Initialize:** run static initializers once per classloader.",
+    "Parent loader must be initialized before child. `Class.forName(name, initialize=true, loader)` triggers init.",
+    interview_probes=[
+        "Can you load a class without initializing it?",
+        "What runs first — static field init or static block?",
+        "Difference between `ClassLoader.loadClass` and `Class.forName`?",
+    ],
+    followups=["See [ClassLoader Internals](/java-engineering/classloader-internals/)"],
 ) + q(
     "Interpreter vs JIT?",
+    "Medium", "2 min",
+    "Interpreter executes bytecode immediately with no compile wait; **JIT** compiles hot methods to native code for speed.",
+    "Startup: interpreter + C1 quick compiles. Hot methods promoted to C2 with inlining, escape analysis, intrinsics. **On-Stack Replacement (OSR)** compiles long-running loops still in interpreter. Cold code stays interpreted — saves compile cost.",
+    interview_probes=[
+        "Why not JIT everything at startup?",
+        "What is OSR and when does it matter?",
+        "How would you detect JIT compilation in production?",
+    ],
+    followups=["See [JIT & Safepoints](/java-engineering/jit-escape-analysis-safepoints/)"],
+) + q(
+    "What is bytecode verification?",
+    "Medium", "1–2 min",
+    "Verifier checks class files at **link** time — stack map frames, type safety, valid control flow.",
+    "Prevents stack underflow/overflow, illegal casts, and jumping into middle of instructions. Failure: `VerifyError`. Distinct from compile-time `javac` checks — JVM re-verifies untrusted bytecode.",
+    mistakes=["Assuming `javac` success means no `VerifyError` at runtime for generated bytecode (agents, ASM)."],
+    interview_probes=[
+        "Why does Java need a verifier if javac already type-checks?",
+        "What changed with stack map frames in Java 6+?",
+    ],
+) + q(
+    "JIT C1 vs C2 compilers?",
+    "Hard", "2–3 min",
+    "C1 (client) compiles fast with fewer optimizations; C2 (server) compiles hot methods aggressively after profiling.",
+    "Tiered compilation uses C1 for quick warmup, promotes to C2 for hot code. `-XX:TieredStopAtLevel` controls depth. **Deoptimization** reverts optimized code when assumptions fail (e.g., monomorphic call site becomes megamorphic).",
+    production="Use JVM defaults on JDK 17+; avoid disabling tiered compilation without profiling evidence.",
+    mistakes=[
+        "Disabling JIT (`-Xint`) in production for debugging and forgetting to remove.",
+        "Tuning C2 thresholds without JFR proof of compile storms.",
+    ],
+    interview_probes=[
+        "What triggers deoptimization?",
+        "Megamorphic call site — JIT impact?",
+        "Difference between `-XX:CompileThreshold` and tiered levels?",
+    ],
+    followups=["See [JIT & Safepoints](/java-engineering/jit-escape-analysis-safepoints/)"],
+) + q(
+    "Constant pool and method area?",
     "Medium", "1 min",
-    "Interpreter starts immediately; C1/C2 JIT compiles hot methods to native code.",
-    "Tiered compilation: C1 quick compile, C2 aggressive opts. Deoptimization when assumptions break (megamorphic calls).",
-    followups=["See JIT & Safepoints page"],
-)
+    "Constant pool holds literals, class/method/field symbolic refs; lives in Metaspace with class metadata (Java 8+).",
+    "String literals interned in pool (JDK 7+ on heap). Understanding pool helps explain `OutOfMemoryError: Metaspace` vs heap OOM.",
+    interview_probes=[
+        "Where do string literals live in modern JDK?",
+        "What is `ldc` bytecode instruction?",
+    ],
+) + interview_bank("JVM Internals Interview Drill", [
+    ("Name the three JVM class loaders in JDK 9+.", "Bootstrap (null), Platform (extension), Application (system)."),
+    ("What tool shows compiled methods?", "`jcmd Compiler.queue` / JFR `jdk.CompilerPhase` / `-XX:+PrintCompilation`."),
+    ("VerifyError vs NoClassDefFoundError?", "VerifyError: bad bytecode; NoClassDefFoundError: present at compile, missing/failed at runtime init."),
+])
 
 PAGES["classloader-internals"] = fm(
     "ClassLoader Internals",
     "Bootstrap, platform, application loaders, delegation model.",
     "ClassLoaders",
     4, "JVM", "4.3",
-) + q(
+) + page_intro("""
+Class loaders define **namespace boundaries** for classes. The **parent-delegation model** prevents replacing `java.lang.String` from application code and underpins modular isolation in containers and app servers.
+""") + q(
     "Class loader delegation — why parent-first?",
-    "Medium", "1 min",
-    "Security and single definition — core classes cannot be spoofed by child loaders.",
-    "Bootstrap loads `java.*`. Application loader loads classpath/module path. Child delegates to parent before loading itself.",
+    "Medium", "2 min",
+    "Security and **single definition** — core JDK classes loaded once by bootstrap/platform loaders; app code cannot spoof `java.*`.",
+    "Default: child asks parent to load; parent tries its parent up to bootstrap. Only if parent fails does child load from its own classpath. Tomcat/OSGi use **child-first** for web apps to isolate WAR dependencies.",
+    interview_probes=[
+        "Who loads `java.lang.Object`?",
+        "How do you break parent delegation intentionally?",
+        "Module path vs classpath — which loader?",
+    ],
     followups=["How break delegation (OSGi, Tomcat)?"],
-)
+) + q(
+    "Bootstrap vs Platform vs Application loader?",
+    "Medium", "1–2 min",
+    "**Bootstrap** (null `getClassLoader()`): `java.base` core classes. **Platform** (extension): JDK modules not in base. **Application** (system): application classpath/module path.",
+    "JDK 9+ module system: loaders align with module layers. `ClassLoader.getSystemClassLoader()` returns application loader in most apps.",
+    interview_probes=[
+        "Can you instantiate BootstrapClassLoader?",
+        "What loader loads JDBC driver from `META-INF/services`?",
+    ],
+) + q(
+    "Custom classloader use cases?",
+    "Hard", "2 min",
+    "Hot reload, plugin architectures, bytecode generation (agents), isolating conflicting dependency versions.",
+    "Must define `findClass` or delegate properly; leaking custom loaders retains all their classes (Metaspace leak). Always null out refs on undeploy.",
+    production="Prefer JPMS layers or container isolation over hand-rolled loaders unless building a plugin platform.",
+    interview_probes=[
+        "What happens if same class name loaded by two loaders?",
+        "How does `instanceof` interact with different loaders?",
+    ],
+) + interview_bank("ClassLoader Interview Drill", [
+    ("Symptom: `ClassCastException` on same class name — cause?", "Same FQCN loaded by two different class loaders — types incompatible."),
+    ("`Thread.contextClassLoader` purpose?", "Frameworks set it so libraries load classes from the right module/WAR."),
+])
 
 PAGES["classloader-memory-leaks"] = fm(
     "ClassLoader Memory Leaks",

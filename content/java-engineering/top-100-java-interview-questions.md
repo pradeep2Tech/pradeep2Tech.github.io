@@ -9,7 +9,6 @@ shortTitle: "Top 100"
 module: 6
 moduleTitle: "Interview Cheat Sheets"
 sectionRef: "6.1"
-ShowToc: true
 interviewHandbook: true
 ---
 

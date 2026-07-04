@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Performance & Operations"
 sectionRef: "6.1"
 weight: 601
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/eviction-policies/"

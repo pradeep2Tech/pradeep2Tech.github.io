@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/longest-substring-without-repeating-characters/"
 sourceLabel: "LeetCode 3"
 pattern: "Variable Window"
-ShowToc: true
 interviewHandbook: true
 ---
 # Longest Substring Without Repeating Characters

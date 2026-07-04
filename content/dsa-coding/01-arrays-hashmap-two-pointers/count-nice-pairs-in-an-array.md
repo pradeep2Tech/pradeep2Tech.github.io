@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/count-nice-pairs-in-an-array/"
 sourceLabel: "LeetCode 1814"
 pattern: "HashMap"
-ShowToc: true
 interviewHandbook: true
 ---
 # Count Nice Pairs in an Array

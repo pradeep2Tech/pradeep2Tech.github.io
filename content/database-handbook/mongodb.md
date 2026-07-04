@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Databases"
 sectionRef: "3.5"
 weight: 304
-ShowToc: true
 ---
 ## 1. Executive Summary
 

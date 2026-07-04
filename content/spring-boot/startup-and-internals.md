@@ -9,7 +9,6 @@ shortTitle: "Startup"
 module: 1
 moduleTitle: "Startup & Internals"
 sectionRef: "1.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - spring-boot-quick-ref

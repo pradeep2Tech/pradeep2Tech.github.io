@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Redis Internals"
 sectionRef: "3.5"
 weight: 305
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/sentinel/"

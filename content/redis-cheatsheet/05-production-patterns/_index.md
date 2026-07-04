@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Redis Handbook"
 sectionRef: "0"
 weight: 5
-ShowToc: true
 ---
 # Production Patterns
 

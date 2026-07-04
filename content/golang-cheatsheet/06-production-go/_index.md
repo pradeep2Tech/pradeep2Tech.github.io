@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "Go Handbook"
 sectionRef: "0"
 weight: 600
-ShowToc: true
 interviewHandbook: true
 ---
 

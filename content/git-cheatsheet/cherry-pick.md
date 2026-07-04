@@ -9,7 +9,6 @@ shortTitle: "Cherry Pick"
 module: 2
 moduleTitle: "Branching & Integration"
 sectionRef: "2.4"
-ShowToc: true
 ---
 
 ## Executive Summary

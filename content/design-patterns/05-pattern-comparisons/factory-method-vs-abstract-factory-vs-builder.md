@@ -11,7 +11,6 @@ moduleTitle: "Pattern Comparisons"
 sectionRef: "5.9"
 weight: 509
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/factory-method-vs-abstract-factory-vs-builder/"
 ---
@@ -181,7 +180,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Factory Method — document service picks parser:**
@@ -368,6 +367,25 @@ func (b *EmailBuilder) Build() (EmailMessage, error) {
 ```
 
 Go favors **package-level factory functions** and **functional options** over deep inheritance hierarchies.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+**Python note:** compare trade-offs using the Java/Go tabs — Python uses Protocols, dataclasses, and composition similarly.
+
+```python
+from typing import Protocol
+
+class ExamplePort(Protocol):
+    def execute(self) -> None: ...
+
+class ExampleService:
+    def __init__(self, port: ExamplePort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

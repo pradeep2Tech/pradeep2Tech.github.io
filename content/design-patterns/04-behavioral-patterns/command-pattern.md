@@ -11,7 +11,6 @@ moduleTitle: "Behavioral Patterns"
 sectionRef: "4.2"
 weight: 402
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/command-pattern/"
 ---
@@ -91,7 +90,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — logic trapped in UI handler:**
@@ -204,6 +203,28 @@ func (i *Invoker) Undo() {
 ```
 
 Go favors **small command structs** and explicit invoker types; use closures only when undo is not required.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class Command(Protocol):
+    def execute(self) -> None: ...
+
+class LightOn:
+    def execute(self) -> None:
+        print("on")
+
+class Remote:
+    def __init__(self) -> None:
+        self._history: list[Command] = []
+
+    def press(self, cmd: Command) -> None:
+        cmd.execute()
+        self._history.append(cmd)
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

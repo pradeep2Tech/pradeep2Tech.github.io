@@ -10,7 +10,6 @@ module: 9
 moduleTitle: "DSA & Coding"
 sectionRef: "9.4"
 weight: 904
-ShowToc: true
 interviewHandbook: true
 ---
 

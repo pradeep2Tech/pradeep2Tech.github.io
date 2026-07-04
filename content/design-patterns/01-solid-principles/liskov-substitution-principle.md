@@ -11,7 +11,6 @@ moduleTitle: "SOLID Principles"
 sectionRef: "1.3"
 weight: 103
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/liskov-substitution-principle/"
 ---
@@ -89,7 +88,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — subtype breaks caller assumptions:**
@@ -225,6 +224,23 @@ func (FrozenAccount) Withdraw(Money) WithdrawResult {
 ```
 
 Go favors **small interfaces** and **result types** over inheritance — each implementation honestly reports outcomes.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class Notifier(Protocol):
+    def send(self, msg: str) -> None: ...
+
+class OrderService:
+    def __init__(self, notifier: Notifier) -> None:
+        self._notifier = notifier
+
+    def confirm(self, order_id: str) -> None:
+        self._notifier.send(f"Order {order_id} confirmed")
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

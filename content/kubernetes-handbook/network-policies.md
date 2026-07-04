@@ -6,10 +6,9 @@ description: "Pod-level firewall rules for ingress and egress traffic."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Network Policies"
-module: 2
+module: 3
 moduleTitle: "Networking & Exposure"
-sectionRef: "2.3"
-ShowToc: true
+sectionRef: "3.3"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/network-policies/"]
 ---

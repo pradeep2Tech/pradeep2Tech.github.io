@@ -473,7 +473,6 @@ shortTitle: "{short}"
 module: {mod_id}
 moduleTitle: "{mod_title}"
 sectionRef: "{section_ref}"
-ShowToc: true
 javaVersions: ["8", "11", "17", "21", "25"]
 ---
 

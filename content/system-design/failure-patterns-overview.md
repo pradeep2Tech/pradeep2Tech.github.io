@@ -9,7 +9,6 @@ shortTitle: "Failure Patterns"
 module: 6
 moduleTitle: "Reliability"
 sectionRef: "6.4"
-ShowToc: true
 ---
 
 ## Overview

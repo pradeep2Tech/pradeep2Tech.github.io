@@ -6,10 +6,9 @@ description: "Client, daemon, containerd, runc, and image registry flow."
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Docker Arch"
-module: 6
-moduleTitle: "Docker"
-sectionRef: "6.1"
-ShowToc: true
+module: 7
+moduleTitle: "Docker Deep Dive"
+sectionRef: "7.1"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/docker-architecture/"]
 ---

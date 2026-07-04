@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Design Patterns Handbook"
 sectionRef: "0"
 weight: 5
-ShowToc: true
 ---
 
 # Pattern Comparisons

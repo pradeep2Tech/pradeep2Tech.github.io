@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/"
 sourceLabel: "LeetCode 490"
 pattern: "BFS"
-ShowToc: true
 interviewHandbook: true
 ---
 # Nearest Exit from Entrance in Maze

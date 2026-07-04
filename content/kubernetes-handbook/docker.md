@@ -9,7 +9,6 @@ shortTitle: "Docker"
 module: 1
 moduleTitle: "Containers & Orchestration"
 sectionRef: "1.1"
-ShowToc: true
 ---
 
 ## Executive Summary

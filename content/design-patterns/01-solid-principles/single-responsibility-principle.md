@@ -11,7 +11,6 @@ moduleTitle: "SOLID Principles"
 sectionRef: "1.1"
 weight: 101
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/single-responsibility-principle/"
 ---
@@ -81,7 +80,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — multiple reasons to change:**
@@ -178,6 +177,36 @@ func (s *OrderService) PlaceOrder(ctx context.Context, req OrderRequest) (OrderR
     }
     return ToResponse(order), nil
 }
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+**Violation — god object:**
+
+```python
+class OrderManager:
+    def place(self, req: dict) -> None:
+        self._validate(req)
+        self._save(req)
+        self._send_email(req)
+        self._generate_pdf(req)
+```
+
+**Fixed — SRP splits:**
+
+```python
+class OrderService:
+    def __init__(self, validator, repo, notifier) -> None:
+        self._validator = validator
+        self._repo = repo
+        self._notifier = notifier
+
+    def place(self, req: dict) -> str:
+        self._validator.check(req)
+        order_id = self._repo.save(req)
+        self._notifier.confirm(order_id)
+        return order_id
 ```
 
 {{< /impl-tab >}}

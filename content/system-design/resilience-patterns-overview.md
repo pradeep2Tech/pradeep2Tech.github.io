@@ -9,7 +9,6 @@ shortTitle: "Resilience Patterns"
 module: 6
 moduleTitle: "Reliability"
 sectionRef: "6.3"
-ShowToc: true
 ---
 
 ## Overview

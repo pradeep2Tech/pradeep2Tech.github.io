@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Query & Performance"
 sectionRef: "3.6"
 weight: 306
-ShowToc: true
 interviewHandbook: true
 ---
 

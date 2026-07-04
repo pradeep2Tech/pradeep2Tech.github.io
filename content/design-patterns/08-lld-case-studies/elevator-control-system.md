@@ -11,7 +11,6 @@ moduleTitle: "LLD Case Studies"
 sectionRef: "8.1"
 weight: 801
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/elevator-control-system-lld/"
 ---
@@ -118,7 +117,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Junior approach — giant switch on elevator status:**
@@ -305,6 +304,23 @@ func (c *ElevatorController) Tick() {
         e.Step()
     }
 }
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class DomainPort(Protocol):
+    def execute(self) -> None: ...
+
+class ApplicationService:
+    def __init__(self, port: DomainPort) -> None:
+        self._port = port
+
+    def run(self) -> None:
+        self._port.execute()
 ```
 
 {{< /impl-tab >}}

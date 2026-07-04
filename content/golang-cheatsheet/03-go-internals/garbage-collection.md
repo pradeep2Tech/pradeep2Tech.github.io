@@ -10,7 +10,6 @@ module: 3
 moduleTitle: "Go Internals"
 sectionRef: "3.4"
 weight: 304
-ShowToc: true
 cheatSheet: true
 interviewHandbook: true
 aliases:

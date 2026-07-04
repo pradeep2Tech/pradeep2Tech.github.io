@@ -10,7 +10,6 @@ module: 7
 moduleTitle: "Comparisons"
 sectionRef: "7.3"
 weight: 703
-ShowToc: true
 ---
 
 ## Quick Revision

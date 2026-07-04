@@ -10,7 +10,6 @@ module: 6
 moduleTitle: "PostgreSQL Handbook"
 sectionRef: "6.0"
 weight: 600
-ShowToc: true
 interviewHandbook: true
 ---
 

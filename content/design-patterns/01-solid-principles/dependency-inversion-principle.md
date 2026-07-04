@@ -11,7 +11,6 @@ moduleTitle: "SOLID Principles"
 sectionRef: "1.5"
 weight: 105
 languages: ["java", "golang"]
-ShowToc: true
 aliases:
   - "/design-patterns/dependency-inversion-principle/"
 ---
@@ -86,7 +85,7 @@ sequenceDiagram
 
 ### Implementation
 
-{{< impl-tabs default="java" java="Java" golang="Go" >}}
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
 {{< impl-tab lang="java" >}}
 
 **Violation — high-level depends on JDBC concretion:**
@@ -209,6 +208,23 @@ func (s *OrderService) PlaceOrder(ctx context.Context, req OrderRequest) (OrderR
 ```
 
 Define interfaces in the **application package**; adapters live in `infra/postgres`, `infra/stripe`.
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+```python
+from typing import Protocol
+
+class Notifier(Protocol):
+    def send(self, msg: str) -> None: ...
+
+class OrderService:
+    def __init__(self, notifier: Notifier) -> None:
+        self._notifier = notifier
+
+    def confirm(self, order_id: str) -> None:
+        self._notifier.send(f"Order {order_id} confirmed")
+```
 
 {{< /impl-tab >}}
 {{< /impl-tabs >}}

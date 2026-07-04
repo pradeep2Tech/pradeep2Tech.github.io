@@ -14,7 +14,6 @@ languages: ["java", "golang"]
 source: "https://leetcode.com/problems/n-queens/"
 sourceLabel: "LeetCode 51"
 pattern: "Backtracking"
-ShowToc: true
 interviewHandbook: true
 ---
 # N-Queens

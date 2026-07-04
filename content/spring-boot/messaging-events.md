@@ -9,7 +9,6 @@ shortTitle: "Messaging"
 module: 7
 moduleTitle: "Messaging & Events"
 sectionRef: "7.1"
-ShowToc: true
 interviewHandbook: true
 aliases:
   - events-ref

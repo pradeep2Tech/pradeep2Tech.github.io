@@ -10,7 +10,6 @@ module: 7
 moduleTitle: "Anti-Patterns"
 sectionRef: "7.4"
 weight: 704
-ShowToc: true
 ---
 
 ### Problem & Intent
@@ -52,7 +51,68 @@ flowchart LR
 
 ### Implementation
 
-Consolidate variation behind [Strategy](/design-patterns/04-behavioral-patterns/strategy-pattern/), [Template Method](/design-patterns/04-behavioral-patterns/template-method-pattern/), or configuration.
+{{< impl-tabs default="java" java="Java" golang="Go" python="Python" >}}
+{{< impl-tab lang="java" >}}
+
+**Violation — tax rule in 12 files:**
+
+```java
+// Controller, service, PDF, email template each duplicate:
+if ("US".equals(order.getCountry())) { rate = 0.08; }
+```
+
+**Fixed — single policy:**
+
+```java
+public interface TaxPolicy { Money rateFor(Order order); }
+
+public class OrderPricing {
+    private final TaxPolicy tax;
+    public Money total(Order o) { return o.subtotal().plus(tax.rateFor(o)); }
+}
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="golang" >}}
+
+```go
+type TaxPolicy interface { Rate(o Order) decimal.Decimal }
+
+func Total(o Order, tax TaxPolicy) decimal.Decimal {
+    return o.Subtotal.Add(tax.Rate(o))
+}
+```
+
+{{< /impl-tab >}}
+{{< impl-tab lang="python" >}}
+
+**Violation:**
+
+```python
+class OrderManager:
+    def place(self, req: dict) -> None:
+        # many unrelated responsibilities in one type
+        ...
+```
+
+**Fixed:**
+
+```python
+class OrderService:
+    def __init__(self, validator, repo, notifier) -> None:
+        self._validator = validator
+        self._repo = repo
+        self._notifier = notifier
+
+    def place(self, req: dict) -> str:
+        self._validator.check(req)
+        return self._repo.save(req)
+```
+
+{{< /impl-tab >}}
+{{< /impl-tabs >}}
+
+Consolidate variation behind [Strategy](/design-patterns/04-behavioral-patterns/strategy-pattern/) or [Template Method](/design-patterns/04-behavioral-patterns/template-method-pattern/).
 
 ---
 

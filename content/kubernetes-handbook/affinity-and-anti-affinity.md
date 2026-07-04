@@ -6,10 +6,9 @@ description: "Pod placement rules — node affinity, pod affinity, and topology 
 tags: ["kubernetes-handbook", "kubernetes", "docker", "cheatsheet", "handbook"]
 categories: ["Kubernetes Handbook"]
 shortTitle: "Affinity"
-module: 4
+module: 5
 moduleTitle: "Scheduling & Scaling"
-sectionRef: "4.2"
-ShowToc: true
+sectionRef: "5.2"
 cheatSheet: true
 aliases: ["/kubernetes-cheatsheet/affinity-and-anti-affinity/"]
 ---
@@ -78,12 +77,24 @@ kubectl describe pod api-xyz -n myapp
 
 **Syntax:**
 ```yaml
-podAntiAffinity:\n  requiredDuringSchedulingIgnoredDuringExecution:\n    - labelSelector:\n        matchLabels:\n          app: api\n      topologyKey: kubernetes.io/hostname
+podAntiAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchLabels:
+          app: api
+      topologyKey: kubernetes.io/hostname
 ```
 
 **Example:**
 ```yaml
-podAntiAffinity:\n  preferredDuringSchedulingIgnoredDuringExecution:\n    - weight: 100\n      podAffinityTerm:\n        labelSelector:\n          matchLabels:\n            app: api\n        topologyKey: topology.kubernetes.io/zone
+podAntiAffinity:
+  preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchLabels:
+            app: api
+        topologyKey: topology.kubernetes.io/zone
 ```
 
 **Common mistakes:**

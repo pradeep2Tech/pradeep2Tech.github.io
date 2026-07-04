@@ -10,7 +10,6 @@ module: 5
 moduleTitle: "Production Patterns"
 sectionRef: "5.1"
 weight: 501
-ShowToc: true
 
 aliases:
   - "/redis-cheatsheet/caching-patterns/"
