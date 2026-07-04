@@ -19,12 +19,13 @@ Dense **interview handbook** for senior engineers, leads, and architects — not
 | You are… | Start here |
 | :--- | :--- |
 | **Interview prep (6+ years)** | [Top 100 Questions](/java-engineering/top-100-java-interview-questions/) |
+| **Interview prep (coding)** | [DSA & Coding](/dsa-coding/) → [Top 30 Must-Solve](/dsa-coding/09-interview-guide/top-30-must-solve/) → [Pattern Cheat Sheets](/dsa-coding/11-interview-pattern-cheatsheets/01-two-pointers-cheatsheet/) |
 | **Staff engineer / architect** | [HashMap Internals](/java-engineering/hashmap-internals/) → [JVM Memory & GC](/java-engineering/jvm-memory-gc-oom-guide/) → [JVM Flags](/java-engineering/jvm-flags-and-tuning/) |
 | **Concurrency deep dive** | [Java Threading](/java-engineering/java-threading-interview-guide/) → [JMM](/java-engineering/java-memory-model/) → [Virtual Threads](/java-engineering/virtual-threads-interview-guide/) |
 | **Quick revision** | [Memory Diagram](/java-engineering/memory-diagram-cheatsheet/) · [Thread Lifecycle](/java-engineering/thread-lifecycle-cheatsheet/) · [Collections Big-O](/java-engineering/collections-complexity/) |
 
 {{% note %}}
-Spring Boot, design patterns, and DSA live in **other handbook sections** — this is **Java language + JVM platform** only.
+Spring Boot and design patterns live in **other handbook sections** — this track is **Java language + JVM platform**. For coding interview patterns (HashMap, two pointers, DP), see [DSA & Coding](/dsa-coding/).
 {{% /note %}}
 
 ---

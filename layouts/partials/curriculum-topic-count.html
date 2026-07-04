@@ -1,0 +1,40 @@
+{{- /* Count publishable topics for a curriculum section (home grid badge). */ -}}
+{{- $count := 0 -}}
+{{- $slug := .slug -}}
+{{- $sidebar := site.Data.curriculum_sidebar -}}
+{{- $sidebarCfg := dict -}}
+{{- if and $sidebar $sidebar.sections -}}
+  {{- $sidebarCfg = index $sidebar.sections $slug | default dict -}}
+{{- end -}}
+
+{{- $modulesKey := $sidebarCfg.modules -}}
+{{- if $modulesKey -}}
+  {{- $modData := index site.Data $modulesKey -}}
+  {{- if and $modData $modData.modules -}}
+    {{- range $modData.modules -}}
+      {{- $count = add $count (len (.topics | default slice)) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if eq $count 0 -}}
+  {{- $orderKey := $sidebarCfg.order -}}
+  {{- if $orderKey -}}
+    {{- $orderData := index site.Data $orderKey -}}
+    {{- if and $orderData $orderData.topics -}}
+      {{- $count = len $orderData.topics -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if eq $count 0 -}}
+  {{- with site.GetPage (printf "/%s/" $slug) -}}
+    {{- range .RegularPages -}}
+      {{- if and (eq .Kind "page") (not (in .File.Dir "_meta/")) -}}
+        {{- $count = add $count 1 -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $count -}}

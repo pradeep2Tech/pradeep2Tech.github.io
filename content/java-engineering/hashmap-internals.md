@@ -104,4 +104,6 @@ Do not use user-controlled keys with weak `hashCode` — collision DoS risk; con
 - [Previous: Collection Selection Matrix](/java-engineering/collection-selection-matrix/)
 - [Next: CHM Internals](/java-engineering/concurrenthashmap-internals/)
 - [Map Implementations](/java-engineering/map-implementations/)
+- [Two Sum (DSA)](/dsa-coding/01-arrays-hashmap-two-pointers/two-sum/) — HashMap interview pattern
+- [Group Anagrams (DSA)](/dsa-coding/01-arrays-hashmap-two-pointers/group-anagrams/)
 - [Java Engineering Handbook Index](/java-engineering/)

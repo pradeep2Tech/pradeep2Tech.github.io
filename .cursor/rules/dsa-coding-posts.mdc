@@ -1,0 +1,81 @@
+---
+description: DSA & Coding — interview problem pages (Java + Go)
+globs:
+  - content/dsa-coding/**
+  - data/dsa_coding_*.yaml
+  - scripts/build_dsa_coding_handbook.py
+  - scripts/dsa_coding_questions_data.py
+---
+
+# DSA & Coding
+
+Interview-focused problem curriculum at `/dsa-coding/`. One page per canonical problem (55 total) across 8 pattern modules.
+
+Reference: `content/dsa-coding/01-arrays-hashmap-two-pointers/two-sum.md`
+
+## Audience
+
+Engineers preparing for coding interviews (3–10 YOE). Assumes [Java Engineering](/java-engineering/) for collections complexity.
+
+## Structure
+
+| Path | Purpose |
+|---|---|
+| `data/dsa_coding_modules.yaml` | 11 modules, 55 problems + guides (auto-generated) |
+| `data/dsa_coding_order.yaml` | Flat prev/next (auto-generated) |
+| `scripts/dsa_coding_questions_data.py` | Problem registry (single source of truth) |
+| `scripts/build_dsa_coding_handbook.py` | Sync yaml + prune orphans |
+| `content/dsa-coding/<module>/<slug>.md` | One page per problem (edit markdown directly) |
+
+## Hugo Front Matter (problem pages)
+
+```yaml
+interviewHandbook: true
+languages: ["java", "golang"]
+source: "https://leetcode.com/problems/..."
+sourceLabel: "LeetCode N"
+pattern: "HashMap"
+module: 1
+moduleTitle: "Arrays, HashMap & Two Pointers"
+sectionRef: "1.1"
+draft: false
+```
+
+## Required Sections (`##` headings)
+
+1. **Problem Statement** — restated + constraints table
+2. **Pattern Recognition** — signals that identify the technique
+3. **Brute Force** — naive approach
+4. **Optimal Solution** — final approach summary
+5. **Walkthrough** — small example trace
+6. **Implementation** — Java + Go in impl-tabs (mandatory)
+7. **Complexity** — time and space
+8. **Edge Cases** — at least 3
+9. **Interview Follow-ups** — 3–5 probes with short answers
+10. **See Also** — prev/next + cheat sheet link
+
+Pattern module `_index.md` pages: Mermaid decision flowchart, template pseudocode, problem table.
+
+Module 11 cheat sheets: Recognition Signals · Template · Complexity · Common Mistakes · Top Problems.
+
+## Implementation — Mandatory `impl-tabs`
+
+Same contract as [Design Patterns](/design-patterns/) — see `lld-posts.mdc`.
+
+- Every solution in `{{< impl-tabs >}}` / `{{< impl-tab >}}`
+- Java tab first (default), Go second
+- Use `{{<` / `>}}` delimiters when panels contain fenced code
+- `lang="golang"` not `lang="go"`
+
+## Out of Scope (link instead)
+
+GoF design patterns → [Design Patterns](/design-patterns/). System design → [System Design](/system-design/). Java language deep dive → [Java Engineering](/java-engineering/).
+
+## Regenerate
+
+```bash
+python scripts/build_dsa_coding_handbook.py
+hugo --minify
+```
+
+Add new problems in `dsa_coding_questions_data.py`, create the markdown page, then run the build script to sync yaml and navigation order.

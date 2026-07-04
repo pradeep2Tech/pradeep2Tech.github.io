@@ -24,7 +24,7 @@
         {{- $menuLabel := .menuLabel -}}
         {{- $page := or (site.GetPage (printf "/%s/" $slug)) (site.GetPage (printf "/%s" $slug)) (site.GetPage $slug) -}}
         {{- with $page -}}
-          {{- $topicCount := len .RegularPages -}}
+          {{- $topicCount := partial "curriculum-topic-count.html" (dict "slug" $slug) -}}
       <a class="curriculum-card" href="{{ .RelPermalink }}">
         <span class="curriculum-card-accent" aria-hidden="true"></span>
         <div class="curriculum-card-body">

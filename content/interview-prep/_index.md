@@ -7,4 +7,4 @@ tags: ["interview-prep", "architecture", "interview"]
 ShowPageNums: true
 ---
 
-Curated **comparison guides** and interview-ready answers. For full system design case studies, see [System Design](/system-design/). For pattern depth, see [Design Patterns](/design-patterns/) and [Microservices](/microservices/).
+Curated **comparison guides** and interview-ready answers. For full system design case studies, see [System Design](/system-design/). For pattern depth, see [Design Patterns](/design-patterns/) and [Microservices](/microservices/). For **coding patterns** (55 problems, Java + Go), see [DSA & Coding](/dsa-coding/).
