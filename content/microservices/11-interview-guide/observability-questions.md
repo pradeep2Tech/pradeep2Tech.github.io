@@ -1,57 +1,64 @@
 ---
-title: "Observability Questions"
+title: "Observability & SRE Interviews"
 date: 2026-07-03T15:00:00+00:00
 draft: false
-description: "Observability Questions subset from Top 300."
+description: "Production debugging with metrics, logs, traces, alerting, SLO burn, and incident investigation."
 tags: ["microservices", "architecture-playbook", "distributed-systems"]
 categories: ["Microservices Architecture Playbook"]
 shortTitle: "Observability"
 module: 11
 moduleTitle: "Interview Guide"
-sectionRef: "11.x"
-weight: 1102
+sectionRef: "11.6"
+weight: 1106
 playbookVersion: 3
 interviewHandbook: true
 ---
 
-# Observability Questions
+# Observability & SRE Interviews
 
-Questions only — no answers.
+Production debugging with metrics, logs, traces, alerting, SLO burn, and incident investigation.
 
-Sourced from [Top 300](/microservices/11-interview-guide/top-300-microservices-questions/).
+Complements the [Top 300 master index](/microservices/11-interview-guide/top-300-microservices-questions/) with **observability-only** prompts not repeated there.
 
-1. How do RED metrics differ from USE for a gRPC service?
-2. What fields belong in structured logs for correlation?
-3. Head vs tail sampling tradeoffs for payment traces?
-4. How propagate traceparent through Kafka record headers?
-5. Golden signals for async pipeline vs sync API?
-6. Alert on consumer lag vs CPU for worker autoscale?
-7. Dashboard minimum for new microservice production launch?
-8. How link logs to traces in OpenTelemetry collector pipeline?
-9. What SLO burn rate alert fires before user-visible outage?
-10. How detect missing trace context at service boundary?
-11. Observability scenario 1: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-12. Observability scenario 2: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-13. Observability scenario 3: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-14. Observability scenario 4: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-15. Observability scenario 5: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-16. Observability scenario 6: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-17. Observability scenario 7: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-18. Observability scenario 8: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-19. Observability scenario 9: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-20. Observability scenario 10: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-21. Observability scenario 11: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-22. Observability scenario 12: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-23. Observability scenario 13: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-24. Observability scenario 14: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-25. Observability scenario 15: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-26. Observability scenario 16: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-27. Observability scenario 17: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-28. Observability scenario 18: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-29. Observability scenario 19: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-30. Observability scenario 20: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-31. Observability scenario 21: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-32. Observability scenario 22: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-33. Observability scenario 23: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-34. Observability scenario 24: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-35. Observability scenario 25: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
+Questions only — no answers. Strong responses discuss tradeoffs, failure modes, production behavior, operational impact, cost, scaling, reliability, observability, and migration.
+
+1. **Senior Engineer · Medium** — How would you debug a latency spike when logs show normal response times but users report timeouts?
+2. **Senior Engineer · Medium** — Walk me through minimum viable observability for a service launching in two weeks.
+3. **Senior Engineer · Medium** — How would you design structured logging so on-call can reconstruct a checkout journey in under five minutes?
+4. **Senior Engineer · Hard** — Design trace propagation through a mesh, API gateway, Kafka consumer, and scheduled cron job.
+5. **Senior Engineer · Hard** — How would you investigate missing metrics after a Prometheus scrape config change?
+6. **Staff Engineer · Hard** — Walk me through SLO burn-rate alerts that reduce pager fatigue without missing real outages.
+7. **Staff Engineer · Hard** — How would you debug high-cardinality metrics introduced by a feature flag dimension?
+8. **Staff Engineer · Hard** — Design an on-call dashboard that links golden signals, deploys, and feature flags for one service.
+9. **Principal Architect · Hard** — How would you standardize observability across 60 teams without mandating one vendor for everything?
+10. **Senior Engineer · Medium** — Walk me through correlating OpenTelemetry traces with structured logs in Loki.
+11. **Senior Engineer · Hard** — How would you detect instrumentation gaps that make healthy services look fine during partial outages?
+12. **Staff Engineer · Hard** — Design sampling policies when compliance requires full traces for payments but not for catalog browsing.
+13. **Staff Engineer · Hard** — How would you troubleshoot exemplar-to-trace navigation when latency outliers are intermittent?
+14. **Principal Architect · Hard** — Walk me through observability architecture when traces go to Tempo, logs to Loki, metrics to Prometheus, and cost must stay flat.
+15. **Senior Engineer · Medium** — How would you alert on consumer lag before it becomes a six-hour backlog?
+16. **Senior Engineer · Hard** — Design log redaction pipelines that preserve debuggability without leaking PII to centralized storage.
+17. **Staff Engineer · Hard** — How would you investigate a silent data corruption bug with no error logs and flat golden signals?
+18. **Staff Engineer · Hard** — Walk me through building an incident timeline when three teams each have partial telemetry.
+19. **Principal Architect · Hard** — How would you measure observability maturity beyond 'do they have dashboards?'
+20. **Senior Engineer · Medium** — How would you debug trace context loss at an async boundary between HTTP and message publishing?
+21. **Senior Engineer · Hard** — Design metric naming conventions that survive autogenerated framework instrumentation.
+22. **Staff Engineer · Hard** — How would you use burn-rate multi-window alerts for a tier-1 API with weekly seasonality?
+23. **Staff Engineer · Hard** — Walk me through diagnosing Grafana 'no data' when Prometheus shows targets up.
+24. **Principal Architect · Hard** — How would you architect observability for multi-region failover when trace IDs must stitch across regions?
+25. **Senior Engineer · Hard** — How would you detect log volume storms that will blow retention budget before cardinality does?
+26. **Senior Engineer · Hard** — Design runbooks that start from symptoms, not tooling names.
+27. **Staff Engineer · Hard** — How would you validate that every production incident has enough telemetry for a useful postmortem?
+28. **Staff Engineer · Hard** — Walk me through debugging p99 regression isolated to one availability zone.
+29. **Principal Architect · Hard** — How would you trade full-fidelity tracing against storage cost for a high-QPS edge service?
+30. **Senior Engineer · Medium** — How would you instrument batch jobs so failures are visible even when no user HTTP request exists?
+31. **Senior Engineer · Hard** — Design correlation between deployment events and SLO burn in the same Grafana view.
+32. **Staff Engineer · Hard** — How would you debug Jaeger gaps caused by aggressive head sampling on error spans only?
+33. **Staff Engineer · Hard** — Walk me through onboarding legacy monolith services to OpenTelemetry without a full rewrite.
+34. **Principal Architect · Hard** — How would you define observability contracts between platform and product teams?
+35. **Senior Engineer · Hard** — How would you investigate alert storms triggered by a single misconfigured recording rule?
+36. **Senior Engineer · Hard** — Design synthetic checks that catch user-visible failures missed by internal health endpoints.
+37. **Staff Engineer · Hard** — How would you use logs to debug a race condition that traces average away?
+38. **Staff Engineer · Hard** — Walk me through building SLOs for async pipelines where success is eventual, not immediate.
+39. **Principal Architect · Hard** — How would you respond when executives want one uptime number for a system nobody defined end-to-end?
+40. **Senior Engineer · Hard** — How would you detect and fix double-counting in RED metrics after a framework upgrade?

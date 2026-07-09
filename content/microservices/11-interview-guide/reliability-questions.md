@@ -1,62 +1,64 @@
 ---
-title: "Reliability Questions"
+title: "Reliability & Resilience Interviews"
 date: 2026-07-03T15:00:00+00:00
 draft: false
-description: "Reliability Questions subset from Top 300."
+description: "Resilience under failure: retries, circuit breakers, bulkheads, sagas, SLOs, chaos, and disaster recovery."
 tags: ["microservices", "architecture-playbook", "distributed-systems"]
 categories: ["Microservices Architecture Playbook"]
 shortTitle: "Reliability"
 module: 11
 moduleTitle: "Interview Guide"
-sectionRef: "11.x"
-weight: 1102
+sectionRef: "11.5"
+weight: 1105
 playbookVersion: 3
 interviewHandbook: true
 ---
 
-# Reliability Questions
+# Reliability & Resilience Interviews
 
-Questions only — no answers.
+Resilience under failure: retries, circuit breakers, bulkheads, sagas, SLOs, chaos, and disaster recovery.
 
-Sourced from [Top 300](/microservices/11-interview-guide/top-300-microservices-questions/).
+Complements the [Top 300 master index](/microservices/11-interview-guide/top-300-microservices-questions/) with **reliability-only** prompts not repeated there.
 
-1. Design the resilience stack for a payment dependency.
-2. Why must breaker timeout be less than client timeout?
-3. When is retry safe on HTTP POST in payments?
-4. What is a retry budget and why use full jitter?
-5. Read fallback vs write fallback policies at checkout?
-6. How does bulkhead prevent cascade without fixing root cause?
-7. What SLO would you set for tier-1 checkout API?
-8. How do error budgets gate feature releases?
-9. What is consumer-driven contract testing vs E2E?
-10. How do idempotent consumers interact with at-least-once delivery?
-11. Design saga compensation for failed inventory reservation.
-12. How ensure orchestrator durability with outbox?
-13. What happens when half-open probes overload recovering service?
-14. Graceful degradation for recommendations without faking payments?
-15. How test timeout chains in CI for microservice graph?
-16. Reliability scenario 1: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-17. Reliability scenario 2: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-18. Reliability scenario 3: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-19. Reliability scenario 4: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-20. Reliability scenario 5: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-21. Reliability scenario 6: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-22. Reliability scenario 7: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-23. Reliability scenario 8: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-24. Reliability scenario 9: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-25. Reliability scenario 10: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-26. Reliability scenario 11: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-27. Reliability scenario 12: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-28. Reliability scenario 13: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-29. Reliability scenario 14: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-30. Reliability scenario 15: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-31. Reliability scenario 16: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-32. Reliability scenario 17: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-33. Reliability scenario 18: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-34. Reliability scenario 19: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-35. Reliability scenario 20: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-36. Reliability scenario 21: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-37. Reliability scenario 22: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-38. Reliability scenario 23: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-39. Reliability scenario 24: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
-40. Reliability scenario 25: describe tradeoffs, failure modes, and production mitigation for a tier-1 microservices platform.
+Questions only — no answers. Strong responses discuss tradeoffs, failure modes, production behavior, operational impact, cost, scaling, reliability, observability, and migration.
+
+1. **Senior Engineer · Medium** — How would you design retries for a payment authorize call that sometimes succeeds on the provider but times out to you?
+2. **Senior Engineer · Medium** — Walk me through circuit breaker thresholds when downstream p99 varies 10× by time of day.
+3. **Senior Engineer · Medium** — How would you implement idempotency for refund APIs that partners expose as at-most-once?
+4. **Senior Engineer · Hard** — Design graceful degradation when loyalty points cannot be calculated but the order must still complete.
+5. **Senior Engineer · Hard** — How would you test saga compensation paths without contaminating production finance data?
+6. **Staff Engineer · Hard** — Walk me through SLO design for an async fulfillment workflow with no user-facing HTTP endpoint.
+7. **Staff Engineer · Hard** — How would you coordinate timeout budgets when each team owns only their hop in a seven-service chain?
+8. **Staff Engineer · Hard** — Design bulkheads when a shared thread pool serves both checkout and low-priority batch exports.
+9. **Principal Architect · Hard** — How would you define error budget policy when multiple services contribute to one customer journey SLO?
+10. **Senior Engineer · Medium** — Walk me through fallback strategies for currency conversion when the rates API is stale or down.
+11. **Senior Engineer · Hard** — How would you make at-least-once Kafka consumers safe for balance adjustments without exactly-once fantasy?
+12. **Staff Engineer · Hard** — Design chaos experiments that validate failover without breaching vendor rate limits.
+13. **Staff Engineer · Hard** — How would you handle a circuit breaker stuck open because health checks probe the wrong dependency?
+14. **Principal Architect · Hard** — Walk me through disaster recovery when RPO is minutes but cross-region replication lag is hours.
+15. **Senior Engineer · Medium** — How would you implement adaptive retries that back off when the downstream is clearly overloaded?
+16. **Senior Engineer · Hard** — Design compensation for a saga step that cannot be undone automatically and needs human approval.
+17. **Staff Engineer · Hard** — How would you validate that client timeouts always exceed server-side breaker plus retry budgets?
+18. **Staff Engineer · Hard** — Walk me through graceful shutdown when Kubernetes gives you 30 seconds but sagas need two minutes.
+19. **Principal Architect · Hard** — How would you prioritize reliability investments across 40 services with one shared platform team?
+20. **Senior Engineer · Medium** — How would you design health endpoints that reflect downstream readiness, not just process liveness?
+21. **Senior Engineer · Hard** — Design idempotent webhook processing when partners retry for 72 hours with the same payload.
+22. **Staff Engineer · Hard** — How would you run a game day for database failover when apps cache DNS for five minutes?
+23. **Staff Engineer · Hard** — Walk me through error budget burn during a deploy-induced incident vs a dependency outage.
+24. **Principal Architect · Hard** — How would you architect resilience when a critical vendor has no SLA and no staging environment?
+25. **Senior Engineer · Hard** — How would you prevent retry storms when a gateway and three services each implement their own retry policy?
+26. **Senior Engineer · Hard** — Design dead-letter handling that preserves ordering for payment settlement events.
+27. **Staff Engineer · Hard** — How would you tune half-open probe rates so recovery is detected without re-overloading the service?
+28. **Staff Engineer · Hard** — Walk me through contract testing that catches breaking changes before they trip breakers in production.
+29. **Principal Architect · Hard** — How would you align product expectations with partial failure UX during regional outages?
+30. **Senior Engineer · Medium** — How would you design outbox relay monitoring so silent stalls page before business impact?
+31. **Senior Engineer · Hard** — Design hedged reads for search suggestions without doubling load during normal conditions.
+32. **Staff Engineer · Hard** — How would you validate saga orchestrator durability across DB failover and pod rescheduling?
+33. **Staff Engineer · Hard** — Walk me through incident response when error budgets are exhausted mid-quarter.
+34. **Principal Architect · Hard** — How would you choose between active-active and active-passive DR for tier-1 checkout?
+35. **Senior Engineer · Hard** — How would you design queue-based load leveling when spikes are predictable but amplitude is not?
+36. **Senior Engineer · Hard** — Design fallback content policies that never misrepresent payment or inventory state.
+37. **Staff Engineer · Hard** — How would you measure whether resilience patterns actually reduced customer-visible incidents?
+38. **Staff Engineer · Hard** — Walk me through tuning bulkhead pool sizes using production saturation metrics.
+39. **Principal Architect · Hard** — How would you govern org-wide retry defaults so local optimizations do not create global failure?
+40. **Senior Engineer · Hard** — How would you design safe manual overrides during incidents without bypassing audit requirements?

@@ -1,5 +1,5 @@
 baseURL = "https://pradeep2Tech.github.io/"
-languageCode = "en-us"
+locale = "en-US"
 title = "Pradeep CS – Engineering Notes"
 theme = "PaperMod"
 enableRobotsTXT = true

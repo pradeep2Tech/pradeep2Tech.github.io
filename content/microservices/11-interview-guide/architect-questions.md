@@ -1,72 +1,64 @@
 ---
-title: "Architect Questions"
+title: "Architecture & Design Interviews"
 date: 2026-07-03T15:00:00+00:00
 draft: false
-description: "Architect Questions subset from Top 300."
+description: "Architectural decision-making for decomposition, technology selection, tradeoffs, migration, governance, and platform engineering."
 tags: ["microservices", "architecture-playbook", "distributed-systems"]
 categories: ["Microservices Architecture Playbook"]
-shortTitle: "Architect"
+shortTitle: "Architecture & Design"
 module: 11
 moduleTitle: "Interview Guide"
-sectionRef: "11.x"
+sectionRef: "11.2"
 weight: 1102
 playbookVersion: 3
 interviewHandbook: true
 ---
 
-# Architect Questions
+# Architecture & Design Interviews
 
-Questions only — no answers.
+Architectural decision-making for decomposition, technology selection, tradeoffs, migration, governance, and platform engineering.
 
-Sourced from [Top 300](/microservices/11-interview-guide/top-300-microservices-questions/).
+Complements the [Top 300 master index](/microservices/11-interview-guide/top-300-microservices-questions/) with **architecture-only** prompts not repeated there.
 
-1. When does a modular monolith outperform a microservices fleet for a 12-person product team?
-2. How does Conway's Law influence your decomposition boundaries?
-3. What signals indicate you are building a distributed monolith?
-4. Compare SOA ESB-centric integration with modern event-driven microservices.
-5. When would you reject a microservices migration proposal from leadership?
-6. How do you define service boundaries using bounded contexts?
-7. What operational tax does microservices impose vs modular monolith?
-8. How do API gateway and BFF responsibilities differ at the edge?
-9. When should a BFF aggregate five calls vs delegate to a domain service?
-10. How do you prevent the API gateway from becoming a distributed monolith?
-11. Design service discovery for multi-cluster Kubernetes without hardcoded IPs.
-12. When is client-side discovery preferable to server-side load balancing?
-13. How do you choose sync gRPC vs async events for a new integration?
-14. What is database-per-service and why forbid cross-schema JOINs?
-15. When is CQRS worth the operational cost over simple CRUD?
-16. Orchestration vs choreography saga — decision criteria?
-17. Why is dual-write an anti-pattern and what replaces it?
-18. How does outbox differ from CDC for event publication?
-19. When would you use event sourcing vs event-carried state transfer?
-20. How do you model cross-domain reporting without shared operational databases?
-21. How do you align team topology with service ownership?
-22. What is the strangler fig pattern and when is it preferred over rewrite?
-23. How do you phase database decomposition without big-bang cutover?
-24. What anti-corruption layer responsibilities exist at legacy boundaries?
-25. When is a service mesh operational tax not justified?
-26. What Kubernetes primitives are mandatory for stateless microservices?
-27. How do PodDisruptionBudgets interact with rolling deployments?
-28. What is expand-contract schema migration and why use it?
-29. How do you structure ADRs for a contentious broker selection?
-30. Differentiate monolith, modular monolith, microservices, and SOA for a fintech platform.
-31. What bounded context would you extract first from an e-commerce monolith?
-32. How do you measure whether decomposition improved deploy frequency?
-33. When does shared library coupling negate microservices benefits?
-34. How do you govern API versioning across autonomous teams?
-35. What is smart endpoints and dumb pipes in practice today?
-36. **E-commerce checkout:** 5 services, payment partner SLA 200ms — design sync/async split and fallback when payment is down.
-37. **Banking ledger:** Strong consistency for balances — can you use choreography saga? Defend orchestration choice.
-38. **Multi-tenant SaaS:** Noisy neighbor on shared Kafka cluster — isolation options at platform level.
-39. **Global deployment:** EU data residency — how do service boundaries and databases align to regions?
-40. **Legacy ERP integration:** SOAP monolith + new microservices — strangler vs dual-write risks.
-41. **Black Friday scale:** 10× traffic on catalog only — which services scale independently?
-42. **Observability gap:** P99 spikes but all services green — how do you find the tail dependency?
-43. **Mesh adoption:** 40 teams, only 3 want Istio — when is mesh tax not justified?
-44. **Shared library drift:** DTO JAR shared by 15 services — governance model.
-45. **Event schema evolution:** Add field to `OrderCreated` — compatibility rules for 12 consumers.
-46. **On-call incident:** Circuit breaker stuck OPEN on recommendations — business impact vs fail-fast tradeoff.
-47. **Database decomposition:** Orders still JOIN customers cross-schema — extraction blocked — remediation plan.
-48. **API versioning:** Mobile clients lag 6 months — breaking change policy.
-49. **Saga stuck:** Compensation failed on inventory release — ops playbook.
-50. **Cost review:** 80 microservices, 12 actually deploy independently — rationalization approach.
+Questions only — no answers. Strong responses discuss tradeoffs, failure modes, production behavior, operational impact, cost, scaling, reliability, observability, and migration.
+
+1. **Senior Engineer · Medium** — How would you evaluate whether a new integration belongs inside an existing service vs a new microservice?
+2. **Senior Engineer · Medium** — Walk me through defining API contracts before teams commit to separate deployment pipelines.
+3. **Senior Engineer · Medium** — How would you decide sync REST vs async events for a fraud-check that must complete before payment capture?
+4. **Senior Engineer · Medium** — Design a reference deployment topology for stateless services on Kubernetes across two availability zones.
+5. **Senior Engineer · Hard** — How would you structure platform capabilities so product teams get self-service without bypassing governance?
+6. **Staff Engineer · Hard** — Walk me through an architecture review when the proposal solves today's pain but creates a distributed monolith in 18 months.
+7. **Staff Engineer · Hard** — How would you set technology selection criteria for message brokers across five business units with different SLAs?
+8. **Staff Engineer · Hard** — Design service boundaries for a marketplace where sellers, buyers, payments, and logistics evolve at different speeds.
+9. **Staff Engineer · Hard** — How would you reason about centralizing observability vs mandating standards and letting teams own tooling?
+10. **Principal Architect · Hard** — Walk me through a multi-year architecture evolution plan when the monolith still ships 80% of revenue features.
+11. **Principal Architect · Hard** — How would you design governance that accelerates delivery instead of becoming an approval bottleneck?
+12. **Principal Architect · Hard** — Design a data ownership model when analytics, ML, and operations all need the same customer events.
+13. **Senior Engineer · Medium** — How would you choose between database-per-service and shared read replicas for cross-domain reporting?
+14. **Senior Engineer · Hard** — Walk me through decomposition criteria when two teams fight over ownership of the customer aggregate.
+15. **Staff Engineer · Hard** — How would you architect an internal API marketplace with discovery, versioning, and deprecation policy?
+16. **Staff Engineer · Hard** — Design multi-region active-active boundaries when checkout must stay strongly consistent for inventory holds.
+17. **Principal Architect · Hard** — How would you decide build-vs-buy for workflow orchestration across payments, shipping, and refunds?
+18. **Senior Engineer · Medium** — Walk me through when a modular monolith should gain an anti-corruption layer before any service extraction.
+19. **Staff Engineer · Hard** — How would you align architecture principles with actual on-call pain from the last six incidents?
+20. **Principal Architect · Hard** — Design a platform engineering operating model that does not become the bottleneck for every team.
+21. **Senior Engineer · Hard** — How would you evaluate event-carried state transfer vs event notification for catalog price updates?
+22. **Staff Engineer · Hard** — Walk me through ADR documentation when leadership mandates Kafka but your team prefers RabbitMQ.
+23. **Principal Architect · Hard** — How would you structure architecture decision forums so dissent is recorded, not buried?
+24. **Senior Engineer · Medium** — Design API versioning when mobile clients cannot force-upgrade for 12 months.
+25. **Staff Engineer · Hard** — How would you prevent shared protobuf packages from recreating monolith coupling?
+26. **Principal Architect · Hard** — Walk me through choosing edge aggregation vs domain-owned BFFs for a global product with regional compliance.
+27. **Senior Engineer · Hard** — How would you model blast radius when extracting payments from a shared runtime cluster?
+28. **Staff Engineer · Hard** — Design a service maturity rubric that teams respect because it reflects production reality.
+29. **Principal Architect · Hard** — How would you sequence platform investments when reliability debt and feature pressure compete for the same quarter?
+30. **Senior Engineer · Medium** — Walk me through when to introduce a service mesh vs strengthening library-based resilience first.
+31. **Staff Engineer · Hard** — How would you architect tenant isolation for regulated healthcare workloads on shared Kubernetes?
+32. **Principal Architect · Hard** — Design a migration runway when the strangler target architecture is clear but funding covers only one extraction per year.
+33. **Senior Engineer · Hard** — How would you decide whether search indexing is a catalog concern or a platform capability?
+34. **Staff Engineer · Hard** — Walk me through technology sunset planning when twelve services still depend on a deprecated broker client.
+35. **Principal Architect · Hard** — How would you balance autonomous team velocity with enterprise-wide consistency for identity, billing, and audit?
+36. **Senior Engineer · Medium** — Design bounded contexts for a subscription business with trials, upgrades, proration, and dunning.
+37. **Staff Engineer · Hard** — How would you evaluate CQRS when the team has never operated separate read and write data stores?
+38. **Principal Architect · Hard** — Walk me through architecture tradeoffs when acquiring a company whose stack conflicts with your platform standards.
+39. **Senior Engineer · Hard** — How would you prevent the API gateway team from owning business orchestration that belongs in domain services?
+40. **Staff Engineer · Hard** — Design a contract-first workflow that still allows rapid prototyping for early product discovery.

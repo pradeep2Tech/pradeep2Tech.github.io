@@ -35,54 +35,7 @@ Apply at **service boundaries** (HTTP/gRPC clients), **API gateway** egress, and
 
 ---
 
-## Architecture Diagram
-
-```mermaid
-stateDiagram-v2
-    [*] --> Closed : System Healthy
-    Closed --> Open : Failure Rate > Threshold
-    Note over Open: Fail Fast / Execute Fallback
-    Open --> HalfOpen : Sleep Window Expires
-    HalfOpen --> Closed : Probe Successes Met
-    HalfOpen --> Open : Probe Failure Detected
-```
-
-```mermaid
-flowchart LR
-    subgraph checkout["Order Service"]
-        CB["Circuit Breaker"]
-        FB["Fallback Handler"]
-    end
-    Pay["Payment Service"]
-    CB -->|"CLOSED: forward"| Pay
-    CB -->|"OPEN: skip call"| FB
-```
-
----
-
-## Internal Working
-
-Remote gRPC/HTTP calls pass through resilience interceptors (e.g., Resilience4j, Envoy). The breaker monitors outcomes over a **rolling window**; bulkheads cap concurrent calls per dependency; retries use exponential backoff with jitter on **idempotent** operations only; timeouts propagate as gRPC deadlines.
-
-| Pattern | Mechanism | Stops |
-| :--- | :--- | :--- |
-| **Timeout** | Bounded wait per call | Thread hang |
-| **Bulkhead** | Per-dependency pool/semaphore | Pool monopolization |
-| **Circuit breaker** | OPEN fail-fast | Retry storms into sick dependency |
-| **Fallback** | Cached/static/degraded response | Blank UX on reads |
-| **Retry** | Backoff + budget | Transient blips |
-
----
-
-## Tradeoffs
-
-| Pros | Cons | When NOT to use |
-| :--- | :--- | :--- |
-| Contains blast radius | Degraded features when OPEN | In-process monolith calls |
-| Fast failure vs hang | Misconfigured thresholds flap | Writes without idempotency + retry |
-| Observable state metrics | Does not fix root dependency | No fallback strategy defined |
-
----
+## Design Decisions
 
 ### Circuit Breaker
 
