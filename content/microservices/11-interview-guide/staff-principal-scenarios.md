@@ -42,6 +42,6 @@ Questions only — no answers. Strong responses discuss tradeoffs, failure modes
 20. **Principal Architect · Hard** — Choose success metrics for an architecture transformation beyond number of services migrated.
 21. **Principal Architect · Hard** — Build alignment when platform and product disagree on whether to fund multi-region active-active.
 22. **Staff Engineer · Hard** — Influence teams to adopt SLO-based release gates without being seen as delivery police.
-23. **Principal Architect · Hard** — Define when architecture standards should be enforced vs waived for regulated customer deadlines.
+23. **Principal Architect · Hard** — How would you define when architecture standards should be enforced vs waived for regulated customer deadlines?
 24. **Staff Engineer · Hard** — Coach a tech lead whose service boundaries mirror Jira epics instead of business capabilities.
 25. **Principal Architect · Hard** — Navigate a reorg that splits ownership of a critical customer journey across four new managers.

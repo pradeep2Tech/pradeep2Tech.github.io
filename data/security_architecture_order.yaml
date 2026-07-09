@@ -1,12 +1,15 @@
-# Security Architecture index order.
-# Edit this list to reorder the Table of Contents; chapter numbers follow this sequence.
+# Security Architecture curriculum order.
+# Every page answers one architectural question and builds on the previous page.
 topics:
-  - phantom-token-pattern
-  - scim-enterprise-provisioning
-  - edge-downstream-auth
-  - csrf-double-submit-cookie
-  - http-secure-headers-blueprint
-  - defensive-input-pipelines
-  - distributed-rate-limiting-l7-ddos
-  - cloud-secrets-envelope-encryption
-  - zero-trust-mtls
+  - trust-boundaries-and-threat-models
+  - enterprise-identity-lifecycle
+  - enterprise-authentication-sessions-tokens
+  - authorization-decisions
+  - browser-security-architecture
+  - api-gateway-security-architecture
+  - microservice-trust-mtls
+  - secrets-keys-data-protection
+  - cloud-iam-workload-identity
+  - kubernetes-platform-security
+  - secure-delivery-supply-chain
+  - security-operations-incident-response

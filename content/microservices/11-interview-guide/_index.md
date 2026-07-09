@@ -21,7 +21,7 @@ This is **not** a definition question bank. Each page simulates how experienced 
 
 | Section | Page | Focus |
 | :--- | :--- | :--- |
-| 11.1 | [Top 300 Questions](/microservices/11-interview-guide/top-300-microservices-questions/) | Master index — source of truth |
+| 11.1 | [Top 300 Questions (Master Index)](/microservices/11-interview-guide/top-300-microservices-questions/) | Source of truth for the full handbook |
 | 11.2 | [Architecture & Design](/microservices/11-interview-guide/architect-questions/) | Decomposition, technology selection, governance |
 | 11.3 | [Distributed Systems](/microservices/11-interview-guide/distributed-systems-interviews/) | Consistency, ordering, partitions, recovery |
 | 11.4 | [Scalability](/microservices/11-interview-guide/scalability-questions/) | Traffic spikes, sharding, caching, bottlenecks |

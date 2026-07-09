@@ -27,7 +27,7 @@ Canonical map of all curriculum sections. Use this instead of scanning `content/
 | `dsa-coding` | Patterns & Practice | 86 | — | 85 | interview-DSA | `dsa-coding-posts.mdc` | `build_dsa_coding_handbook.py` |
 | `interview-prep` | Career & Emerging | 11 | 1 | 8 | interview-QA | `—` | `—` |
 | `ai-for-engineers` | Career & Emerging | 6 | 1 | 5 | career | `—` | `—` |
-| `security-architecture` | Security | 10 | — | 9 | playbook | `—` | `—` |
+| `security-architecture` | Security | 13 | — | 12 | playbook | `—` | `—` |
 
 ## Per-Section Detail
 
@@ -259,7 +259,7 @@ Canonical map of all curriculum sections. Use this instead of scanning `content/
 - **Menu label:** Interview Preparation
 - **Group:** career
 - **Content path:** `content/interview-prep/`
-- **Pages:** 11
+- **Pages:** 17
 - **Modules data:** `data/interview_prep_modules.yaml`
 - **Order data:** `data/interview_prep_order.yaml`
 - **Layouts:** `layouts/interview-prep/list.html`, `layouts/interview-prep/single.html`
@@ -287,7 +287,7 @@ Canonical map of all curriculum sections. Use this instead of scanning `content/
 - **Menu label:** Security Architecture
 - **Group:** security
 - **Content path:** `content/security-architecture/`
-- **Pages:** 10
+- **Pages:** 13
 - **Order data:** `data/security_architecture_order.yaml`
 - **Layouts:** `layouts/security-architecture/list.html`, `layouts/security-architecture/single.html`
 - **Content type:** playbook

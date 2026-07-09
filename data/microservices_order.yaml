@@ -30,10 +30,13 @@ topics:
   - 10-production-playbook/architecture-review-checklist
   - 11-interview-guide/top-300-microservices-questions
   - 11-interview-guide/architect-questions
-  - 11-interview-guide/troubleshooting-questions
+  - 11-interview-guide/distributed-systems-interviews
   - 11-interview-guide/scalability-questions
   - 11-interview-guide/reliability-questions
   - 11-interview-guide/observability-questions
+  - 11-interview-guide/troubleshooting-questions
+  - 11-interview-guide/system-design-case-studies
+  - 11-interview-guide/staff-principal-scenarios
   - 12-learning-paths/senior-engineer-path
   - 12-learning-paths/lead-engineer-path
   - 12-learning-paths/architect-path
