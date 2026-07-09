@@ -1,0 +1,136 @@
+---
+description: Authoring rules for security architecture playbook posts
+globs: content/security-architecture/**/*.md, data/security_architecture_modules.yaml, data/security_architecture_order.yaml, layouts/security-architecture/*.html, layouts/partials/curriculum-nav-links.html
+alwaysApply: false
+---
+
+# Security Architecture Posts
+
+Security Architecture is a senior-engineer-to-architect playbook. Each page should answer one architectural question and help readers make trade-offs in real enterprise systems.
+
+## Read First
+
+Before editing security content:
+
+1. Read this rule.
+2. Scan only the relevant files under `content/security-architecture/`.
+3. Check `data/security_architecture_order.yaml` for sequence.
+4. Check or create `data/security_architecture_modules.yaml` if module grouping is part of the task.
+
+Do not scan the full repo.
+
+## Repo Layout
+
+| Path | Purpose |
+|------|---------|
+| `content/security-architecture/_index.md` | Section landing page |
+| `content/security-architecture/<topic>.md` | One page per architectural question |
+| `data/security_architecture_modules.yaml` | Module grouping and sidebar structure when present |
+| `data/security_architecture_order.yaml` | Flat learning order and previous/next navigation |
+
+URL pattern: `/security-architecture/<filename>/`
+
+Backward compatibility is not required until the security section is public. Prefer stronger learning structure over preserving old page boundaries.
+
+## Learning Flow
+
+Preferred order:
+
+1. Trust boundaries
+2. Enterprise authentication
+3. Authorization
+4. Browser/API security
+5. Service-to-service security
+6. Secrets/data protection
+7. Platform security
+8. Enterprise identity lifecycle
+9. Supply chain
+10. Security operations
+
+When adding or moving topics, keep the reader's mental model progressing from boundaries and identity to runtime controls, platform controls, delivery, and operations.
+
+## Page Contract
+
+Every security page should answer one architectural question, for example:
+
+- "Where should this trust boundary live?"
+- "Who decides authorization, and with which context?"
+- "Which token belongs in the browser, service mesh, or workload identity path?"
+- "How does this control fail in production?"
+
+Avoid pages that are only term lists, thin introductions, or repeated explanations of the same protocol.
+
+## Structure
+
+Use `##` headings and keep sections scannable. A strong page usually contains:
+
+1. **Architectural Question** - the decision the page answers
+2. **Context and Threat Model** - actors, assets, trust boundaries, assumptions
+3. **Recommended Architecture** - target design with Mermaid where useful
+4. **Decision Points** - options, trade-offs, when to choose each
+5. **Failure Modes** - what breaks, how it is detected, how it is contained
+6. **Implementation Notes** - practical controls, config shape, rollout concerns
+7. **Interview / Architect Answer** - concise senior-level explanation
+
+Do not force this exact template when a page reads better with fewer sections. Prefer fewer strong documents over many thin documents.
+
+## Deduplication Rules
+
+Avoid duplicate explanations of:
+
+- OAuth
+- JWT
+- Kubernetes
+- AWS
+- mTLS
+- secrets
+- API Gateway
+
+If a concept is already explained elsewhere, link to the canonical page and focus the current page on the architectural decision at hand.
+
+## Diagrams
+
+Use Mermaid when it clarifies boundaries, token paths, policy evaluation, or control planes.
+
+| Diagram type | Use for |
+|--------------|---------|
+| `flowchart LR` | Trust boundaries, component topology, control-plane/data-plane split |
+| `sequenceDiagram` | Login, token exchange, policy decision, mTLS handshake, incident flow |
+| `stateDiagram-v2` | Identity lifecycle, key rotation, incident states |
+
+Keep diagrams readable. Use sequence diagrams for request choreography instead of duplicating the same flow in numbered prose.
+
+## Writing Style
+
+- Write for senior engineers growing into architecture roles.
+- Be concrete about ownership: browser, gateway, IdP, service, mesh, platform, CI/CD, SOC.
+- Name the security decision, not just the technology.
+- Include real trade-offs: latency, blast radius, operability, revocation, auditability, developer experience.
+- Prefer tables for option comparisons, control ownership, and failure-mode summaries.
+- Avoid vendor-only framing unless the page is specifically about a platform.
+- Avoid fear-driven language; explain controls through risk reduction and system behavior.
+
+## Navigation Workflow
+
+When adding, merging, or renaming pages:
+
+1. Update `content/security-architecture/<slug>.md`.
+2. Update `data/security_architecture_order.yaml`.
+3. Update `data/security_architecture_modules.yaml` if modules/sidebar grouping exists or is being introduced.
+4. Update `content/security-architecture/_index.md` if the section overview changes.
+5. Run `python scripts/generate_ai_index.py` after large content or section structure changes.
+
+Because the section is not public yet, merging or deleting weak pages is allowed when it improves the learning path.
+
+## Preview Checklist
+
+| Check | Expected |
+|-------|----------|
+| Page intent | One clear architectural question |
+| Learning order | Topic fits the security architecture progression |
+| Duplication | Shared explanations are linked, not repeated |
+| Diagrams | Mermaid renders and supports the decision |
+| Navigation | Previous/next follows `security_architecture_order.yaml` |
+| Depth | Page has real trade-offs and failure modes |
+
+Reference existing pages under `content/security-architecture/` only when they are directly relevant to the task.

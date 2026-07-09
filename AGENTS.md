@@ -13,6 +13,7 @@ Hugo static site (PaperMod theme) publishing interview-focused engineering curri
 | Edit design pattern / LLD pages | `data/design_patterns_modules.yaml`, reference `content/design-patterns/strategy-pattern.md` | `lld-posts.mdc` |
 | Edit system design posts | reference `content/system-design/urlshortner.md` | `system-design-posts.mdc` |
 | Edit microservices posts | reference `content/microservices/circuit-breaker-pattern.md` | `microservices-posts.mdc` |
+| Edit security architecture posts | `content/security-architecture/`, `data/security_architecture_modules.yaml`, `data/security_architecture_order.yaml` | `security-architecture-posts.mdc` |
 | Edit cheat-sheet handbooks (Java, Python, Go, K8s, Redis, PostgreSQL, Spring) | section's `data/*_modules.yaml` | `cheatsheet-template.mdc` + section rule |
 | Edit layouts or shortcodes | `docs/ai-index/ARCHITECTURE.md` | — |
 | Understand full section map | `docs/ai-index/SECTION-REGISTRY.md` | `project-index.mdc` |
@@ -52,6 +53,32 @@ Defined in `data/curriculum_sections.yaml`:
 | **practice** | design-patterns, dsa-coding |
 | **career** | interview-prep, ai-for-engineers |
 | **security** | security-architecture |
+
+## Security Architecture Authoring
+
+Security Architecture is a senior-engineer-to-architect playbook.
+
+Before editing security content:
+1. Read `.cursor/rules/security-architecture-posts.mdc`.
+2. Scan only the relevant files under `content/security-architecture/`.
+3. Do not preserve old page boundaries if merging improves learning.
+4. Avoid duplicate explanations of OAuth, JWT, Kubernetes, AWS, mTLS, secrets, and API Gateway.
+5. Every security page should answer one architectural question.
+6. Prefer fewer strong documents over many thin documents.
+7. Backward compatibility is not required until the security section is public.
+
+Preferred learning flow:
+
+Trust boundaries
+→ Enterprise authentication
+→ Authorization
+→ Browser/API security
+→ Service-to-service security
+→ Secrets/data protection
+→ Platform security
+→ Enterprise identity lifecycle
+→ Supply chain
+→ Security operations
 
 ## Content Types
 
