@@ -17,6 +17,36 @@ topics:
   - 07-platform-patterns/sidecar-and-service-mesh
   - 07-platform-patterns/kubernetes-patterns
   - 08-observability/observability
+  - 08-observability/metrics-logs-and-traces
+  - 08-observability/correlation-and-context-propagation
+  - 08-observability/red-method
+  - 08-observability/use-method
+  - 08-observability/golden-signals
+  - 08-observability/red-use-diagnostic-workflow
+  - 08-observability/opentelemetry-architecture
+  - 08-observability/metrics-design
+  - 08-observability/structured-logging
+  - 08-observability/distributed-tracing
+  - 08-observability/alerting-slos-and-error-budgets
+  - 08-observability/observability-tool-landscape
+  - 08-observability/choosing-observability-stack
+  - 08-observability/cloud-provider-observability
+  - 08-observability/production-failure-scenarios
+  - 08-observability/observability-maturity-model
+  - 08-observability/architect-checklist
+  - 08-observability/advanced/continuous-profiling
+  - 08-observability/advanced/ebpf-observability
+  - 08-observability/advanced/frontend-mobile-rum
+  - 08-observability/advanced/synthetic-monitoring
+  - 08-observability/advanced/database-observability
+  - 08-observability/advanced/service-topology-dependency-intelligence
+  - 08-observability/advanced/telemetry-finops
+  - 08-observability/implementation/spring-boot-opentelemetry
+  - 08-observability/implementation/golang-opentelemetry
+  - 08-observability/implementation/kubernetes-collector-patterns
+  - 08-observability/implementation/prometheus-recording-rules
+  - 08-observability/implementation/grafana-dashboard-patterns
+  - 08-observability/implementation/slo-alert-examples
   - 09-migration-modernization/strangler-pattern
   - 09-migration-modernization/monolith-decomposition
   - 09-migration-modernization/database-decomposition

@@ -1,11 +1,12 @@
 {{- $ctx := .ctx -}}
 {{- $topics := .order | default slice -}}
 {{- $section := .section | default $ctx.Section -}}
-{{- $slug := $ctx.File.BaseFileName -}}
 {{- $idx := -1 -}}
 {{- range $i, $s := $topics -}}
-  {{- if eq $s $slug -}}
-    {{- $idx = $i -}}
+  {{- with site.GetPage (printf "%s/%s" $section $s) -}}
+    {{- if eq .RelPermalink $ctx.RelPermalink -}}
+      {{- $idx = $i -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 {{- if ge $idx 0 -}}

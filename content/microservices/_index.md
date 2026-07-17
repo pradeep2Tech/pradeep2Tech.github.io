@@ -26,7 +26,7 @@ Architect-focused handbook for senior engineers, tech leads, and architects — 
 | 5 | [Resilience Patterns](/microservices/05-resilience-patterns/) | 1 |
 | 6 | [Event-Driven](/microservices/06-event-driven/) | 2 |
 | 7 | [Platform Patterns](/microservices/07-platform-patterns/) | 2 |
-| 8 | [Observability](/microservices/08-observability/) | 1 |
+| 8 | [Observability](/microservices/08-observability/) | 31 |
 | 9 | [Migration](/microservices/09-migration-modernization/) | 4 |
 | 10 | [Production Playbook](/microservices/10-production-playbook/) | 7 |
 | 11 | [Interview Guide](/microservices/11-interview-guide/) | 6 |
