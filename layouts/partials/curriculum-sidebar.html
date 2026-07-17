@@ -6,19 +6,19 @@
 {{- $menuLabel := $section | humanize -}}
 {{- $groupId := "design" -}}
 {{- $accent := "#4f46e5" -}}
-{{- range site.Data.curriculum_sections.sections -}}
+{{- range hugo.Data.curriculum_sections.sections -}}
   {{- if eq .slug $section -}}
     {{- $menuLabel = .menuLabel | default $menuLabel -}}
     {{- $groupId = .group | default $groupId -}}
   {{- end -}}
 {{- end -}}
-{{- range site.Data.curriculum_sections.groups -}}
+{{- range hugo.Data.curriculum_sections.groups -}}
   {{- if eq .id $groupId -}}
     {{- $accent = .accent | default $accent -}}
   {{- end -}}
 {{- end -}}
 
-{{- $sidebarCfg := index site.Data.curriculum_sidebar.sections $section -}}
+{{- $sidebarCfg := index hugo.Data.curriculum_sidebar.sections $section -}}
 {{- $subSuffixes := slice "-interview-questions" "-debate-questions" -}}
 {{- $sectionIndexURL := (site.GetPage (printf "/%s/" $section)).RelPermalink -}}
 
@@ -37,7 +37,7 @@
     </a>
 
     {{- if $sidebarCfg.modules -}}
-      {{- $modules := index site.Data $sidebarCfg.modules "modules" | default slice -}}
+      {{- $modules := index hugo.Data $sidebarCfg.modules "modules" | default slice -}}
       {{- range $modules -}}
         {{- $modId := .id -}}
         {{- $modOpen := false -}}
@@ -146,7 +146,7 @@
       {{- end -}}
 
     {{- else if $sidebarCfg.flatGroups -}}
-      {{- $orderTopics := index site.Data $sidebarCfg.order "topics" | default slice -}}
+      {{- $orderTopics := index hugo.Data $sidebarCfg.order "topics" | default slice -}}
       {{- $splitAt := $sidebarCfg.splitAfter | default 0 -}}
       {{- if eq $splitAt 0 -}}
         {{- range $sidebarCfg.flatGroups -}}
@@ -204,7 +204,7 @@
       {{- end -}}
 
     {{- else if $sidebarCfg.order -}}
-      {{- $orderTopics := index site.Data $sidebarCfg.order "topics" | default slice -}}
+      {{- $orderTopics := index hugo.Data $sidebarCfg.order "topics" | default slice -}}
       {{- $groupOpen := false -}}
       {{- range $orderTopics -}}
         {{- with site.GetPage (printf "%s/%s" $section .) -}}

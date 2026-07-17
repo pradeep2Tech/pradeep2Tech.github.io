@@ -1,5 +1,5 @@
-{{- $sections := site.Data.curriculum_sections.sections | default slice -}}
-{{- $groups := site.Data.curriculum_sections.groups | default slice -}}
+{{- $sections := hugo.Data.curriculum_sections.sections | default slice -}}
+{{- $groups := hugo.Data.curriculum_sections.groups | default slice -}}
 {{- if gt (len $sections) 0 -}}
 <div class="ekh-hub" aria-label="Curriculum">
   {{- range $groups -}}

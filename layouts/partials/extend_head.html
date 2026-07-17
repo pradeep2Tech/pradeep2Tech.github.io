@@ -18,7 +18,7 @@
 </style>
 {{- end -}}
 {{- $isCurriculumSection := false -}}
-{{- range site.Data.curriculum_sections.sections -}}
+{{- range hugo.Data.curriculum_sections.sections -}}
   {{- if eq .slug $.Section -}}
     {{- $isCurriculumSection = true -}}
   {{- end -}}

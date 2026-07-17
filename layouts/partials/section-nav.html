@@ -1,6 +1,6 @@
 {{- $section := .Section -}}
 {{- $label := .Params.sectionNavLabel | default (.Section | humanize | title) -}}
-{{- $sections := site.Data.curriculum_sections.sections | default slice -}}
+{{- $sections := hugo.Data.curriculum_sections.sections | default slice -}}
 {{- range $sections -}}
   {{- if eq .slug $section -}}
     {{- $label = .menuLabel | default $label -}}

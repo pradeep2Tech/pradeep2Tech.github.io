@@ -2,7 +2,7 @@
 {{- $navPartial := .navPartial | default "section-nav.html" -}}
 {{- $orderData := .orderData -}}
 {{- $section := .section -}}
-{{- $topics := index site.Data $orderData "topics" | default slice -}}
+{{- $topics := index hugo.Data $orderData "topics" | default slice -}}
 
 {{- partial "curriculum-book-open.html" $page -}}
 

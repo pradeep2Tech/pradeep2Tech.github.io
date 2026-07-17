@@ -1,7 +1,7 @@
 {{- /* Count publishable topics for a curriculum section (home grid badge). */ -}}
 {{- $count := 0 -}}
 {{- $slug := .slug -}}
-{{- $sidebar := site.Data.curriculum_sidebar -}}
+{{- $sidebar := hugo.Data.curriculum_sidebar -}}
 {{- $sidebarCfg := dict -}}
 {{- if and $sidebar $sidebar.sections -}}
   {{- $sidebarCfg = index $sidebar.sections $slug | default dict -}}
@@ -9,7 +9,7 @@
 
 {{- $modulesKey := $sidebarCfg.modules -}}
 {{- if $modulesKey -}}
-  {{- $modData := index site.Data $modulesKey -}}
+  {{- $modData := index hugo.Data $modulesKey -}}
   {{- if and $modData $modData.modules -}}
     {{- range $modData.modules -}}
       {{- $count = add $count (len (.topics | default slice)) -}}
@@ -20,7 +20,7 @@
 {{- if eq $count 0 -}}
   {{- $orderKey := $sidebarCfg.order -}}
   {{- if $orderKey -}}
-    {{- $orderData := index site.Data $orderKey -}}
+    {{- $orderData := index hugo.Data $orderKey -}}
     {{- if and $orderData $orderData.topics -}}
       {{- $count = len $orderData.topics -}}
     {{- end -}}
