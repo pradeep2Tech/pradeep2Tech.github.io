@@ -1,5 +1,9 @@
 {{- partial "diagram-lightbox-head.html" . -}}
 {{- partial "section-collapsible-head.html" . -}}
+{{- with resources.Get "css/accordion-controller.css" -}}
+  {{- $css := . | minify | fingerprint -}}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+{{- end -}}
 {{- partial "cs-quick-ref-head.html" . -}}
 {{- partial "code-tabs-head.html" . -}}
 {{- partial "playbook-shortcodes-head.html" . -}}

@@ -33,6 +33,8 @@
   {{- $isHidden := ($page.Param "cover.hiddenInSingle") | default ($page.Param "cover.hidden") | default false -}}
   {{- partial "cover.html" (dict "cxt" $page "IsSingle" true "isHidden" $isHidden) -}}
 
+  {{- partial "accordion-controls.html" $page -}}
+
   {{- if $page.Content -}}
   {{- $flatQuickRef := or ($page.Param "cheatSheet") (strings.HasSuffix $section "-cheatsheet") (eq $section "java-engineering") (eq $section "spring-boot") (eq $section "kubernetes-handbook") -}}
   <div class="post-content{{ if not $flatQuickRef }} sd-collapsible-content{{ else }} cs-quick-ref{{ end }}">

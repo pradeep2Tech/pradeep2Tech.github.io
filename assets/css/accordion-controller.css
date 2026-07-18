@@ -1,0 +1,46 @@
+/* Page-level controls shared by native <details> and custom accordions. */
+.accordion-controls {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+}
+
+.accordion-controls[hidden] {
+  display: none;
+}
+
+.accordion-control {
+  padding: 0.4rem 0.75rem;
+  color: var(--secondary);
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: var(--radius, 8px);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.accordion-control:hover:not(:disabled) {
+  color: var(--primary);
+  background: var(--code-bg);
+}
+
+.accordion-control:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.accordion-control:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .accordion-controls {
+    justify-content: center;
+  }
+}
