@@ -158,6 +158,21 @@
       applyTransform();
     }
 
+    function fitToWidth() {
+      const svg = content.querySelector("svg");
+      if (!svg) return;
+
+      const stageRect = stage.getBoundingClientRect();
+      if (stageRect.width < 1) return;
+
+      const { width: svgW } = getSvgDimensions(svg);
+      scale = Math.min((stageRect.width - 48) / svgW, 1);
+      scale = Math.max(scale, 0.15);
+      panX = 0;
+      panY = 0;
+      applyTransform();
+    }
+
     function openModal(frame) {
       const svg = frame.querySelector(".mermaid svg");
       if (!svg) return;
@@ -174,7 +189,7 @@
       document.body.style.overflow = "hidden";
 
       requestAnimationFrame(() => {
-        requestAnimationFrame(fitToStage);
+        requestAnimationFrame(fitToWidth);
       });
     }
 
@@ -356,7 +371,22 @@
     const toggle = document.getElementById("ekh-sidebar-toggle");
     const closeBtn = document.getElementById("ekh-sidebar-close");
     const backdrop = document.getElementById("ekh-sidebar-backdrop");
-    if (!sidebar || !toggle) return;
+    const layout = document.querySelector(".ekh-book-layout");
+    if (!sidebar || !toggle || !layout) return;
+
+    const mobile = () => window.matchMedia("(max-width: 960px)").matches;
+    let collapsed = false;
+    try {
+      collapsed = localStorage.getItem("ekh-sidebar-collapsed") === "true";
+    } catch (_) {}
+
+    const applyDesktopState = () => {
+      layout.classList.toggle("is-sidebar-collapsed", collapsed);
+      toggle.setAttribute("aria-expanded", String(!collapsed));
+    };
+
+    if (!mobile()) applyDesktopState();
+    else toggle.setAttribute("aria-expanded", "false");
 
     const open = () => {
       sidebar.classList.add("is-open");
@@ -375,15 +405,36 @@
     };
 
     toggle.addEventListener("click", () => {
-      if (sidebar.classList.contains("is-open")) shut();
-      else open();
+      if (mobile()) {
+        if (sidebar.classList.contains("is-open")) shut();
+        else open();
+        return;
+      }
+
+      collapsed = !collapsed;
+      applyDesktopState();
+      try {
+        localStorage.setItem("ekh-sidebar-collapsed", String(collapsed));
+      } catch (_) {}
     });
     closeBtn?.addEventListener("click", shut);
     backdrop?.addEventListener("click", shut);
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && mobile()) shut();
+    });
     sidebar.querySelectorAll(".ekh-sidebar-link").forEach((link) => {
       link.addEventListener("click", () => {
         if (window.matchMedia("(max-width: 960px)").matches) shut();
       });
+    });
+    window.addEventListener("resize", () => {
+      if (mobile()) {
+        layout.classList.remove("is-sidebar-collapsed");
+        if (!sidebar.classList.contains("is-open")) toggle.setAttribute("aria-expanded", "false");
+      } else {
+        shut();
+        applyDesktopState();
+      }
     });
   }
 </script>

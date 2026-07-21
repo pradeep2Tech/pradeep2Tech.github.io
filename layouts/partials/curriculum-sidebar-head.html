@@ -6,6 +6,14 @@
 {{- end -}}
 {{- if $isCurriculumSection -}}
 <style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--theme);
+    border-bottom: 1px solid var(--border);
+  }
+
   .main:has(.ekh-book-layout) {
     max-width: min(1440px, calc(100vw - 1.5rem));
   }
@@ -24,6 +32,17 @@
     overflow: clip;
     border: 1px solid color-mix(in srgb, var(--ekh-accent) 20%, var(--border));
     box-shadow: 0 4px 24px color-mix(in srgb, var(--ekh-accent) 8%, transparent);
+    transition: grid-template-columns 0.22s ease;
+  }
+
+  .ekh-book-layout.is-sidebar-collapsed {
+    grid-template-columns: 0 minmax(0, 1fr);
+  }
+
+  .ekh-book-layout.is-sidebar-collapsed .ekh-sidebar {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .ekh-book-layout--design { --ekh-accent: #4f46e5; }
@@ -38,12 +57,14 @@
     align-self: start;
     display: flex;
     flex-direction: column;
+    max-height: calc(100vh - var(--header-height, 60px));
     background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--ekh-accent) 10%, var(--entry)) 0%,
       var(--entry) 40%
     );
     border-right: 1px solid color-mix(in srgb, var(--ekh-accent) 18%, var(--border));
+    transition: opacity 0.18s ease, visibility 0.18s ease;
   }
 
   .ekh-sidebar-head {
@@ -92,7 +113,13 @@
   }
 
   .ekh-sidebar-nav {
+    flex: 1;
+    min-height: 0;
     padding: 0.65rem 0.5rem 1rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--ekh-accent) 40%, transparent) transparent;
   }
 
   .ekh-sidebar-module {
@@ -261,6 +288,16 @@
     background: var(--theme);
   }
 
+  .ekh-article,
+  .ekh-index-content,
+  .ekh-book-main > .ekh-page-header,
+  .ekh-book-main > .sd-toc,
+  .ekh-book-main > .post-footer {
+    width: 100%;
+    max-width: 960px;
+    margin-inline: auto;
+  }
+
   .ekh-page-header {
     margin-bottom: 1.25rem;
     padding-bottom: 1rem;
@@ -291,30 +328,30 @@
     max-width: none;
   }
 
+  .ekh-article .post-content :is(h2, h3, h4, h5, h6)[id] {
+    scroll-margin-top: calc(var(--header-height, 60px) + 1rem);
+  }
+
   .ekh-sidebar-toggle {
-    display: none;
-    position: fixed;
-    bottom: 1.25rem;
-    left: 1.25rem;
-    z-index: 90;
+    display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.55rem 0.9rem;
-    border: none;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #fff;
-    background: var(--ekh-accent, #4f46e5);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: auto 0.35rem auto var(--gap);
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: var(--primary);
+    background: var(--entry);
     cursor: pointer;
   }
 
-  .ekh-book-layout--design ~ .ekh-sidebar-toggle { background: #4f46e5; }
-  .ekh-book-layout--handbooks ~ .ekh-sidebar-toggle { background: #0d9488; }
-  .ekh-book-layout--practice ~ .ekh-sidebar-toggle { background: #7c3aed; }
-  .ekh-book-layout--career ~ .ekh-sidebar-toggle { background: #d97706; }
-  .ekh-book-layout--security ~ .ekh-sidebar-toggle { background: #e11d48; }
+  .ekh-sidebar-toggle:hover {
+    background: var(--code-bg);
+  }
 
   .ekh-sidebar-backdrop {
     display: none;
@@ -328,6 +365,7 @@
     .ekh-book-layout {
       grid-template-columns: 1fr;
       border-radius: 10px;
+      overflow: visible;
     }
 
     .ekh-sidebar {
@@ -342,6 +380,9 @@
       transform: translateX(-105%);
       transition: transform 0.22s ease;
       box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
     }
 
     /* The mobile sidebar is a viewport-bound drawer. Only its topic list
@@ -361,10 +402,6 @@
 
     .ekh-sidebar-close {
       display: block;
-    }
-
-    .ekh-sidebar-toggle {
-      display: inline-flex;
     }
 
     .ekh-sidebar-backdrop.is-visible {

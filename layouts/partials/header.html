@@ -1,6 +1,16 @@
+{{- $isCurriculumSection := false -}}
+{{- range hugo.Data.curriculum_sections.sections -}}
+    {{- if eq .slug $.Section -}}{{- $isCurriculumSection = true -}}{{- end -}}
+{{- end -}}
 <header class="header">
     <nav class="nav">
         <div class="logo">
+            {{- if $isCurriculumSection }}
+            <button type="button" class="ekh-sidebar-toggle" id="ekh-sidebar-toggle"
+                aria-controls="ekh-sidebar" aria-expanded="true" aria-label="Toggle curriculum navigation">
+                <span aria-hidden="true">☰</span>
+            </button>
+            {{- end }}
             {{- $label_text := (site.Params.label.text | default site.Title) }}
             {{- if site.Title }}
             <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ $label_text }} (Alt + H)">

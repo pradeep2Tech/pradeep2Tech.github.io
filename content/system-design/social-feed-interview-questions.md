@@ -15,43 +15,43 @@ Companion Q&A for [Designing a Social Graph & Feed Application at Scale](/system
 
 **1. How do you handle hot keys when a celebrity with 100M followers posts a video?**
 
-We decouple the celebrity ingestion path using a pull-based hybrid architecture. Instead of duplicating the post identifier across 100 million follower feeds at write time (push model), the post metadata is appended to a dedicated celebrity storage registry. When active followers read their feed, the system queries both their pre-computed push feed and fetches recent celebrity posts to merge them dynamically at read time.
+We use hybrid fan-out. Instead of copying the post ID into 100 million follower feeds, Fan-out Worker records it in Celebrity Store. On a feed read, Feed Service merges precomputed Redis Feed IDs with recent Celebrity Store IDs and recommendations, then hydrates the selected IDs through Post Service.
 
 **2. What happens if a fan-out worker crashes halfway through processing a message?**
 
-Kafka consumer offsets are only committed after a fan-out batch write is successfully acknowledged by the destination caches (RedisFeed/ScyllaDB). If a worker fails mid-process, the uncommitted message batch is reassigned to another active worker instance in the consumer group, ensuring at-least-once delivery guarantees.
+Kafka consumer offsets are committed only after the Fan-out Worker's idempotent batch write is acknowledged by Redis Feed or Celebrity Store. If a worker fails mid-batch, Kafka reassigns the uncommitted partition to another consumer. The batch is replayed under at-least-once delivery, and deterministic Sorted Set members prevent duplicate feed entries.
 
 **3. How do you prevent cursor drift when a user scrolls their feed while new posts are arriving?**
 
-We implement time-and-ID-bound opaque cursor tokens rather than numeric database offsets. The cursor base64 token decodes to an absolute timestamp and lexicographical ID bound (`created_at <= TIMESTAMP AND post_id < LAST_ID`). New posts arriving after the timestamp are excluded from the current scrolling session, ensuring stable page offsets.
+We use a signed, versioned opaque cursor containing the last `(created_at, post_id)` pair rather than a numeric offset. The next page applies `created_at < :time OR (created_at = :time AND post_id < :id)` under the same descending order. The post ID is a deterministic tie-breaker, so new arrivals do not shift items already traversed.
 
-**4. Why use ScyllaDB/Cassandra for posts instead of a relational database with partitioning?**
+**4. Why use ScyllaDB for posts instead of a relational database with partitioning?**
 
-Social media post generation is highly write-heavy, and query patterns are highly predictable (fetch posts by `author_id` ordered by time). Relational structures introduce lock contention and B-Tree rebalancing overhead at scale. Cassandra's LSM storage model converts randomized write mutations into sequential appends, matching our performance needs.
+Post generation is write-intensive and its access paths are predictable. ScyllaDB's LSM-tree engine converts random mutations into sequential writes and scales horizontally. Post Service maintains denormalized `posts_by_author` and `posts_by_id` projections for chronological author scans and bounded feed hydration; this trades joins and ad hoc queries for predictable throughput and latency.
 
 **5. How do you implement a "Like" counter without causing database lock contention?**
 
-We avoid direct transactional updates (`UPDATE posts SET likes = likes + 1`). Instead, interactions are streamed through Kafka topics and buffered using distributed counters in Redis via `HINCRBY`. An asynchronous worker batch-flushes these updates to ScyllaDB persistent storage every 10 seconds using delta additions.
+We avoid hot-row updates such as `UPDATE posts SET likes = likes + 1`. Like Service and Comment Service update Redis Counters with `HINCRBY` and publish `like-created` or `comment-created`. Post Service's engagement projection consumer batch-flushes durable deltas to ScyllaDB every 10 seconds; Kafka replay and idempotent event IDs support recovery.
 
 **6. How do you defend against malicious or explicit image uploads at scale?**
 
-Uploaded assets are initially isolated in an unreadable private S3 staging bucket. An asynchronous event-driven workflow passes the asset to automated ML moderation pipelines. The asset is moved to the public CDN-backed production bucket only after passing policy checks; otherwise, a notification is sent to the user and the asset is deleted.
+Clients upload assets through presigned URLs into private S3 Raw storage. An asynchronous `media-uploaded` workflow validates, moderates, and transforms the object. Approved derivatives are written to S3 Processed and served through the CDN; rejected objects remain private and are removed according to lifecycle policy.
 
 **7. What is your strategy for caching the social graph relationships?**
 
-The active social follow graph is stored in Redis Sorted Sets, where the key is the `user_id` and the members are the followed IDs scored by follow timestamp. This structure allows O(log N + M) edge lookups to find common connections or compile follow lists during feed construction.
+PostgreSQL is the system of record for the follow graph. Redis caches active following lists as Sorted Sets under `graph:following:{user_id}`, with followed IDs scored by follow timestamp. User Service owns both the cache-aside lookup and invalidation on `follow-created`, `follow-deleted`, and block events.
 
 **8. How does the system handle an active-active cross-region database split?**
 
-We use multi-region ScyllaDB deployments configured with CRDTs (Conflict-free Replicated Data Types) and LWW (Last-Write-Wins) timestamp conflict resolution rules. For non-commutative metrics like user profile data, updates use database quorum checks across a majority of regions.
+We avoid unconstrained multi-writer semantics. Reconstructable feeds remain AP-leaning and converge from replicated events, while account and follow-graph writes use home-region ownership, fencing tokens, and controlled regional failover. ScyllaDB replication handles post-domain availability; PostgreSQL profile mutations retain a single authoritative writer to prevent split brain.
 
-**9. Why choose Envoy over traditional Nginx setups for your API Gateway?**
+**9. Why use Envoy as the API Gateway data plane?**
 
-Envoy provides advanced cloud-native networking features, including native HTTP/2 and gRPC upstream multiplexing, live configuration reloads via xDS APIs, advanced distributed tracing hooks, and robust circuit breaking capabilities.
+API Gateway uses Envoy for HTTP/2 and gRPC upstream multiplexing, dynamic xDS configuration, distributed-tracing integration, and circuit breaking. The choice does not eliminate application-level authentication, authorization, validation, or idempotency enforcement.
 
 **10. How do you handle cache stampedes on popular post items?**
 
-We protect the system from cache stampedes using a combination of distributed locks (Redlock) to ensure only one worker recomputes a cache miss, along with probabilistic early expiration algorithms (XFetch). These algorithms recompute and refresh cache entries before they expire.
+We combine request coalescing, short leased locks with fencing tokens, probabilistic early refresh, and jittered TTLs. Circuit breakers prevent a miss storm from overwhelming PostgreSQL or ScyllaDB, while stale-but-valid or reduced feeds provide graceful degradation.
 
 ---
 
@@ -59,11 +59,11 @@ We protect the system from cache stampedes using a combination of distributed lo
 
 **11. What happens if the pre-computed feed cache is destroyed completely?**
 
-The Feed Service falls back to an automated Backfill Engine. This engine queries the follower cache repository to identify follow relationships and pulls the top 100 recent post references from RedisLatest for those users, rebuilding the target feed cache interactively.
+Feed Service performs a bounded on-demand rebuild. It obtains followed-author IDs through User Service, recent post IDs through Post Service's Author Timeline Cache, celebrity IDs from Celebrity Store, and optional candidates from Recommendation Service. It merges and deduplicates those streams, repopulates Redis Feed, and uses request coalescing plus circuit breakers to protect PostgreSQL and ScyllaDB.
 
 **12. How do you ensure idempotency for post creation under bad network conditions?**
 
-Clients attach a unique UUID key to the `X-Idempotency-Key` header. When a request arrives, the API Gateway runs an atomic `SETNX` operation in Redis using this key with a 120-second TTL. If the key exists, the request is rejected as a duplicate, preventing duplicate posts from being created.
+Clients attach a UUID in `X-Idempotency-Key`. Post Service atomically reserves the key in the Idempotency Cache for the documented 24-hour replay window and associates it with a request fingerprint. An identical retry returns the original response; reuse with a different payload returns `409 Conflict`.
 
 **13. How do you scale down infrastructure costs during off-peak night hours?**
 
@@ -71,19 +71,19 @@ We use Kubernetes Horizontal Pod Autoscalers (HPA) driven by custom Prometheus m
 
 **14. What happens when a user deletes their account?**
 
-Account deletion initiates an asynchronous saga pattern. The user status is immediately marked as `DELETED` in the database to block user access. A background cleanup job streams delete events through Kafka to purge social relationships, invalidate cached feeds, and remove media assets over time.
+Account deletion starts an asynchronous saga. User Service first marks the PostgreSQL account `DELETED` to block access, then reliably publishes `account-deleted`. Idempotent consumers purge graph edges, feeds, search and recommendation projections, and media according to retention and legal-hold policy.
 
 **15. How do you handle pagination when a user blocks another user while scrolling?**
 
-The Feed Engine filters posts against a dynamic bloom filter representing the user's blocked IDs during timeline generation. If a block occurs mid-scroll, the active page filtering catches the change, ensuring blocked content is removed from subsequent pages.
+Feed Service applies the current block-state projection during candidate filtering and again during Post Service hydration. A block event invalidates graph and feed entries asynchronously; the hydration check prevents stale cached IDs from exposing blocked content on subsequent pages.
 
-**16. Why choose a graph database layout over PostgreSQL for the follow network?**
+**16. Why choose PostgreSQL instead of a graph database for the follow network?**
 
 We don't need a full graph database since our queries only require shallow, single-hop index scans (e.g., fetching direct followers). A normalized relational database with partial indexes handles this pattern efficiently without the operational complexity of a graph database.
 
 **17. How do you protect your internal service microservices from cascading crashes?**
 
-We isolate services using an internal service mesh fabric (Istio) configured with explicit request deadlines, retries with exponential backoff, and circuit-breaker thresholds. If a downstream service fails, upstream callers return degraded data or use local cache fallbacks.
+We isolate services with explicit deadlines, bulkheads, circuit breakers, and bounded retries with exponential backoff and jitter. Retries are limited to idempotent operations. Optional feed sources fail independently, allowing Feed Service to return a partial chronological feed instead of amplifying a dependency outage.
 
 **18. How do you design a system to support "Infinite Scrolling" reliably?**
 
@@ -95,7 +95,7 @@ All system timestamps are unified, captured, and stored using UTC ISO 8601 forma
 
 **20. What database choices support multi-region user profile mutations?**
 
-We use a globally distributed relational database architecture like CockroachDB or a sharded PostgreSQL setup with region-locked master nodes. This ensures strong consistency and regulatory compliance (like GDPR data residency) for user profiles.
+User Service owns profiles in PostgreSQL. At multi-region scale, each account has an authoritative home region; cross-region replicas serve eligible reads, while fencing and controlled promotion preserve a single writer during failover. Data-residency policy determines placement and replication boundaries.
 
 ---
 
@@ -103,19 +103,19 @@ We use a globally distributed relational database architecture like CockroachDB 
 
 **21. How do you catch API route parameter attacks or SQL injection threats?**
 
-We enforce strict input validation rules at the Envoy gateway layer using OpenAPI specification contracts, and all downstream database adapters use parameterized prepared statements.
+API Gateway enforces coarse OpenAPI shape, authentication, and request-size limits. Each business service still performs authoritative semantic validation and authorization, while PostgreSQL adapters use parameterized statements and ScyllaDB access uses bound CQL parameters.
 
 **22. What caching strategy handles post metadata updates best?**
 
-We apply a standard Cache-Aside strategy. On updates, the system purges the item from the cache. The next read operation fetches the fresh value from ScyllaDB and rehydrates the cache tier.
+Post metadata is owned and hydrated by Post Service; Feed Service caches only post IDs. If Post Service introduces a metadata cache, it uses cache-aside with event-driven invalidation on `post-approved`, `post-rejected`, `post-deleted`, or processed-media changes. ScyllaDB remains authoritative.
 
 **23. How do you track metrics across asynchronous workers?**
 
-We collect metrics using stateless OpenTelemetry collector sidecars that push application telemetry data to a centralized Prometheus cluster every 10 seconds.
+Services emit traces and metrics through OpenTelemetry SDKs and collectors. Prometheus scrapes metric endpoints, while trace context and event IDs propagate through Kafka headers. Dashboards and alerts track feed p99 latency, Kafka lag age, Redis hit ratio, dependency errors, and freshness SLOs.
 
 **24. What happens if a user updates their profile picture?**
 
-An explicit update request updates the database and sends a profile invalidation message to a Kafka topic. Workers pick up this message to refresh cached user profiles and evict outdated copies from edge caches.
+User Service commits the PostgreSQL update and publishes `profile-updated` through its reliable event-publication path. Consumers invalidate or refresh the Redis User Profile Cache; personalized profile data is not stored at the CDN edge.
 
 **25. How do you scale media delivery for trending viral videos?**
 
@@ -123,23 +123,23 @@ Viral assets are cached at edge locations using geographically distributed CDN n
 
 **26. Why do you use UUIDv7 or Snowflake IDs over standard database auto-increments?**
 
-Standard auto-increments expose business metrics and cause resource contention in distributed write environments. Custom frameworks like Snowflake or UUIDv7 provide time-sortable, 64-bit unique identifiers that can be generated independently without centralized locks.
+Standard auto-increments expose business metrics and create a centralized allocation dependency. Snowflake-style 64-bit IDs and 128-bit UUIDv7 IDs are time-sortable and can be generated without a database sequence; Snowflake requires worker-ID and clock discipline, while UUIDv7 has a larger storage footprint.
 
 **27. How do you handle deep pagination requests efficiently?**
 
-We enforce hard limits on maximum history access depths (e.g., limiting user feeds to 500 items). Requests for older archival data are redirected to specialized cold data storage engines instead of high-performance caches.
+We bound the online feed window and page size, reject abusive cursor depth, and use keyset pagination rather than offsets. If historical browsing becomes a product requirement, it receives a separately capacity-planned archive API instead of falling through to unbounded scans on serving stores.
 
 **28. How do you verify the health of microservices in your clusters?**
 
-Kubernetes clusters run continuous liveness and readiness probes against custom `/healthz` endpoints. These endpoints verify local dependencies like database connections and memory limits before routing traffic to a container.
+Kubernetes uses liveness probes only for unrecoverable local process failure and readiness probes to control traffic admission. Readiness reflects whether the instance can serve safely without requiring every optional dependency to be healthy; dependency health is monitored separately to avoid ejecting all pods during a shared outage.
 
-**29. What happens if a Kafka cluster experiences severe broker lag?**
+**29. What happens if Kafka consumer lag grows severely?**
 
-The system triggers automated HPA scaling policies to deploy more consumer pods. If lag continues to grow, low-priority tasks (like analytical tracking counters) are temporarily bypassed to focus compute resources on core ingestion paths.
+Consumers scale on lag age and backlog only up to the available partition count. If lag continues growing, the platform adds partitions or brokers where appropriate, throttles noncritical producers, and prioritizes moderation and fan-out over analytics. Kafka absorbs short bursts; sustained lag triggers admission control before retention or disk safety limits are breached.
 
 **30. How do you manage secrets like API keys and database credentials safely?**
 
-Secrets are injected into container runtimes as temporary environment values using automated secrets managers like HashiCorp Vault or AWS Secrets Manager, with encryption certificates rotated automatically every 30 days.
+Secrets are delivered at runtime from a managed secret store such as HashiCorp Vault or AWS Secrets Manager using workload identity and least-privilege policies. Credentials and certificates rotate according to their risk policy, and applications support reload without embedding secrets in images or source control.
 
 ---
 
@@ -147,7 +147,7 @@ Secrets are injected into container runtimes as temporary environment values usi
 
 **31. How do you handle large video files over slow mobile networks?**
 
-The client uploads video files in small, chunked byte streams to a chunker service. The service verifies each chunk using MD5 checksums, allowing interrupted uploads to resume from the last successful chunk.
+The client uses S3 multipart upload with presigned part URLs, uploading directly to S3 Raw without a media-proxy service. Part checksums and the multipart upload ID support integrity verification and resume; abandoned uploads are removed by lifecycle policy.
 
 **32. Why do you use Redis Sorted Sets for active user feeds?**
 
@@ -171,11 +171,11 @@ We analyze system latency by running continuous, low-overhead production profili
 
 **37. What happens if a user unfollows another user?**
 
-The follow engine updates the graph database and pushes an eviction payload to a Kafka topic. Background workers consume this payload to instantly remove the unfollowed user's posts from the active user's cached feed.
+User Service updates the PostgreSQL follow graph and publishes `follow-deleted`. Consumers invalidate the Follow Graph Cache and remove the author's IDs from the follower's Redis Feed asynchronously. The read path still applies current relationship and block visibility rules during hydration.
 
 **38. How do you isolate operational traffic from business intelligence queries?**
 
-We direct analytical workloads to a dedicated data lake or read-replica warehouse (like Snowflake). This keeps heavy analytical queries isolated from the primary transactional databases.
+Independent Kafka consumers load a dedicated analytical store or data lake. BI queries run there rather than against PostgreSQL, ScyllaDB, Redis, or OpenSearch serving clusters, preserving transactional and feed-path capacity.
 
 **39. Why do you use mTLS inside your Kubernetes clusters?**
 
@@ -195,7 +195,7 @@ The client application debounces the interaction locally. The API gateway also a
 
 **42. How do you test the system for disaster recovery scenarios?**
 
-We run scheduled chaos engineering exercises (using tools like Chaos Mesh) to inject random failures, such as availability zone outages and network lag, into staging environments to verify automated recovery paths.
+We run scheduled recovery exercises for node, availability-zone, network, Kafka-lag, Redis-loss, and regional-failover scenarios. Tests begin in staging and progress to tightly scoped production experiments with abort conditions, validating runbooks, RPO/RTO, alarms, and data reconciliation.
 
 **43. Why do you separate media uploads from post metadata creation?**
 
@@ -207,7 +207,7 @@ We protect our databases by sizing them to handle baseline loads, using resilien
 
 **45. What happens if a user deletes a post?**
 
-The system marks the post as `DELETED` in the database to hide it instantly. A deletion event is then broadcast to Kafka, triggering background jobs to purge the post from user feeds, remove it from caches, and delete associated files from object storage.
+Post Service marks the ScyllaDB record as `DELETED` and reliably publishes `post-deleted`. Fan-out and cache consumers purge the ID from Redis Feed, Author Timeline Cache, Celebrity Store, and Redis Trending; Search Indexer removes the document, and Media workers apply the object-retention policy.
 
 **46. How do you optimize CDN cache delivery for user feeds?**
 
@@ -215,7 +215,7 @@ We do not cache personalized user feeds at the CDN layer because they change fre
 
 **47. How do you ensure log data remains useful during outages?**
 
-We enforce structured JSON logging across all microservices. These logs include standardized metadata fields like `correlation_id` and `tenant_id` to make debugging easier in centralized logging systems.
+We emit structured logs with correlation ID, trace ID, event ID, service, error code, Kafka partition/offset, retry count, and degradation decision. User identifiers are minimized or pseudonymized, and tokens or content are never logged.
 
 **48. What is the trade-off of using long-lived JWTs?**
 
@@ -227,7 +227,7 @@ We use multi-phase migration strategies (like Expand and Contract). New columns 
 
 **50. Why use an event-driven architecture instead of direct RPC calls?**
 
-An event-driven architecture decouples services, turning tight dependencies into asynchronous message streams. This protects the system from cascading failures, improves availability, and allows different components to scale independently.
+We use synchronous RPC for request/response operations that require an immediate result, such as feed hydration, and Kafka events for moderation, fan-out, indexing, recommendation generation, notification, and cache invalidation. This separation provides replay, backpressure, and independent scaling, at the cost of idempotency requirements and eventual consistency.
 
 ---
 
