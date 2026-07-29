@@ -11,7 +11,11 @@ CONTENT = ROOT / "content" / "technology-playbook"
 DATA = ROOT / "data"
 
 # Hand-polished pages — generator skips these slugs.
-SKIP_SLUGS = frozenset({"kafka-vs-rabbitmq", "how-to-choose-database"})
+SKIP_SLUGS = frozenset({
+    "kafka-vs-rabbitmq",
+    "how-to-choose-database",
+    "how-to-choose-api-protocol",
+})
 
 MICROSERVICES_DEEP_DIVES = {
     "event-driven-architecture": "/microservices/event-driven-architecture-log-streaming/",
