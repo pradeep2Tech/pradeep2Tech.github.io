@@ -38,114 +38,41 @@ This framework supports that process for relational, document, wide-column, key-
 
 ---
 
-## 2. Business Problem
+## 2. Frame the Decision
 
-The business problem is rarely "we need a database." It is usually a need to protect a capability such as:
+The business problem is rarely "we need a database." It is a capability the system must protect: accepting payments, serving a product catalog, detecting fraud, searching customer records, or producing regulatory reports.
 
-- Accepting payments
-- Serving a product catalog
-- Detecting fraud
-- Searching customer records
-- Producing regulatory reports
+Before discussing products, write down:
 
-A database decision must connect those outcomes to measurable architecture requirements.
+| Decision Context | What to Establish |
+| --- | --- |
+| **Capability** | Business goal, stakeholders, critical journeys, and delivery boundaries |
+| **Data ownership** | Authoritative source, writers, readers, and downstream consumers |
+| **Failure impact** | Consequences of lost, stale, duplicated, unavailable, or slow data |
+| **Constraints** | Regulatory obligations, delivery horizon, budget, and organizational limits |
 
-| Without a framework | With a framework |
-| :--- | :--- |
-| Brand-driven choices (Oracle because enterprise) | Workload-driven shortlist tied to business outcomes |
-| OLTP store abused for BI | Clear OLTP vs warehouse split |
-| Surprise scale limits at launch | Partition/shard plan upfront |
-| Team cannot operate chosen DB | Managed service vs self-hosted fit |
-| Requirements expressed as product features | Decision criteria expressed as measurable quality attributes |
-| Technology selected without exit criteria | ADR records trade-offs, risks, and reassessment triggers |
-
-Before evaluating products, establish the business impact of:
-
-- Data loss
-- Stale reads
-- Unavailable writes
-- Slow queries
-- Regulatory breaches
-- Delayed delivery
-
-These consequences determine which architecture qualities deserve priority when factors conflict.
-
----
-
-## 3. Architecture Decision Flow
+This context determines which requirements are mandatory and which trade-offs the business can accept.
 
 ```mermaid
-flowchart TD
-  requirements[Business Requirements] --> capability[Business Capability]
-  capability --> workload[Workload Analysis]
-  workload --> nfr[NFR Analysis]
-  nfr --> shortlist[Technology Shortlist]
-  shortlist --> poc[Proof of Concept]
-  poc --> adr[Architecture Decision Record]
-  adr --> production[Production]
+flowchart LR
+  capability["Business capability"] --> requirements["Workload requirements"]
+  requirements --> classes["Database classes"]
+  classes --> options["Viable products"]
+  options --> evidence["Representative evidence"]
+  evidence --> adr["Architecture Decision Record"]
 ```
 
-Use the flow as a sequence of decisions:
-
-1. **Frame the business decision.** Identify the capability, stakeholders, critical journeys, data ownership, and consequences of failure.
-2. **Define measurable requirements.** Document access patterns, consistency semantics, latency percentiles, throughput, growth, availability, recovery, compliance, and cost boundaries.
-3. **Rank the requirements.** Separate mandatory constraints from preferences. When all qualities are labelled critical, the trade-off remains hidden.
-4. **Classify the workload.** Select database classes that naturally support the dominant model and access patterns.
-5. **Shortlist viable options.** Remove candidates that fail a hard constraint before comparing secondary features.
-6. **Validate with representative evidence.** Test real query shapes, data distribution, concurrency, failure behaviour, and expected growth rather than a synthetic happy path.
-7. **Record the decision.** Capture context, decision, alternatives, evidence, risks, mitigations, and conditions that require review.
-
 ---
 
-## 4. Decision Checklist
+## 3. Understand the Workload Requirements
 
-{{< decision-card title="Step 1 — Classify the workload" >}}
-1. **Transactional OLTP** — ACID, JOINs, reporting on normalized model → **Relational** (PostgreSQL, MySQL, Oracle, SQL Server)
-2. **Flexible product schema** — nested JSON, rapid iteration → **Document** (MongoDB, Couchbase, Cosmos DB)
-3. **Write-heavy, massive scale** — time-series IoT, global write path → **Wide column** (Cassandra, ScyllaDB)
-4. **Sub-ms key lookups** — session, cache, rate limit counters → **Key-value** (Redis, DynamoDB)
-5. **Relationship traversal** — fraud rings, dependencies → **Graph** (Neo4j, Neptune)
-6. **Metrics & telemetry** → **Time series** (InfluxDB, TimescaleDB)
-7. **Full-text & faceted search** → **Search** (Elasticsearch, OpenSearch, Solr)
-8. **Petabyte analytics** → **Warehouse / OLAP** (Snowflake, BigQuery, ClickHouse)
-9. **Semantic / RAG retrieval** → **Vector** (pgvector, Milvus, Pinecone, Weaviate)
-{{< /decision-card >}}
+Evaluate the five requirements together. No single factor selects a database; the decision comes from their combination, priority, and tension.
 
-{{< decision-card title="Step 2 — Apply non-functional filters" >}}
-- **Consistency:** strong vs eventual — does a stale read create financial, safety, or trust risk?
-- **Latency p99:** single-digit ms vs seconds acceptable?
-- **Availability and recovery:** what downtime and data loss can the business tolerate?
-- **Ops model:** managed service vs self-managed platform?
-- **Compliance:** region residency, encryption, retention, deletion, and audit trail
-- **Team skills:** what can you run at 3 a.m. during an incident?
-{{< /decision-card >}}
+### Access patterns
 
-{{< decision-card title="Step 3 — Define evidence and exit criteria" >}}
-- **Acceptance criteria:** measurable pass/fail thresholds for latency, throughput, consistency, recovery, security, and cost
-- **Representative workload:** production-scale data volume, key distribution, query mix, concurrency, bursts, and background work
-- **Failure evidence:** behaviour during node loss, network delay, replica lag, throttling, and dependency failure
-- **Operational evidence:** backup, restore, failover, upgrade, observability, access revocation, and capacity expansion
-- **Exit criteria:** conditions that reject a candidate or trigger reassessment after production adoption
-{{< /decision-card >}}
+Access patterns describe how data is shaped, read, written, joined, searched, and aggregated. Capture the dominant paths before designing a schema or comparing products.
 
-Before approving the decision, confirm that:
-
-- The dominant reads, writes, updates, deletes, and analytical queries are documented.
-- Business owners have agreed on the cost of stale, missing, duplicated, or unavailable data.
-- Capacity estimates include current demand, expected growth, peaks, and skewed keys.
-- Hard constraints are separated from desirable features.
-- At least two viable candidates were compared using the same workload and acceptance criteria.
-- The selected database has a clear role: system of record, derived read model, cache, index, or analytical store.
-- The design describes how data crosses boundaries when more than one store is required.
-- The ADR records rejected alternatives, accepted risks, and review triggers.
-
----
-
-## 5. Architecture Decision Factors
-
-An architect evaluates these factors together. No single factor selects a database; the decision comes from the combination, priority, and tension between them.
-
-### Data model
+#### Data model
 
 **Why it matters:** The shape of the data determines how naturally the database can enforce invariants, represent relationships, evolve schemas, and answer queries. A poor fit pushes integrity and transformation logic into application code.
 
@@ -158,7 +85,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Selecting a flexible schema to avoid modelling, treating denormalization as free, or choosing the database from a sample entity while ignoring relationships and lifecycle changes.
 
-### Access patterns
+#### Query shapes
 
 **Why it matters:** Databases optimize specific query shapes. Known access patterns determine indexes, partition keys, aggregate boundaries, and whether a store class is suitable at all.
 
@@ -167,11 +94,12 @@ An architect evaluates these factors together. No single factor selects a databa
 - What are the highest-volume and highest-value reads and writes?
 - Are lookups by key, range, relationship, full text, similarity, or multidimensional aggregation?
 - Which queries require filtering, sorting, JOINs, pagination, or ad hoc exploration?
+- For each query, what are its frequency, criticality, result size, and consistency expectation?
 - Can new access patterns be served by derived read models instead of the system of record?
 
 **Common mistakes:** Designing only from the entity model, assuming indexes solve every query, or selecting a database before listing the critical queries and their frequency.
 
-### Read/write ratio
+#### Read/write ratio
 
 **Why it matters:** Read-heavy and write-heavy workloads impose different demands on indexing, replication, caching, compaction, and contention. The ratio also influences whether separate read models are justified.
 
@@ -184,7 +112,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Using averages that hide peaks, counting requests without considering work per request, or adding indexes for reads without measuring their write amplification.
 
-### Consistency
+### Consistency requirements
 
 **Why it matters:** Consistency defines what users and downstream systems may observe after a write. It protects business invariants but can constrain availability, latency, and geographic distribution.
 
@@ -197,7 +125,9 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Asking whether the whole system needs "strong consistency," confusing ACID with every consistency guarantee, or accepting eventual consistency without defining the user-visible reconciliation behaviour.
 
-### Latency
+### Latency and throughput targets
+
+#### Latency
 
 **Why it matters:** Latency is part of the user journey and often determines topology, indexing, caching, and data locality. Tail latency matters more than an attractive average.
 
@@ -210,7 +140,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Optimizing for average latency, quoting vendor benchmarks as application performance, or setting one latency target for every workload.
 
-### Throughput
+#### Throughput
 
 **Why it matters:** Throughput determines whether the design can absorb sustained demand, bursts, batch jobs, and background processing without violating latency or availability targets.
 
@@ -223,7 +153,9 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Treating all operations as equal, testing only steady-state traffic, or projecting throughput without data size, key distribution, and concurrency.
 
-### Scalability
+### Scale trajectory
+
+#### Scalability
 
 **Why it matters:** The scale model determines how capacity grows and where limits appear. Vertical scaling, read replicas, partitioning, and sharding solve different constraints and introduce different complexity.
 
@@ -236,7 +168,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Designing for hypothetical internet scale, postponing partition-key analysis until growth arrives, or assuming horizontal scaling removes coordination and hotspot problems.
 
-### Availability, durability, and recoverability
+#### Availability, durability, and recoverability
 
 **Why it matters:** Availability defines whether the service can accept and serve requests during faults, durability defines whether acknowledged data survives those faults, and recoverability defines whether the organization can restore a trustworthy service after logical or physical failure. These are separate qualities and must not be collapsed into a single uptime percentage.
 
@@ -249,7 +181,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Treating replication as backup, quoting provider SLAs as application availability, designing failover without fencing, or defining an RPO and RTO that have never been demonstrated through recovery exercises.
 
-### Multi-region requirements
+#### Multi-region requirements
 
 **Why it matters:** Multi-region architecture changes the consistency, latency, availability, conflict, and data-residency trade-offs. It must be justified by a business continuity or user-latency requirement.
 
@@ -262,7 +194,11 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Treating replicas as a complete multi-region strategy, enabling writes everywhere without a conflict model, or using global distribution when a tested recovery design would meet the requirement.
 
-### Operational maturity
+### Operational constraints
+
+Operational constraints determine whether the organization can run the chosen design safely, legally, and economically throughout its lifecycle.
+
+#### Operational maturity
 
 **Why it matters:** A database is viable only if the organization can deploy, observe, secure, recover, upgrade, and troubleshoot it within the required service levels.
 
@@ -275,7 +211,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Evaluating query features while ignoring lifecycle ownership, assuming a managed offering removes all operational responsibility, or adopting several specialized stores without staffing the resulting data platform.
 
-### Compliance
+#### Compliance
 
 **Why it matters:** Regulatory, contractual, privacy, retention, and audit obligations can eliminate otherwise suitable options and influence the logical and physical data architecture.
 
@@ -288,7 +224,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Treating compliance as a post-selection checklist, assuming encryption alone is sufficient, or replicating regulated data into caches, indexes, and analytics stores without applying the same controls.
 
-### Data lifecycle, ownership, and sovereignty
+#### Data lifecycle, ownership, and sovereignty
 
 **Why it matters:** Data outlives individual applications. Ownership, provenance, retention, archival, deletion, and geographic placement determine whether the platform remains governable as data is copied into caches, indexes, streams, warehouses, backups, and AI retrieval systems.
 
@@ -301,7 +237,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Allowing multiple systems to claim authority for the same fact, applying deletion only to the primary database, losing provenance during CDC or ETL, or using backups and analytical copies to bypass residency controls.
 
-### Tenancy and isolation
+#### Tenancy and isolation
 
 **Why it matters:** Tenant placement affects security boundaries, noisy-neighbour risk, customization, scaling, backup and restore, residency, and unit economics. The database model must support both present customer tiers and credible enterprise isolation requirements.
 
@@ -314,7 +250,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Treating a tenant identifier as sufficient isolation, selecting database-per-tenant without automating fleet operations, ignoring large-tenant skew, or losing tenant boundaries in caches, streams, and analytics.
 
-### Cost
+#### Cost
 
 **Why it matters:** Database cost includes more than licenses or infrastructure. Storage growth, replicas, indexes, data movement, engineering time, specialist skills, and migration risk contribute to total cost of ownership.
 
@@ -327,7 +263,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Comparing list prices instead of workload costs, ignoring people and migration costs, or overengineering for future scale that may never arrive.
 
-### Portability and exit strategy
+#### Portability and exit strategy
 
 **Why it matters:** A database decision creates long-lived dependencies in schemas, drivers, operational procedures, security controls, and data pipelines. Portability is not always the priority, but lock-in should be intentional, valued, and reversible enough for the business risk.
 
@@ -340,7 +276,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 **Common mistakes:** Claiming portability because a service supports a familiar API, avoiding useful managed capabilities without a credible exit requirement, or discovering only during migration that data export, egress, extensions, and operational semantics are the real constraints.
 
-### Team expertise
+#### Team expertise
 
 **Why it matters:** Familiarity affects delivery speed, schema quality, performance tuning, incident recovery, and the ability to use a database safely. Expertise is a decision factor, though not a reason to preserve a poor architectural fit forever.
 
@@ -355,7 +291,7 @@ An architect evaluates these factors together. No single factor selects a databa
 
 ---
 
-## 6. Database Classification
+## 4. Evaluate Database Classes
 
 Classification narrows the decision space; it does not select a product. Start with the class that fits the dominant data model and access patterns, then apply the decision factors and validate individual candidates.
 
@@ -363,29 +299,22 @@ Classification narrows the decision space; it does not select a product. Start w
 The decision tree is a **shortlisting heuristic for one bounded workload**, not a claim that an enterprise system needs only one store.
 
 Repeat the analysis for each materially different access pattern. A transactional system of record may legitimately feed a search index, analytical warehouse, cache, or vector index, provided ownership and consistency are explicit.
+
+Prefer an existing, well-operated platform when it remains a natural fit. Introduce a specialized store only for a demonstrated constraint; give each business fact one authoritative owner and make every cache, index, warehouse table, or vector projection traceable and reproducible through CDC, a transactional outbox, replay, and reconciliation.
 {{< /note >}}
 
 ```mermaid
-flowchart TD
-  startNode["Start with dominant workload"] --> acidDecision{"Need ACID transactions?"}
-  acidDecision -->|Yes| relationalDb["Relational database"]
-  acidDecision -->|No| schemaDecision{"Need a flexible aggregate schema?"}
-  schemaDecision -->|Yes| documentDb["Document database"]
-  schemaDecision -->|No| relationshipDecision{"Need relationship traversal?"}
-  relationshipDecision -->|Yes| graphDb["Graph database"]
-  relationshipDecision -->|No| textDecision{"Need full-text search?"}
-  textDecision -->|Yes| searchEngine["Search engine"]
-  textDecision -->|No| timeDecision{"Is the workload time-series?"}
-  timeDecision -->|Yes| timeSeriesDb["Time-series database"]
-  timeDecision -->|No| analyticsDecision{"Need large-scale analytics?"}
-  analyticsDecision -->|Yes| analyticalWarehouse["Analytical warehouse"]
-  analyticsDecision -->|No| semanticDecision{"Need semantic search?"}
-  semanticDecision -->|Yes| vectorDb["Vector database"]
-  semanticDecision -->|No| keyDecision{"Primarily key-based access?"}
-  keyDecision -->|Yes| keyValueDb["Key-value database"]
-  keyDecision -->|No| writeDecision{"Need massive distributed writes?"}
-  writeDecision -->|Yes| wideColumnDb["Wide-column database"]
-  writeDecision -->|No| reassessNode["Reassess workload and NFRs"]
+flowchart LR
+  startNode["Start"] --> workload{"Dominant workload?"}
+  workload -->|"ACID transactions and JOINs"| relationalDb["Relational"]
+  workload -->|"Flexible JSON documents"| documentDb["Document"]
+  workload -->|"Massive write throughput"| wideColumnDb["Wide column"]
+  workload -->|"Fast key lookups"| keyValueDb["Key-value"]
+  workload -->|"Relationship traversal"| graphDb["Graph"]
+  workload -->|"Metrics and telemetry"| timeSeriesDb["Time series"]
+  workload -->|"Full-text search"| searchEngine["Search"]
+  workload -->|"Large-scale analytics"| analyticalWarehouse["Warehouse / OLAP"]
+  workload -->|"Semantic search"| vectorDb["Vector"]
 ```
 
 | Class | Architectural fit | Illustrative products | Illustrative managed options |
@@ -402,7 +331,9 @@ flowchart TD
 
 ---
 
-## 7. Anti-patterns
+## 5. Compare Options and Trade-offs
+
+### Eliminate poor fits
 
 | Anti-pattern | Why it fails |
 | :--- | :--- |
@@ -416,9 +347,7 @@ flowchart TD
 | Benchmark-driven selection | Generic benchmark results rarely represent real queries, data skew, concurrency, or failure modes |
 | Premature polyglot persistence | More stores are introduced before one store has demonstrated a real architectural constraint |
 
----
-
-## 8. Trade-offs
+### Make trade-offs explicit
 
 {{< comparison-table caption="Store class selection matrix" >}}
 | If you need… | Prefer | Avoid as primary |
@@ -434,12 +363,14 @@ flowchart TD
 
 The decision is usually between competing qualities, not between a good and bad product:
 
-- **Consistency vs availability and geographic latency:** stronger coordination protects invariants but can reduce write availability or increase latency during partitions.
-- **Flexible schema vs enforced integrity:** rapid model evolution reduces initial friction but can move validation, migration, and compatibility work into applications.
-- **Read optimization vs write cost:** indexes, replicas, and projections accelerate reads while adding write amplification, storage, and synchronization complexity.
-- **Specialized fit vs operational simplicity:** a purpose-built store may serve one access pattern well but expands the platform, skills, and data-consistency surface.
-- **Scale headroom vs present cost:** designing for realistic growth is prudent; designing for unvalidated extreme scale can impose complexity before it produces value.
-- **Portability vs native capability:** abstractions and common features ease future change, while deeper product capabilities can improve the current solution but increase migration effort.
+| Tension | Architectural Consequence |
+| --- | --- |
+| **Consistency vs. availability and geographic latency** | Stronger coordination protects invariants but can reduce write availability or increase latency during partitions. |
+| **Flexible schema vs. enforced integrity** | Rapid model evolution reduces initial friction but can move validation, migration, and compatibility work into applications. |
+| **Read optimization vs. write cost** | Indexes, replicas, and projections accelerate reads while adding write amplification, storage, and synchronization complexity. |
+| **Specialized fit vs. operational simplicity** | A purpose-built store may serve one access pattern well but expands the platform, skills, and data-consistency surface. |
+| **Scale headroom vs. present cost** | Designing for realistic growth is prudent; designing for unvalidated extreme scale can impose complexity before it produces value. |
+| **Portability vs. native capability** | Common abstractions ease future change; deeper product capabilities can improve the current solution but increase migration effort. |
 
 {{< tip >}}
 **Architect recommendation:** An ADR should state which side of each relevant trade-off is preferred, why the business accepts it, and how the risk will be monitored.
@@ -447,7 +378,38 @@ The decision is usually between competing qualities, not between a good and bad 
 
 ---
 
-## 9. Real-world Examples
+## 6. Validate and Record the Decision
+
+Compare at least two viable candidates against the same acceptance criteria. Vendor benchmarks can inform the test design, but they cannot replace evidence from the actual workload.
+
+### Validation checklist
+
+| Evidence | What to Validate |
+| --- | --- |
+| **Workload** | Production-scale data volume, query mix, key distribution, result sizes, concurrency, bursts, background work, and expected growth |
+| **Quality attributes** | Pass/fail thresholds for consistency, p95/p99 latency, throughput, availability, RPO/RTO, security, compliance, and cost |
+| **Failure behaviour** | Node loss, network delay, replica lag, throttling, dependency failure, ambiguous writes, and recovery under load |
+| **Operations** | Backup, restore, failover, upgrade, observability, access revocation, capacity expansion, and data export |
+| **Architecture boundaries** | System of record, derived read models, caches, indexes, ownership, synchronization, replay, and reconciliation |
+
+Use realistic data at **2× expected peak throughput** where practical. Include skewed keys and degraded conditions; a synthetic happy path does not prove production fitness.
+
+### ADR checklist
+
+The ADR is the final decision artifact:
+
+| ADR Section | What to Record |
+| --- | --- |
+| **Context** | Business capability, workload requirements, constraints, and data ownership |
+| **Options** | Viable candidates, rejected alternatives, and the same evidence for each |
+| **Decision** | Selected database, its role, and why it best fits the ranked requirements |
+| **Trade-offs** | Accepted compromises, risks, mitigations, and operational consequences |
+| **Adoption** | Migration and rollback approach, owners, and production-readiness conditions |
+| **Reassessment** | Evidence that triggers review: changed access patterns, scale, regulation, cost, or organizational capability |
+
+---
+
+## 7. Real-world Examples
 
 ```mermaid
 flowchart TD
@@ -638,7 +600,7 @@ Equivalent products can be evaluated against:
 
 ---
 
-## 10. Failure Scenarios
+## 8. Failure Scenarios
 
 Production failures test the assumptions behind the architecture decision.
 
@@ -669,22 +631,7 @@ See [Transactional Outbox](/database-handbook/transactional-outbox-pattern/) for
 
 ---
 
-## 11. Best Practices
-
-1. Start with the **business capability and failure impact**, then translate them into measurable database requirements and acceptance thresholds.
-2. Document **access patterns before schema and product selection**; include frequency, criticality, result size, and consistency expectations.
-3. Separate **OLTP**, **cache**, **search**, and **warehouse** when their requirements genuinely differ — synchronize via CDC/outbox and keep ownership explicit.
-4. Shortlist **two** candidates; run identical POC queries at 2× expected QPS using realistic data volume, distribution, concurrency, and failure conditions.
-5. Document **RPO/RTO** and test restore quarterly in regulated domains.
-6. Prefer extending an existing, well-operated database platform when the workload remains a natural fit; PostgreSQL extensions such as pgvector or Timescale are examples, not a default mandate.
-7. Write an **ADR** with decision drivers, rejected alternatives, evidence, accepted trade-offs, and review triggers — interviews and audits both ask "why not X?"
-8. Revisit the decision when access patterns, regulatory boundaries, scale assumptions, or organizational capability materially change; do not revisit it merely because a new product is fashionable.
-9. Assign one authoritative owner to each business fact and make every cache, search index, warehouse table, and vector index traceable and reproducible.
-10. Test operability as part of selection: backup, restore, failover, upgrade, observability, access revocation, capacity expansion, and data export all belong in the proof of concept.
-
----
-
-## 12. Production Considerations
+## 9. Production Considerations
 
 Selecting the right database class is only the beginning.
 
@@ -718,7 +665,7 @@ Enterprise readiness depends on whether the platform can:
 
 **Common mistakes:** Testing only that a snapshot can be mounted, never validating application-level consistency, performing the first restore during an incident, or omitting large-dataset restore duration from the RTO.
 
-**Recommended practices:** Run scheduled restore exercises into an isolated environment, validate checksums and critical business records, measure end-to-end recovery time, test access to encryption keys and credentials, record evidence, and track remediation actions. Include application owners in periodic recovery simulations.
+**Recommended practices:** Run scheduled restore exercises into an isolated environment, validate checksums and critical business records, measure end-to-end recovery time, test access to encryption keys and credentials, record evidence, and track remediation actions. Include application owners in periodic recovery simulations, and test at least quarterly in regulated domains.
 
 ### PITR
 
@@ -858,7 +805,7 @@ Enterprise readiness depends on whether the platform can:
 
 ---
 
-## 13. Managed Cloud Services
+## 10. Managed Cloud Services
 
 Managed services reduce infrastructure work, but they do not transfer accountability to the provider for:
 
@@ -929,7 +876,7 @@ Record which managed features create deliberate lock-in and what business value 
 
 ---
 
-## 14. Interview Answer
+## 11. Interview Answer
 
 {{< interview-answer >}}
 "I start with the business capability and the cost of failure, then make the workload measurable: data model, access patterns, read/write ratio, consistency semantics, p99 latency, throughput, growth, availability, RPO/RTO, residency, and cost. I classify each bounded workload rather than choosing a product first — relational for transactional invariants, document for aggregates, wide column for partition-key scale, key-value for hot keyed state, graph for traversal, search for lexical retrieval, warehouse for analytics, and vector for similarity. I identify the authoritative store and treat caches and indexes as reproducible projections. I shortlist at least two viable options and test realistic data, skew, concurrency, failover, restore, migration, and operability. The ADR records evidence, rejected alternatives, accepted trade-offs, ownership, and review triggers. I use polyglot persistence only where the benefit of a specialized store exceeds its consistency and operational cost."
@@ -937,7 +884,7 @@ Record which managed features create deliberate lock-in and what business value 
 
 ---
 
-## 15. Related Topics
+## 12. Related Topics
 
 - [Databases module](/technology-playbook/module-databases/) — product-specific pages
 - [MongoDB vs PostgreSQL](/database-handbook/mongodb-vs-postgresql/) · [Oracle vs PostgreSQL](/database-handbook/oracle-vs-postgresql/)
