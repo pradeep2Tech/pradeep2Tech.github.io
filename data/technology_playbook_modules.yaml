@@ -41,25 +41,32 @@ modules:
 
   - id: 3
     slug: workflow-batch-rules-schedulers
-    focus: "Workflow, Batch, Rules & Schedulers"
-    landingTitle: "Workflow, Batch, Rules & Schedulers"
-    landingDescription: "Orchestration, batch processing, business rules, and job scheduling for enterprise workloads."
-    topics:
-      - temporal
-      - camunda
-      - netflix-conductor
-      - airflow
-      - argo-workflows
-      - prefect
-      - apache-spark
-      - apache-flink
-      - apache-beam
-      - databricks
-      - drools
-      - easy-rules
-      - openl-tablets
-      - aws-rule-engine
-      - azure-logic-apps
-      - quartz
-      - control-m
-      - autosys
+    focus: "Technology Deep Dives"
+    landingTitle: "Technology Deep Dives"
+    landingDescription: "Workflow engines, batch and data processing, business rules, and enterprise scheduling."
+    groups:
+      - name: "Workflow Engines"
+        topics:
+          - temporal
+          - camunda
+          - netflix-conductor
+          - argo-workflows
+      - name: "Batch & Data Processing"
+        topics:
+          - ../spring-boot/spring-batch
+          - apache-spark
+          - apache-flink
+          - apache-beam
+          - databricks
+          - airflow
+          - prefect
+      - name: "Rule Engines"
+        topics:
+          - drools
+          - easy-rules
+          - openl-tablets
+      - name: "Schedulers"
+        topics:
+          - quartz
+          - control-m
+          - autosys
