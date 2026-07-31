@@ -1,94 +1,69 @@
 ---
-title: "Collection Selection Matrix"
+title: "Java Collections Interview Refresh"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "Choose List, Set, Map, Queue by access pattern, ordering, concurrency, and null policy."
-tags: ["java", "java-engineering", "handbook", "interview"]
+description: "Choose Java collections by access pattern, ordering, and concurrency."
+tags: ["java", "collections", "interview", "cheatsheet"]
 categories: ["Java Engineering Handbook"]
-shortTitle: "Collection Choice"
+shortTitle: "Collections"
 module: 2
-moduleTitle: "Collections"
+moduleTitle: "Collections Refresh"
 sectionRef: "2.1"
-interviewHandbook: true
-aliases:
-  - collections-decision-matrix
-  - list-set-queue-comparison
-  - collections-utils-and-ordering
+cheatSheet: true
+aliases: ["collections-decision-matrix", "list-set-queue-comparison", "collections-utils-and-ordering"]
 ---
 
+## At a Glance
 
-Interview-oriented collection selection for senior engineers.
+- Start from access pattern, ordering, mutation rate, concurrency, and memory—not habit.
+- Know expected complexity and semantic guarantees; implementation details are optional probes.
+- For shared mutable state, prefer ownership or immutability before concurrent collections.
 
-```mermaid
-flowchart TD
-  need[Need collection?] --> keyed{Keyed?}
-  keyed -->|yes| map[Map matrix]
-  keyed -->|no| unique{Unique?}
-  unique -->|yes| set[Set matrix]
-  unique -->|no| seq{Indexed?}
-  seq -->|yes| al[ArrayList]
-  seq -->|no| q[Queue/Deque]
-```
+---
 
-| Need | Default | Alternatives |
+## Selection Matrix
+
+| Need | Default choice | Change when |
 | :--- | :--- | :--- |
-| General list | `ArrayList` | `LinkedList` rare |
-| Unique unordered | `HashSet` | `LinkedHashSet` for order |
-| Unique sorted | `TreeSet` | `ConcurrentSkipListSet` |
-| Key-value | `HashMap` | See [Map Implementations](/java-engineering/map-implementations/) |
-| FIFO / stack | `ArrayDeque` | `LinkedBlockingQueue` bounded |
-| Priority | `PriorityQueue` | Not thread-safe |
-| Concurrent map | `ConcurrentHashMap` | Not `Collections.synchronizedMap` for writes |
-| LRU cache | `LinkedHashMap` access-order | Caffeine in production |
+| Indexed sequence | `ArrayList` | Use `ArrayDeque` for queue/stack operations |
+| Unique values | `HashSet` | `LinkedHashSet` for insertion order; `TreeSet` for sorted/range operations |
+| Key/value lookup | `HashMap` | `LinkedHashMap` for stable/LRU order; `TreeMap` for sorted/range keys |
+| FIFO/LIFO | `ArrayDeque` | `BlockingQueue` for producer-consumer coordination |
+| Priority processing | `PriorityQueue` | It orders removal, not iteration |
+| Concurrent map | `ConcurrentHashMap` | Use atomic `compute`, `merge`, or `putIfAbsent` for compound changes |
+| Read-mostly list | `CopyOnWriteArrayList` | Avoid when writes are frequent or lists are large |
+| Bounded work buffer | `ArrayBlockingQueue` | Capacity creates backpressure; unbounded queues hide overload |
 
-| List op | ArrayList | LinkedList |
-| :--- | :---: | :---: |
-| `get(i)` | **O(1)** | O(n) |
-| `add(end)` | O(1)* | O(1) |
-| `add(i)` | O(n) | O(n) |
+## Complexity Refresh
 
-| Set op | HashSet | TreeSet |
-| :--- | :---: | :---: |
-| `add/contains` | O(1) avg | O(log n) |
-| Iteration order | Undefined | Sorted |
+| Operation | Typical cost | Caveat |
+| :--- | :--: | :--- |
+| `ArrayList.get` | O(1) | Middle insert/remove is O(n) |
+| `HashMap.get/put` | O(1) average | Correct immutable key contract matters |
+| `TreeMap.get/put` | O(log n) | Pays for ordering and range queries |
+| `PriorityQueue.offer/poll` | O(log n) | `peek` is O(1) |
+| `containsValue` on map | O(n) | Value lookup is not indexed |
 
----
+## Interview Decisions
 
-## ArrayList vs LinkedList for 10M random reads?
+| Prompt | Strong answer |
+| :--- | :--- |
+| `ArrayList` vs `LinkedList` | Usually `ArrayList`: locality, memory, O(1) indexed access; linked traversal rarely wins |
+| Immutable vs unmodifiable | Immutable cannot change; unmodifiable may be a view of mutable backing data |
+| Fail-fast iterator | Best-effort bug detection, not a thread-safety guarantee |
+| Why CHM disallows null | Null would make “absent” ambiguous during concurrent reads |
+| LRU cache | `LinkedHashMap` works locally; distributed cache needs expiry, capacity, consistency, and metrics |
 
-**Difficulty:** Easy · **Time:** 30 sec
+## Quick Gotchas
 
-### Short Answer
-
-`ArrayList` — O(1) indexed access. `LinkedList` is O(n) per get.
-
-### Detailed Explanation
-
-LinkedList rarely wins on modern CPUs due to cache misses walking nodes. Use ArrayList unless deque operations at both ends without index access.
-
-### Interview Questions
-
-1. When is LinkedList justified?
-
-### Follow-up Questions
-
-- When is LinkedList justified?
+- Pre-size a large known collection, but do not guess oversized capacities everywhere.
+- Never mutate keys after insertion.
+- `Collections.synchronizedMap` does not make multi-step logic atomic.
+- Choose bounded queues and define rejection/backpressure behavior.
+- Do not claim `LinkedList` is faster without the actual access pattern and measurement.
 
 ---
-## When LinkedHashMap over HashMap?
 
-**Difficulty:** Medium · **Time:** 1 min
+## See Also
 
-### Short Answer
-
-Insertion or access-order iteration, LRU caches, predictable debugging.
-
-### Detailed Explanation
-
-Maintains doubly-linked list through entries. Access-order mode (`true` ctor flag) moves entries on `get` — classic LRU with `removeEldestEntry`.
-
-### Production Notes
-
-Pre-size: `new HashMap<>(expectedSize / 0.75f + 1)`.
-
----
+[← Core Java](/java-engineering/language-fundamentals/) · [Concurrency →](/java-engineering/java-threading-interview-guide/)

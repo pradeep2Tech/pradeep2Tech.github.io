@@ -1,61 +1,57 @@
 ---
-description: Java Engineering Handbook — interview-focused handbook for senior engineers
-globs: content/java-engineering/**/*.md, data/java_engineering_modules.yaml, data/java_engineering_order.yaml, scripts/build_java_engineering_handbook.py, scripts/generate_java_handbook_refactor.py
+description: Java Interview Refresh - six cheat sheets for experienced engineers
+globs: content/java-engineering/**/*.md, data/java_engineering_modules.yaml, data/java_engineering_order.yaml, scripts/build_java_engineering_handbook.py
 alwaysApply: false
 ---
 
-# Java Engineering Handbook
+# Java Interview Refresh
 
-Reference: `content/java-engineering/top-100-java-interview-questions.md`, `content/java-engineering/hashmap-internals.md`
+Reference: `content/java-engineering/top-100-java-interview-questions.md`, `content/java-engineering/language-fundamentals.md`
 
 ## Audience
 
-Senior engineers, leads, and **architects** — interview preparation, quick revision, production decisions. **Not** a beginner tutorial.
+Experienced Java engineers, leads, and architects who need a fast interview refresh. Not a beginner tutorial and not an internals curriculum.
 
-## Structure
+## Primary Course
 
 | Path | Purpose |
 |---|---|
-| `data/java_engineering_modules.yaml` | 6 modules, **36 topics** |
-| `data/java_engineering_order.yaml` | Flat prev/next nav |
-| `scripts/build_java_engineering_handbook.py` | Sync order + prune orphans |
-| `scripts/generate_java_handbook_refactor.py` | Regenerate interview pages (optional) |
-| `content/java-engineering/<slug>.md` | Hand-maintained interview pages |
+| `data/java_engineering_modules.yaml` | 6 modules, one cheat sheet each |
+| `data/java_engineering_order.yaml` | Flat previous/next navigation |
+| `scripts/build_java_engineering_handbook.py` | Sync course order; preserve optional depth pages |
+| `content/java-engineering/<slug>.md` | Hand-maintained refresh sheets and optional references |
 
-URL: `/java-engineering/<slug>/` — use `aliases:` in front matter for renamed slugs.
+URL: `/java-engineering/<slug>/` - use `aliases:` in front matter for renamed slugs.
 
-## Page Format (`interviewHandbook: true`)
+## Page Format (`cheatSheet: true`)
 
-1. **Question** as `##` heading
-2. **Short Answer**
-3. **Detailed Explanation**
-4. **Internal Working** (when relevant)
-5. **Production Notes**
-6. **Common Mistakes**
-7. **Follow-up Questions** with links
+1. At a Glance - 2-3 bullets
+2. Decision/reference tables
+3. Production scenarios or answer frame
+4. Quick Gotchas
+5. See Also
 
-Difficulty and expected answer time live on the [Top 100 index](/java-engineering/top-100-java-interview-questions/) only — not repeated on depth pages.
-
-Cheat sheets (`cheatSheet: true`): one-screen tables/diagrams only — link to depth pages.
+Answers should lead with the decision, constraint, and trade-off. Explain internals only in direct response to an explicit interviewer probe.
 
 ## Modules
 
-1. Language Fundamentals (incl. streams)
-2. Collections (internals + selection)
-3. Concurrency (JMM, CAS, threading, VT)
-4. JVM (memory/GC, class loaders, JIT)
-5. Platform APIs
-6. Interview Cheat Sheets (Top 100 index)
+1. Core Java Refresh
+2. Collections Refresh
+3. Concurrency Refresh
+4. JVM in Production
+5. Modern Java
+6. Interview Sprint
+
+Each module contains one compact cheat sheet. Deep internals pages may remain as optional references but must not appear in the primary course unless specifically requested.
 
 ## Out of Scope
 
-Spring Boot, Hibernate, Maven, design patterns, DSA, NIO deep dive → other sections.
+Spring Boot, Hibernate, build tools, design patterns, DSA, and distributed-system design belong in their dedicated sections.
 
 ## Maintenance
 
 ```bash
-python scripts/build_java_engineering_handbook.py   # sync order, prune orphans
-python scripts/generate_java_handbook_refactor.py  # optional bulk regen of generated pages
+python scripts/build_java_engineering_handbook.py
 ```
 
-Content is **hand-maintained** in markdown. Build script does not overwrite page bodies.
+Page bodies are hand-maintained. The build script synchronizes navigation and does not delete unlisted depth pages.

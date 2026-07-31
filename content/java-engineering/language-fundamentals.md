@@ -1,124 +1,74 @@
 ---
-title: "Language Fundamentals"
+title: "Core Java Interview Refresh"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "Primitives, var, records, switch patterns — interview essentials for senior Java engineers."
-tags: ["java", "java-engineering", "handbook", "interview"]
+description: "One-page refresh of Java language decisions for experienced engineers."
+tags: ["java", "interview", "cheatsheet"]
 categories: ["Java Engineering Handbook"]
-shortTitle: "Language Basics"
+shortTitle: "Core Java"
 module: 1
-moduleTitle: "Language Fundamentals"
+moduleTitle: "Core Java Refresh"
 sectionRef: "1.1"
-interviewHandbook: true
-aliases:
-  - core-java-quick-ref
+cheatSheet: true
+aliases: ["core-java-quick-ref"]
 ---
 
-## Why prefer primitives over wrappers in hot loops?
+## At a Glance
 
-**Difficulty:** Easy · **Time:** 30 sec
-
-### Short Answer
-
-Primitives avoid heap allocation and autoboxing overhead.
-
-### Detailed Explanation
-
-Wrapper types (`Integer`, `Long`) are objects — each autobox may allocate on the heap and add cache pressure. In tight loops over millions of iterations, `int` arithmetic is faster and GC-friendly. Collections require generics, so use primitive-specialized libraries (fastutil, Eclipse Collections) when numeric throughput matters.
-
-### Internal Working
-
-Autoboxing calls `Integer.valueOf` which may hit the small-integer cache (-128 to 127) or allocate.
-
-### Production Notes
-
-Profile before micro-optimizing; readability wins in business logic.
-
-### Common Mistakes
-
-Using `Integer` in `List` where values are always non-null.
-
-### Interview Questions
-
-1. What is the default value of a local `int` vs field?
-2. When does widening vs narrowing apply?
-
-### Follow-up Questions
-
-- What is the default value of a local `int` vs field?
-- When does widening vs narrowing apply?
+- Answer with **when and why**, not textbook definitions.
+- Prefer composition, immutability, explicit contracts, and simple failure handling.
+- Know language features well enough to review production code; skip compiler/JVM internals unless asked.
 
 ---
-## What does `final` on a reference mean?
 
-**Difficulty:** Easy · **Time:** 30 sec
+## Language and Design Decisions
 
-### Short Answer
+| Topic | Interview answer | Production judgment |
+| :--- | :--- | :--- |
+| Interface vs abstract class | Interface defines capability; abstract class shares state/implementation | Prefer interfaces at boundaries; inherit only for a stable IS-A model |
+| Composition vs inheritance | Composition delegates and changes independently | Default to composition; inheritance couples lifecycle and behavior |
+| Record vs class | Record is a transparent immutable data carrier | Use for DTOs/value responses; use class when identity or mutable lifecycle matters |
+| Sealed hierarchy | Restricts valid subtypes | Useful for closed domain outcomes and exhaustive pattern matching |
+| `final` | Prevents reassignment, override, or inheritance | A final reference does not make its object immutable |
+| Pass-by-value | Java copies primitive values and object references | A method can mutate the referenced object, not replace the caller's reference |
+| Immutable type | Final state, no mutators, defensive copies | Safer sharing, caching, and concurrent use |
 
-The reference binding cannot change; the referenced object may still mutate.
+## Contracts You Must Recall
 
-### Detailed Explanation
+| Contract | Rule | Typical failure |
+| :--- | :--- | :--- |
+| `equals` / `hashCode` | Equal objects must have equal hashes | Lost lookup after mutating a map key |
+| `Comparable` / `Comparator` | Natural order vs external ordering | Ordering inconsistent with equality |
+| Checked exception | Caller can reasonably recover | Leaking infrastructure exceptions through domain APIs |
+| Unchecked exception | Programming error or unrecoverable operation | Catching `Exception` and hiding the cause |
+| Try-with-resources | Closes in reverse declaration order | Missing suppressed exception during diagnosis |
 
-`final User user` means you cannot reassign `user` to another object. If `User` is mutable, `user.setName()` is still legal. Immutability requires an immutable class design (records, unmodifiable fields).
+## Generics, Lambdas, and Streams
 
-### Interview Questions
+| Question | Quick answer |
+| :--- | :--- |
+| `? extends T` | Producer: read values as `T`; do not add |
+| `? super T` | Consumer: safely add `T`; reads are `Object` |
+| Why type erasure matters | Generic type arguments are mostly unavailable at runtime |
+| `map` vs `flatMap` | Transform one value vs transform and flatten nested values |
+| `reduce` vs `collect` | Immutable associative reduction vs mutable accumulation |
+| `Optional` | Good return type for absence; avoid fields, parameters, and `get()` |
+| Parallel stream | Use only for measured, CPU-bound, independent, sufficiently large work |
 
-1. How do `final` fields affect JVM initialization and visibility?
+## Quick Gotchas
 
-### Follow-up Questions
+- Never use mutable business fields in a `HashMap` key.
+- Do not return `null` collections; return an empty collection.
+- Do not use exceptions for normal control flow.
+- Stream side effects make correctness and parallel execution harder.
+- Defensive copying must happen on both input and output for mutable fields.
 
-- How do `final` fields affect JVM initialization and visibility?
+## Answer Frame
 
----
-## Arrays covariant but generics invariant — explain.
-
-**Difficulty:** Medium · **Time:** 1 min
-
-### Short Answer
-
-`String[]` is an `Object[]` at runtime; `List<String>` is not a `List<Object>`.
-
-### Detailed Explanation
-
-Arrays carry runtime element type information — assigning `Object[] o = new String[1]; o[0] = 1` fails at runtime with `ArrayStoreException`. Generics erase type parameters at compile time; the compiler rejects unsafe assignments to preserve type safety without runtime checks on every read.
-
-### Internal Working
-
-Type erasure: `List<String>` bytecode is `List`.
-
-### Production Notes
-
-Don't use arrays for generic APIs — prefer `List<T>`.
-
-### Interview Questions
-
-1. What is heap pollution?
-2. Why no `new T[]`?
-
-### Follow-up Questions
-
-- What is heap pollution?
-- Why no `new T[]`?
+> “I would choose **X** because of **this constraint**. The trade-off is **Y**. In production I would guard against **Z**.”
 
 ---
-## Pattern matching switch and exhaustiveness (17+/21+)
 
-**Difficulty:** Medium · **Time:** 1 min
+## See Also
 
-### Short Answer
-
-Switch on sealed types must cover all permitted subtypes; compiler enforces exhaustiveness.
-
-### Detailed Explanation
-
-Sealed classes/interfaces restrict subclasses (`permits`). Combined with pattern switches, the compiler verifies all cases are handled — no default needed when exhaustive. Records destructure in case labels: `case Point(int x, int y)`.
-
-### Interview Questions
-
-1. Difference between classic switch and switch expressions?
-
-### Follow-up Questions
-
-- Difference between classic switch and switch expressions?
-
----
+[Collections →](/java-engineering/collection-selection-matrix/) · [Interview Sprint](/java-engineering/top-100-java-interview-questions/)

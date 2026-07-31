@@ -1,121 +1,85 @@
 ---
-title: "JVM Memory, GC & OOM Guide"
+title: "JVM Production Interview Refresh"
 date: 2026-06-30T10:00:00+00:00
 draft: false
-description: "Heap regions, collectors, leaks, OOM types, and diagnosis."
-tags: ["java", "java-engineering", "handbook", "interview"]
+description: "JVM memory, GC, OOM, and production diagnosis for senior interviews."
+tags: ["java", "jvm", "production", "interview", "cheatsheet"]
 categories: ["Java Engineering Handbook"]
-shortTitle: "Memory & GC"
+shortTitle: "JVM Production"
 module: 4
-moduleTitle: "JVM"
+moduleTitle: "JVM in Production"
 sectionRef: "4.1"
-interviewHandbook: true
-aliases:
-  - jvm-memory-and-gc
-  - memory-leaks-and-oom
-  - memory-diagram-interview
-  - gc-summary-interview
+cheatSheet: true
+aliases: ["jvm-memory-and-gc", "memory-leaks-and-oom", "memory-diagram-interview", "gc-summary-interview"]
 ---
 
-## Stack vs heap?
+## At a Glance
 
-**Difficulty:** Easy · **Time:** 30 sec
-
-### Short Answer
-
-Stack: per-thread frames, primitives and references, automatic lifetime. Heap: shared objects, GC-managed.
-
-### Detailed Explanation
-
-References on stack point to heap objects. Static field data lives in heap; class metadata in Metaspace.
-
-### Internal Working
-
-See [Memory Diagram Cheat Sheet](/java-engineering/memory-diagram-cheatsheet/).
-
-### Interview Questions
-
-1. Where do static fields live?
-
-### Follow-up Questions
-
-- Where do static fields live?
+- For architects, JVM knowledge means diagnosing capacity, latency, leaks, and upgrade risk.
+- Tune from evidence: service-level latency, allocation rate, GC logs, JFR, dumps, and container limits.
+- Explain collector internals only if the interviewer asks a follow-up.
 
 ---
-## Minor vs major GC?
 
-**Difficulty:** Medium · **Time:** 1 min
+## Memory Map
 
-### Short Answer
+| Area | Holds | Common failure signal |
+| :--- | :--- | :--- |
+| Heap | Objects and arrays | `Java heap space`, rising live set, GC pressure |
+| Thread stacks | Frames and local variables | `StackOverflowError`, native-thread pressure |
+| Metaspace | Class metadata | Class-loader leak, `Metaspace` OOM |
+| Direct/native memory | Buffers, JNI, JVM structures | Process memory high while heap looks normal |
+| Code cache | Compiled methods | Compilation disabled/full-code-cache warnings |
 
-Minor: young gen (Eden/Survivor), frequent, usually short STW. Major/old: tenured collection — longer unless concurrent collector.
+## Collector Choice
 
-### Detailed Explanation
+| Goal | Typical starting point | Decision evidence |
+| :--- | :--- | :--- |
+| Balanced general service | G1 | Pause percentiles, throughput, heap size |
+| Very low pauses / large heap | ZGC | Latency target, CPU headroom, supported JDK |
+| Batch throughput | Parallel GC | Total completion time matters more than pauses |
 
-Generational hypothesis: most objects die young. Promotion when survivors exceed age threshold.
+Do not promise that changing collectors fixes allocation churn, leaks, undersized containers, or downstream latency.
 
-### Internal Working
+## Production Diagnosis
 
-TLAB: per-thread Eden buffers reduce allocation contention.
+| Symptom | First evidence | Likely directions |
+| :--- | :--- | :--- |
+| Heap keeps rising | GC log + post-GC live set + heap histogram | Retention leak, cache growth, workload growth |
+| Long pauses | GC log/JFR, allocation and promotion rate | Heap sizing, allocation churn, collector fit |
+| High CPU, normal heap | JFR/profiler + repeated thread dumps | Hot loop, serialization, contention, excessive retries |
+| Process memory > heap | Native memory tracking / container metrics | Direct buffers, threads, JNI, metaspace |
+| Service frozen | Thread dumps several seconds apart | Deadlock, pool starvation, blocking dependency |
+| OOM restart | Exact OOM type + dump + container events | Heap, metaspace, native threads, direct memory, cgroup kill |
 
-### Interview Questions
+## Artifact to Use
 
-1. G1 mixed GC?
-2. When ZGC over G1?
+| Artifact | Answers |
+| :--- | :--- |
+| Heap dump | What retains memory and along which reference path? |
+| Thread dump | What are threads waiting on, and is progress occurring? |
+| GC log | How often, how long, how much memory reclaimed? |
+| JFR | Where are CPU, allocation, locks, I/O, and pauses spent over time? |
+| Application metrics/traces | Which user path and dependency correlate with the JVM symptom? |
 
-### Follow-up Questions
+## Strong Scenario Answer
 
-- G1 mixed GC?
-- When ZGC over G1?
+1. Confirm user impact and stabilize with a safe operational action.
+2. Capture evidence before restart when feasible.
+3. Separate leak from load by checking the post-GC live-set trend.
+4. Correlate JVM evidence with releases, traffic, caches, and downstream latency.
+5. Fix the cause, canary it, and add a regression alert/load test.
 
----
-## G1 vs ZGC?
+## Quick Gotchas
 
-**Difficulty:** Hard · **Time:** 2 min
-
-### Short Answer
-
-G1: regional, balanced default. ZGC: sub-ms pauses, colored pointers, large heaps, more CPU/barrier cost.
-
-### Detailed Explanation
-
-Tune with `-Xlog:gc*` and pause P99. Container: `-XX:MaxRAMPercentage`.
-
-### Production Notes
-
-`-XX:+HeapDumpOnOutOfMemoryError` on persistent volume.
-
-### Interview Questions
-
-1. Shenandoah?
-2. Humongous objects in G1?
-
-### Follow-up Questions
-
-- Shenandoah?
-- Humongous objects in G1?
-
----
-## Can you leak memory with a GC?
-
-**Difficulty:** Medium · **Time:** 1 min
-
-### Short Answer
-
-Yes — logical leaks keep strong references (static maps, listeners, ThreadLocal, classloader chains).
-
-### Detailed Explanation
-
-OOM types: heap, Metaspace, direct buffer, unable to create native thread.
-
-### Interview Questions
-
-1. See Reference Types
-2. ThreadLocal in pools
-
-### Follow-up Questions
-
-- See Reference Types
-- ThreadLocal in pools
+- “GC exists, so Java cannot leak” is false; reachable objects can be retained forever.
+- A bigger heap can delay an OOM and lengthen recovery without fixing retention.
+- Container memory includes more than `-Xmx`.
+- A single thread dump is a snapshot; compare several for progress.
+- Avoid memorizing flags without explaining the metric and risk they address.
 
 ---
+
+## See Also
+
+[← Concurrency](/java-engineering/java-threading-interview-guide/) · [Modern Java →](/java-engineering/java-version-migration-guide/)

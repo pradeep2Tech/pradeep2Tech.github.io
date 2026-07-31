@@ -66,228 +66,37 @@ flowchart LR
 
 ## 3. Understand the Workload Requirements
 
-Evaluate the five requirements together. No single factor selects a database; the decision comes from their combination, priority, and tension.
-
-### Access patterns
-
-Access patterns describe how data is shaped, read, written, joined, searched, and aggregated. Capture the dominant paths before designing a schema or comparing products.
-
-#### Data model
-
-**Why it matters:** The shape of the data determines how naturally the database can enforce invariants, represent relationships, evolve schemas, and answer queries. A poor fit pushes integrity and transformation logic into application code.
-
-**Questions an architect should ask:**
-
-- Are entities highly related, aggregate-oriented, key-addressable, graph-shaped, temporal, or analytical?
-- Which invariants must be enforced atomically?
-- How frequently will the schema evolve, and must old and new representations coexist?
-- Is duplication acceptable, and which copy is authoritative?
-
-**Common mistakes:** Selecting a flexible schema to avoid modelling, treating denormalization as free, or choosing the database from a sample entity while ignoring relationships and lifecycle changes.
-
-#### Query shapes
-
-**Why it matters:** Databases optimize specific query shapes. Known access patterns determine indexes, partition keys, aggregate boundaries, and whether a store class is suitable at all.
-
-**Questions an architect should ask:**
-
-- What are the highest-volume and highest-value reads and writes?
-- Are lookups by key, range, relationship, full text, similarity, or multidimensional aggregation?
-- Which queries require filtering, sorting, JOINs, pagination, or ad hoc exploration?
-- For each query, what are its frequency, criticality, result size, and consistency expectation?
-- Can new access patterns be served by derived read models instead of the system of record?
-
-**Common mistakes:** Designing only from the entity model, assuming indexes solve every query, or selecting a database before listing the critical queries and their frequency.
-
-#### Read/write ratio
-
-**Why it matters:** Read-heavy and write-heavy workloads impose different demands on indexing, replication, caching, compaction, and contention. The ratio also influences whether separate read models are justified.
-
-**Questions an architect should ask:**
-
-- What are the sustained and peak read and write rates?
-- Are updates concentrated on hot records or distributed across keys?
-- How many secondary indexes must each write maintain?
-- Can reads tolerate replicas, caches, or asynchronously built projections?
-
-**Common mistakes:** Using averages that hide peaks, counting requests without considering work per request, or adding indexes for reads without measuring their write amplification.
-
-### Consistency requirements
-
-**Why it matters:** Consistency defines what users and downstream systems may observe after a write. It protects business invariants but can constrain availability, latency, and geographic distribution.
-
-**Questions an architect should ask:**
-
-- Which operations require linearizable, serializable, read-your-writes, or eventual consistency?
-- What business harm results from stale, reordered, duplicated, or lost updates?
-- Must multiple records or aggregates change atomically?
-- How will conflicts be detected and resolved?
-
-**Common mistakes:** Asking whether the whole system needs "strong consistency," confusing ACID with every consistency guarantee, or accepting eventual consistency without defining the user-visible reconciliation behaviour.
-
-### Latency and throughput targets
-
-#### Latency
-
-**Why it matters:** Latency is part of the user journey and often determines topology, indexing, caching, and data locality. Tail latency matters more than an attractive average.
-
-**Questions an architect should ask:**
-
-- What are the p50, p95, and p99 targets for each critical operation?
-- Does the target include network and application time or only database execution?
-- Which queries are latency-sensitive, and which can run asynchronously?
-- How does latency change during peaks, failures, or maintenance?
-
-**Common mistakes:** Optimizing for average latency, quoting vendor benchmarks as application performance, or setting one latency target for every workload.
-
-#### Throughput
-
-**Why it matters:** Throughput determines whether the design can absorb sustained demand, bursts, batch jobs, and background processing without violating latency or availability targets.
-
-**Questions an architect should ask:**
-
-- What operations per second and data volume per second must be supported?
-- What are the peak, burst, and batch profiles?
-- How expensive is each operation in rows, documents, indexes, or scanned data?
-- What headroom is required for growth and degraded operation?
-
-**Common mistakes:** Treating all operations as equal, testing only steady-state traffic, or projecting throughput without data size, key distribution, and concurrency.
-
-### Scale trajectory
-
-#### Scalability
-
-**Why it matters:** The scale model determines how capacity grows and where limits appear. Vertical scaling, read replicas, partitioning, and sharding solve different constraints and introduce different complexity.
-
-**Questions an architect should ask:**
-
-- What will grow: data volume, query rate, write rate, tenants, or relationship density?
-- Can the workload be partitioned with stable, evenly distributed keys?
-- Which operations require cross-partition coordination?
-- At what threshold does the current scale strategy stop being economical or reliable?
-
-**Common mistakes:** Designing for hypothetical internet scale, postponing partition-key analysis until growth arrives, or assuming horizontal scaling removes coordination and hotspot problems.
-
-#### Availability, durability, and recoverability
-
-**Why it matters:** Availability defines whether the service can accept and serve requests during faults, durability defines whether acknowledged data survives those faults, and recoverability defines whether the organization can restore a trustworthy service after logical or physical failure. These are separate qualities and must not be collapsed into a single uptime percentage.
-
-**Questions an architect should ask:**
-
-- What availability target applies to each critical read and write journey?
-- What data loss is acceptable, expressed as an RPO, and how quickly must service return, expressed as an RTO?
-- Which failures must the design tolerate: process, node, zone, region, operator error, corruption, or compromised credentials?
-- How are ambiguous writes, failover, backup restore, and downstream reconciliation handled?
-
-**Common mistakes:** Treating replication as backup, quoting provider SLAs as application availability, designing failover without fencing, or defining an RPO and RTO that have never been demonstrated through recovery exercises.
-
-#### Multi-region requirements
-
-**Why it matters:** Multi-region architecture changes the consistency, latency, availability, conflict, and data-residency trade-offs. It must be justified by a business continuity or user-latency requirement.
-
-**Questions an architect should ask:**
-
-- Is the requirement active-active writes, regional reads, disaster recovery, or data residency?
-- What happens to writes during a network partition or regional outage?
-- Which data may cross regional boundaries?
-- What recovery point and recovery time are required for regional failure?
-
-**Common mistakes:** Treating replicas as a complete multi-region strategy, enabling writes everywhere without a conflict model, or using global distribution when a tested recovery design would meet the requirement.
-
-### Operational constraints
-
-Operational constraints determine whether the organization can run the chosen design safely, legally, and economically throughout its lifecycle.
-
-#### Operational maturity
-
-**Why it matters:** A database is viable only if the organization can deploy, observe, secure, recover, upgrade, and troubleshoot it within the required service levels.
-
-**Questions an architect should ask:**
-
-- Who owns the database and responds to incidents?
-- Are backup, restore, upgrade, capacity, and failure procedures understood and tested?
-- Does the organization have suitable monitoring and diagnostic experience?
-- Is the operational model proportional to the business value of the workload?
-
-**Common mistakes:** Evaluating query features while ignoring lifecycle ownership, assuming a managed offering removes all operational responsibility, or adopting several specialized stores without staffing the resulting data platform.
-
-#### Compliance
-
-**Why it matters:** Regulatory, contractual, privacy, retention, and audit obligations can eliminate otherwise suitable options and influence the logical and physical data architecture.
-
-**Questions an architect should ask:**
-
-- What data classifications, residency rules, retention periods, and deletion obligations apply?
-- What encryption, access control, segregation, and audit evidence are required?
-- Can sensitive fields be minimized, tokenized, or isolated?
-- Does the design support legal hold and verifiable deletion where required?
-
-**Common mistakes:** Treating compliance as a post-selection checklist, assuming encryption alone is sufficient, or replicating regulated data into caches, indexes, and analytics stores without applying the same controls.
-
-#### Data lifecycle, ownership, and sovereignty
-
-**Why it matters:** Data outlives individual applications. Ownership, provenance, retention, archival, deletion, and geographic placement determine whether the platform remains governable as data is copied into caches, indexes, streams, warehouses, backups, and AI retrieval systems.
-
-**Questions an architect should ask:**
-
-- Which bounded context owns each business fact, and which stores contain only derived projections?
-- How are retention, legal hold, archival, deletion, and subject-access obligations propagated to every copy?
-- What lineage proves where data originated, how it changed, and which consumers received it?
-- Which countries, regions, tenants, or security zones may store or process the data?
-
-**Common mistakes:** Allowing multiple systems to claim authority for the same fact, applying deletion only to the primary database, losing provenance during CDC or ETL, or using backups and analytical copies to bypass residency controls.
-
-#### Tenancy and isolation
-
-**Why it matters:** Tenant placement affects security boundaries, noisy-neighbour risk, customization, scaling, backup and restore, residency, and unit economics. The database model must support both present customer tiers and credible enterprise isolation requirements.
-
-**Questions an architect should ask:**
-
-- Are tenants isolated by row, schema, database, cluster, account, or deployment, and why?
-- Can one tenant exhaust connections, storage, I/O, partitions, or query capacity used by others?
-- Must a tenant be restored, migrated, encrypted, retained, or deleted independently?
-- How will tenant identity be enforced in every query, cache key, event, index, and analytical projection?
-
-**Common mistakes:** Treating a tenant identifier as sufficient isolation, selecting database-per-tenant without automating fleet operations, ignoring large-tenant skew, or losing tenant boundaries in caches, streams, and analytics.
-
-#### Cost
-
-**Why it matters:** Database cost includes more than licenses or infrastructure. Storage growth, replicas, indexes, data movement, engineering time, specialist skills, and migration risk contribute to total cost of ownership.
-
-**Questions an architect should ask:**
-
-- What is the expected cost at current, forecast, and peak scale?
-- Which workload characteristics drive cost: compute, storage, I/O, replicas, or data transfer?
-- What engineering and operational effort does each option require?
-- What is the cost of migration, lock-in, downtime, or an incorrect decision?
-
-**Common mistakes:** Comparing list prices instead of workload costs, ignoring people and migration costs, or overengineering for future scale that may never arrive.
-
-#### Portability and exit strategy
-
-**Why it matters:** A database decision creates long-lived dependencies in schemas, drivers, operational procedures, security controls, and data pipelines. Portability is not always the priority, but lock-in should be intentional, valued, and reversible enough for the business risk.
-
-**Questions an architect should ask:**
-
-- Which proprietary APIs, data types, extensions, operational features, or billing constructs will the design depend on?
-- Can data be exported in a usable format within an acceptable time and cost?
-- What would trigger migration, and can CDC or dual-run techniques support a controlled exit?
-- Which managed capabilities create enough business value to justify migration complexity?
-
-**Common mistakes:** Claiming portability because a service supports a familiar API, avoiding useful managed capabilities without a credible exit requirement, or discovering only during migration that data export, egress, extensions, and operational semantics are the real constraints.
-
-#### Team expertise
-
-**Why it matters:** Familiarity affects delivery speed, schema quality, performance tuning, incident recovery, and the ability to use a database safely. Expertise is a decision factor, though not a reason to preserve a poor architectural fit forever.
-
-**Questions an architect should ask:**
-
-- Which technologies can the team design, tune, secure, and recover today?
-- Is the expertise concentrated in one person or shared and documented?
-- What training, hiring, or platform support would close a capability gap?
-- Does the benefit of a new database justify its learning and support burden?
-
-**Common mistakes:** Selecting technology from résumé preference, equating basic development experience with production expertise, or rejecting a better fit without evaluating a realistic capability-building plan.
+Use the five requirements as a shared vocabulary for discovery, product comparison, proof-of-concept design, and ADR review.
+
+```mermaid
+mindmap
+  root((Workload Requirements))
+    Access Patterns
+      Data Model
+      Query Shapes
+      Read/Write Ratio
+    Consistency
+      Transaction Semantics
+      Staleness Tolerance
+      Conflict Resolution
+    Performance
+      Latency
+      Throughput
+    Scale
+      Scalability
+      Availability, Durability, Recovery
+      Multi-region
+      Tenancy and Isolation
+    Operations
+      Operational Maturity
+      Compliance
+      Data Lifecycle and Ownership
+      Cost
+      Team Expertise
+      Portability and Exit Strategy
+```
+
+For each branch, document the current requirement, expected growth, hard constraint, preferred target, and acceptable compromise. Requirements should be measurable: query shapes and rates, consistency semantics, latency percentiles, throughput, capacity, availability, RPO/RTO, residency, operational ownership, and total cost.
 
 ---
 

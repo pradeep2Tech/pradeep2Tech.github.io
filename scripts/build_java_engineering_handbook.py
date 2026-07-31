@@ -2124,7 +2124,7 @@ t.join();
 
 
 def main() -> None:
-    """Sync topic order and prune orphan pages. Content is hand-maintained in content/."""
+    """Sync the six-page course order without deleting optional depth pages."""
     modules_path = DATA / "java_engineering_modules.yaml"
     with open(modules_path, encoding="utf-8") as f:
         modules = yaml.safe_load(f)["modules"]
@@ -2137,15 +2137,15 @@ def main() -> None:
     if missing_files:
         raise SystemExit(f"Missing content files: {missing_files}")
 
-    keep = {"_index.md"} | {f"{s}.md" for s in ordered}
-    deleted = 0
-    for path in CONTENT.glob("*.md"):
-        if path.name not in keep:
-            path.unlink()
-            deleted += 1
-            print(f"Deleted {path.relative_to(ROOT)}")
+    listed = {"_index.md"} | {f"{s}.md" for s in ordered}
+    optional_depth_pages = [
+        path for path in CONTENT.glob("*.md") if path.name not in listed
+    ]
 
-    print(f"\nSummary: order synced, {deleted} orphans deleted, {len(ordered)} topics.")
+    print(
+        f"\nSummary: order synced, {len(ordered)} course topics, "
+        f"{len(optional_depth_pages)} optional depth pages preserved."
+    )
 
 
 if __name__ == "__main__":
