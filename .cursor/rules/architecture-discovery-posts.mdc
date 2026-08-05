@@ -1,0 +1,61 @@
+---
+description: Authoring standard and template routing for the Architecture Discovery Framework
+globs: content/architecture-discovery/**/*.md, archetypes/architecture-discovery-*.md, data/architecture_discovery_*.yaml, layouts/architecture-discovery/*.html
+alwaysApply: false
+---
+
+# Architecture Discovery Framework Posts
+
+Read these sources before authoring:
+
+1. `docs/architecture-discovery-gap-analysis.md`
+2. `docs/architecture-discovery-content-roadmap.md`
+3. `docs/architecture-discovery-template-guide.md`
+4. the selected `archetypes/architecture-discovery-<type>.md`
+
+## Mandatory template routing
+
+Every article must declare a supported `contentType` and start from the matching archetype:
+
+- `tutorial`
+- `concept`
+- `architecture-pattern`
+- `checklist`
+- `case-study`
+- `decision-record`
+- `technology-comparison`
+- `interview-question`
+- `cheat-sheet`
+- `workshop`
+
+Do not create an untyped free-form article. If no template fits, revise the roadmap or template guide before authoring.
+
+## Content boundary
+
+Architecture Discovery owns what to discover, who to involve, which evidence to collect, how to validate it, and which governed artifact records the outcome.
+
+Cross-reference rather than duplicate:
+
+- System Design for solution design and NFR catalogs
+- Microservices for service, resilience, observability, and migration implementation
+- Technology Decisions for product and pattern selection
+- Security Architecture for controls, protocols, identity, trust, and platform security
+- Engineering handbooks for product internals and configuration
+
+## Required quality
+
+- Answer one architectural question.
+- Explain why the issue matters in an enterprise setting.
+- Make evidence, owners, uncertainty, and quality criteria explicit.
+- Use practical tables and Mermaid diagrams where relationships or flows warrant them.
+- Include tradeoffs, failure modes, common mistakes, architecture review notes, and interview probes when applicable.
+- Prefer fewer integrated pages over thin articles.
+- Keep pages `draft: true` until template comments, empty prompts, broken links, and unvalidated claims are removed.
+
+## Hugo conventions
+
+- Use lowercase kebab-case paths and titles in normal front matter.
+- Use fenced `mermaid` blocks without HTML wrappers.
+- Use existing callout and comparison shortcodes.
+- Set `cheatSheet: true` only for flat reference pages.
+- Keep navigation identifiers synchronized with `data/architecture_discovery_modules.yaml` and `data/architecture_discovery_order.yaml` when publishing a new topic.

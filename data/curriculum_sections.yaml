@@ -28,6 +28,9 @@ sections:
   - slug: microservices
     menuLabel: Microservices
     group: design
+  - slug: architecture-discovery
+    menuLabel: Architecture Discovery
+    group: design
   - slug: technology-playbook
     menuLabel: Technology Decisions
     group: design

@@ -1,0 +1,15 @@
+{{- $difficulty := .Param "difficulty" -}}
+{{- $estimatedReadingTime := .Param "estimatedReadingTime" -}}
+{{- if or $difficulty $estimatedReadingTime -}}
+<div class="post-meta curriculum-learning-meta" aria-label="Learning metadata">
+  {{- with $difficulty -}}
+  <span>Difficulty: {{ . | humanize | title }}</span>
+  {{- end -}}
+  {{- if and $difficulty $estimatedReadingTime -}}
+  <span aria-hidden="true">&nbsp;·&nbsp;</span>
+  {{- end -}}
+  {{- with $estimatedReadingTime -}}
+  <span>Estimated reading time: {{ . }} min</span>
+  {{- end -}}
+</div>
+{{- end -}}

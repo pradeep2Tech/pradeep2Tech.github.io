@@ -1,0 +1,7 @@
+{{- define "main" -}}
+{{- if eq .RelPermalink ("/architecture-discovery/" | relLangURL) -}}
+  {{- partial "curriculum-module-list.html" (dict "page" . "section" "architecture-discovery" "modulesData" "architecture_discovery_modules" "navPartial" "section-nav.html" "tocLabel" "Architecture Discovery Framework table of contents") -}}
+{{- else -}}
+  {{- partial "curriculum-section-single.html" (dict "page" . "navPartial" "section-nav.html" "orderData" "architecture_discovery_order" "section" "architecture-discovery") -}}
+{{- end -}}
+{{- end -}}

@@ -9,6 +9,9 @@ sections:
   microservices:
     modules: microservices_modules
     order: microservices_order
+  architecture-discovery:
+    modules: architecture_discovery_modules
+    order: architecture_discovery_order
   technology-playbook:
     modules: technology_playbook_modules
     order: technology_playbook_order

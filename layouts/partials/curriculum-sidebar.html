@@ -79,11 +79,19 @@
                   {{- $sectionNum := printf "%d.%d" $modId $topicCounter -}}
                   {{- $shortTitle := .Params.shortTitle | default .Title -}}
                   {{- $base := .File.BaseFileName -}}
+                  {{- $isPlanned := and (eq $section "architecture-discovery") (not .Content) -}}
               <li>
+                {{- if $isPlanned -}}
+                <span class="ekh-sidebar-link ekh-sidebar-link--planned" title="Planned chapter — content is not published yet" aria-disabled="true">
+                  <span class="ekh-sidebar-link-num">{{ $sectionNum }}</span>
+                  <span class="ekh-sidebar-link-text">{{ $shortTitle }} <small>Planned</small></span>
+                </span>
+                {{- else -}}
                 <a class="ekh-sidebar-link{{ if eq $currentURL .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">
                   <span class="ekh-sidebar-link-num">{{ $sectionNum }}</span>
                   <span class="ekh-sidebar-link-text">{{ $shortTitle }}</span>
                 </a>
+                {{- end -}}
                   {{- $subPages := slice -}}
                   {{- range $subSuffixes -}}
                     {{- with site.GetPage (printf "%s/%s%s" $section $base .) -}}
@@ -115,11 +123,19 @@
               {{- $sectionNum := printf "%d.%d" $modId (add $topicIdx 1) -}}
               {{- $shortTitle := .Params.shortTitle | default .Title -}}
               {{- $base := .File.BaseFileName -}}
+              {{- $isPlanned := and (eq $section "architecture-discovery") (not .Content) -}}
           <li>
+            {{- if $isPlanned -}}
+            <span class="ekh-sidebar-link ekh-sidebar-link--planned" title="Planned chapter — content is not published yet" aria-disabled="true">
+              <span class="ekh-sidebar-link-num">{{ $sectionNum }}</span>
+              <span class="ekh-sidebar-link-text">{{ $shortTitle }} <small>Planned</small></span>
+            </span>
+            {{- else -}}
             <a class="ekh-sidebar-link{{ if eq $currentURL .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">
               <span class="ekh-sidebar-link-num">{{ $sectionNum }}</span>
               <span class="ekh-sidebar-link-text">{{ $shortTitle }}</span>
             </a>
+            {{- end -}}
               {{- $subPages := slice -}}
               {{- range $subSuffixes -}}
                 {{- with site.GetPage (printf "%s/%s%s" $section $base .) -}}

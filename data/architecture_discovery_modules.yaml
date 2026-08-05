@@ -1,0 +1,114 @@
+# Architecture Discovery Framework — module-grouped learning path.
+modules:
+  - id: 1
+    slug: foundations
+    focus: "Foundations"
+    landingTitle: "Architecture Discovery Foundations"
+    landingDescription: "Scope the engagement, understand the discovery lifecycle, and prepare reusable questions."
+    topics:
+      - introduction
+      - discovery-framework
+      - discovery-framework/stakeholders-and-decision-rights
+      - discovery-framework/discovery-lifecycle-and-governance
+      - discovery-framework/discovery-workshops
+      - discovery-framework/evidence-assumptions-and-confidence
+      - discovery-framework/current-state-architecture-baseline
+      - discovery-framework/findings-requirements-decision-traceability
+      - discovery-questionnaire
+
+  - id: 2
+    slug: discovery-domains
+    focus: "Discovery Domains"
+    landingTitle: "Enterprise Discovery Domains"
+    landingDescription: "Discover business intent, system behavior, quality attributes, dependencies, data, security, technology, and operations."
+    groups:
+      - name: "Business and Domain Context"
+        topics:
+          - business-discovery
+          - business-discovery/business-outcomes-and-success-measures
+          - business-discovery/business-capability-mapping
+          - business-discovery/value-streams-and-operating-model
+          - domain-discovery
+          - domain-discovery/domain-boundaries-and-ownership
+          - domain-discovery/domain-events-and-collaboration
+          - functional-discovery
+          - functional-discovery/use-cases-scenarios-and-scope
+          - functional-discovery/functional-rules-and-acceptance-boundaries
+          - business-process
+          - business-process/process-exceptions-and-compensations
+          - business-process/target-process-and-automation-opportunities
+      - name: "Architecture Quality and Constraints"
+        topics:
+          - non-functional-discovery
+          - non-functional-discovery/nfr-prioritization-and-conflict-resolution
+          - non-functional-discovery/nfr-acceptance-and-traceability
+          - integration
+          - integration/integration-requirements-and-failure-semantics
+          - integration/integration-and-api-catalog-governance
+          - data
+          - data/data-flows-lineage-quality-and-reconciliation
+          - data/data-classification-lifecycle-and-recovery
+          - security
+          - security/compliance-controls-and-evidence
+          - security/security-gaps-and-risk-acceptance
+          - technology
+          - technology/standards-constraints-and-technical-debt
+          - technology/technology-decision-inputs
+          - operational
+          - operational/reliability-incidents-and-observability-baseline
+          - operational/delivery-environment-and-release-discovery
+          - operational/capacity-continuity-cost-and-finops
+
+  - id: 3
+    slug: modernization-and-deliverables
+    focus: "Modernization and Deliverables"
+    landingTitle: "Modernization Decisions and Architecture Outputs"
+    landingDescription: "Assess modernization options, manage risk, and produce decision-ready architecture deliverables."
+    topics:
+      - modernization
+      - modernization/application-and-component-assessment
+      - modernization/modernization-disposition-decisions
+      - modernization/transition-and-coexistence-architecture
+      - modernization/migration-waves-and-dependency-sequencing
+      - modernization/modernization-readiness-and-fitness-measures
+      - risk
+      - risk/risk-analysis-ownership-and-treatment
+      - risk/architecture-reviews-and-reassessment-triggers
+      - risk/from-discovery-findings-to-architecture-options
+      - risk/option-evaluation-and-recommendation
+      - risk/discovery-closure-and-architecture-handoff
+      - deliverables
+
+  - id: 4
+    slug: applied-resources
+    focus: "Applied Resources"
+    landingTitle: "Templates, Practice, and Reference"
+    landingDescription: "Apply the framework with templates, checklists, concise references, case studies, and interview exercises."
+    groups:
+      - name: "Reusable Assets"
+        topics:
+          - templates
+          - checklists
+          - checklists/discovery-engagement-checklist
+          - checklists/discovery-completeness-checklist
+          - checklists/architecture-review-checklist
+          - cheat-sheets
+          - cheat-sheets/discovery-questionnaire
+          - cheat-sheets/domain-model
+          - cheat-sheets/business-discovery
+          - cheat-sheets/functional-discovery
+          - cheat-sheets/nfr-discovery
+          - cheat-sheets/integration-discovery
+          - cheat-sheets/technology-selection-inputs
+          - cheat-sheets/security-discovery
+          - cheat-sheets/architecture-reviews
+          - cheat-sheets/architecture-deliverables
+          - cheat-sheets/modernization-discovery
+      - name: "Applied Learning"
+        topics:
+          - case-studies
+          - interview
+      - name: "Reference"
+        topics:
+          - glossary
+          - references

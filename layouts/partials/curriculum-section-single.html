@@ -29,6 +29,7 @@
       {{- partial "post_canonical.html" $page -}}
     </div>
     {{- end -}}
+    {{- partial "curriculum-learning-meta.html" $page -}}
   </header>
   {{- $isHidden := ($page.Param "cover.hiddenInSingle") | default ($page.Param "cover.hidden") | default false -}}
   {{- partial "cover.html" (dict "cxt" $page "IsSingle" true "isHidden" $isHidden) -}}
