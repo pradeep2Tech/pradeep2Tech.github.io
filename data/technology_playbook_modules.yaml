@@ -70,3 +70,11 @@ modules:
           - quartz
           - control-m
           - autosys
+
+  - id: 4
+    slug: api-patterns
+    focus: "API Patterns"
+    landingTitle: "API Patterns"
+    landingDescription: "Focused architecture patterns for choosing, designing, and operating application APIs."
+    topics:
+      - graphql-architecture
