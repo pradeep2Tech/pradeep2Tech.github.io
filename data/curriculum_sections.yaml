@@ -79,6 +79,9 @@ sections:
   - slug: ai-for-engineers
     menuLabel: AI for Engineers
     group: career
+  - slug: spring-ai
+    menuLabel: Spring AI Handbook
+    group: career
   - slug: security-architecture
     menuLabel: Security Architecture
     group: security

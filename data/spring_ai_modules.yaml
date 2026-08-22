@@ -1,0 +1,22 @@
+modules:
+  - id: 1
+    focus: "Models & Retrieval"
+    topics:
+      - llm-foundations
+      - production-prompt-engineering
+      - rag-pipeline
+      - retrieval-quality-lifecycle
+  - id: 2
+    focus: "Spring AI & Agents"
+    topics:
+      - spring-ai-core
+      - tools-and-agents
+      - agent-state-and-reliability
+  - id: 3
+    focus: "Production Architecture"
+    topics:
+      - security-and-guardrails
+      - production-operations
+      - multi-agent-systems
+      - enterprise-platform
+      - production-use-cases

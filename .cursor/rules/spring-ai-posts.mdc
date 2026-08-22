@@ -1,0 +1,17 @@
+---
+description: Spring AI and Agentic AI interview handbook authoring rules
+globs:
+  - content/spring-ai/**
+  - data/spring_ai_*.yaml
+  - scripts/build_spring_ai_handbook.py
+---
+
+# Spring AI Handbook
+
+- Target experienced Java/Spring engineers and architects; avoid beginner setup tutorials.
+- Preserve every workbook prompt, priority, source type, and key-area mapping in the source manifest.
+- Use the portable Spring AI 2.x API surface and flag provider/version-specific behavior.
+- Keep probabilistic model decisions separate from deterministic IAM, validation, policy, and transactions.
+- Consolidate related prompts into compact topic pages; split only when a major architecture explanation requires it.
+- Prefer one flowchart and a concise revision map over repeated answer subsections or code examples.
+- Regenerate with `python scripts/build_spring_ai_handbook.py`; hand edits to generated pages will be overwritten.

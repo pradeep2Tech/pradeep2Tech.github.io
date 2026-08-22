@@ -59,5 +59,8 @@ sections:
   ai-for-engineers:
     modules: ai_for_engineers_modules
     order: ai_for_engineers_order
+  spring-ai:
+    modules: spring_ai_modules
+    order: spring_ai_order
   security-architecture:
     order: security_architecture_order

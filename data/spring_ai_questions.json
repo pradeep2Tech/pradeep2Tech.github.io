@@ -1,0 +1,1712 @@
+[
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "1",
+    "question": "What is an LLM, and how does it generate a response?",
+    "keyAreas": "Transformer, tokens, attention, context, next-token prediction, inference",
+    "priority": "Critical",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "2",
+    "question": "What is the difference between an LLM, embedding model, and reranking model?",
+    "keyAreas": "Generation vs embeddings vs relevance scoring",
+    "priority": "Medium",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "3",
+    "question": "What is a token, and why does tokenization matter in production?",
+    "keyAreas": "Context limits, cost, latency, token consumption",
+    "priority": "Medium",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "4",
+    "question": "What is an LLM context window, and why is it important?",
+    "keyAreas": "Prompt + history + RAG context + tools + tool results",
+    "priority": "High",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "5",
+    "question": "What is hallucination, and why does it happen?",
+    "keyAreas": "Probabilistic generation, missing knowledge, poor retrieval, conflicting context, prompt injection",
+    "priority": "Critical",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "6",
+    "question": "What is the difference between Prompting, RAG, and Fine-tuning?",
+    "keyAreas": "When to use each, knowledge vs behavior",
+    "priority": "Critical",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "7",
+    "question": "What are Temperature and Top-P? How do they affect production systems?",
+    "keyAreas": "Randomness, sampling, determinism, cost/quality trade-off",
+    "priority": "High",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "8",
+    "question": "What are embeddings, and how does semantic similarity work?",
+    "keyAreas": "Vector representation, cosine similarity, vector DB, dimensions",
+    "priority": "Critical",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "9",
+    "question": "Why can't an LLM directly access enterprise databases/APIs?",
+    "keyAreas": "Tool/function calling, application-controlled execution, security",
+    "priority": "Critical",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "numbered",
+    "sourceNumber": "10",
+    "question": "What is the difference between traditional RAG and an AI Agent?",
+    "keyAreas": "Retrieval vs reasoning/action/tool selection/orchestration",
+    "priority": "Critical",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "follow-up",
+    "sourceNumber": "F1",
+    "question": "If an LLM predicts the next token, how can it appear to reason?",
+    "keyAreas": "LLM",
+    "priority": "Follow-up",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "follow-up",
+    "sourceNumber": "F2",
+    "question": "What happens if RAG retrieves too much content?",
+    "keyAreas": "Context Window",
+    "priority": "Follow-up",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "follow-up",
+    "sourceNumber": "F3",
+    "question": "How would you reduce hallucinations in production?",
+    "keyAreas": "Hallucination",
+    "priority": "Follow-up",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "follow-up",
+    "sourceNumber": "F4",
+    "question": "You have 10,000 company documents. Would you fine-tune the model?",
+    "keyAreas": "RAG vs Fine-tuning",
+    "priority": "Follow-up",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "follow-up",
+    "sourceNumber": "F5",
+    "question": "What temperature would you use for a financial transaction agent?",
+    "keyAreas": "Temperature",
+    "priority": "Follow-up",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "follow-up",
+    "sourceNumber": "F6",
+    "question": "What happens if query and documents use different embedding models?",
+    "keyAreas": "Embeddings",
+    "priority": "Follow-up",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "follow-up",
+    "sourceNumber": "F7",
+    "question": "How do you validate and secure LLM-generated tool parameters?",
+    "keyAreas": "Tool Calling",
+    "priority": "Follow-up",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "llm",
+    "sourceType": "follow-up",
+    "sourceNumber": "F8",
+    "question": "Why shouldn't every RAG application become an Agent?",
+    "keyAreas": "RAG vs Agent",
+    "priority": "Follow-up",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "1",
+    "question": "Explain a production RAG architecture end-to-end.",
+    "keyAreas": "Ingestion → parsing → chunking → embeddings → vector DB → retrieval → prompt construction → LLM",
+    "priority": "Critical",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "2",
+    "question": "How does document ingestion work in your RAG system?",
+    "keyAreas": "Document discovery, parsing, metadata extraction, transformation, chunking, embedding, indexing",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "3",
+    "question": "How do you decide the right chunk size and chunk overlap?",
+    "keyAreas": "Semantic boundaries, token limits, retrieval quality, overlap trade-offs",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "4",
+    "question": "What chunking strategies have you used?",
+    "keyAreas": "Fixed-size, recursive, semantic, structural/hierarchical chunking",
+    "priority": "High",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "5",
+    "question": "What metadata would you store along with an embedding?",
+    "keyAreas": "Tenant, document ID, source, page, section, version, timestamp, permissions, document type",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "6",
+    "question": "How does vector similarity search work?",
+    "keyAreas": "Embeddings, nearest-neighbor search, cosine similarity/distance, top-K",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "7",
+    "question": "Why did you choose your Vector DB?",
+    "keyAreas": "pgVector / OpenSearch / Chroma / Pinecone etc.; scale, filtering, operational complexity, latency",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "8",
+    "question": "How do you improve retrieval quality when the top-K results are poor?",
+    "keyAreas": "Query transformation, metadata filtering, hybrid search, reranking, chunking improvements",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "9",
+    "question": "What is hybrid search, and when would you use it?",
+    "keyAreas": "Keyword/BM25 + vector search, exact terms, IDs, domain terminology",
+    "priority": "High",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "10",
+    "question": "What is reranking and why is it useful?",
+    "keyAreas": "Initial retrieval → reranker → best context; precision vs latency",
+    "priority": "High",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "11",
+    "question": "How do you prevent irrelevant documents from entering the LLM context?",
+    "keyAreas": "Similarity threshold, top-K, metadata filters, reranking, relevance evaluation",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "12",
+    "question": "How do you handle document updates and deletions?",
+    "keyAreas": "Versioning, document IDs, re-indexing, stale embeddings, deletion propagation",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "13",
+    "question": "How do you implement multi-tenant RAG securely?",
+    "keyAreas": "Tenant isolation, metadata filters, authorization, vector namespace/index strategy",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "14",
+    "question": "How do you handle large documents such as PDFs, tables, images and diagrams?",
+    "keyAreas": "Parsing, OCR, structure preservation, multimodal content, metadata",
+    "priority": "High",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "15",
+    "question": "How do you evaluate RAG quality?",
+    "keyAreas": "Retrieval precision/recall, context relevance, faithfulness, answer correctness, evaluation datasets",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "16",
+    "question": "How do you handle hallucination when retrieved documents don't contain the answer?",
+    "keyAreas": "Grounding, relevance threshold, abstention, \"I don't know\", citations, guardrails",
+    "priority": "Critical",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "17",
+    "question": "How would you implement RAG using Spring AI?",
+    "keyAreas": "VectorStore, EmbeddingModel, ChatClient, advisors/retrieval flow, configuration",
+    "priority": "Critical",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "18",
+    "question": "How would you optimize RAG latency in production?",
+    "keyAreas": "Embedding latency, vector search, reranking, caching, parallel retrieval, context size, model latency",
+    "priority": "High",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "19",
+    "question": "How would you monitor a production RAG pipeline?",
+    "keyAreas": "Retrieval latency, LLM latency, token usage, retrieval scores, failures, hallucination/evaluation metrics",
+    "priority": "High",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "numbered",
+    "sourceNumber": "20",
+    "question": "What are the major failure modes of a production RAG system?",
+    "keyAreas": "Bad parsing, bad chunks, stale index, poor retrieval, wrong metadata, prompt injection, model failure, vector DB failure",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F1",
+    "question": "Why did you choose 500 tokens instead of 1,000?",
+    "keyAreas": "Chunking",
+    "priority": "Follow-up",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F2",
+    "question": "Why top-K = 5? How did you determine it?",
+    "keyAreas": "Retrieval",
+    "priority": "Follow-up",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F3",
+    "question": "What similarity threshold did you use and why?",
+    "keyAreas": "Similarity",
+    "priority": "Follow-up",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F4",
+    "question": "How do you prevent Tenant A from retrieving Tenant B's documents?",
+    "keyAreas": "Metadata",
+    "priority": "Follow-up",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F5",
+    "question": "A document changes. How do you identify and replace its old chunks?",
+    "keyAreas": "Updates",
+    "priority": "Follow-up",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F6",
+    "question": "What happens if you change the embedding model?",
+    "keyAreas": "Embeddings",
+    "priority": "Follow-up",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F7",
+    "question": "Why not send the top 20 documents directly to the LLM?",
+    "keyAreas": "Reranking",
+    "priority": "Follow-up",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F8",
+    "question": "When does keyword search outperform vector search?",
+    "keyAreas": "Hybrid Search",
+    "priority": "Follow-up",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F9",
+    "question": "What does your system do when retrieval returns no relevant documents?",
+    "keyAreas": "Hallucination",
+    "priority": "Follow-up",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F10",
+    "question": "How do you prove your RAG system improved after changing chunking?",
+    "keyAreas": "Evaluation",
+    "priority": "Follow-up",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F11",
+    "question": "Walk me through your Spring AI RAG implementation.",
+    "keyAreas": "Spring AI",
+    "priority": "Follow-up",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "rag",
+    "sourceType": "follow-up",
+    "sourceNumber": "F12",
+    "question": "What was the biggest RAG problem you encountered and how did you debug it?",
+    "keyAreas": "Production",
+    "priority": "Follow-up",
+    "topic": "rag-pipeline"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "1",
+    "question": "What is Spring AI, and what problem does it solve?",
+    "keyAreas": "ChatClient, model abstraction, EmbeddingModel, VectorStore, tools, advisors",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "2",
+    "question": "Walk me through your Spring AI application architecture.",
+    "keyAreas": "Controller → service → ChatClient → retrieval/tools → LLM → response",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "3",
+    "question": "How do you use ChatClient in Spring AI?",
+    "keyAreas": "Fluent API, system/user messages, structured response, model configuration",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "4",
+    "question": "How do you implement RAG using Spring AI?",
+    "keyAreas": "VectorStore, retrieval, context injection, advisors/retrieval flow",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "5",
+    "question": "How do you configure different LLM providers in Spring AI?",
+    "keyAreas": "OpenAI/Azure OpenAI/Anthropic/etc., provider abstraction, configuration",
+    "priority": "High",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "6",
+    "question": "How do you implement embeddings in Spring AI?",
+    "keyAreas": "EmbeddingModel, batch embedding, dimensions, model consistency",
+    "priority": "High",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "7",
+    "question": "How do you integrate pgVector/OpenSearch with Spring AI?",
+    "keyAreas": "VectorStore, indexing, similarity search, metadata filtering",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "8",
+    "question": "How do you implement metadata filtering in Spring AI RAG?",
+    "keyAreas": "Tenant/document/security filters, retrieval constraints",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "9",
+    "question": "How do you implement tool/function calling in Spring AI?",
+    "keyAreas": "@Tool, tool registration, arguments, execution, results",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "10",
+    "question": "How does Spring AI handle the interaction between the LLM and tools?",
+    "keyAreas": "Tool definitions → model selection → tool call → Java execution → tool result → model",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "11",
+    "question": "How do you implement structured output from an LLM?",
+    "keyAreas": "JSON schema, typed Java objects, validation, malformed output handling",
+    "priority": "High",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "12",
+    "question": "How do you handle LLM failures in a Spring Boot application?",
+    "keyAreas": "Timeout, retry, fallback, circuit breaker, provider failure, controlled response",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "13",
+    "question": "How do you manage conversation memory?",
+    "keyAreas": "Conversation ID, persistence, context window, summarization, Redis/DB",
+    "priority": "High",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "14",
+    "question": "How do you prevent conversation history from consuming the entire context window?",
+    "keyAreas": "Sliding window, summarization, selective history, token budgeting",
+    "priority": "High",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "15",
+    "question": "How do you secure Spring AI tools?",
+    "keyAreas": "Authentication, authorization, RBAC, input validation, tool allow-list",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "16",
+    "question": "How do you observe a Spring AI application?",
+    "keyAreas": "Logs, metrics, tracing, LLM latency, token usage, retrieval/tool spans",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "17",
+    "question": "How do you test a Spring AI application?",
+    "keyAreas": "Unit tests, mocked LLM, integration tests, retrieval tests, evaluation datasets",
+    "priority": "High",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "18",
+    "question": "How do you control LLM cost in a production Spring AI application?",
+    "keyAreas": "Model selection, token limits, caching, prompt optimization, routing",
+    "priority": "High",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "19",
+    "question": "How would you implement multi-model/provider fallback?",
+    "keyAreas": "Provider abstraction, routing, timeout, fallback, semantic differences",
+    "priority": "High",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "spring",
+    "sourceType": "numbered",
+    "sourceNumber": "20",
+    "question": "Why would you choose Spring AI instead of LangChain/LangGraph/LangChain4j?",
+    "keyAreas": "Java ecosystem, Spring integration, abstraction, agent/workflow requirements, trade-offs",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "1",
+    "question": "What is an AI Agent? How is it different from a traditional RAG application?",
+    "keyAreas": "Reasoning, planning, tool selection, action, observation, iteration",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "2",
+    "question": "Walk me through the complete execution flow of an AI Agent.",
+    "keyAreas": "User → LLM → tool selection → tool execution → result → LLM → next action/final answer",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "3",
+    "question": "What is tool/function calling?",
+    "keyAreas": "Tool schema, function name, parameters, model-generated tool call, application execution",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "4",
+    "question": "How does the LLM decide which tool to call?",
+    "keyAreas": "Tool descriptions, schemas, model capability, context, prompt/instructions",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "5",
+    "question": "How do you define tools in Spring AI?",
+    "keyAreas": "@Tool, tool methods, descriptions, parameters, registration",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "6",
+    "question": "What happens if the LLM generates invalid tool arguments?",
+    "keyAreas": "Schema validation, deserialization failure, validation, retry/correction, controlled failure",
+    "priority": "Critical",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "7",
+    "question": "What happens if a tool execution fails?",
+    "keyAreas": "Timeout, retry, fallback, error propagation, agent decision, user response",
+    "priority": "Critical",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "8",
+    "question": "How do you prevent an agent from entering an infinite tool-calling loop?",
+    "keyAreas": "Max iterations, state tracking, duplicate detection, timeout, termination conditions",
+    "priority": "Critical",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "9",
+    "question": "How do you decide which operations should become Agent tools?",
+    "keyAreas": "Business value, determinism, security, side effects, idempotency, authorization",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "10",
+    "question": "How do you secure AI Agent tools?",
+    "keyAreas": "Authentication, authorization, RBAC, allow-list, input validation, tenant isolation",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "11",
+    "question": "How do you handle tools that modify data?",
+    "keyAreas": "Confirmation, authorization, idempotency, transaction boundaries, audit trail",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "12",
+    "question": "How do you prevent duplicate tool execution?",
+    "keyAreas": "Idempotency keys, execution state, request IDs, deduplication",
+    "priority": "Critical",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "13",
+    "question": "How do you handle tool timeouts and slow downstream APIs?",
+    "keyAreas": "Timeout, retry policy, circuit breaker, async execution, fallback",
+    "priority": "High",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "14",
+    "question": "How do you control the number of tools exposed to an LLM?",
+    "keyAreas": "Tool allow-list, context size, domain-specific tools, dynamic tool selection",
+    "priority": "High",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "15",
+    "question": "How do you control agent token consumption and cost?",
+    "keyAreas": "Token budgets, iteration limits, prompt compression, model routing, caching",
+    "priority": "High",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "16",
+    "question": "What is the difference between an Agent, Workflow, and Orchestrator?",
+    "keyAreas": "Autonomous decision-making vs deterministic flow vs coordination",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "17",
+    "question": "When should you NOT use an AI Agent?",
+    "keyAreas": "Deterministic business logic, strict compliance, predictable workflows, latency-sensitive operations",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "18",
+    "question": "How would you design an Agent that uses RAG + REST APIs + database tools?",
+    "keyAreas": "Agent orchestration, retrieval, tools, authorization, state, error handling",
+    "priority": "Critical",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "19",
+    "question": "How do you maintain state during multi-step agent execution?",
+    "keyAreas": "Agent state, conversation state, tool results, workflow state, persistence",
+    "priority": "High",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "20",
+    "question": "How do you observe and debug an Agent execution?",
+    "keyAreas": "Trace ID, LLM calls, prompts, tool calls, latency, errors, token usage, decisions",
+    "priority": "Critical",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "21",
+    "question": "How do you test an AI Agent?",
+    "keyAreas": "Unit tests, mocked LLM, tool tests, integration tests, scenario tests, evaluation",
+    "priority": "High",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "22",
+    "question": "How do you handle an LLM provider failure during agent execution?",
+    "keyAreas": "Timeout, fallback model, provider routing, state preservation, retry",
+    "priority": "High",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "23",
+    "question": "What is multi-agent architecture?",
+    "keyAreas": "Specialized agents, coordinator, delegation, communication, shared state",
+    "priority": "High",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "24",
+    "question": "When would you choose multi-agent over a single agent?",
+    "keyAreas": "Complexity, domain separation, independent capabilities, parallelism vs overhead",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "agent",
+    "sourceType": "numbered",
+    "sourceNumber": "25",
+    "question": "Design a production Agentic AI architecture using Java 21 + Spring AI.",
+    "keyAreas": "All components + security + observability + resilience + scaling",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "1",
+    "question": "Why do LLMs hallucinate?",
+    "keyAreas": "Probabilistic generation, missing knowledge, weak retrieval, conflicting context, prompt ambiguity",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "2",
+    "question": "How would you reduce hallucinations in a production RAG system?",
+    "keyAreas": "Grounding, retrieval thresholds, citations, constrained prompts, abstention, validation",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "3",
+    "question": "What are guardrails in GenAI systems?",
+    "keyAreas": "Input/output/tool guardrails, policy enforcement, validation, safety controls",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "4",
+    "question": "How would you implement input guardrails?",
+    "keyAreas": "Prompt injection detection, PII, malicious input, length/token limits, content policy",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "5",
+    "question": "How would you implement output guardrails?",
+    "keyAreas": "Schema validation, factual grounding, toxicity/safety checks, sensitive-data filtering",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "6",
+    "question": "What is prompt injection? How would you defend against it?",
+    "keyAreas": "Direct/indirect injection, untrusted documents, instruction hierarchy, isolation, validation",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "7",
+    "question": "How can a malicious document attack a RAG system?",
+    "keyAreas": "Indirect prompt injection, poisoned content, retrieved instructions",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "8",
+    "question": "What happens when RAG returns no relevant documents?",
+    "keyAreas": "Similarity threshold, abstention, fallback search, clarification, controlled response",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "9",
+    "question": "How do you verify that an LLM answer is actually grounded in retrieved documents?",
+    "keyAreas": "Citation mapping, entailment/faithfulness checks, claim validation, evaluation",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "10",
+    "question": "How do you prevent the LLM from inventing information not present in your knowledge base?",
+    "keyAreas": "Grounded prompts, retrieval threshold, answer constraints, citations, abstention",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "11",
+    "question": "How do you handle malformed LLM responses?",
+    "keyAreas": "Structured output, schema validation, retry, correction prompt, fallback",
+    "priority": "High",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "12",
+    "question": "What happens if the LLM provider becomes unavailable?",
+    "keyAreas": "Timeout, retry, fallback provider/model, circuit breaker, graceful degradation",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "13",
+    "question": "How do you handle LLM rate limits such as HTTP 429?",
+    "keyAreas": "Exponential backoff, jitter, concurrency limits, quotas, provider fallback",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "14",
+    "question": "How do you handle LLM timeouts?",
+    "keyAreas": "Request timeout, cancellation, retry policy, fallback, async patterns",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "15",
+    "question": "How do you prevent an Agent from repeatedly executing the same tool?",
+    "keyAreas": "Iteration limits, state tracking, duplicate detection, idempotency",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "16",
+    "question": "How do you prevent unauthorized tool execution?",
+    "keyAreas": "RBAC, tool allow-list, authorization before execution, tenant context",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "17",
+    "question": "How do you safely execute tools that modify enterprise data?",
+    "keyAreas": "Authorization, validation, confirmation, idempotency, transactions, audit",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "18",
+    "question": "How do you protect sensitive information in prompts and LLM responses?",
+    "keyAreas": "PII detection/redaction, access control, data minimization, encryption, logging controls",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "19",
+    "question": "How do you evaluate a RAG/Agent system in production?",
+    "keyAreas": "Retrieval metrics, faithfulness, correctness, task success, latency, cost",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "20",
+    "question": "How do you detect that a production Agent is degrading?",
+    "keyAreas": "Quality metrics, tool failures, retrieval scores, token usage, latency, user feedback",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "21",
+    "question": "How do you implement observability for an Agent?",
+    "keyAreas": "Distributed tracing, LLM spans, prompts, tool calls, latency, tokens, errors",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "22",
+    "question": "What should and shouldn't be logged from an LLM application?",
+    "keyAreas": "PII/secrets, prompts, responses, tool arguments, redaction, audit requirements",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "23",
+    "question": "How do you control LLM cost in production?",
+    "keyAreas": "Token budgets, model routing, caching, prompt optimization, rate limits, max iterations",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "24",
+    "question": "How do you handle model/version changes?",
+    "keyAreas": "Regression evaluation, prompt compatibility, embedding migration, canary testing",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "safety",
+    "sourceType": "numbered",
+    "sourceNumber": "25",
+    "question": "Design a production-grade GenAI platform with security, guardrails, resilience and observability.",
+    "keyAreas": "End-to-end architecture and operational controls",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "1",
+    "question": "What is a Multi-Agent AI system?",
+    "keyAreas": "Multiple specialized agents, independent responsibilities, orchestration",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "2",
+    "question": "When would you choose Multi-Agent over a Single Agent?",
+    "keyAreas": "Domain complexity, specialization, isolation, parallelism vs complexity",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "3",
+    "question": "What are common Multi-Agent architecture patterns?",
+    "keyAreas": "Supervisor, hierarchical, peer-to-peer, pipeline, parallel agents",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "4",
+    "question": "What is a Supervisor/Orchestrator Agent?",
+    "keyAreas": "Task decomposition, delegation, aggregation, final decision",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "5",
+    "question": "How do agents communicate with each other?",
+    "keyAreas": "Messages, structured state, events, shared context, APIs",
+    "priority": "High",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "6",
+    "question": "Should agents share the same memory?",
+    "keyAreas": "Shared vs isolated memory, context pollution, security, ownership",
+    "priority": "High",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "7",
+    "question": "How would you design a Multi-Agent system for an enterprise use case?",
+    "keyAreas": "Agent boundaries, coordinator, tools, state, communication, observability",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "8",
+    "question": "How do you prevent agents from duplicating work?",
+    "keyAreas": "Ownership, task IDs, state, coordination, idempotency",
+    "priority": "High",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "9",
+    "question": "How do you handle failure of one agent?",
+    "keyAreas": "Retry, fallback, compensation, partial result, escalation",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "10",
+    "question": "How do you prevent circular delegation between agents?",
+    "keyAreas": "Max hops, execution graph, state tracking, timeout, termination conditions",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "11",
+    "question": "How do you control the number of agent interactions?",
+    "keyAreas": "Max iterations, token budget, execution budget, time budget",
+    "priority": "High",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "12",
+    "question": "How do you secure communication between agents?",
+    "keyAreas": "Identity, authorization, trust boundaries, least privilege, tenant context",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "13",
+    "question": "How would you handle conflicting results from two agents?",
+    "keyAreas": "Confidence, evidence, priority, deterministic arbitration, supervisor",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "14",
+    "question": "How do you implement parallel agent execution?",
+    "keyAreas": "Independent tasks, async/concurrent execution, aggregation, timeout",
+    "priority": "High",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "15",
+    "question": "What is the difference between Agent-to-Agent communication and Tool Calling?",
+    "keyAreas": "Agent delegation vs deterministic capability invocation",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "16",
+    "question": "How do you maintain state across a multi-agent workflow?",
+    "keyAreas": "Workflow state, correlation ID, persistent state, event/state store",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "17",
+    "question": "How do you observe and debug Multi-Agent execution?",
+    "keyAreas": "Distributed tracing, agent spans, messages, tool calls, state transitions",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "18",
+    "question": "How do you evaluate a Multi-Agent system?",
+    "keyAreas": "Agent-level + workflow-level success, correctness, latency, cost",
+    "priority": "High",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "19",
+    "question": "What are the disadvantages of Multi-Agent architecture?",
+    "keyAreas": "Latency, token cost, complexity, nondeterminism, debugging, coordination",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "multi",
+    "sourceType": "numbered",
+    "sourceNumber": "20",
+    "question": "Design a production Multi-Agent architecture using Java 21 + Spring AI.",
+    "keyAreas": "Complete architecture, orchestration, agents, tools, RAG, state, resilience",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "1",
+    "question": "Design a production-grade Agentic AI platform using Java 21 + Spring AI.",
+    "keyAreas": "API, agent orchestration, LLM, RAG, tools, state, security, observability",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "2",
+    "question": "How would you architect an enterprise AI platform supporting multiple AI use cases?",
+    "keyAreas": "Shared platform services, tenant isolation, model gateway, RAG, tools, governance",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "3",
+    "question": "How would you make the platform multi-tenant?",
+    "keyAreas": "Tenant isolation, data partitioning, vector filtering, authorization, quotas",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "4",
+    "question": "How would you support multiple LLM providers?",
+    "keyAreas": "OpenAI, Azure OpenAI, Claude, Gemini, Bedrock, abstraction/routing/fallback",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "5",
+    "question": "How would you design LLM provider failover?",
+    "keyAreas": "Health checks, timeout, circuit breaker, fallback, model compatibility",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "6",
+    "question": "How would you scale an Agentic AI platform to thousands of concurrent users?",
+    "keyAreas": "Stateless services, async processing, concurrency limits, queues, caching, rate limits",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "7",
+    "question": "How would you handle long-running Agent workflows?",
+    "keyAreas": "Async jobs, workflow/state persistence, callbacks/events, resumability",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "8",
+    "question": "How would you design Agent state and memory?",
+    "keyAreas": "Short-term context, long-term memory, workflow state, Redis/DB",
+    "priority": "High",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "9",
+    "question": "How would you secure an enterprise Agentic AI platform?",
+    "keyAreas": "IAM, RBAC, tool authorization, secrets, tenant isolation, data protection",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "10",
+    "question": "How would you protect the system against prompt injection?",
+    "keyAreas": "Input/output controls, untrusted context, tool isolation, authorization",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "11",
+    "question": "How would you prevent an Agent from performing dangerous business operations?",
+    "keyAreas": "Tool permissions, policy engine, confirmation, approval workflow, audit",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "12",
+    "question": "How would you design observability for Agentic AI?",
+    "keyAreas": "OpenTelemetry, traces, LLM/tool spans, token metrics, quality metrics",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "13",
+    "question": "How would you debug a slow Agent request?",
+    "keyAreas": "Trace decomposition: API → retrieval → LLM → tools → downstream APIs",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "14",
+    "question": "How would you control GenAI cost?",
+    "keyAreas": "Token budgets, model routing, caching, prompt optimization, quotas",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "15",
+    "question": "How would you evaluate Agent quality before production deployment?",
+    "keyAreas": "Golden datasets, RAG evaluation, task success, regression testing, red teaming",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "16",
+    "question": "How would you deploy a new prompt/model version safely?",
+    "keyAreas": "Versioning, A/B, canary, evaluation, rollback",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "17",
+    "question": "How would you handle model hallucination in a regulated enterprise workflow?",
+    "keyAreas": "Grounding, deterministic rules, validation, human approval, audit",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "18",
+    "question": "How would you design disaster recovery for an Agentic AI platform?",
+    "keyAreas": "Stateless recovery, persistent state, vector DB backup, provider failover",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "19",
+    "question": "What parts of an Agentic AI system should be deterministic?",
+    "keyAreas": "Authorization, business rules, validation, transactions, policy enforcement",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "enterprise",
+    "sourceType": "numbered",
+    "sourceNumber": "20",
+    "question": "When would you reject an Agentic AI solution and use conventional software instead?",
+    "keyAreas": "Determinism, compliance, latency, cost, risk, predictable workflows",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "1",
+    "question": "Explain one GenAI solution you personally implemented.",
+    "keyAreas": "Ownership, architecture, implementation depth",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "2",
+    "question": "Explain how an LLM generates a response.",
+    "keyAreas": "LLM fundamentals",
+    "priority": "Medium",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "3",
+    "question": "Explain hallucination and how you mitigate it.",
+    "keyAreas": "Grounding, reliability",
+    "priority": "Critical",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "4",
+    "question": "Walk me through your RAG architecture end-to-end.",
+    "keyAreas": "Ingestion → retrieval → generation",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "5",
+    "question": "Why did you choose your chunking strategy?",
+    "keyAreas": "Practical RAG knowledge",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "6",
+    "question": "How do you improve poor retrieval results?",
+    "keyAreas": "Hybrid search, reranking, metadata",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "7",
+    "question": "How do you handle document updates/deletions?",
+    "keyAreas": "Index lifecycle, consistency",
+    "priority": "High",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "8",
+    "question": "How do you implement secure multi-tenant RAG?",
+    "keyAreas": "Isolation, authorization",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "9",
+    "question": "Explain your Java 21 + Spring AI architecture.",
+    "keyAreas": "Framework + implementation",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "10",
+    "question": "How would you implement RAG using Spring AI?",
+    "keyAreas": "ChatClient, VectorStore, retrieval",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "11",
+    "question": "How would you implement tool calling using Spring AI?",
+    "keyAreas": "@Tool, schema, execution",
+    "priority": "Critical",
+    "topic": "spring-ai-core"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "12",
+    "question": "How would you handle multiple LLM providers?",
+    "keyAreas": "Provider abstraction/routing",
+    "priority": "High",
+    "topic": "llm-foundations"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "13",
+    "question": "What is an AI Agent?",
+    "keyAreas": "Agent vs RAG",
+    "priority": "Critical",
+    "topic": "retrieval-quality-lifecycle"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "14",
+    "question": "Walk me through the complete Agent execution flow.",
+    "keyAreas": "Reason → tool → result → next action",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "15",
+    "question": "How does an LLM decide which tool to call?",
+    "keyAreas": "Function/tool calling",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "16",
+    "question": "What happens when the LLM generates invalid tool arguments?",
+    "keyAreas": "Validation/recovery",
+    "priority": "Critical",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "17",
+    "question": "How do you prevent infinite Agent loops?",
+    "keyAreas": "Iteration/time/token limits",
+    "priority": "Critical",
+    "topic": "agent-state-and-reliability"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "18",
+    "question": "How do you secure Agent tools?",
+    "keyAreas": "IAM/RBAC/authorization",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "19",
+    "question": "A tool call times out. What happens next?",
+    "keyAreas": "Retry, idempotency, unknown state",
+    "priority": "Critical",
+    "topic": "tools-and-agents"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "20",
+    "question": "Azure OpenAI starts returning 429s. What do you do?",
+    "keyAreas": "Rate limiting, backoff, fallback",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "21",
+    "question": "The LLM provider becomes unavailable. Design the fallback.",
+    "keyAreas": "Resilience/provider routing",
+    "priority": "Critical",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "22",
+    "question": "Agent latency suddenly increases from 3s to 30s. How do you debug it?",
+    "keyAreas": "Observability/tracing",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "23",
+    "question": "Agent cost has increased 5×. How do you investigate and control it?",
+    "keyAreas": "Tokens, models, loops, caching",
+    "priority": "High",
+    "topic": "production-operations"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "24",
+    "question": "How would you protect an Agent from prompt injection?",
+    "keyAreas": "Direct + indirect injection",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "25",
+    "question": "How do you prevent hallucinated business decisions?",
+    "keyAreas": "Grounding + deterministic controls",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "26",
+    "question": "How would you protect sensitive enterprise data?",
+    "keyAreas": "PII, authorization, logging",
+    "priority": "Critical",
+    "topic": "security-and-guardrails"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "27",
+    "question": "When would you choose Multi-Agent over a Single Agent?",
+    "keyAreas": "Architecture judgment",
+    "priority": "Critical",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "28",
+    "question": "Design a Supervisor-based Multi-Agent architecture.",
+    "keyAreas": "Delegation, state, failures",
+    "priority": "High",
+    "topic": "multi-agent-systems"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "29",
+    "question": "Design a production Agentic AI platform for 1,000+ concurrent users.",
+    "keyAreas": "Scalability, resilience, security",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  },
+  {
+    "sourceGroup": "interview",
+    "sourceType": "numbered",
+    "sourceNumber": "30",
+    "question": "When would you reject Agentic AI and use conventional software/workflows instead?",
+    "keyAreas": "Senior architect judgment",
+    "priority": "Critical",
+    "topic": "enterprise-platform"
+  }
+]
