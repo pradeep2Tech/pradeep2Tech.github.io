@@ -24,16 +24,16 @@ flowchart LR
 
 ## Revision Map
 
-| Question | What a strong answer should establish | Priority |
-|---|---|---|
-| How do you structure a production system prompt? | Define role and objective, non-negotiable policy, allowed data and tools, response contract, abstention rules and conflict handling. Keep stable policy separate from request-specific content. | Critical |
-| How do system, user, retrieved context and tool instructions differ? | System instructions define application policy; user content expresses intent; retrieved content is untrusted evidence; tool descriptions define capabilities, not authorization. Preserve this precedence in prompt assembly and execution. | Critical |
-| How do you prevent retrieved content from overriding system instructions? | Delimit and label retrieved text as data, strip active markup where practical, instruct the model not to execute embedded directions, minimize exposed tools and enforce authorization outside the model. | Critical |
-| How do you design prompts for structured output? | Use a narrow typed schema with field semantics and constraints, request no extra prose, then parse and validate the result as untrusted input. Retry only bounded correctable failures. | Critical |
-| When should you use few-shot versus zero-shot prompting? | Start zero-shot when instructions and schema are sufficient. Add a small representative set of examples when format, classification boundaries or edge-case behavior remain ambiguous; measure the token and anchoring cost. | Medium |
-| How do you version and test prompts? | Store prompts as reviewed artifacts with semantic versions and dependencies on model, tools, schema and retrieval strategy. Run unit checks, golden scenarios, adversarial cases and online canaries before promotion. | Critical |
-| How do you prevent prompt drift during model upgrades? | Pin prompt-model combinations, compare old and new behavior on a frozen evaluation set, inspect tool and structured-output compatibility, canary by risk tier and retain immediate rollback. | Critical |
-| How do you optimize a prompt without degrading quality? | Establish a quality and safety baseline first, remove redundant tokens incrementally, evaluate each change across representative and adversarial cases, and optimize cost or latency only within explicit quality guardrails. | Critical |
+| Question | Detailed answer |
+|---|---|
+| How do you structure a production system prompt? | Define role and objective, non-negotiable policy, allowed data and tools, response contract, abstention rules and conflict handling. Keep stable policy separate from request-specific content. |
+| How do system, user, retrieved context and tool instructions differ? | System instructions define application policy; user content expresses intent; retrieved content is untrusted evidence; tool descriptions define capabilities, not authorization. Preserve this precedence in prompt assembly and execution. |
+| How do you prevent retrieved content from overriding system instructions? | Delimit and label retrieved text as data, strip active markup where practical, instruct the model not to execute embedded directions, minimize exposed tools and enforce authorization outside the model. |
+| How do you design prompts for structured output? | Use a narrow typed schema with field semantics and constraints, request no extra prose, then parse and validate the result as untrusted input. Retry only bounded correctable failures. |
+| When should you use few-shot versus zero-shot prompting? | Start zero-shot when instructions and schema are sufficient. Add a small representative set of examples when format, classification boundaries or edge-case behavior remain ambiguous; measure the token and anchoring cost. |
+| How do you version and test prompts? | Store prompts as reviewed artifacts with semantic versions and dependencies on model, tools, schema and retrieval strategy. Run unit checks, golden scenarios, adversarial cases and online canaries before promotion. |
+| How do you prevent prompt drift during model upgrades? | Pin prompt-model combinations, compare old and new behavior on a frozen evaluation set, inspect tool and structured-output compatibility, canary by risk tier and retain immediate rollback. |
+| How do you optimize a prompt without degrading quality? | Establish a quality and safety baseline first, remove redundant tokens incrementally, evaluate each change across representative and adversarial cases, and optimize cost or latency only within explicit quality guardrails. |
 
 ## Production Rule
 

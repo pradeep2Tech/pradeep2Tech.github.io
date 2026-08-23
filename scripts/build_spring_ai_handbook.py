@@ -188,6 +188,22 @@ PROMPT_QUESTIONS = [
     ("How do you optimize a prompt without degrading quality?", "Critical", "Establish a quality and safety baseline first, remove redundant tokens incrementally, evaluate each change across representative and adversarial cases, and optimize cost or latency only within explicit quality guardrails."),
 ]
 
+FOUNDATION_ANSWERS = {
+    "What is an LLM, and how does it generate a response?": "A large language model is a Transformer-based neural network trained to estimate the probability of the next token from the tokens already in its context. The input is tokenized into numeric IDs, converted into learned representations, and processed through attention layers that relate each token to relevant earlier tokens. During inference, the model produces a probability distribution, selects one token according to its decoding settings, appends it to the context, and repeats until a stop condition is reached. It generates from learned statistical patterns and supplied context; it does not query a factual database unless the application explicitly provides retrieval or tools.",
+    "Explain how an LLM generates a response.": "The application assembles system instructions, user input, conversation history, retrieved evidence and tool results into a bounded context. The tokenizer converts that text into tokens, and the Transformer uses attention to compute contextual representations and a next-token probability distribution. A decoding strategy selects a token, adds it to the sequence and repeats autoregressively. The final response is therefore probabilistic generation conditioned on the available context, not a deterministic lookup or proof of correctness.",
+    "What is the difference between an LLM, embedding model, and reranking model?": "An LLM generates new token sequences and is used for answering, summarizing or planning. An embedding model converts text into a fixed-length vector so a vector index can retrieve semantically related candidates; it does not generate an answer. A reranking model compares a query with retrieved candidates and produces a stronger relevance ordering, usually at higher per-document cost. In RAG they form a pipeline: embeddings retrieve broadly, reranking improves precision, and the LLM synthesizes from the selected evidence.",
+    "What is a token, and why does tokenization matter in production?": "A token is the model's processing unit and may be a word, part of a word, punctuation or whitespace depending on the tokenizer. The complete request and generated response consume tokens, so tokenization determines whether prompts fit the context window and directly affects provider cost, memory, throughput and latency. Different models can tokenize the same text differently, making character or word counts unreliable. Production systems should measure tokens with the target model's tokenizer and reserve explicit budgets for instructions, history, retrieval, tools and output.",
+    "What is an LLM context window, and why is it important?": "The context window is the maximum token budget the model can consider for one inference request. System instructions, user messages, conversation history, retrieved chunks, tool definitions, tool results and the planned output all compete for this space. Exceeding it causes rejection or truncation, while filling it with weak content increases latency, cost and the chance that important evidence is ignored. A production system therefore allocates token budgets, retrieves selectively, summarizes older history and preserves critical instructions.",
+    "What is hallucination, and why does it happen?": "Hallucination is a plausible-sounding response that is unsupported or false. It occurs because an LLM optimizes next-token likelihood rather than truth, especially when knowledge is missing, instructions are ambiguous, retrieval is weak, context conflicts, or untrusted text manipulates the prompt. Mitigation combines authoritative retrieval, relevance thresholds, citations, abstention, structured validation and deterministic checks for business decisions. No prompt can eliminate hallucination, so risk-sensitive workflows require evaluation and human or rule-based control.",
+    "Explain hallucination and how you mitigate it.": "Hallucination is unsupported generation caused by probabilistic prediction rather than factual verification. I reduce it by grounding answers in authorized evidence, filtering and reranking retrieval, requiring claim-linked citations, instructing the system to abstain when evidence is insufficient, and validating high-impact outputs against deterministic sources. I then measure faithfulness and answer correctness on a representative evaluation set. In regulated workflows, the model may recommend, but rules or humans approve the decision.",
+    "What is the difference between Prompting, RAG, and Fine-tuning?": "Prompting changes the instructions and context supplied at runtime and is best for defining a task, tone, constraints or response format. RAG retrieves current or private knowledge at request time and grounds the response without changing model weights. Fine-tuning changes model behavior by training on examples and is useful for stable specialized patterns, not as the primary store for frequently changing enterprise facts. Most enterprise systems start with prompting, add RAG for knowledge, and consider fine-tuning only after evaluation shows a persistent behavioral gap.",
+    "What are Temperature and Top-P? How do they affect production systems?": "Temperature reshapes the next-token probability distribution: lower values concentrate choices and higher values increase variation. Top-P limits sampling to the smallest set of tokens whose cumulative probability reaches a threshold, excluding the long tail. They interact, so production systems normally tune one conservatively and hold the other stable. Low-variance settings suit extraction and transactions, but they do not guarantee determinism because providers, model versions and infrastructure can still change outputs.",
+    "What are embeddings, and how does semantic similarity work?": "An embedding model maps text into a fixed-dimensional vector whose geometry represents learned semantic relationships. The query and documents must use the same embedding model and dimension; a vector store then uses cosine similarity, dot product or Euclidean distance to find nearby vectors, often through an approximate nearest-neighbor index. Similarity only ranks related candidates—it does not prove relevance or truth—so production retrieval also uses metadata filters, thresholds and reranking. Changing the embedding model requires a versioned re-embedding and index migration.",
+    "Why can't an LLM directly access enterprise databases/APIs?": "A model receives context and generates text or structured tool-call requests; it has no inherent network identity, database session or authorization to enterprise systems. The application exposes a controlled set of tool schemas, validates model-generated arguments, checks the authenticated user's permissions, executes the operation and returns a bounded result. This separation prevents the model from granting itself access and allows timeouts, idempotency, audit and policy enforcement. Credentials must remain in the execution layer, never in prompts.",
+    "What is the difference between traditional RAG and an AI Agent?": "Traditional RAG follows a mostly fixed path: retrieve evidence, add it to the prompt and generate a grounded answer. An agent can iteratively decide what action to take next, choose tools, observe results, update state and continue until a termination condition is met. RAG is often one capability used by an agent, but it does not itself imply planning or side effects. Use an agent only when dynamic decisions add value; deterministic retrieval or workflows are simpler, faster and safer for predictable tasks.",
+    "How would you handle multiple LLM providers?": "Place provider-specific clients behind a model gateway that routes by capability, data residency, latency, cost and risk rather than treating every model as interchangeable. Normalize the application contract, but retain provider-specific configuration where capabilities differ. Test prompts, structured output, tool calling, safety behavior and token accounting for every supported model. Fail over only to a semantically compatible model, preserve the request deadline, and record the selected provider and model version for evaluation and audit.",
+}
+
 def workbook_rows(path: Path) -> list[dict[str, str]]:
     ns = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
     rel_ns = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -284,6 +300,13 @@ def select_topic(item: dict[str, str]) -> str:
 
 def flow(kind: str) -> str:
     diagrams = {
+        "foundations": """flowchart LR
+    T[Input text] --> K[Tokenizer] --> C[Context tokens]
+    C --> A[Transformer attention] --> P[Next-token probabilities]
+    P --> D[Decode one token] --> S{Stop condition?}
+    S -->|no| C
+    S -->|yes| O[Generated response]
+    O --> V[Application validation]""",
         "pipeline": """flowchart LR
     S[Sources] --> P[Parse and chunk] --> E[Embed] --> V[(Vector index)]
     Q[Question] --> R[Authorized retrieval] --> C[Grounded context] --> M[Model] --> A[Cited answer]
@@ -349,24 +372,25 @@ def flow(kind: str) -> str:
 
 def takeaway(item: dict[str, str]) -> str:
     areas = item["keyAreas"].rstrip(".")
+    if item["question"] in FOUNDATION_ANSWERS:
+        return FOUNDATION_ANSWERS[item["question"]]
     q = item["question"].lower()
     if any(x in q for x in ("when should", "when would you reject", "why shouldn't")):
-        return f"Choose the simpler deterministic design unless {areas} provide measurable value that justifies AI risk and operating cost."
+        return f"Start from the deterministic alternative and identify exactly where interpretation or dynamic action is required. Evaluate {areas} against latency, compliance, predictability and operating cost. Use an agent only when measured task-quality improvement outweighs its additional nondeterminism and failure surface."
     if any(x in q for x in ("secure", "protect", "prevent unauthorized", "multi-tenant")):
-        return f"Enforce {areas} in deterministic application and data boundaries; never trust the prompt or model to supply security context."
+        return f"Treat {areas} as deterministic controls enforced at the application, retrieval and tool boundaries. Identity, tenant scope and permissions must come from authenticated server context, never from prompt text or model output. Apply least privilege, validate every requested action and preserve an audit trail across fallback and retry paths."
     if any(x in q for x in ("failure", "fails", "timeout", "429", "unavailable", "degrading", "slow", "increased")):
-        return f"Bound, observe and classify the failure; protect capacity, recover through an idempotent tested path, then verify {areas}."
+        return f"Use an end-to-end deadline and tracing to locate the failing segment before retrying. Protect capacity with bounded concurrency, backoff and circuit breaking, and make retries idempotent when side effects are possible. Recover through a tested fallback or safe degradation, then verify {areas} and add the incident to regression coverage."
     if any(x in q for x in ("evaluate", "prove", "test")):
-        return f"Use versioned representative scenarios and measure {areas}; compare against a baseline and retain failures as regressions."
+        return f"Build a versioned dataset of representative, edge and adversarial scenarios and define expected evidence or outcomes before testing. Measure {areas} separately so retrieval, generation and end-task failures are distinguishable. Compare against a baseline, inspect failures rather than relying on one aggregate score, and retain every accepted defect as a regression case."
     if any(x in q for x in ("design", "architecture", "walk me through", "flow")):
-        return f"Make {areas} explicit as independently observable components with clear trust, state and failure boundaries."
-    return f"Connect {areas}; define the contract, limits, measurement and safe failure behavior for the complete path."
+        return f"Separate the design into explicit components for {areas}, with a clear contract and owner for each boundary. Show how authenticated context, state and evidence move through the system, and where deterministic policy constrains model decisions. Then explain bottlenecks, partial failures, recovery, scaling signals and the metrics that prove the complete task works."
+    return f"A complete answer should explain how {areas} participate in the same execution path rather than listing them independently. Define what enters each boundary, what transformation or decision occurs, and what invariant must hold before the result moves forward. Close with limits, failure behavior and observable measures for quality, latency, security and cost."
 
 def page(title: str, description: str, items: list[dict[str, str]], kind: str) -> str:
     rows = []
     for item in items:
-        label = "Follow-up" if item["sourceType"] == "follow-up" else item["priority"]
-        rows.append(f"| {item['question'].replace('|', '\\|')} | {takeaway(item).replace('|', '\\|')} | {label} |")
+        rows.append(f"| {item['question'].replace('|', '\\|')} | {takeaway(item).replace('|', '\\|')} |")
     return f'''---
 title: {json.dumps(title)}
 date: 2026-08-22T00:00:00+05:30
@@ -387,8 +411,8 @@ interviewHandbook: true
 
 ## Revision Map
 
-| Question | What a strong answer should establish | Priority |
-|---|---|---|
+| Question | Detailed answer |
+|---|---|
 {chr(10).join(rows)}
 
 ## Interview Lens
@@ -445,7 +469,7 @@ Use an agent only where interpretation, iterative evidence gathering or dynamic 
 '''
 
 def prompt_engineering_page() -> str:
-    rows = "\n".join(f"| {question} | {answer} | {priority} |" for question, priority, answer in PROMPT_QUESTIONS)
+    rows = "\n".join(f"| {question} | {answer} |" for question, _priority, answer in PROMPT_QUESTIONS)
     return f'''---
 title: "Production Prompt Engineering"
 date: 2026-08-22T00:00:00+05:30
@@ -472,8 +496,8 @@ flowchart LR
 
 ## Revision Map
 
-| Question | What a strong answer should establish | Priority |
-|---|---|---|
+| Question | Detailed answer |
+|---|---|
 {rows}
 
 ## Production Rule
