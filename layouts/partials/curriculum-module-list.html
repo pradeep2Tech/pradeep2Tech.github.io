@@ -8,6 +8,9 @@
   {{- if $page.Description -}}
   <div class="post-description">{{ $page.Description | markdownify }}</div>
   {{- end -}}
+  {{- if eq $page.Section "spring-ai" -}}
+  {{- partial "spring-ai-print-button.html" $page -}}
+  {{- end -}}
 </header>
 
 {{- if $page.Content -}}

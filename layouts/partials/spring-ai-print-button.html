@@ -1,0 +1,30 @@
+<div class="spring-ai-print-actions" aria-label="Page actions">
+  <button type="button" class="spring-ai-print-button" data-spring-ai-print>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z" />
+    </svg>
+    Print this page
+  </button>
+</div>
+<script>
+(() => {
+  const button = document.querySelector("[data-spring-ai-print]");
+  if (!button || button.dataset.ready === "true") return;
+  button.dataset.ready = "true";
+
+  button.addEventListener("click", () => {
+    const changed = [];
+    document.querySelectorAll(".post-content details:not([open])").forEach((details) => {
+      changed.push(details);
+      details.open = true;
+    });
+
+    const restore = () => {
+      changed.forEach((details) => details.removeAttribute("open"));
+      window.removeEventListener("afterprint", restore);
+    };
+    window.addEventListener("afterprint", restore);
+    window.print();
+  });
+})();
+</script>

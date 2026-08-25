@@ -11,6 +11,110 @@
 {{- partial "home-curriculum-head.html" . -}}
 {{- partial "curriculum-nav-head.html" . -}}
 {{- partial "curriculum-sidebar-head.html" . -}}
+{{- if eq .Section "spring-ai" -}}
+<style>
+  .spring-ai-print-actions {
+    margin-top: 1rem;
+  }
+  .spring-ai-print-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--ekh-accent) 45%, var(--border));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--ekh-accent) 8%, var(--entry));
+    color: var(--primary);
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .spring-ai-print-button:hover {
+    background: color-mix(in srgb, var(--ekh-accent) 15%, var(--entry));
+  }
+  .spring-ai-print-button svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media print {
+    @page {
+      size: auto;
+      margin: 14mm 12mm 16mm;
+    }
+    .header,
+    .footer,
+    .ekh-sidebar,
+    .ekh-sidebar-backdrop,
+    .ekh-sidebar-toggle,
+    .spring-ai-print-actions,
+    .accordion-controls,
+    .post-footer,
+    .top-link,
+    .diagram-frame-hint,
+    #diagram-modal {
+      display: none !important;
+    }
+    html,
+    body,
+    .main,
+    .ekh-book-layout,
+    .ekh-book-main,
+    .ekh-article,
+    .post-content,
+    .ekh-index-content {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      background: #fff !important;
+      color: #000 !important;
+    }
+    .ekh-book-layout {
+      display: block !important;
+      min-height: 0 !important;
+    }
+    .ekh-page-header {
+      margin-bottom: 1rem !important;
+      padding-bottom: 0.6rem !important;
+    }
+    .post-content details,
+    .post-content details > * {
+      display: block !important;
+    }
+    .post-content summary {
+      list-style: none !important;
+    }
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content table,
+    .diagram-frame,
+    .mermaid,
+    pre,
+    blockquote {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .post-content a {
+      color: #000 !important;
+      text-decoration: none !important;
+    }
+    .diagram-frame {
+      border: 1px solid #bbb !important;
+      box-shadow: none !important;
+    }
+  }
+</style>
+{{- end -}}
 {{- if .IsHome -}}
 <style>
   /* legacy curriculum grid rules kept for non-home if needed */

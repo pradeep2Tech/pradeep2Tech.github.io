@@ -30,6 +30,9 @@
     </div>
     {{- end -}}
     {{- partial "curriculum-learning-meta.html" $page -}}
+    {{- if eq $section "spring-ai" -}}
+    {{- partial "spring-ai-print-button.html" $page -}}
+    {{- end -}}
   </header>
   {{- $isHidden := ($page.Param "cover.hiddenInSingle") | default ($page.Param "cover.hidden") | default false -}}
   {{- partial "cover.html" (dict "cxt" $page "IsSingle" true "isHidden" $isHidden) -}}
